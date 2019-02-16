@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""" Main module for nitor-deploy-tools
+""" Main module for nameless-deploy-tools
 """
 
 PATH_COMMANDS = [
@@ -104,9 +104,9 @@ NDT_ONLY_SCRIPT = [
 CONSOLE_ONLY = [
     'cf-update-stack=n_utils.cli:update_stack',
     'ndt=n_utils.ndt:ndt',
-    'nitor-dt-register-complete=n_utils.project_util:ndt_register_complete',
-    'nitor-dt-load-project-env=n_utils.project_util:load_project_env',
-    'nitor-dt-enable-profile=n_utils.profile_util:cli_enable_profile'
+    'nameless-dt-register-complete=n_utils.project_util:ndt_register_complete',
+    'nameless-dt-load-project-env=n_utils.project_util:load_project_env',
+    'nameless-dt-enable-profile=n_utils.profile_util:cli_enable_profile'
 ]
 CONSOLESCRIPTS = CONSOLE_ONLY + NDT_AND_CONSOLE
 COMMAND_MAPPINGS = {}

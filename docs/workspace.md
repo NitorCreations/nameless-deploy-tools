@@ -2,11 +2,11 @@
 ## Command completion
 
 Most things have decent bash command completion, even for things like AMI Ids in AWS. To make it work, the things
-outputted by `nitor-dt-register-complete` need to be in your environment. So put the following somewhere
+outputted by `nameless-dt-register-complete` need to be in your environment. So put the following somewhere
 (e.g. your ~/.bashrc) where it gets run for your profile (or run it manually when working with ndt)
 
 ```bash
-eval "$(nitor-dt-register-complete)"
+eval "$(nameless-dt-register-complete)"
 ```
 
 ## Project session switcher
@@ -49,7 +49,7 @@ unset AWS_PROFILE AWS_DEFAULT_PROFILE
 So taking project environment variables into use with your command completion would require setting
 
 ```bash
-eval "$(nitor-dt-register-complete --project-env)"
+eval "$(nameless-dt-register-complete --project-env)"
 ```
 
 Somewehere in your bash profile files - I have mine in `~/.bashrc`
@@ -63,7 +63,7 @@ The checked git local configurations are:
 * `ndt.profile.ndt` - enable a prpfile that has settings to do a `ndt assume-role` including a potential mfa token.
 
 You can set these variables by calling `git config [variable] [value]` and you can check the commands
-that would be executed by calling `nitor-dt-load-project-env`
+that would be executed by calling `nameless-dt-load-project-env`
 
 So to complete the script example from above, you would put the script somewhere handy to execute -
 say `~/bin/my-admin-role` if you have that on your `PATH`. Then you would just set that to be
@@ -74,12 +74,12 @@ checked every time you give a command.
 
 The simplest way to set up your working environment is to use a profile in `~/.aws/config` and
 set either `ndt.profile.azure`, `ndt.profile.iam` or `ndt.profile.ndt`. Examples of these
-profiles are below. That will run `nitor-dt-enable-profile` for every prompt command and that in
+profiles are below. That will run `nameless-dt-enable-profile` for every prompt command and that in
 turn checks session validity from environment variables and doesn't actually execute anything
 else if you have a valid session defined. You can also chain for example an azure profile and
 and assume role if that is how multi-account access is setup for you.
 
-`nitor-dt-register-complete` uses `nitor-dt-load-project-env` as a prompt command that is run
+`nameless-dt-register-complete` uses `nameless-dt-load-project-env` as a prompt command that is run
 every time the shell prompt is created. By default that will be a python script and will have
 the usual python startup slowness attached. On some systems you can work around this by compiling
 that command into a native binary with [nuitka](http://nuitka.net/). The process of replacing
@@ -87,9 +87,9 @@ that python script with a binary version is as follows:
 
 ```bash
 sudo -H pip install -U nuitka
-ENV_SCRIPT="$(dirname $(dirname $(n-include hook.sh)))/nitor-dt-load-project-env.py"
+ENV_SCRIPT="$(dirname $(dirname $(n-include hook.sh)))/nameless-dt-load-project-env.py"
 python -m nuitka --recurse-to=n_utils.project_util $ENV_SCRIPT
-sudo cp nitor-dt-load-project-env.exe $(which nitor-dt-load-project-env)
+sudo cp nameless-dt-load-project-env.exe $(which nameless-dt-load-project-env)
 ```
 
 Doing this on a machine that has the right tooling will give you a much snappier prompt.

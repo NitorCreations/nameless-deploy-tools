@@ -261,7 +261,7 @@ node {
 """)
                 }
             }
-            description("nitor-deploy-tools deploy stack job")
+            description("nameless-deploy-tools deploy stack job")
             blockOn(blockOnArray)
         }
         addSCMTriggers(job, jobType, properties, s)
@@ -316,7 +316,7 @@ fi
 ndt undeploy-stack $imageDir $stackName
 """)
                 }
-                description("nitor-deploy-tools undeploy stack job")
+                description("nameless-deploy-tools undeploy stack job")
                 blockOn([jobName])
             }
             viewMap[jobPrefix] << undeployJobName
@@ -349,7 +349,7 @@ ndt undeploy-stack $imageDir $stackName
             steps {
                 shell("ndt bake-docker " + imageDir + " " + stackName)
             }
-            description("nitor-deploy-tools bake docker job")
+            description("nameless-deploy-tools bake docker job")
             configure { project ->
                 project / 'scm' / 'extensions' << 'hudson.plugins.git.extensions.impl.PathRestriction' {
                     includedRegions "\\Q$imageDir/docker-\\E.*"
@@ -404,7 +404,7 @@ ndt undeploy-stack $imageDir $stackName
                 steps {
                     shell("ndt promote-image \$AMI_ID $jobName")
                 }
-                description("nitor-deploy-tools promote image job")
+                description("nameless-deploy-tools promote image job")
                 configure { project ->
                     project / 'properties' / 'hudson.model.ParametersDefinitionProperty' / 'parameterDefinitions' << 'jp.ikedam.jenkins.plugins.extensible__choice__parameter.ExtensibleChoiceParameterDefinition' {
                         name 'AMI_ID'
@@ -434,7 +434,7 @@ return ret
                 steps {
                     shell("ndt bake-image " + imageDir)
                 }
-                description("nitor-deploy-tools bake image job")
+                description("nameless-deploy-tools bake image job")
             }
         }
         addSCMTriggers(job, jobType, properties, s)

@@ -15,11 +15,11 @@ import sys
 from setuptools import setup
 from n_utils import PATH_COMMANDS, CONSOLESCRIPTS
 
-setup(name='nitor_deploy_tools',
+setup(name='nameless_deploy_tools',
       version='1.60',
       description='Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow',
-      url='http://github.com/NitorCreations/nitor-deploy-tools',
-      download_url='https://github.com/NitorCreations/nitor-deploy-tools/tarball/1.60',
+      url='http://github.com/NitorCreations/nameless-deploy-tools',
+      download_url='https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.60',
       author='Pasi Niemi',
       author_email='pasi@nitor.com',
       license='Apache 2.0',

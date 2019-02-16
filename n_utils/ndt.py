@@ -93,7 +93,7 @@ def do_command_completion():
 
 
 def ndt():
-    """ The main nitor deploy tools command that provides bash command
+    """ The main nameless deploy tools command that provides bash command
     completion and subcommand execution
     """
     if "_ARGCOMPLETE" in os.environ:

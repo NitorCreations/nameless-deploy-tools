@@ -29,7 +29,7 @@ configure_and_start_nexus () {
     cd $SECTMP
     touch .repo.pwd
     chown 600 .repo.pwd
-    /opt/nitor/fetch-secrets.sh show ${CF_paramDnsName} | tr -d "\n" > .repo.pwd
+    fetch-secrets.sh show ${CF_paramDnsName} | tr -d "\n" > .repo.pwd
     mkdir -p /opt/nexus/sonatype-work/nexus/conf
     wget http://central.maven.org/maven2/org/apache/shiro/tools/shiro-tools-hasher/1.2.4/shiro-tools-hasher-1.2.4-cli.jar -O /root/shiro-tools-hasher-1.2.4-cli.jar
     ADMIN_HASH=$(java -jar /root/shiro-tools-hasher-1.2.4-cli.jar -r .repo.pwd -a SHA-512 -f shiro1)

@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""" Utilities to bootsrap AWS accounts into use with nitor-deploy-tools
+""" Utilities to bootsrap AWS accounts into use with nameless-deploy-tools
 """
 from __future__ import print_function
 

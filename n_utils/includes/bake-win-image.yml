@@ -22,7 +22,7 @@
         module: ec2
         region: "{{ aws_region }}"
         instance_tags: "{{ bake_tags }}"
-        count_tag:     { "environment": "nitor", "Name": "{{ job_name }} prototype" }
+        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
         exact_count: 0
         instance_type: "{{ instance_type }}"
         image: "{{ root_ami }}"
@@ -42,8 +42,8 @@
     - local_action:
         module: ec2
         region: "{{ aws_region }}"
-        instance_tags: { "environment": "nitor", "Name": "{{ job_name }} prototype" }
-        count_tag:     { "environment": "nitor", "Name": "{{ job_name }} prototype" }
+        instance_tags: { "environment": "nameless", "Name": "{{ job_name }} prototype" }
+        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
         exact_count: 1
         instance_type: "{{ instance_type }}"
         image: "{{ root_ami }}"
@@ -99,24 +99,24 @@
     wait_for_connection:
       delay: 30
       timeout: 600
-  - win_file: path="C:\\nitor" state=directory
+  - win_file: path="C:\\nameless" state=directory
     when: base_ami_id == "clean"
-  - win_copy: src="{{ prepare_script }}" dest="C:\\nitor\\prepare.ps1"
+  - win_copy: src="{{ prepare_script }}" dest="C:\\nameless\\prepare.ps1"
     when: base_ami_id == "clean"
-  - win_copy: src="{{ imagedir }}/pre_install.ps1" dest="C:\\nitor\\pre_install.ps1"
-  - win_copy: src="{{ imagedir }}/post_install.ps1" dest="C:\\nitor\\post_install.ps1"
+  - win_copy: src="{{ imagedir }}/pre_install.ps1" dest="C:\\nameless\\pre_install.ps1"
+  - win_copy: src="{{ imagedir }}/post_install.ps1" dest="C:\\nameless\\post_install.ps1"
   - win_copy:
       src: "{{ imagedir }}/{{ item }}"
-      dest: "C:\\nitor\\"
+      dest: "C:\\nameless\\"
     with_items: "{{ files }}"
   - win_chocolatey: name="{{ item }}"
     with_items: [ "python2", "awscli", "sync" ]
     when: base_ami_id == "clean"
-  - win_shell: "C:\\nitor\\prepare.ps1"
+  - win_shell: "C:\\nameless\\prepare.ps1"
     args:
       chdir: "C:\\"
     when: base_ami_id == "clean"
-  - win_shell: "C:\\nitor\\pre_install.ps1"
+  - win_shell: "C:\\nameless\\pre_install.ps1"
     args:
       chdir: "C:\\"
   - win_updates:
@@ -132,7 +132,7 @@
     when: not update_result.skipped and update_result.reboot_required
   - win_chocolatey: name="{{ item }}"
     with_items: "{{ packages }}"
-  - win_shell: "C:\\nitor\\post_install.ps1"
+  - win_shell: "C:\\nameless\\post_install.ps1"
     args:
       chdir: "C:\\"
 
@@ -170,8 +170,8 @@
     - local_action:
         module: ec2
         region: "{{ aws_region }}"
-        instance_tags: { "environment": "nitor", "Name": "{{ job_name }} prototype" }
-        count_tag:     { "environment": "nitor", "Name": "{{ job_name }} prototype" }
+        instance_tags: { "environment": "nameless", "Name": "{{ job_name }} prototype" }
+        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
         exact_count: 0
         instance_type: "{{ instance_type }}"
         image: "{{ root_ami }}"

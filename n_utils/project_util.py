@@ -75,7 +75,7 @@ complete -o nospace -F _ndt_complete "ndt"
     if len(argv) > 1 and argv[1] == "--project-env":
         print("""_projectenv_hook() {
   local previous_exit_status=$?;
-  eval "$(nitor-dt-load-project-env)";
+  eval "$(nameless-dt-load-project-env)";
   return $previous_exit_status;
 };
 if ! [[ "$PROMPT_COMMAND" =~ _projectenv_hook ]]; then

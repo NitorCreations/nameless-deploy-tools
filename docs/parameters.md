@@ -101,7 +101,7 @@ packages, runs post-install script and then creates the image.
 
 ### `paramDeployToolsVersion`
 
-The version of nitor-deploy-tools to install. Use `latest` to always install
+The version of nameless-deploy-tools to install. Use `latest` to always install
 the latest one or select a version to stay with a specific one. At times
 there are alpha releases out, you can also define `alpha` to get the latest
 alpha release.

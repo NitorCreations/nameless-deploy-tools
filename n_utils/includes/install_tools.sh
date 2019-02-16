@@ -21,7 +21,7 @@ if [ -z "$1" -o "$1" = "latest" -o "$1" = "alpha" ]; then
 else
   DEPLOYTOOLS_VERSION="==$1"
 fi
-rm -f /opt/nitor/instance-data.json
+rm -f /opt/nameless/instance-data.json
 
 OS_TYPE=$(source /etc/os-release; echo ${ID})
 if [ "$OS_TYPE" = "ubuntu" ]; then
@@ -33,13 +33,13 @@ fi
 python -m pip install -U pip --ignore-installed
 pip install -U setuptools awscli boto3
 # If alpha, get first all non-alpha dependencies
-pip install -U "nitor-deploy-tools$DEPLOYTOOLS_VERSION"
+pip install -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION"
 if [ "$1" = "alpha" ]; then
   # Upgrade just ndt to alpha
-  pip install -U --pre --no-deps "nitor-deploy-tools"
+  pip install -U --pre --no-deps "nameless-deploy-tools"
 fi
 aws configure set default.s3.signature_version s3v4
-rm -f /opt/nitor/instance-data.json
+rm -f /opt/nameless/instance-data.json
 # Make sure we get logging
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null ; then
   echo "output: {all: '| tee -a /var/log/cloud-init-output.log'}" >> /etc/cloud/cloud.cfg.d/05_logging.cfg

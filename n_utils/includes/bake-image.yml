@@ -22,8 +22,8 @@
     - local_action:
         module: ec2
         region: "{{ aws_region }}"
-        instance_tags: { "environment": "nitor", "Name": "{{ job_name }} prototype" }
-        count_tag:     { "environment": "nitor", "Name": "{{ job_name }} prototype" }
+        instance_tags: { "environment": "nameless", "Name": "{{ job_name }} prototype" }
+        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
         exact_count: 0
         instance_type: "{{ instance_type }}"
         image: "{{ root_ami }}"
@@ -44,7 +44,7 @@
         module: ec2
         region: "{{ aws_region }}"
         instance_tags: "{{ bake_tags }}"
-        count_tag:     { "environment": "nitor", "Name": "{{ job_name }} prototype" }
+        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
         exact_count: 1
         instance_type: "{{ instance_type }}"
         image: "{{ root_ami }}"
@@ -109,12 +109,12 @@
         createhome: yes
     - shell: bash -c 'sleep {{ timeout_min }}m ; shutdown -P +1' &
     - file:
-        path: /opt/nitor
+        path: /opt/nameless
         state: directory
         mode: 0755
     - copy:
         src: "{{ imagedir }}/{{ item }}"
-        dest: /opt/nitor/
+        dest: /opt/nameless/
         owner: root
         group: root
         mode: 0644
@@ -180,8 +180,8 @@
     - local_action:
         module: ec2
         region: "{{ aws_region }}"
-        instance_tags: { "environment": "nitor", "Name": "{{ job_name }} prototype" }
-        count_tag:     { "environment": "nitor", "Name": "{{ job_name }} prototype" }
+        instance_tags: { "environment": "nameless", "Name": "{{ job_name }} prototype" }
+        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
         exact_count: 0
         instance_type: "{{ instance_type }}"
         image: "{{ root_ami }}"

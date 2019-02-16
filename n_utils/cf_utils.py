@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""" Utilities to work with instances made by nitor-deploy-tools stacks
+""" Utilities to work with instances made by nameless-deploy-tools stacks
 """
 from __future__ import print_function
 
@@ -53,8 +53,8 @@ ACCOUNT_ID = None
 ROLE_NAME = None
 INSTANCE_IDENTITY_URL = 'http://169.254.169.254/latest/dynamic/instance-identity/document'
 USER_DATA_URL = 'http://169.254.169.254/latest/user-data'
-INSTANCE_DATA_LINUX = '/opt/nitor/instance-data.json'
-INSTANCE_DATA_WIN = 'C:/nitor/instance-data.json'
+INSTANCE_DATA_LINUX = '/opt/nameless/instance-data.json'
+INSTANCE_DATA_WIN = 'C:/nameless/instance-data.json'
 
 dthandler = lambda obj: obj.isoformat() if hasattr(obj, 'isoformat') else json.JSONEncoder().default(obj)
 
@@ -129,8 +129,8 @@ class InstanceInfo(object):
         firstly from the metadata service and then from EC2 tags and then
         from the CloudFormation template that created this instance
 
-        The info is then cached in /opt/nitor/instance-data.json on linux and
-        in  C:\\nitor\\instance-data.json on windows.
+        The info is then cached in /opt/nameless/instance-data.json on linux and
+        in  C:\\nameless\\instance-data.json on windows.
     """
     _info = {}
 
@@ -248,10 +248,10 @@ class InstanceInfo(object):
             info_file_parent = None
             if os.path.isdir('C:/'):
                 info_file_parent = 'C:/'
-                info_file_dir = 'C:/nitor'
+                info_file_dir = 'C:/nameless'
             else:
                 info_file_parent = '/opt'
-                info_file_dir = '/opt/nitor'
+                info_file_dir = '/opt/nameless'
             if not os.path.isdir(info_file_dir) and os.access(info_file_parent, os.W_OK):
                 os.makedirs(info_file_dir)
             if not os.access(info_file_dir, os.W_OK):

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""" Command line tools for nitor-deploy-tools
+""" Command line tools for nameless-deploy-tools
 """
 from __future__ import print_function
 
@@ -159,7 +159,7 @@ def colorprint(data, output_format="yaml"):
 
 
 def yaml_to_json():
-    """Convert Nitor CloudFormation yaml to CloudFormation json with some
+    """Convert nameless CloudFormation yaml to CloudFormation json with some
     preprosessing
     """
     parser = get_parser()
@@ -200,7 +200,7 @@ def yaml_to_yaml():
 
 
 def json_to_yaml():
-    """Convert CloudFormation json to an approximation of a Nitor CloudFormation
+    """Convert CloudFormation json to an approximation of a nameless CloudFormation
     yaml with for example scripts externalized
     """
     parser = get_parser()

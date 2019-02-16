@@ -34,7 +34,7 @@ fi
 ./update-commandlist.sh
 sed -i "s/$VERSION/$NEW_VERSION/g" setup.py
 sed -i "s/## Released version.*/## Released version $NEW_VERSION/g" README.md
-sed -i "s/nitor-deploy-tools==.*/nitor-deploy-tools==$NEW_VERSION/g" docker/Dockerfile
+sed -i "s/nameless-deploy-tools==.*/nameless-deploy-tools==$NEW_VERSION/g" docker/Dockerfile
 git commit -m "$1" setup.py README.md docker/Dockerfile docs/commands.md
 git tag "$NEW_VERSION" -m "$1"
 git push --tags origin master

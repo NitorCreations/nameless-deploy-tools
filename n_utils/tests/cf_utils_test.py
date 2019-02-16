@@ -54,7 +54,7 @@ def describe_stacks(StackName=None):
         "Stacks": [
             {
                 "StackId": "arn:aws:cloudformation:eu-west-1:832585949989:stack/infra-network/809d77a0-afab-11e5-92de-50faeb52a4d2",
-                "Description": "Nitor infra network stack",
+                "Description": "Nameless infra network stack",
                 "Tags": [],
                 "Outputs": [
                     {

@@ -26,7 +26,7 @@ Parameters:
       Description: Docker image tag to use for deployment
     paramServiceName:
       Type: String
-      Default: Nitor-Backend-S3-Sites-Proxy
+      Default: Namless-Backend-S3-Sites-Proxy
       Description: Container service name
     paramSitesBucketArn:
       Description: Sites Bucket ARN

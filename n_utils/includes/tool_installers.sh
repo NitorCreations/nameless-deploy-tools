@@ -138,7 +138,7 @@ update_deploytools() {
     echo "Specific version not defined - updating to latest"
     DEPLOYTOOLS_VERSION="latest"
   fi
-  echo "Updating nitor-deploy-tools to $DEPLOYTOOLS_VERSION"
+  echo "Updating nameless-deploy-tools to $DEPLOYTOOLS_VERSION"
   bash "$(n-include install_tools.sh)" "${DEPLOYTOOLS_VERSION}"
 }
 update_aws_utils () {
