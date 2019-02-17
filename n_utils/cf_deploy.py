@@ -32,9 +32,9 @@ from pygments import highlight, lexers, formatters
 from pygments.styles import get_style_by_name
 from termcolor import colored
 
-from . import aws_infra_util
-from .cf_utils import get_images
-from .log_events import CloudWatchLogsThread, CloudFormationEvents, fmttime
+from n_utils import aws_infra_util
+from n_utils.cf_utils import get_images
+from n_utils.log_events import CloudWatchLogsThread, CloudFormationEvents, fmttime
 
 REDIRECTED = False
 

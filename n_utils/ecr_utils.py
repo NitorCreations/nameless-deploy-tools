@@ -23,7 +23,7 @@ import boto3
 
 from botocore.exceptions import ClientError
 
-from .cf_utils import region
+from n_utils.cf_utils import region
 
 
 def ensure_repo(name):

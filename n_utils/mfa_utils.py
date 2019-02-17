@@ -20,13 +20,13 @@ import os
 import yaml
 import pyotp
 from os import walk
-from .yuuuu3332111i1l1i import IiII1IiiIiI1, I11iIi1I
+from n_utils.yuuuu3332111i1l1i import IiII1IiiIiI1, I11iIi1I
 import json
 import base64
 import pyqrcode
-from Cryptodome . Cipher import AES
-from Cryptodome . Util import Counter
-from Cryptodome . Hash import SHA256
+from Cryptodome.Cipher import AES
+from Cryptodome.Util import Counter
+from Cryptodome.Hash import SHA256
 
 
 def mfa_add_token(args):
