@@ -1,8 +1,8 @@
 from builtins import object
-import re
-import shutil
-import tarfile
-import tempfile
+from re import sub
+from shutil import rmtree
+from tarfile import open as tar_open, ReadError as TarReadError
+from tempfile import mkdtemp
 from os import environ, devnull, linesep
 from subprocess import Popen, PIPE
 from locale import getpreferredencoding
@@ -32,7 +32,7 @@ class Git(object):
         if branch in self.export_directories:
             return self.export_directories[branch], True
         else:
-            co_dir = tempfile.mkdtemp()
+            co_dir = mkdtemp()
             self.export_directories[branch] = co_dir
             return co_dir, False
     
@@ -41,7 +41,7 @@ class Git(object):
         output, _ = proc.communicate()
         if proc.returncode == 0:
             for line in output.decode(SYS_ENCODING).split(linesep):
-                line = re.sub(r"^[\*\s]*", "", line).strip()
+                line = sub(r"^[\*\s]*", "", line).strip()
                 if "origin/HEAD" in line:
                     continue
                 if line.endswith("origin/" + branch) or line == branch:
@@ -51,7 +51,7 @@ class Git(object):
     def delete_exports(self):
         for dir in list(self.export_directories.values()):
             try:
-                shutil.rmtree(dir)
+                rmtree(dir)
             except:
                 # Best effport deleting only - not fatal
                 pass
@@ -67,9 +67,9 @@ class Git(object):
                 if not export_branch:
                     raise CheckoutException("Failed to resolve branch " + branch + " for export")
                 proc = Popen(["git", "archive", "--format", "tar", export_branch], stdout=PIPE, stderr=open(devnull, 'w'))
-                tar = tarfile.open(mode="r|", fileobj=proc.stdout)
+                tar = tar_open(mode="r|", fileobj=proc.stdout)
                 tar.extractall(path=checkout_dir)
-        except tarfile.ReadError:
+        except TarReadError:
             raise CheckoutException("Failed to export branch " + branch)
         return checkout_dir
 
@@ -90,7 +90,7 @@ class Git(object):
             for line in output.decode(SYS_ENCODING).split(linesep):
                 if "detached" in line:
                     continue
-                line = re.sub(r"^[\*\s]*", "", line).strip()
+                line = sub(r"^[\*\s]*", "", line).strip()
                 if not line:
                     continue
                 if "origin/HEAD" in line:
