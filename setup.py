@@ -16,10 +16,10 @@ from setuptools import setup
 from n_utils import PATH_COMMANDS, CONSOLESCRIPTS
 
 setup(name='nameless_deploy_tools',
-      version='1.60',
+      version='1.61',
       description='Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow',
       url='http://github.com/NitorCreations/nameless-deploy-tools',
-      download_url='https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.60',
+      download_url='https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.61',
       author='Pasi Niemi',
       author_email='pasi@nitor.com',
       license='Apache 2.0',
