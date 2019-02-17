@@ -1135,148 +1135,127 @@ optional arguments:
 ## `[ndt ]associate-eip`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/associate-eip", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3105, in <module>
-    @_call_aside
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3089, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3118, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 578, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 895, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 781, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'nitor-deploy-tools\' distribution was not found and is required by the application
+usage: associate-eip [-h] [-i IP] [-a ALLOCATIONID] [-e EIPPARAM]
+                     [-p ALLOCATIONIDPARAM]
+
+Associate an Elastic IP for the instance that this script runs on
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i IP, --ip IP        Elastic IP to allocate - default is to get paramEip
+                        from the stack that created this instance
+  -a ALLOCATIONID, --allocationid ALLOCATIONID
+                        Elastic IP allocation id to allocate - default is to
+                        get paramEipAllocationId from the stack that created
+                        this instance
+  -e EIPPARAM, --eipparam EIPPARAM
+                        Parameter to look up for Elastic IP in the stack -
+                        default is paramEip
+  -p ALLOCATIONIDPARAM, --allocationidparam ALLOCATIONIDPARAM
+                        Parameter to look up for Elastic IP Allocation ID in
+                        the stack - default is paramEipAllocationId
 ```
 
 ## `[ndt ]cf-logs-to-cloudwatch`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/cf-logs-to-cloudwatch", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3105, in <module>
-    @_call_aside
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3089, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3118, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 578, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 895, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 781, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'nitor-deploy-tools\' distribution was not found and is required by the application
+usage: cf-logs-to-cloudwatch [-h] file
+
+Read a file and send rows to cloudwatch and keep following the end for new
+data. The log group will be the stack name that created instance and the
+logstream will be the instance id and filename.
+
+positional arguments:
+  file        File to follow
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `[ndt ]ec2-associate-eip`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/ec2-associate-eip", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3105, in <module>
-    @_call_aside
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3089, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3118, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 578, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 895, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 781, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'nitor-deploy-tools\' distribution was not found and is required by the application
+usage: ec2-associate-eip [-h] [-i IP] [-a ALLOCATIONID] [-e EIPPARAM]
+                         [-p ALLOCATIONIDPARAM]
+
+Associate an Elastic IP for the instance that this script runs on
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i IP, --ip IP        Elastic IP to allocate - default is to get paramEip
+                        from the stack that created this instance
+  -a ALLOCATIONID, --allocationid ALLOCATIONID
+                        Elastic IP allocation id to allocate - default is to
+                        get paramEipAllocationId from the stack that created
+                        this instance
+  -e EIPPARAM, --eipparam EIPPARAM
+                        Parameter to look up for Elastic IP in the stack -
+                        default is paramEip
+  -p ALLOCATIONIDPARAM, --allocationidparam ALLOCATIONIDPARAM
+                        Parameter to look up for Elastic IP Allocation ID in
+                        the stack - default is paramEipAllocationId
 ```
 
 ## `[ndt ]logs-to-cloudwatch`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/logs-to-cloudwatch", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3105, in <module>
-    @_call_aside
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3089, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3118, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 578, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 895, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 781, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'nitor-deploy-tools\' distribution was not found and is required by the application
+usage: logs-to-cloudwatch [-h] file
+
+Read a file and send rows to cloudwatch and keep following the end for new
+data. The log group will be the stack name that created instance and the
+logstream will be the instance id and filename.
+
+positional arguments:
+  file        File to follow
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `[ndt ]n-include`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/n-include", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3105, in <module>
-    @_call_aside
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3089, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3118, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 578, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 895, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 781, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'nitor-deploy-tools\' distribution was not found and is required by the application
+usage: n-include [-h] file
+
+Find a file from the first of the defined include paths
+
+positional arguments:
+  file        The file to find
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `[ndt ]n-include-all`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/n-include-all", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3105, in <module>
-    @_call_aside
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3089, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3118, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 578, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 895, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 781, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'nitor-deploy-tools\' distribution was not found and is required by the application
+usage: n-include-all [-h] pattern
+
+Find a file from the first of the defined include paths
+
+positional arguments:
+  pattern     The file pattern to find
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `[ndt ]signal-cf-status`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/signal-cf-status", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3105, in <module>
-    @_call_aside
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3089, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 3118, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 578, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 895, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 781, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'nitor-deploy-tools\' distribution was not found and is required by the application
+usage: signal-cf-status [-h] [-r RESOURCE] status
+
+Signal CloudFormation status to a logical resource in CloudFormation that is
+either given on the command line or resolved from CloudFormation tags
+
+positional arguments:
+  status                Status to indicate: SUCCESS | FAILURE
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r RESOURCE, --resource RESOURCE
+                        Logical resource name to signal. Looked up from
+                        cloudformation tags by default
 ```
 
 ## `create-shell-archive.sh`
