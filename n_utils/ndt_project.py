@@ -35,7 +35,7 @@ class Component(object):
                     if subdir == "image":
                         sc_name = ""
                     else:
-                        sc_name = subdir.split("-")[-1:][0]
+                        sc_name = "-".join(subdir.split("-")[1:])
                     ret.append(obj(self, sc_name))
         return ret
 
