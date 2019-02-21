@@ -129,7 +129,9 @@
     register: update_result
     when: base_ami_id == "clean"
   - win_reboot:
-    when: not update_result.skipped and update_result.reboot_required
+    when:
+      - "'skipped' not in update_result"
+      - update_result["reboot_required"]
   - win_chocolatey: name="{{ item }}"
     with_items: "{{ packages }}"
   - win_shell: "C:\\nameless\\post_install.ps1"
