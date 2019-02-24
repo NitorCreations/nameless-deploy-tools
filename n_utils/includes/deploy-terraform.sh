@@ -110,6 +110,4 @@ if [ -n "$DRYRUN" ]; then
   exit 0
 fi
 
-terraform apply
-
-sls deploy -s $paramEnvId
+terraform apply -auto-approve
