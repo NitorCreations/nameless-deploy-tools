@@ -80,11 +80,10 @@ elif which assume-deploy-role.sh > /dev/null && [ -z "$AWS_SESSION_TOKEN" ]; the
   eval $(assume-deploy-role.sh)
 fi
 
-eval "$(ndt load-parameters "$component" -l "$terraform" -e)"
+eval "$(ndt load-parameters "$component" -t "$terraform" -e)"
 
-ndt load-parameters "$component" -l "$terraform" -y > "$component/terraform-$ORIG_terraform_NAME/variables.yml"
-ndt yaml-to-yaml "$component/terraform-$ORIG_terraform_NAME/template.yaml" > "$component/terraform-$ORIG_terraform_NAME/terraform.yml"
+ndt load-parameters "$component" -t "$terraform" -j > "$component/terraform-$ORIG_TERRAFORM_NAME/terraform.tfvars"
 
-cd "$component/terraform-$ORIG_terraform_NAME"
+cd "$component/terraform-$ORIG_TERRAFORM_NAME"
 
-sls remove -s $paramEnvId
+terraform destroy -auto-approve

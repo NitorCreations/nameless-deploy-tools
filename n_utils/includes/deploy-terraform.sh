@@ -92,7 +92,28 @@ elif [ -n "$AWS_PROFILE" ]; then
   eval "$(ndt profile-to-env $AWS_PROFILE)"
 fi
 
-ndt load-parameters "$component" -t "$terraform" -j > "$component/terraform-$ORIG_TERRAFORM_NAME/terraform.tfvars"
+COMPONENT_DIR="$component/terraform-$ORIG_TERRAFORM_NAME"
+ndt load-parameters "$component" -t "$terraform" -j > "$COMPONENT_DIR/terraform.tfvars"
+
+if [ "$paramStateBucket" ]; then
+  cat > $COMPONENT_DIR/backend.tf << EOF
+terraform {
+    backend "s3" {
+        encrypt = true
+        bucket = "$paramStateBucket"
+EOF
+  if [ "$paramLockTable" ]; then
+    cat >> $COMPONENT_DIR/backend.tf << EOF
+        dynamodb_table = "${paramLockTable}"
+EOF
+  fi
+  cat >> $component/terraform-$ORIG_TERRAFORM_NAME/backend.tf << EOF
+        region = "$REGION"
+        key = "${component}/${ORIG_TERRAFORM_NAME}.tfstate"
+    }
+}
+EOF
+fi
 
 cd "$component/terraform-$ORIG_TERRAFORM_NAME"
 
@@ -100,7 +121,7 @@ if [ -x "./pre_deploy.sh" ]; then
   "./pre_deploy.sh"
 fi
 
-if ! [ -d "terraform.tfstate.d" ]; then
+if ! [ -d ".terraform" ]; then
   terraform init
 fi
 
