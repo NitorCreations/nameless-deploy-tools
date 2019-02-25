@@ -34,6 +34,7 @@ import tempfile
 import time
 import tempfile
 import six
+from copy import deepcopy
 from collections import deque, OrderedDict
 from os.path import expanduser
 from threading import Event, Lock, Thread
@@ -751,7 +752,8 @@ def register_private_dns(dns_name, hosted_zone):
 
 
 def interpolate_file(file_name, destination=None, stack_name=None,
-                     use_vault=False, encoding='utf-8'):
+                     use_vault=False, use_environ=False, skip_stack=False,
+                     encoding='utf-8'):
     if not destination:
         destination = file_name
         dstfile = tempfile.NamedTemporaryFile(dir=os.path.dirname(file_name),
@@ -761,11 +763,15 @@ def interpolate_file(file_name, destination=None, stack_name=None,
         dstfile = tempfile.NamedTemporaryFile(dir=os.path.dirname(destination),
                                               prefix=os.path.basename(destination),
                                               delete=False)
-    if not stack_name:
-        info = InstanceInfo()
-        params = info.stack_data_dict()
+    if use_environ:
+        params = deepcopy(os.environ)
     else:
-        params = stack_params_and_outputs(region(), stack_name)
+        params = {}
+    if not stack_name and is_ec2() and not skip_stack:
+        info = InstanceInfo()
+        params.update(info.stack_data_dict())
+    elif stack_name and not skip_stack:
+        params.update(stack_params_and_outputs(region(), stack_name))
     vault = None
     vault_keys = []
     if use_vault:
@@ -852,8 +858,15 @@ def expand_only_double_paranthesis_params(line, params, vault, vault_keys):
 
 def _process_line(line, params, vault, vault_keys):
     ret = line
+    ret = _process_line_re(ret, params, vault, vault_keys, SIMPLE_PARAM_RE)
+    ret = _process_line_re(ret, params, vault, vault_keys, DOUBLE_PARANTHESIS_RE)
+    ret = _process_line_re(ret, params, vault, vault_keys, PARAM_RE)
+    return ret
+
+def _process_line_re(line, params, vault, vault_keys, matcher):
+    ret = line
     next_start = 0
-    match = PARAM_RE.search(line)
+    match = matcher.search(line)
     while match is not None:
         param_value = None
         param_name = match.group(1)
@@ -881,7 +894,7 @@ def _process_line(line, params, vault, vault_keys):
             next_start = match.end()
         else:
             ret = ret[:match.start()] + param_value + ret[match.end():]
-        match = PARAM_RE.search(ret, next_start)
+        match = matcher.search(ret, next_start)
     return ret
 
 

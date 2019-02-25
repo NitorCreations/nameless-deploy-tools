@@ -737,6 +737,12 @@ def cli_interpolate_file():
     parser.add_argument("-s", "--stack", help="Stack name for values. " +
                                               "Automatically resolved on ec2" +
                                               " instances")
+    parser.add_argument("-k", "--skip-stack", help="Skip stack parameters in" +
+                                                    " all cases",
+                        action="store_true")
+    parser.add_argument("-n", "--use-environ", help="Use environment variables" +
+                                                    " for interpolation",
+                        action="store_true")
     parser.add_argument("-v", "--vault", help="Use vault values as well." +
                                               "Vault resovled from env " +
                                               "variables or default is used",
@@ -750,7 +756,8 @@ def cli_interpolate_file():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     interpolate_file(args.file, stack_name=args.stack, use_vault=args.vault,
-                     destination=args.output, encoding=args.encoding)
+                     destination=args.output, use_environ=args.use_environ,
+                     skip_stack=args.skip_stack, encoding=args.encoding)
 
 
 def cli_ecr_ensure_repo():
@@ -1087,4 +1094,3 @@ def cli_list_components():
         print(json.dumps(ret, indent=2))
     else:
         print("\n".join(ret))
-    
