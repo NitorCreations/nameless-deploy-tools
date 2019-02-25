@@ -317,6 +317,8 @@ usage: ndt deploy-terraform [-d] [-h] component terraform-name
 
 Exports ndt parameters into component/terraform-name/terraform.tfvars as json, runs pre_deploy.sh in the
 terraform project and runs terraform plan; terraform apply for the same
+If TF_BACKEND_CONF is defined and points to a readable file relative to the ndt root,
+that file will get interpolated to $component/terraform-$terraform_name/backend.tf
 
 positional arguments:
   component   the component directory where the terraform directory is
@@ -492,7 +494,8 @@ optional arguments:
 ## `ndt interpolate-file`
 
 ```bash
-usage: ndt interpolate-file [-h] [-s STACK] [-v] [-o OUTPUT] [-e ENCODING]
+usage: ndt interpolate-file [-h] [-s STACK] [-k] [-n] [-v] [-o OUTPUT]
+                            [-e ENCODING]
                             file
 
 Replace placeholders in file with parameter values from stack and optionally
@@ -506,6 +509,8 @@ optional arguments:
   -s STACK, --stack STACK
                         Stack name for values. Automatically resolved on ec2
                         instances
+  -k, --skip-stack      Skip stack parameters in all cases
+  -n, --use-environ     Use environment variables for interpolation
   -v, --vault           Use vault values as well.Vault resovled from env
                         variables or default is used
   -o OUTPUT, --output OUTPUT
