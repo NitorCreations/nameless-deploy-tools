@@ -40,6 +40,8 @@ usage() {
   echo "" >&2
   echo "Exports ndt parameters into component/terraform-name/terraform.tfvars as json, runs pre_deploy.sh in the" >&2
   echo "terraform project and runs terraform plan; terraform apply for the same" >&2
+  echo "If TF_BACKEND_CONF is defined and points to a readable file relative to the ndt root," >&2
+  echo "that file will get interpolated to \$component/terraform-\$terraform_name/backend.tf" >&2
   echo "" >&2
   echo "positional arguments:" >&2
   echo "  component   the component directory where the terraform directory is" >&2
@@ -95,24 +97,8 @@ fi
 COMPONENT_DIR="$component/terraform-$ORIG_TERRAFORM_NAME"
 ndt load-parameters "$component" -t "$terraform" -j > "$COMPONENT_DIR/terraform.tfvars"
 
-if [ "$paramStateBucket" ]; then
-  cat > $COMPONENT_DIR/backend.tf << EOF
-terraform {
-    backend "s3" {
-        encrypt = true
-        bucket = "$paramStateBucket"
-EOF
-  if [ "$paramLockTable" ]; then
-    cat >> $COMPONENT_DIR/backend.tf << EOF
-        dynamodb_table = "${paramLockTable}"
-EOF
-  fi
-  cat >> $component/terraform-$ORIG_TERRAFORM_NAME/backend.tf << EOF
-        region = "$REGION"
-        key = "${component}/${ORIG_TERRAFORM_NAME}.tfstate"
-    }
-}
-EOF
+if [ -r "$TF_BACKEND_CONF" ]; then
+  ndt interpolate-file -n -k "$TF_BACKEND_CONF" -o "$COMPONENT_DIR/backend.tf"
 fi
 
 cd "$component/terraform-$ORIG_TERRAFORM_NAME"
