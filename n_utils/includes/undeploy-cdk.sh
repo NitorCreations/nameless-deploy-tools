@@ -80,11 +80,10 @@ elif which assume-deploy-role.sh > /dev/null && [ -z "$AWS_SESSION_TOKEN" ]; the
   eval $(assume-deploy-role.sh)
 fi
 
-eval "$(ndt load-parameters "$component" -l "$cdk" -e)"
+eval "$(ndt load-parameters "$component" -c "$cdk" -e)"
 
-ndt load-parameters "$component" -l "$cdk" -y > "$component/cdk-$ORIG_cdk_NAME/variables.yml"
-ndt yaml-to-yaml "$component/cdk-$ORIG_cdk_NAME/template.yaml" > "$component/cdk-$ORIG_cdk_NAME/cdk.yml"
+ndt load-parameters "$component" -c "$cdk" -j > "$component/cdk-$ORIG_CDK_NAME/variables.json"
 
-cd "$component/cdk-$ORIG_cdk_NAME"
+cd "$component/cdk-$ORIG_CDK_NAME"
 
-sls remove -s $paramEnvId
+cdk destroy

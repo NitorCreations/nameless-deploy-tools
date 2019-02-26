@@ -99,9 +99,10 @@ if [ -x "./pre_deploy.sh" ]; then
 fi
 
 cdk synth
-cdk diff
+cdk diff ||:
 
 if [ -n "$DRYRUN" ]; then
+  echo "Dry run - quitting"
   exit 0
 fi
 
