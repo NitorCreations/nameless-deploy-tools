@@ -5,7 +5,18 @@
 ## Released version 1.65
 
 Nameless deploy tools are a set of tools to implement a true Infrastructure As Code workflow
-with AWS and CloudFormation.
+with various cloud infrastructure management tools. Currently supported tools are
+CloudFormation, AWS CDK, Serverless Framework and Terraform.
+
+## Why Nameless?
+
+A common analogy for cloud infrastructure has been to move from having pets with
+names that need lots of looking after, to cattle that has at most id's. It's time
+to move to the industrial age from the agrarian era. The infrastructure our
+applications runs now comes and goes and we know at most some statistical information
+about the actual executions. Run times, memory usage, used bandwidth and the like.
+We no longer know even the id's of the things that actually run the code. Hence -
+nameless.
 
 ## Rationale
 
@@ -30,7 +41,8 @@ has at it's core a thought-out way of a branching infrastructure development mod
 
 nameless-deploy-tools works by defining _Amazon Machine Images_, _Docker containers_,
 _Serverless services_ and deploying _[CloudFormation](https://aws.amazon.com/cloudformation/)
-stacks_ of resources.
+stacks_ of resources. CloudFormation stacks can also be defined with _[AWS CDK](https://awslabs.github.io/aws-cdk/)_ 
+applications. All of the above can also be deployed using _[Terraform](https://www.terraform.io)_.
 
 ## Installation
 
