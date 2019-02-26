@@ -39,8 +39,8 @@ has at it's core a thought-out way of a branching infrastructure development mod
 
 ## What it is
 
-nameless-deploy-tools works by defining _Amazon Machine Images_, _Docker containers_,
-_Serverless services_ and deploying _[CloudFormation](https://aws.amazon.com/cloudformation/)
+nameless-deploy-tools works by defining _Amazon Machine Images_, _[Docker containers](https://www.docker.com)_,
+_[Serverless services](https://serverless.com)_ and deploying _[CloudFormation](https://aws.amazon.com/cloudformation/)
 stacks_ of resources. CloudFormation stacks can also be defined with _[AWS CDK](https://awslabs.github.io/aws-cdk/)_ 
 applications. All of the above can also be deployed using _[Terraform](https://www.terraform.io)_.
 
