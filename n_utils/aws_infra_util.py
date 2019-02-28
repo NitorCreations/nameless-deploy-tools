@@ -29,6 +29,7 @@ import six
 import tempfile
 import tarfile
 import shutil
+from base64 import b64encode
 from collections import OrderedDict
 from glob import glob
 from yaml import ScalarNode, SequenceNode, MappingNode
@@ -40,7 +41,7 @@ from n_utils.cf_utils import stack_params_and_outputs, region, resolve_account, 
 from n_utils.git_utils import Git
 from n_utils.ndt import find_include
 from n_utils.ecr_utils import repo_uri
-
+from n_vault import Vault
 stacks = dict()
 CFG_PREFIX = "AWS::CloudFormation::Init_config_files_"
 
@@ -190,21 +191,37 @@ def _process_infra_prop_line(line, params, used_params):
     key_val = line.split("=", 1)
     if len(key_val) == 2:
         key = re.sub("[^a-zA-Z0-9_]", "", key_val[0].strip())
-        if key in os.environ:
-            value = os.environ[key]
-        else:
-            value = key_val[1].strip()
-        if value.startswith("\"") and value.endswith("\""):
-            value = value[1:-1]
-        value = expand_vars(value, used_params, None, [])
-        if value.strip().startswith("StackRef:"):
-            stackref_doc = yaml_load(StringIO(value))
-            stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
-            if stack_value:
-                value = stack_value
-        params[key] = value
-        used_params[key] = value
+    if key in os.environ:
+        value = os.environ[key]
+    else:
+        value = key_val[1]
+    value = _process_value(value, used_params)
+    params[key] = value
+    used_params[key] = value
 
+def _process_value(value, used_params):
+    value = value.strip()
+    if (value.startswith("\"") and value.endswith("\"")) or (value.startswith("'") and value.endswith("'")):
+        value = value[1:-1]
+    value = expand_vars(value, used_params, None, [])
+    if value.strip().startswith("StackRef:"):
+        stackref_doc = yaml_load(StringIO(value))
+        stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
+        if stack_value:
+            value = stack_value
+    if value.strip().startswith("TFRef:"):
+        tfref_doc = yaml_load(StringIO(value))
+        tf_value = _resolve_tfref_from_dict(tfref_doc['TFRef'])
+        if tf_value:
+            value = tf_value
+    if value.strip().startswith("Encrypt:"):
+        enc_doc = yaml_load(StringIO(unicode(value)))
+        enc_conf = enc_doc["Encrypt"]
+        value = _process_value(enc_conf["value"], used_params)
+        del enc_conf["value"]
+        vault = Vault(**enc_conf)
+        value = b64encode(vault.direct_encrypt(value))
+    return value
 
 def import_parameter_file(filename, params):
     used_params = deepcopy(os.environ)
