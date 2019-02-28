@@ -50,7 +50,8 @@ setup(name='nameless_deploy_tools',
           'python-dateutil',
           'pycryptodomex',
           'configparser',
-          'scandir'
+          'scandir',
+          'jmespath'
       ] + ([
           'win-unicode-console',
           'wmi',
