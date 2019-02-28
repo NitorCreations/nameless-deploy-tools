@@ -41,8 +41,11 @@ from n_utils.cf_utils import stack_params_and_outputs, region, resolve_account, 
 from n_utils.git_utils import Git
 from n_utils.ndt import find_include
 from n_utils.ecr_utils import repo_uri
+from n_utils.tf_utils import pull_state, flat_state, jmespath_var
 from n_vault import Vault
 stacks = dict()
+terraforms = dict()
+parameters = dict()
 CFG_PREFIX = "AWS::CloudFormation::Init_config_files_"
 
 ############################################################################
@@ -172,6 +175,13 @@ def run_command(command):
 def _resolve_stackref_from_dict(stack_var):
     if "region" in stack_var and "stackName" in stack_var and "paramName" in stack_var:
         return _resolve_stackref(stack_var['region'], stack_var['stackName'], stack_var['paramName'])
+    elif "component" in stack_var and "stack" in stack_var and "paramName" in stack_var:
+        param_name = stack_var["paramName"]
+        del stack_var["paramName"]
+        params = load_parameters(**stack_var)
+        region = params["REGION"]
+        stack_name = params["STACK_NAME"]
+        return _resolve_stackref(region, stack_name, param_name)
     else:
         return None
 
@@ -187,17 +197,45 @@ def _resolve_stackref(region, stack_name, stack_param):
         return stack_params[stack_param]
     return None
 
+def _resolve_tfref_from_dict(tfref_var):
+    if "component" in tfref_var and "terraform" in tfref_var and ("paramName" in tfref_var or "jmespath" in tfref_var):
+        with Git() as git:
+            current_branch = git.get_current_branch()
+            if "branch" in tfref_var:
+                branch = tfref_var["branch"]
+            else:
+                branch = current_branch
+            tf_key = (tfref_var["component"], tfref_var["terraform"], branch)
+            if tf_key in terraforms:
+                terraform = terraforms[tf_key]
+            else:
+                root = "."
+                if branch != current_branch:
+                    root = git.export_branch(branch)
+                terraform = pull_state(tfref_var["component"], tfref_var["terraform"], root=root)
+                terraforms[tf_key] = terraform
+            if "paramName" in tfref_var:
+                flat_state_dict = flat_state(terraform)
+                if tfref_var["paramName"] in flat_state_dict:
+                    return flat_state_dict[tfref_var["paramName"]]
+                else:
+                    return None
+            if "jmespath" in tfref_var:
+                return jmespath_var(terraform, tfref_var["jmespath"])
+    else:
+        return None
+
 def _process_infra_prop_line(line, params, used_params):
     key_val = line.split("=", 1)
     if len(key_val) == 2:
         key = re.sub("[^a-zA-Z0-9_]", "", key_val[0].strip())
-    if key in os.environ:
-        value = os.environ[key]
-    else:
-        value = key_val[1]
-    value = _process_value(value, used_params)
-    params[key] = value
-    used_params[key] = value
+        if key in os.environ:
+            value = os.environ[key]
+        else:
+            value = key_val[1]
+        value = _process_value(value, used_params)
+        params[key] = value
+        used_params[key] = value
 
 def _process_value(value, used_params):
     value = value.strip()
@@ -209,15 +247,19 @@ def _process_value(value, used_params):
         stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
         if stack_value:
             value = stack_value
-    if value.strip().startswith("TFRef:"):
-        tfref_doc = yaml_load(StringIO(value))
+    if value.strip().startswith("TFRef:") and "TF_INIT_OUTPUT" not in os.environ:
+        tfref_doc = yaml_load(StringIO(unicode(value)))
         tf_value = _resolve_tfref_from_dict(tfref_doc['TFRef'])
         if tf_value:
             value = tf_value
     if value.strip().startswith("Encrypt:"):
         enc_doc = yaml_load(StringIO(unicode(value)))
         enc_conf = enc_doc["Encrypt"]
-        value = _process_value(enc_conf["value"], used_params)
+        if isinstance(enc_conf, OrderedDict):
+            to_encrypt = yaml_save(enc_conf["value"])
+        else:
+            to_encrypt = enc_conf["value"]
+        value = _process_value(to_encrypt, used_params)
         del enc_conf["value"]
         vault = Vault(**enc_conf)
         value = b64encode(vault.direct_encrypt(value))
@@ -319,6 +361,19 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
 def load_parameters(component=None, stack=None, serverless=None, docker=None, image=None, 
                     cdk=None, terraform=None, branch=None, resolve_images=False,
                     git=None):
+    subc_name = ""
+    if stack:
+        subc_name = "stack=" + stack
+    if serverless:
+        subc_name = "serverless=" + serverless
+    if docker:
+        subc_name = "docker=" + docker
+    if isinstance(image, six.string_types):
+        subc_name = "image=" + image
+    if cdk:
+        subc_name = "cdk=" + cdk
+    if terraform:
+        subc_name = "terraform=" + terraform
     if not git:
         git = Git()
     with git:
@@ -326,6 +381,9 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
         if not branch:
             branch = current_branch
         branch = branch.strip().split("origin/")[-1:][0]
+        params_key = (component, subc_name, branch)
+        if params_key in parameters:
+            return parameters[params_key]
         ret = {
             "GIT_BRANCH": branch
         }
@@ -347,18 +405,27 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
             _add_subcomponent_file(prefix + component, branch, "terraform", terraform, files)
             _add_subcomponent_file(prefix + component, branch, "docker", docker, files)
             _add_subcomponent_file(prefix + component, branch, "image", image, files)
-            if (image, six.string_types):
+            if isinstance(image, six.string_types):
                 files.append(prefix + component + os.sep + "image" + os.sep + "infra.properties")
                 files.append(prefix + component + os.sep + "image" + os.sep + "infra-" + branch + ".properties")
+        initial_resolve = ret.copy()
+        for file in files:
+            if os.path.exists(file):
+                import_parameter_file(file, initial_resolve)
+        if "REGION" not in initial_resolve:
+            ret["REGION"] = region()
+        else:
+            ret["REGION"] = initial_resolve["REGION"]
+        if not "AWS_DEFAULT_REGION" in os.environ:
+            os.environ["AWS_DEFAULT_REGION"] = ret["REGION"]
+        if "paramEnvId" not in initial_resolve:
+            ret["paramEnvId"] = branch
+        else:
+            ret["paramEnvId"] = initial_resolve["paramEnvId"]
         for file in files:
             if os.path.exists(file):
                 import_parameter_file(file, ret)
         if (serverless or stack or cdk or terraform) and resolve_images:
-            if not "AWS_DEFAULT_REGION" in os.environ:
-                if "REGION" in ret:
-                    os.environ["AWS_DEFAULT_REGION"] = ret["REGION"]
-                else:
-                    os.environ["AWS_DEFAULT_REGION"] = region()
             image_branch = branch
             if 'BAKE_IMAGE_BRANCH' in ret:
                 image_branch = ret['BAKE_IMAGE_BRANCH']
@@ -399,6 +466,7 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
                 ret["DOCKER_NAME"] = component + "/" + ret["paramEnvId"] + "-" + ret["ORIG_DOCKER_NAME"]
         if "JENKINS_JOB_PREFIX" not in ret:
             ret["JENKINS_JOB_PREFIX"] = "ndt" + ret["paramEnvId"]
+        parameters[params_key] = ret
         return ret
 
 

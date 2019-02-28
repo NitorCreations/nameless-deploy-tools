@@ -66,7 +66,7 @@ onexit() {
     rm -f $OUTPUT
     exit "$EXIT_VAL"
 }
-TF_INIT_OUTPUT="$(mktemp)"
+export TF_INIT_OUTPUT="$(mktemp)"
 exec 3>&1 4>&2 >$TF_INIT_OUTPUT 2>&1
 trap onexit EXIT
 set -xe

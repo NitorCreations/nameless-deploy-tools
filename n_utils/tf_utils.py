@@ -1,5 +1,6 @@
 import json
-import jmespath
+from jmespath import search
+from subprocess import Popen, PIPE
 from collections import OrderedDict
 
 def flat_state(state):
@@ -24,8 +25,17 @@ def flat_state(state):
 
 def jmespath_var(state, jmespath_expr):
     state_doc = json.loads(state)
-    ret = jmespath.search(jmespath_expr, state_doc)
+    ret = search(jmespath_expr, state_doc)
     if isinstance(ret[0], dict):
         return json.dumps(ret[0])
     else:
         return "\n".join(ret)
+
+def pull_state(component, terraform, root="."):
+    cmd = ["ndt", "terraform-pull-state", component, terraform]
+    process = Popen(cmd, cwd=root, stdout=PIPE, stderr=PIPE)
+    process.universal_newlines = True
+    stdout, _  = process.communicate()
+    if process.returncode != 0:
+        return {}
+    return stdout

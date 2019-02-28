@@ -60,6 +60,7 @@ from n_utils.profile_util import update_profile, print_profile
 from n_utils.ndt_project import list_jobs, list_components
 from n_utils.git_utils import Git
 from n_utils.ndt_project import Project
+from n_utils.tf_utils import pull_state, jmespath_var, flat_state
 
 SYS_ENCODING = locale.getpreferredencoding()
 
@@ -674,7 +675,28 @@ def show_stack_params_and_outputs():
     else:
         print(json.dumps(resp, indent=2))
 
-
+def show_terraform_params():
+    """ Show available parameters for a terraform subcomponent """
+    parser = get_parser()
+    parser.add_argument("component", help="The component containg the terraform subcomponet")
+    parser.add_argument("terraform", help="The name of the terraform subcomponent")
+    param = parser.add_mutually_exclusive_group(required=False)
+    param.add_argument("-j", "--jmespath", help="Show just a matching jmespath value")
+    param.add_argument("-p", "--parameter", help="Name of paremeter if only" +
+                                                " one parameter required")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    terraform = pull_state(args.component, args.terraform)
+    if args.jmespath:
+        print(jmespath_var(terraform, args.jmespath))
+    else:
+        params = flat_state(terraform)
+        if args.parameter:
+            if args.parameter in params:
+                print(params[args.parameter])
+        else:
+            print(json.dumps(params, indent=2))
+            
 def cli_get_images():
     """ Gets a list of images given a bake job name
     """
