@@ -7,7 +7,7 @@ get_bakeable_images() {
 }
 get_stack_dirs() {
   if [ -r infra.properties -o -r infra-master.properties ]; then
-    echo $(find . -mindepth 2 -maxdepth 2 -name 'infra*.properties' | cut -d '/' -f 2 | sort -u)
+    echo $(find . -mindepth 2 -maxdepth 3 -name 'infra*.properties' | cut -d '/' -f 2 | sort -u)
   fi
 }
 get_stacks() {

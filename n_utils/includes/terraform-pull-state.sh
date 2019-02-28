@@ -20,10 +20,7 @@ if [ "$_ARGCOMPLETE" ]; then
   source $(n-include autocomplete-helpers.sh)
   case $COMP_CWORD in
     2)
-      if [ "$COMP_INDEX" = "$COMP_CWORD" ]; then
-        DRY="-d "
-      fi
-      compgen -W "$DRY-h $(get_stack_dirs)" -- $COMP_CUR
+      compgen -W "-h $(get_stack_dirs)" -- $COMP_CUR
       ;;
     3)
       compgen -W "$(get_terraform $COMP_PREV)" -- $COMP_CUR
@@ -36,12 +33,9 @@ if [ "$_ARGCOMPLETE" ]; then
 fi
 
 usage() {
-  echo "usage: ndt deploy-terraform [-d] [-h] component terraform-name" >&2
+  echo "usage: ndt terraform-init-state [-h] component terraform-name" >&2
   echo "" >&2
-  echo "Exports ndt parameters into component/terraform-name/terraform.tfvars as json, runs pre_deploy.sh in the" >&2
-  echo "terraform project and runs terraform plan; terraform apply for the same" >&2
-  echo "If TF_BACKEND_CONF is defined and points to a readable file relative to the ndt root," >&2
-  echo "that file will get interpolated to \$component/terraform-\$terraform_name/backend.tf" >&2
+  echo "Make sure terraform state is initialized either for backend or locally" >&2
   echo "" >&2
   echo "positional arguments:" >&2
   echo "  component   the component directory where the terraform directory is" >&2
@@ -50,7 +44,6 @@ usage() {
   echo "                  you would give sender" >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i"  >&2
   echo "  -h, --help    show this help message and exit"  >&2
   if "$@"; then
     echo "" >&2
@@ -61,27 +54,27 @@ usage() {
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
   usage
 fi
-if [ "$1" = "-d" -o "$1" = "--dryrun" ]; then
-  DRYRUN=1
-  shift
-fi
 die () {
-  echo "$1" >&2
+  echo "$1" >&4
   usage
 }
+onexit() {
+    EXIT_VAL=$?
+    if [ "$EXIT_VAL" != "0" ]; then
+        cat $TF_INIT_OUTPUT >&4
+    fi
+    rm -f $OUTPUT
+    exit "$EXIT_VAL"
+}
+TF_INIT_OUTPUT="$(mktemp)"
+exec 3>&1 4>&2 >$TF_INIT_OUTPUT 2>&1
+trap onexit EXIT
 set -xe
 
 component="$1" ; shift
 [ "${component}" ] || die "You must give the component name as argument"
 terraform="$1"; shift
 [ "${terraform}" ] || die "You must give the terraform name as argument"
-
-TSTAMP=$(date +%Y%m%d%H%M%S)
-if [ -z "$BUILD_NUMBER" ]; then
-  BUILD_NUMBER=$TSTAMP
-else
-  BUILD_NUMBER=$(printf "%04d\n" $BUILD_NUMBER)
-fi
 
 eval "$(ndt load-parameters "$component" -t "$terraform" -e -r)"
 
@@ -95,27 +88,19 @@ elif [ -n "$AWS_PROFILE" ]; then
 fi
 
 COMPONENT_DIR="$component/terraform-$ORIG_TERRAFORM_NAME"
-ndt load-parameters "$component" -t "$terraform" -j > "$COMPONENT_DIR/terraform.tfvars"
 
 if [ "$SKIP_TF_BACKEND" != "y" ] && [ -r "$TF_BACKEND_CONF" ]; then
   ndt interpolate-file -n -k "$TF_BACKEND_CONF" -o "$COMPONENT_DIR/backend.tf"
 fi
 
-cd "$component/terraform-$ORIG_TERRAFORM_NAME"
-
-if [ -x "./pre_deploy.sh" ]; then
-  "./pre_deploy.sh"
-fi
+cd $COMPONENT_DIR
 
 if ! terraform init; then
   rm -rf .terraform
   terraform init
 fi
 
-terraform plan
+set +x
+exec 1>&4
 
-if [ -n "$DRYRUN" ]; then
-  exit 0
-fi
-
-terraform apply -auto-approve
+terraform state pull

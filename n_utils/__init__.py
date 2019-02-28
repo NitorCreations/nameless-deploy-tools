@@ -99,7 +99,8 @@ NDT_ONLY_SCRIPT = [
     'undeploy-cdk.sh',
     'deploy-terraform.sh',
     'undeploy-terraform.sh',
-    'print-create-instructions.sh'
+    'print-create-instructions.sh',
+    'terraform-pull-state.sh'
 ]
 CONSOLE_ONLY = [
     'cf-update-stack=n_utils.cli:update_stack',
