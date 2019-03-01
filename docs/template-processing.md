@@ -240,6 +240,49 @@ StackRef:
   paramName: KMSPolicy
 ```
 
+You can also insert a StackRef as a value into `infra*.properties` file as yaml on a single line.
+
+### `TFRef`
+
+Gets a value from a terraform state json. Parameters can be addressed through a flattened map that you
+can view with the command `ndt show-terraform-params [component] [terraform]` or with a [JMESPath](http://jmespath.org/)
+expression.
+
+Here is an example:
+```yaml
+TFRef:
+  component: azure
+  terraform: eventhub
+  paramName:
+  branch: master
+  paramName: demo_sa.primary_connection_string
+```
+
+`branch` is optional and defaults to the current branch.
+You need to specify either `paramName` for the flat map or `jmespath` to use an expression. You can see
+the extracted state json with `ndt terraform-pull-state [component] [terraform]`.
+
+You can also insert a TFRef as a value into `infra*.properties` file as yaml on a single line.
+
+### `Encrypt`
+
+Encrypts the value with a vault key. Can be configured to use a specific vault stack or a specific KMS key. Useful
+for example when you want to include sensitive data from Terraform stacks.
+
+Here is an example:
+```yaml
+Encrypt:
+  value:
+    TFRef:
+      component: azure
+      terraform: eventhub
+      branch: master
+      paramName: demo_sa.primary_connection_string
+  vault_stack: secret-vault-stack
+```
+
+You can also insert a Encrypt as a value into `infra*.properties` file as yaml on a single line.
+
 ### Tags
 
 For CloudFormation templates you can add a top level entry `Tags` and that will be given to CloudFormation API
