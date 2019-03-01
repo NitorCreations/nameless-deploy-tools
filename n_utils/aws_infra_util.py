@@ -822,6 +822,18 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                                         " in stack " + stack_var['region'] + "." + stack_var['stackName'])
             param_refresh_callback()
             return stack_value
+        elif 'TFRef' in data:
+            tf_var = expand_vars(data['TFRef'], templateParams, None, [])
+            tf_var = _check_refs(tf_var, basefile,
+                                 path + "TFRef_", templateParams, True)
+            data.clear()
+            tf_value = _resolve_tfref_from_dict(tf_var)
+            if not tf_value:
+                ref = stack_var['paramName'] if 'paramName' in stack_var else stack_var['jmespath']
+                raise TFRefUnresolved("Did not find value for: " + ref + \
+                                    " in terraform compnent " + stack_var['component'] + "." + stack_var['terraform'])
+            param_refresh_callback()
+            return tf_value
         elif 'Ref' in data:
             data['__source'] = basefile
         else:
@@ -1077,4 +1089,7 @@ def _patch_launchconf(data):
             lc_userdata.append("\n")
 
 class StackRefUnresolved(Exception):
+    pass
+
+class TFRefUnresolved(Exception):
     pass
