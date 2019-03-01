@@ -242,27 +242,31 @@ def _process_value(value, used_params):
     if (value.startswith("\"") and value.endswith("\"")) or (value.startswith("'") and value.endswith("'")):
         value = value[1:-1]
     value = expand_vars(value, used_params, None, [])
-    if value.strip().startswith("StackRef:"):
-        stackref_doc = yaml_load(StringIO(value))
-        stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
-        if stack_value:
-            value = stack_value
-    if value.strip().startswith("TFRef:") and "TF_INIT_OUTPUT" not in os.environ:
-        tfref_doc = yaml_load(StringIO(unicode(value)))
-        tf_value = _resolve_tfref_from_dict(tfref_doc['TFRef'])
-        if tf_value:
-            value = tf_value
-    if value.strip().startswith("Encrypt:"):
-        enc_doc = yaml_load(StringIO(unicode(value)))
-        enc_conf = enc_doc["Encrypt"]
-        if isinstance(enc_conf, OrderedDict):
-            to_encrypt = yaml_save(enc_conf["value"])
-        else:
-            to_encrypt = enc_conf["value"]
-        value = _process_value(to_encrypt, used_params)
-        del enc_conf["value"]
-        vault = Vault(**enc_conf)
-        value = b64encode(vault.direct_encrypt(value))
+    # Don't go into external refs if:
+    #   a) resolving base variables like REGION and paramEnvId
+    #   b) resolving basic variables used in terraform backend configuration
+    if  "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
+        if value.strip().startswith("StackRef:"):
+            stackref_doc = yaml_load(StringIO(value))
+            stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
+            if stack_value:
+                value = stack_value
+        if value.strip().startswith("TFRef:"):
+            tfref_doc = yaml_load(StringIO(unicode(value)))
+            tf_value = _resolve_tfref_from_dict(tfref_doc['TFRef'])
+            if tf_value:
+                value = tf_value
+        if value.strip().startswith("Encrypt:"):
+            enc_doc = yaml_load(StringIO(unicode(value)))
+            enc_conf = enc_doc["Encrypt"]
+            if isinstance(enc_conf, OrderedDict):
+                to_encrypt = yaml_save(enc_conf["value"])
+            else:
+                to_encrypt = enc_conf["value"]
+            value = _process_value(to_encrypt, used_params)
+            del enc_conf["value"]
+            vault = Vault(**enc_conf)
+            value = b64encode(vault.direct_encrypt(value))
     return value
 
 def import_parameter_file(filename, params):
@@ -414,9 +418,11 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
                 files.append(prefix + component + os.sep + "image" + os.sep + "infra.properties")
                 files.append(prefix + component + os.sep + "image" + os.sep + "infra-" + branch + ".properties")
         initial_resolve = ret.copy()
+        os.environ["DO_NOT_RESOLVE_EXTERNAL_REFS"] = "true"
         for file in files:
             if os.path.exists(file):
                 import_parameter_file(file, initial_resolve)
+        del os.environ["DO_NOT_RESOLVE_EXTERNAL_REFS"]
         if "REGION" not in initial_resolve:
             ret["REGION"] = region()
         else:
