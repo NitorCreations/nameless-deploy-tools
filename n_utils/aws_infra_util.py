@@ -839,6 +839,15 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                                     " in terraform compnent " + stack_var['component'] + "." + stack_var['terraform'])
             param_refresh_callback()
             return tf_value
+        elif 'Encrypt' in data and 'value' in data['Encrypt']:
+            to_encrypt = data['Encrypt']['value']
+            enc_conf = data['Encrypt']
+            del enc_conf['value']
+            vault = Vault(**enc_conf)
+            resolved_value = _preprocess_template(to_encrypt, root, basefile, path + "Encrypt_", templateParams)
+            if not isinstance(resolved_value, six.string_types):
+                raise EncryptException("Encrypted value needs to be a string")
+            return b64encode(vault.direct_encrypt(resolved_value))
         elif 'Ref' in data:
             data['__source'] = basefile
         else:
@@ -1097,4 +1106,7 @@ class StackRefUnresolved(Exception):
     pass
 
 class TFRefUnresolved(Exception):
+    pass
+
+class EncryptException(Exception):
     pass
