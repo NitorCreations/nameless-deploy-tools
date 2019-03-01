@@ -267,7 +267,7 @@ You can also insert a TFRef as a value into `infra*.properties` file as yaml on 
 ### `Encrypt`
 
 Encrypts the value with a vault key. Can be configured to use a specific vault stack or a specific KMS key. Useful
-for example when you want to include sensitive data from Terraform stacks.
+for example when you want to include sensitive data from Terraform stacks or environment variables.
 
 Here is an example:
 ```yaml
