@@ -955,6 +955,26 @@ optional arguments:
                         Name of paremeter if only one parameter required
 ```
 
+## `ndt show-terraform-params`
+
+```bash
+usage: ndt show-terraform-params [-h] [-j JMESPATH | -p PARAMETER]
+                                 component terraform
+
+Show available parameters for a terraform subcomponent
+
+positional arguments:
+  component             The component containg the terraform subcomponet
+  terraform             The name of the terraform subcomponent
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -j JMESPATH, --jmespath JMESPATH
+                        Show just a matching jmespath value
+  -p PARAMETER, --parameter PARAMETER
+                        Name of paremeter if only one parameter required
+```
+
 ## `ndt snapshot-from-volume`
 
 ```bash
@@ -978,6 +998,23 @@ optional arguments:
   -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
                         Tag to add to the snapshot in the format name=value.
                         Multiple values allowed.
+```
+
+## `ndt terraform-pull-state`
+
+```bash
+usage: ndt terraform-init-state [-h] component terraform-name
+
+Make sure terraform state is initialized either for backend or locally
+
+positional arguments:
+  component   the component directory where the terraform directory is
+  terraform-name the name of the terraform directory that has the template
+                  For example for lambda/terraform-sender/template.yaml
+                  you would give sender
+
+optional arguments:
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt undeploy-cdk`
