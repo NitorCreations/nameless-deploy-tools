@@ -330,13 +330,18 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
                 if image:
                     job += job + "_" + image
                 job = re.sub(r'\W', '_', job)
-        if "paramAmi" + image + "Build" in component_params:
+        build_param = "paramAmi" + image + "Build"
+        latest_baked = build_param in component_params and component_params[build_param] == 'latest'
+        if latest_baked:
+            # get current branch latest images
+            images = get_images(job)
+        if build_param in component_params and component_params[build_param] != 'latest':
             # resolve with a specifically set image build number
-            build = component_params["paramAmi" + image + "Build"]
+            build = component_params[build_param]
             image_tag = job + "_" + build
             job_tag_func = lambda image, image_name_prefix: len([tag for tag in image["Tags"] if tag["Value"] == image_tag]) > 0
             images = get_images(job, job_tag_function=job_tag_func)
-        elif imagebranch != branch:
+        elif imagebranch != branch and not latest_baked:
             # resolve promote job
             suffix = "_bake"
             repl_suffix = "_promote"
