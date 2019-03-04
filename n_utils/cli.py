@@ -67,13 +67,21 @@ SYS_ENCODING = locale.getpreferredencoding()
 NoneType = type(None)
 
 def _to_str(data):
+    ret = data
     decode_method = getattr(data, "decode", None)
     if callable(decode_method):
         try:
-            return data.decode()
+            ret = data.decode()
         except:
-            return _to_str(base64.b64encode(data))
-    return data
+            ret = _to_str(base64.b64encode(data))
+    return str(ret)
+
+def _to_bytes(data):
+    ret = data
+    encode_method = getattr(data, "encode", None)
+    if callable(encode_method):
+        ret = data.encode("utf-8")
+    return bytes(ret)
 
 def get_parser(formatter=None):
     func_name = inspect.stack()[1][3]
@@ -848,7 +856,7 @@ def cli_mfa_add_token():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     if args.interactive:
-        args.token_secret = _to_str(input("Enter token secret: "))
+        args.token_secret = _to_bytes(input("Enter token secret: "))
         code_1 = mfa_generate_code_with_secret(args.token_secret)
         print("First sync code: " + code_1)
         print("Waiting to generate second sync code. This could take 30 seconds...")
