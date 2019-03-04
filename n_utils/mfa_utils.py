@@ -37,9 +37,10 @@ def mfa_add_token(args):
         os.makedirs(ndt_dir)
     data = {
         'token_name': args.token_name,
-        'token_arn': args.token_arn,
         'token_secret': "enc--" + str(IiII1IiiIiI1(args.token_secret))
     }
+    if args.token_arn:
+        data['token_arn'] = args.token_arn
     token_file = ndt_dir + '/mfa_' + args.token_name
     if os.path.isfile(token_file) and not args.force:
         raise ValueError('A token with the name ' + args.token_name + ' already exists!')
