@@ -885,16 +885,17 @@ optional arguments:
 ## `ndt register-private-dns`
 
 ```bash
-usage: ndt register-private-dns [-h] dns_name hosted_zone
+usage: ndt register-private-dns [-h] [-t TTL] dns_name hosted_zone
 
 Register local private IP in route53 hosted zone usually for internal use.
 
 positional arguments:
-  dns_name     The name to update in route 53
-  hosted_zone  The name of the hosted zone to update
+  dns_name           The name to update in route 53
+  hosted_zone        The name of the hosted zone to update
 
 optional arguments:
-  -h, --help   show this help message and exit
+  -h, --help         show this help message and exit
+  -t TTL, --ttl TTL  Time to live for the record. 60 by default
 ```
 
 ## `ndt setup-cli`
