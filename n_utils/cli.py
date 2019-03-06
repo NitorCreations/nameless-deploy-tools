@@ -762,9 +762,11 @@ def cli_register_private_dns():
     parser = get_parser()
     parser.add_argument("dns_name", help="The name to update in route 53")
     parser.add_argument("hosted_zone", help="The name of the hosted zone to update")
+    parser.add_argument("-t", "--ttl", help="Time to live for the record. 60 by default",
+                        default="60")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    register_private_dns(args.dns_name, args.hosted_zone)
+    register_private_dns(args.dns_name, args.hosted_zone, ttl=args.ttl)
 
 
 def cli_interpolate_file():

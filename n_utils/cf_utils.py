@@ -718,8 +718,12 @@ def promote_image(ami_id, job_name):
                                                "_" + build_number}])
 
 
-def register_private_dns(dns_name, hosted_zone):
+def register_private_dns(dns_name, hosted_zone, ttl=None):
     set_region()
+    if not ttl:
+        ttl=60
+    else:
+        ttl=int(ttl)
     zone_id = None
     zone_paginator = boto3.client("route53").get_paginator("list_hosted_zones")
     for page in zone_paginator.paginate():
@@ -740,7 +744,7 @@ def register_private_dns(dns_name, hosted_zone):
                 "ResourceRecordSet": {
                     "Name": dns_name,
                     "Type": "A",
-                    "TTL": 60,
+                    "TTL": ttl,
                     "ResourceRecords": [
                         {
                             "Value": info.private_ip()
