@@ -21,6 +21,7 @@ PATH_COMMANDS = [
     'bin/lastpass-fetch-notes.sh',
     'bin/lpssh',
     'bin/encrypt-and-mount.sh',
+    'bin/mount-and-format.sh',
     'bin/setup-fetch-secrets.sh',
     'bin/ssh-hostkeys-collect.sh'
 ]
