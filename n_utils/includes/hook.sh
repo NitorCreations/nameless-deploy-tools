@@ -91,9 +91,14 @@ deploy_cert() {
   local KEYFILE="$2"
   local CERTFILE="$3"
   local CHAINFILE="$4"
+  local CHAINED_CERT=$(mktemp)
+  cat $CERTFILE > $CHAINED_CERT
+  cat $CHAINFILE >> $CHAINED_CERT
   store-secret.sh $DOMAIN.crt < $CERTFILE
   store-secret.sh $DOMAIN.key.clear < $KEYFILE
   store-secret.sh $DOMAIN.chain < $CHAINFILE
+  store-secret.sh $DOMAIN.chained.crt < $CHAINED_CERT
+  rm -f $CHAINED_CERT
   store-secret.sh logout
 #  rm -f $KEYFILE $CERTFILE $CHAINFILE
 }
@@ -103,9 +108,14 @@ unchanged_cert() {
   local KEYFILE="$2"
   local CERTFILE="$3"
   local CHAINFILE="$4"
+  local CHAINED_CERT=$(mktemp)
+  cat $CERTFILE > $CHAINED_CERT
+  cat $CHAINFILE >> $CHAINED_CERT
   store-secret.sh $DOMAIN.crt < $CERTFILE
   store-secret.sh $DOMAIN.key.clear < $KEYFILE
   store-secret.sh $DOMAIN.chain < $CHAINFILE
+  store-secret.sh $DOMAIN.chained.crt < $CHAINED_CERT
+  rm -f $CHAINED_CERT
   store-secret.sh logout
 #  rm -f $KEYFILE $CERTFILE $CHAINFILE
 }
