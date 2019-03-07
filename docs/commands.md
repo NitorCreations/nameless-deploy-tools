@@ -1379,34 +1379,6 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
-## `setup-fetch-secrets.sh`
+## `mount-and-format.sh`
 
 ```bash
-Please run as root
-usage: setup-fetch-secrets.sh [-h] <lpass|s3|vault>
-
-Sets up a global fetch-secrets.sh that fetches secrets from either LastPass, S3 or nitor-vault
-
-positional arguments
-  lpass|s3|vault   the selected secrets backend.
-
-optional arguments:
-  -h, --help  show this help message and exit exit 1
-```
-
-## `ssh-hostkeys-collect.sh`
-
-```bash
-usage: ssh-hostkeys-collect.sh [-h] hostname
-
-Creates a <hostname>-ssh-hostkeys.sh archive in the current directory containing
-ssh host keys to preserve the identity of a server over image upgrades.
-
-positional arguments
-  hostname   the name of the host used to store the keys. Typically the hostname is what
-             instance userdata scripts will use to look for the keys
-
-optional arguments:
-  -h, --help  show this help message and exit
-```
-
