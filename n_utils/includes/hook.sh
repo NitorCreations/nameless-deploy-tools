@@ -120,4 +120,7 @@ unchanged_cert() {
 #  rm -f $KEYFILE $CERTFILE $CHAINFILE
 }
 
-HANDLER=$1; shift; $HANDLER $@
+HANDLER=$1
+shift
+type $HANDLER &>/dev/null && echo "calling $HANDLER" || exit 0
+$HANDLER $@
