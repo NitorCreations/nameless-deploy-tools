@@ -44,7 +44,7 @@ from n_utils import volumes
 from n_utils.cf_utils import InstanceInfo, is_ec2, region, regions, stacks, \
     stack_params_and_outputs, get_images, promote_image, \
     share_to_another_region, set_region, register_private_dns, interpolate_file, \
-    assumed_role_name
+    assumed_role_name, session_token
 from n_utils.cloudfront_utils import distributions, distribution_comments, \
     upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
@@ -52,7 +52,7 @@ from n_utils.log_events import CloudWatchLogsGroups, CloudFormationEvents, Cloud
 from n_utils.maven_utils import add_server
 from n_utils.mfa_utils import mfa_add_token, mfa_delete_token, mfa_generate_code, \
     mfa_generate_code_with_secret, list_mfa_tokens, mfa_backup_tokens, mfa_decrypt_backup_tokens, \
-    mfa_to_qrcode
+    mfa_to_qrcode, mfa_read_token
 from n_utils.account_utils import list_created_accounts, create_account
 from n_utils.aws_infra_util import load_parameters
 from n_utils.ndt import find_include, find_all_includes, include_dirs
@@ -540,6 +540,27 @@ def assume_role():
         print("AWS_SESSION_EXPIRATION=\"" + creds['Expiration'].strftime("%a, %d %b %Y %H:%M:%S +0000") + "\"")
         print("export AWS_ROLE_ARN AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION")
 
+
+def session_to_env():
+    """ Export current session as environment variables """
+    parser = get_parser()
+    parser.add_argument("-t", "--token-name",
+                        help="Name of the mfs token to use.").completer = \
+        ChoicesCompleter(list_mfa_tokens())
+    parser.add_argument("-d", "--duration-minutes", type=int, default=60,
+                        help="Duration in minutes for the session token. Default to 60")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    call_args = {"duration_minutes": args.duration_minutes}
+    if args.token_name:
+        call_args["token_arn"] = mfa_read_token(args.token_name)["token_arn"]
+        call_args["token_value"] = mfa_generate_code(args.token_name)
+
+    creds = session_token(**call_args)
+    print("AWS_ACCESS_KEY_ID=\"" + creds['AccessKeyId'] + "\"")
+    print("AWS_SECRET_ACCESS_KEY=\"" + creds['SecretAccessKey'] + "\"")
+    print("AWS_SESSION_TOKEN=\"" + creds['SessionToken'] + "\"")
+    print("AWS_SESSION_EXPIRATION=\"" + creds['Expiration'].strftime("%a, %d %b %Y %H:%M:%S +0000") + "\"")
 
 def get_parameter():
     """Get a parameter value from the stack

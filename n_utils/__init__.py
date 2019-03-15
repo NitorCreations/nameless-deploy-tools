@@ -88,7 +88,8 @@ NDT_ONLY = [
     'enable-profile=n_utils.profile_util:cli_enable_profile',
     'list-jobs=n_utils.cli:cli_list_jobs',
     'list-components=n_utils.cli:cli_list_components',
-    'show-terraform-params=n_utils.cli:show_terraform_params'
+    'show-terraform-params=n_utils.cli:show_terraform_params',
+    'session-to-env=n_utils.cli:session_to_env'
 ]
 NDT_ONLY_SCRIPT = [
     'bake-docker.sh',

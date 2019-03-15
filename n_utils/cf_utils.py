@@ -1020,3 +1020,20 @@ def read_if_readable(filename):
             return ""
     except:
         return ""
+
+def session_token(duration_minutes=60, token_arn=None, token_value=None):
+    args = {"DurationSeconds": 3600}
+
+    if duration_minutes:
+        args["DurationSeconds"] = duration_minutes * 60
+    if token_arn and  token_value:
+        args["SerialNumber"] = token_arn
+        args["TokenCode"] = token_value
+
+    sts = boto3.client("sts")
+
+    ret = sts.get_session_token(**args)
+    if "Credentials" not in ret:
+        return None
+    else:
+        return ret["Credentials"]
