@@ -113,6 +113,12 @@
         state: directory
         mode: 0755
     - copy:
+        src: "{{ imagedir }}/bake-credentials"
+        dest: /opt/nameless/
+        owner: root
+        group: root
+        mode: 0644
+    - copy:
         src: "{{ imagedir }}/{{ item }}"
         dest: /opt/nameless/
         owner: root

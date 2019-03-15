@@ -105,6 +105,7 @@
     when: base_ami_id == "clean"
   - win_copy: src="{{ imagedir }}/pre_install.ps1" dest="C:\\nameless\\pre_install.ps1"
   - win_copy: src="{{ imagedir }}/post_install.ps1" dest="C:\\nameless\\post_install.ps1"
+  - win_copy: src="{{ imagedir }}/bake-credentials" dest="C:\\nameless\\bake-credentials"
   - win_copy:
       src: "{{ imagedir }}/{{ item }}"
       dest: "C:\\nameless\\"

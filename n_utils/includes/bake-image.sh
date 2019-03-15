@@ -129,6 +129,25 @@ fi
 VAR_AMI="AMIID_${IMAGETYPE}"
 AMI="${!VAR_AMI}"
 
+if aws sts get-caller-identity | grep "Arn\":.*:assumed-role/" > /dev/null; then
+  ASSUMED_ROLE="Y"
+else
+  ASSUMED_ROLE="N"
+fi
+
+if [ $ASSUMED_ROLE = "N" ]; then
+  eval "$(ndt session-to-env)"
+elif [ -z "$AWS_SESSION_TOKEN" ]; then
+  eval "$(ndt profile-to-env $AWS_PROFILE)"
+fi
+
+cat > $imagedir/bake-credentials << EOF
+[bake]
+aws_access_key_id=$AWS_ACCESS_KEY_ID
+aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
+aws_session_token=$AWS_SESSION_TOKEN
+EOF
+
 [ "$AMI" ] || die "Please set AMIID_$IMAGETYPE in ${infrapropfile}"
 
 TSTAMP=$(date +%Y%m%d%H%M%S)
