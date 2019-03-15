@@ -898,6 +898,22 @@ optional arguments:
   -t TTL, --ttl TTL  Time to live for the record. 60 by default
 ```
 
+## `ndt session-to-env`
+
+```bash
+usage: ndt session-to-env [-h] [-t TOKEN_NAME] [-d DURATION_MINUTES]
+
+Export current session as environment variables
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TOKEN_NAME, --token-name TOKEN_NAME
+                        Name of the mfs token to use.
+  -d DURATION_MINUTES, --duration-minutes DURATION_MINUTES
+                        Duration in minutes for the session token. Default to
+                        60
+```
+
 ## `ndt setup-cli`
 
 ```bash
@@ -1382,3 +1398,46 @@ optional arguments:
 ## `mount-and-format.sh`
 
 ```bash
+Mounts a local block device as an encrypted volume. Handy for things like local database installs.
+usage: mount-and-format.sh [-h] blk-device mount-path
+
+
+positional arguments
+  blk-device  the block device you want to mount and formant
+  mount-path  the mount point for the volume
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+## `setup-fetch-secrets.sh`
+
+```bash
+Please run as root
+usage: setup-fetch-secrets.sh [-h] <lpass|s3|vault>
+
+Sets up a global fetch-secrets.sh that fetches secrets from either LastPass, S3 or nitor-vault
+
+positional arguments
+  lpass|s3|vault   the selected secrets backend.
+
+optional arguments:
+  -h, --help  show this help message and exit exit 1
+```
+
+## `ssh-hostkeys-collect.sh`
+
+```bash
+usage: ssh-hostkeys-collect.sh [-h] hostname
+
+Creates a <hostname>-ssh-hostkeys.sh archive in the current directory containing
+ssh host keys to preserve the identity of a server over image upgrades.
+
+positional arguments
+  hostname   the name of the host used to store the keys. Typically the hostname is what
+             instance userdata scripts will use to look for the keys
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
