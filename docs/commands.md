@@ -901,17 +901,81 @@ optional arguments:
 ## `ndt session-to-env`
 
 ```bash
-usage: ndt session-to-env [-h] [-t TOKEN_NAME] [-d DURATION_MINUTES]
-
-Export current session as environment variables
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -t TOKEN_NAME, --token-name TOKEN_NAME
-                        Name of the mfs token to use.
-  -d DURATION_MINUTES, --duration-minutes DURATION_MINUTES
-                        Duration in minutes for the session token. Default to
-                        60
+usage: ndt <command> [args...]
+	command shoud be one of:
+		account-id
+		add-deployer-server
+		associate-eip
+		assume-role
+		assumed-role-name
+		bake-docker
+		bake-image
+		cf-delete-stack
+		cf-follow-logs
+		cf-get-parameter
+		cf-logical-id
+		cf-logs-to-cloudwatch
+		cf-region
+		cf-signal-status
+		cf-stack-id
+		cf-stack-name
+		create-account
+		create-stack
+		deploy-cdk
+		deploy-serverless
+		deploy-stack
+		deploy-terraform
+		detach-volume
+		ec2-associate-eip
+		ec2-clean-snapshots
+		ec2-get-tag
+		ec2-get-userdata
+		ec2-instance-id
+		ec2-region
+		ec2-wait-for-metadata
+		ecr-ensure-repo
+		ecr-repo-uri
+		enable-profile
+		get-images
+		interpolate-file
+		json-to-yaml
+		latest-snapshot
+		list-components
+		list-file-to-json
+		list-jobs
+		load-parameters
+		logs
+		logs-to-cloudwatch
+		mfa-add-token
+		mfa-backup
+		mfa-code
+		mfa-delete-token
+		mfa-qrcode
+		n-include
+		n-include-all
+		print-create-instructions
+		profile-expiry-to-env
+		profile-to-env
+		promote-image
+		pytail
+		read-profile-expiry
+		region
+		register-private-dns
+		setup-cli
+		share-to-another-region
+		show-stack-params-and-outputs
+		show-terraform-params
+		signal-cf-status
+		snapshot-from-volume
+		terraform-pull-state
+		undeploy-cdk
+		undeploy-serverless
+		undeploy-stack
+		undeploy-terraform
+		upsert-cloudfront-records
+		volume-from-snapshot
+		yaml-to-json
+		yaml-to-yaml
 ```
 
 ## `ndt setup-cli`
