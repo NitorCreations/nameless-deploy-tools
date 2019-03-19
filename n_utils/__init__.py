@@ -14,6 +14,7 @@
 
 """ Main module for nameless-deploy-tools
 """
+import base64
 
 PATH_COMMANDS = [
     'bin/create-shell-archive.sh',
@@ -124,3 +125,20 @@ for script in NDT_ONLY_SCRIPT:
 for script in NDT_AND_CONSOLE + NDT_ONLY:
     name, value = script.split("=")
     COMMAND_MAPPINGS[name] = value
+
+def _to_str(data):
+    ret = data
+    decode_method = getattr(data, "decode", None)
+    if callable(decode_method):
+        try:
+            ret = data.decode()
+        except:
+            ret = _to_str(base64.b64encode(data))
+    return str(ret)
+
+def _to_bytes(data):
+    ret = data
+    encode_method = getattr(data, "encode", None)
+    if callable(encode_method):
+        ret = data.encode("utf-8")
+    return bytes(ret)

@@ -27,7 +27,7 @@ import pyqrcode
 from Cryptodome.Cipher import AES
 from Cryptodome.Util import Counter
 from Cryptodome.Hash import SHA256
-
+from n_utils import _to_bytes, _to_str
 
 def mfa_add_token(args):
     """ Adds or overwrites an MFA token to be used with role assumption.
@@ -37,7 +37,7 @@ def mfa_add_token(args):
         os.makedirs(ndt_dir)
     data = {
         'token_name': args.token_name,
-        'token_secret': "enc--" + str(IiII1IiiIiI1(args.token_secret))
+        'token_secret': "enc--" + _to_str(IiII1IiiIiI1(_to_bytes(args.token_secret)))
     }
     if args.token_arn:
         data['token_arn'] = args.token_arn
@@ -98,7 +98,7 @@ def mfa_to_qrcode(token_name):
 
 def mfa_generate_code_with_secret(secret):
     """ Generates an MFA code using the secret passed in. """
-    if secret.startswith("enc--"):
+    if _to_str(secret).startswith("enc--"):
         secret = I11iIi1I(secret[5:])
     totp = pyotp.TOTP(secret)
     return totp.now()

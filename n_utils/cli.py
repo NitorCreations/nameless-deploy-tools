@@ -36,11 +36,8 @@ import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
 from pygments import highlight, lexers, formatters
 from pygments.styles import get_style_by_name
-from n_utils import aws_infra_util
-from n_utils import cf_bootstrap
-from n_utils import cf_deploy
-from n_utils import cf_utils
-from n_utils import volumes
+from n_utils import aws_infra_util, cf_bootstrap, cf_deploy, cf_utils, \
+    volumes, _to_bytes, _to_str
 from n_utils.cf_utils import InstanceInfo, is_ec2, region, regions, stacks, \
     stack_params_and_outputs, get_images, promote_image, \
     share_to_another_region, set_region, register_private_dns, interpolate_file, \
@@ -65,23 +62,6 @@ from n_utils.tf_utils import pull_state, jmespath_var, flat_state
 SYS_ENCODING = locale.getpreferredencoding()
 
 NoneType = type(None)
-
-def _to_str(data):
-    ret = data
-    decode_method = getattr(data, "decode", None)
-    if callable(decode_method):
-        try:
-            ret = data.decode()
-        except:
-            ret = _to_str(base64.b64encode(data))
-    return str(ret)
-
-def _to_bytes(data):
-    ret = data
-    encode_method = getattr(data, "encode", None)
-    if callable(encode_method):
-        ret = data.encode("utf-8")
-    return bytes(ret)
 
 def get_parser(formatter=None):
     func_name = inspect.stack()[1][3]
