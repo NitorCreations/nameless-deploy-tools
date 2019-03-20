@@ -46,7 +46,7 @@ def mfa_add_token(args):
         raise ValueError('A token with the name ' + args.token_name + ' already exists!')
     with open(token_file, 'w') as outfile:
         os.chmod(token_file, 0o600)
-        yaml.dump(data, outfile, default_flow_style=False)
+        yaml.safe_dump(data, outfile, allow_unicode=True, default_flow_style=False)
 
 
 def mfa_read_token(token_name):
@@ -54,7 +54,7 @@ def mfa_read_token(token_name):
     data = None
     with open(get_ndt_dir() + '/mfa_' + token_name, 'r') as infile:
         try:
-            data = yaml.load(infile)
+            data = yaml.load(infile, yaml.SafeLoader)
         except yaml.YAMLError as exc:
             print(exc)
     if data:
