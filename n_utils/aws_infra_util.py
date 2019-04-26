@@ -247,7 +247,7 @@ def _process_value(value, used_params):
     #   b) resolving basic variables used in terraform backend configuration
     if  "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
         if value.strip().startswith("StackRef:"):
-            stackref_doc = yaml_load(StringIO(value))
+            stackref_doc = yaml_load(StringIO(unicode(value)))
             stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
             if stack_value:
                 value = stack_value
