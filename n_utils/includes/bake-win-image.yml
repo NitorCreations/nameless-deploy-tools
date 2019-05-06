@@ -110,8 +110,8 @@
       src: "{{ imagedir }}/{{ item }}"
       dest: "C:\\nameless\\"
     with_items: "{{ files }}"
-  - win_chocolatey: name="{{ item }}"
-    with_items: [ "python2", "awscli", "sync" ]
+  - win_chocolatey:
+      name: [ "python2", "awscli", "sync" ]
     when: base_ami_id == "clean"
   - win_shell: "C:\\nameless\\prepare.ps1"
     args:
@@ -133,8 +133,8 @@
     when:
       - "'skipped' not in update_result"
       - update_result["reboot_required"]
-  - win_chocolatey: name="{{ item }}"
-    with_items: "{{ packages }}"
+  - win_chocolatey:
+      name: "{{ packages }}"
   - win_shell: "C:\\nameless\\post_install.ps1"
     args:
       chdir: "C:\\"

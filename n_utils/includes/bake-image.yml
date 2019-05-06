@@ -130,26 +130,29 @@
       when: ansible_os_family == "Debian"
     - apt: update_cache=yes upgrade=dist
       when: ansible_os_family == "Debian"
-    - apt: name="{{ item }}"
-      with_items: ["python-pip", "git", "build-essential", "gcc", "libpython2.7-dev", "libffi-dev", "libssl-dev", "jq", "nvme-cli"]
+    - apt:
+        name: ["python-pip", "git", "build-essential", "gcc", "libpython2.7-dev", "libffi-dev", "libssl-dev", "jq", "nvme-cli"]
       when: ansible_os_family == "Debian"
-    - yum: name=epel-release
+    - yum:
+        name: epel-release
       when: ansible_os_family == "RedHat"
-    - yum: name=* state=latest
+    - yum:
+        name: '*'
+        state: latest
       when: ansible_os_family == "RedHat"
-    - yum: name={{ item }}
-      with_items: ["python-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python-crypto", "python-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+    - yum:
+        name: ["python-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python-crypto", "python-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
       when: ansible_os_family == "RedHat"
     - script: install_tools.sh {{ tools_version }}
     - script: "{{ imagedir }}/pre_install.sh"
     - apt_key: url="{{ item }}" state=present
       with_items: "{{ keys }}"
       when: ansible_os_family == "Debian"
-    - apt: name="{{ item }}"
-      with_items: "{{ packages }}"
+    - apt:
+        name: "{{ packages }}"
       when: ansible_os_family == "Debian"
-    - yum: name={{ item }}
-      with_items: "{{ packages }}"
+    - yum:
+        name: "{{ packages }}"
       when: ansible_os_family == "RedHat"
     - script: "{{ imagedir }}/post_install.sh"
 
