@@ -231,6 +231,7 @@
       register: old_ami_result
 
     - ec2_ami_facts:
+        region: "{{ aws_region }}"
         image_ids: "{{ old_ami_result.images | map(attribute='image_id') | difference(images_in_use) | list }}"
       register: non_running_images
 
