@@ -88,10 +88,6 @@ if [ -x "$component/docker-$ORIG_DOCKER_NAME/pre_build.sh" ]; then
   cd ../..
 fi
 
-eval "$(ndt session-to-env)"
-
-docker build -t "$DOCKER_NAME" --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"  --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
-
 #If assume-deploy-role.sh is on the path, run it to assume the appropriate role for deployment
 if [ -n "$DOCKER_BAKE_ROLE_ARN" ] && [ -z "$AWS_SESSION_TOKEN" ]; then
   eval "$(ndt assume-role "DOCKER_BAKE_ROLE_ARN")"
@@ -100,6 +96,10 @@ elif [ -n "$DEPLOY_ROLE_ARN" ] && [ -z "$AWS_SESSION_TOKEN" ]; then
 elif which assume-deploy-role.sh > /dev/null && [ -z "$AWS_SESSION_TOKEN" ]; then
   eval "$(assume-deploy-role.sh)"
 fi
+
+eval "$(ndt session-to-env)"
+
+docker build -t "$DOCKER_NAME" --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"  --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
 
 eval "$(ndt ecr-ensure-repo "$DOCKER_NAME")"
 docker tag $DOCKER_NAME:latest $DOCKER_NAME:$BUILD_NUMBER

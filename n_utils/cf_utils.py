@@ -1022,6 +1022,8 @@ def read_if_readable(filename):
         return ""
 
 def session_token(duration_minutes=60, token_arn=None, token_value=None):
+    if "AWS_SESSION_TOKEN" in os.environ:
+        return None
     args = {"DurationSeconds": 3600}
 
     if duration_minutes:

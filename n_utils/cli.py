@@ -537,10 +537,12 @@ def session_to_env():
         call_args["token_value"] = mfa_generate_code(args.token_name)
 
     creds = session_token(**call_args)
-    print("AWS_ACCESS_KEY_ID=\"" + creds['AccessKeyId'] + "\"")
-    print("AWS_SECRET_ACCESS_KEY=\"" + creds['SecretAccessKey'] + "\"")
-    print("AWS_SESSION_TOKEN=\"" + creds['SessionToken'] + "\"")
-    print("AWS_SESSION_EXPIRATION=\"" + creds['Expiration'].strftime("%a, %d %b %Y %H:%M:%S +0000") + "\"")
+    if creds:
+        print("AWS_ACCESS_KEY_ID=\"" + creds['AccessKeyId'] + "\"")
+        print("AWS_SECRET_ACCESS_KEY=\"" + creds['SecretAccessKey'] + "\"")
+        print("AWS_SESSION_TOKEN=\"" + creds['SessionToken'] + "\"")
+        print("AWS_SESSION_EXPIRATION=\"" + creds['Expiration'].strftime("%a, %d %b %Y %H:%M:%S +0000") + "\"")
+        print("export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION")
 
 def get_parameter():
     """Get a parameter value from the stack
