@@ -1,0 +1,5 @@
+[varnish62]
+name=Varnish Cache 6.2 for Enterprise Linux
+baseurl=https://packagecloud.io/varnishcache/varnish62/el/7/$basearch
+enabled=1
+gpgcheck=0
