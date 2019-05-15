@@ -286,6 +286,7 @@ positional arguments:
 
 optional arguments:
   -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i
+  -v, --verbose verbose - verbose output from serverless framework
   -h, --help    show this help message and exit
 ```
 
