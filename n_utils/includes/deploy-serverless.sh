@@ -23,7 +23,7 @@ if [ "$_ARGCOMPLETE" ]; then
       if [ "$COMP_INDEX" = "$COMP_CWORD" ]; then
         DRY="-d "
       fi
-      compgen -W "$DRY-h $(get_stack_dirs)" -- $COMP_CUR
+      compgen -W "$DRY-v -h $(get_stack_dirs)" -- $COMP_CUR
       ;;
     3)
       compgen -W "$(get_serverless $COMP_PREV)" -- $COMP_CUR
@@ -49,6 +49,7 @@ usage() {
   echo "" >&2
   echo "optional arguments:" >&2
   echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i"  >&2
+  echo "  -v, --verbose verbose - verbose output from serverless framework"  >&2
   echo "  -h, --help    show this help message and exit"  >&2
   if "$@"; then
     echo "" >&2
@@ -59,10 +60,15 @@ usage() {
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
   usage
 fi
-if [ "$1" = "-d" -o "$1" = "--dryrun" ]; then
-  DRYRUN=1
-  shift
-fi
+while [ "$1" = "-d" -o "$1" = "--dryrun" -o "$1" = "-v" -o "$1" = "--verbose" ]; do
+  if [ "$1" = "-d" -o "$1" = "--dryrun" ]; then
+    DRYRUN=1
+    shift
+  elif [ "$1" = "-v" -o "$1" = "--verbose" ]; then
+    VERBOSE="-v"
+    shift
+  fi
+done
 die () {
   echo "$1" >&2
   usage
@@ -107,4 +113,4 @@ if [ -n "$DRYRUN" ]; then
   exit 0
 fi
 
-sls deploy -s $paramEnvId
+sls deploy $VERBOSE -s $paramEnvId
