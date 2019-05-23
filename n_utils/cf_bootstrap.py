@@ -430,7 +430,11 @@ class ContextClassBase(object):
                 setattr(self, param, getattr(args, param + "_default")())
             else:
                 default = self.getattr(param + "_default")()
-                setval = eval(input(self.format_prompt(param, default=default)))
+                prompt = self.format_prompt(param, default=default)
+                val = input(prompt)
+                setval = None
+                if val:
+                    setval = eval(val)
                 if not setval:
                     setval = default
                 if param in self.value_mappers:
