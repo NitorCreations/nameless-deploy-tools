@@ -110,6 +110,7 @@ if [ -z "$SKIP_NPM" -o "$SKIP_NPM" = "n" ]; then
 fi
 
 if [ -n "$DRYRUN" ]; then
+  sls package $VERBOSE -s $paramEnvId
   exit 0
 fi
 
