@@ -88,11 +88,12 @@ def fmttime(tstamp):
 
 
 def uprint(message):
-    if sys.version_info[0] > 2:
-        sys.stdout.write((message + os.linesep))
-    else:
-        sys.stdout.write((message + os.linesep)
-                         .encode(locale.getpreferredencoding()))
+    if message:
+        if sys.version_info[0] > 2:
+            sys.stdout.write((message.strip() + os.linesep))
+        else:
+            sys.stdout.write((message.strip() + os.linesep)
+                            .encode(locale.getpreferredencoding()))
 
 
 def validatestarttime(start_time):
