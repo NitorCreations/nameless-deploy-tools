@@ -332,7 +332,7 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
                 prefix = image_params["JENKINS_JOB_PREFIX"]
                 job = prefix + "_" + component + "_bake"
                 if image:
-                    job += job + "_" + image
+                    job = job + "_" + image
                 job = re.sub(r'\W', '_', job)
         build_param = "paramAmi" + image + "Build"
         latest_baked = build_param in component_params and component_params[build_param] == 'latest'
@@ -447,7 +447,7 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
                     # Best effor to load docker uris, but ignore errors since the repo might not
                     # actually be in use. Missing and used uris will result in an error later.
                     pass
-            for image_name in [imagedir.split("/image")[1].replace("-", "") for imagedir in glob(component + os.sep + "image*")]:
+            for image_name in [imagedir.split("/image")[1].replace("-", "").lower() for imagedir in glob(component + os.sep + "image*")]:
                 try:
                     image = resolve_ami(ret, component, image_name, image_branch, branch, git)
                     if image:
