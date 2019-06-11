@@ -130,6 +130,7 @@
     register: update_result
     when: base_ami_id == "clean"
   - win_reboot:
+      reboot_timeout: 1800
     when:
       - "'skipped' not in update_result"
       - update_result["reboot_required"]
