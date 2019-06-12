@@ -34,7 +34,8 @@ from termcolor import colored
 
 from n_utils import aws_infra_util
 from n_utils.cf_utils import get_images
-from n_utils.log_events import CloudWatchLogsThread, CloudFormationEvents, fmttime
+from ec2_utils.logs import CloudWatchLogsThread, fmttime
+from n_utils.log_events import CloudFormationEvents
 
 REDIRECTED = False
 

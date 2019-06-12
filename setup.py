@@ -51,7 +51,8 @@ setup(name='nameless_deploy_tools',
           'pycryptodomex',
           'configparser',
           'scandir',
-          'jmespath'
+          'jmespath',
+          'ec2-utils==0.7'
       ] + ([
           'win-unicode-console',
           'wmi',
