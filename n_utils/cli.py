@@ -45,7 +45,8 @@ from n_utils.cf_utils import InstanceInfo, is_ec2, region, regions, stacks, \
 from n_utils.cloudfront_utils import distributions, distribution_comments, \
     upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
-from n_utils.log_events import CloudWatchLogsGroups, CloudFormationEvents, CloudWatchLogsThread
+from ec2_utils.logs import CloudWatchLogsGroups, CloudWatchLogsThread
+from n_utils.log_events import CloudFormationEvents
 from n_utils.maven_utils import add_server
 from n_utils.mfa_utils import mfa_add_token, mfa_delete_token, mfa_generate_code, \
     mfa_generate_code_with_secret, list_mfa_tokens, mfa_backup_tokens, mfa_decrypt_backup_tokens, \
