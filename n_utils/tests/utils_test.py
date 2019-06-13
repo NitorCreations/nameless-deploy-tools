@@ -192,8 +192,8 @@ def test_get_images(mocker, boto3_client):
 
 
 def test_stackref_order(mocker, boto3_client):
-    target = "n_utils.aws_infra_util.stack_params_and_outputs"
-    stack_params_and_outputs = lambda a, b: STACK_PARAMS
+    target = "ec2_utils.instance_info.stack_params_and_outputs_and_stack"
+    stack_params_and_outputs = lambda a, b: STACK_PARAMS, None
     mocker.patch(target, side_effect=stack_params_and_outputs)
     result = yaml_to_dict('n_utils/tests/templates/test-stackref.yaml')
     assert result["Resources"]["resTaskDefinition"]["Properties"]["ContainerDefinitions"][0]["Environment"][0]["Value"] == \
