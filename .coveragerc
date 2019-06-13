@@ -1,3 +1,6 @@
 [run]
 omit =
     n_utils/tests/*
+    n_utils/__init__.py
+    n_utils/ndt.py
+    n_utils/project_util.py
