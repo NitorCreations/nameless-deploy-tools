@@ -36,8 +36,9 @@ from yaml import ScalarNode, SequenceNode, MappingNode
 from io import StringIO
 from botocore.exceptions import ClientError
 from copy import deepcopy
-from n_utils.cf_utils import stack_params_and_outputs, region, resolve_account, \
-                             expand_vars, get_images, ParamNotAvailable
+from ec2_utils.clients import region
+from ec2_utils.instance_info import resolve_account, stack_params_and_outputs_and_stack
+from n_utils.utils import expand_vars, get_images, ParamNotAvailable
 from n_utils.git_utils import Git
 from n_utils.ndt import find_include
 from n_utils.ecr_utils import repo_uri
@@ -191,7 +192,7 @@ def _resolve_stackref(region, stack_name, stack_param):
     if stack_key in stacks:
         stack_params = stacks[stack_key]
     else:
-        stack_params = stack_params_and_outputs(region, stack_name)
+        stack_params, _ = stack_params_and_outputs_and_stack(stack_name=stack_name, stack_region=region)
         stacks[stack_key] = stack_params
     if stack_param in stack_params:
         return stack_params[stack_param]

@@ -71,7 +71,8 @@ import sys
 import time
 import re
 from botocore.compat import total_seconds
-from ec2_utils.logs import fmttime, millis2iso, timestamp, uprint, validatestarttime, parse_datetime, LogWorkerThread
+from ec2_utils.logs import fmttime, millis2iso, timestamp, \
+    uprint, validatestarttime, parse_datetime, LogWorkerThread
 import queue
 
 class CloudFormationEvents(LogWorkerThread):

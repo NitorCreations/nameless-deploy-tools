@@ -3,7 +3,8 @@ from __future__ import absolute_import
 import os
 import boto3
 from time import time, sleep
-from n_utils import cf_utils
+from ec2_utils.clients import region
+from n_utils import utils
 from n_utils import cf_deploy
 from n_utils.ndt import find_include
 
@@ -45,11 +46,11 @@ def create_account(email, account_name, role_name="OrganizationAccountAccessRole
     os.environ['paramManagedAccount'] = account_id
     os.environ['paramManageRole'] = role_name
     template = find_include("manage-account.yaml")
-    cf_deploy.deploy("managed-account-" + account_name + "-" + account_id, template, cf_utils.region())
+    cf_deploy.deploy("managed-account-" + account_name + "-" + account_id, template, region())
 
     if trusted_accounts:
         role_arn = "arn:aws:iam::" + account_id + ":role/" + role_name
-        assumed_creds = cf_utils.assume_role(role_arn, mfa_token_name=mfa_token)
+        assumed_creds = utils.assume_role(role_arn, mfa_token_name=mfa_token)
         session = boto3.session.Session(aws_access_key_id=assumed_creds['AccessKeyId'],
                                         aws_secret_access_key=assumed_creds['SecretAccessKey'],
                                         aws_session_token=assumed_creds['SessionToken'])
@@ -57,20 +58,20 @@ def create_account(email, account_name, role_name="OrganizationAccountAccessRole
             os.environ['paramTrustedAccount'] = trusted_roles[trusted_account].split(":")[4]
             os.environ['paramRoleName'] = trust_role
             template = find_include("trust-account-role.yaml")
-            cf_deploy.deploy("trust-" + trusted_account, template, cf_utils.region(), session=session)
+            cf_deploy.deploy("trust-" + trusted_account, template, utils.region(), session=session)
         template = find_include("manage-account.yaml")
         for trusted_account in trusted_accounts:
             role_arn = trusted_roles[trusted_account]
             print("Assuming role " + role_arn)
             session = boto3.session.Session()
-            assumed_creds = cf_utils.assume_role(role_arn, mfa_token_name=mfa_token)
+            assumed_creds = utils.assume_role(role_arn, mfa_token_name=mfa_token)
             session = boto3.session.Session(aws_access_key_id=assumed_creds['AccessKeyId'],
                                             aws_secret_access_key=assumed_creds['SecretAccessKey'],
                                             aws_session_token=assumed_creds['SessionToken'])
             os.environ['paramManagedAccount'] = account_id
             os.environ['paramRoleName'] = trust_role
             cf_deploy.deploy("managed-account-" + account_name + "-" + account_id,
-                             template, cf_utils.region(), session=session)
+                             template, region(), session=session)
 
 
 def find_role_arn(trusted_account):

@@ -33,7 +33,7 @@ from pygments.styles import get_style_by_name
 from termcolor import colored
 
 from n_utils import aws_infra_util
-from n_utils.cf_utils import get_images
+from n_utils.utils import get_images
 from ec2_utils.logs import CloudWatchLogsThread, fmttime
 from n_utils.log_events import CloudFormationEvents
 

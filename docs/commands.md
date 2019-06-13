@@ -352,7 +352,8 @@ optional arguments:
 ## `ndt ec2-clean-snapshots`
 
 ```bash
-usage: ndt ec2-clean-snapshots [-h] [-r REGION] [-d DAYS] tags [tags ...]
+usage: ndt ec2-clean-snapshots [-h] [-r REGION] [-d DAYS] [--dry-run]
+                               tags [tags ...]
 
 Clean snapshots that are older than a number of days (30 by default) and have
 one of specified tag values
@@ -368,6 +369,7 @@ optional arguments:
                         instance metadata as a last resort
   -d DAYS, --days DAYS  The number of days that is theminimum age for
                         snapshots to be deleted
+  --dry-run             Do not delete, but print what would be deleted
 ```
 
 ## `ndt ec2-get-tag`

@@ -36,16 +36,18 @@ import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
 from pygments import highlight, lexers, formatters
 from pygments.styles import get_style_by_name
-from n_utils import aws_infra_util, cf_bootstrap, cf_deploy, cf_utils, \
-    volumes, _to_bytes, _to_str
-from n_utils.cf_utils import InstanceInfo, is_ec2, region, regions, stacks, \
-    stack_params_and_outputs, get_images, promote_image, \
-    share_to_another_region, set_region, register_private_dns, interpolate_file, \
-    assumed_role_name, session_token
+from n_utils import aws_infra_util, cf_bootstrap, cf_deploy, utils, \
+     _to_bytes, _to_str
 from n_utils.cloudfront_utils import distributions, distribution_comments, \
     upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
+from n_utils.utils import session_token, get_images, promote_image, \
+    share_to_another_region, interpolate_file, assumed_role_name
+from ec2_utils import ebs, instance_info, clients, interface
+from ec2_utils.clients import is_ec2, region, stacks, regions
+from ec2_utils.instance_info import info, stack_params_and_outputs_and_stack
 from ec2_utils.logs import CloudWatchLogsGroups, CloudWatchLogsThread
+from ec2_utils.cli import _best_effort_stacks
 from n_utils.log_events import CloudFormationEvents
 from n_utils.maven_utils import add_server
 from n_utils.mfa_utils import mfa_add_token, mfa_delete_token, mfa_generate_code, \
@@ -119,33 +121,6 @@ def add_deployer_server():
     add_server(args.file, args.id + "-release", args.username)
 
 
-def get_userdata():
-    """Get userdata defined for an instance into a file
-    """
-    parser = get_parser()
-    parser.add_argument("file", help="File to write userdata into").completer =\
-        FilesCompleter()
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    dirname = os.path.dirname(args.file)
-    if dirname:
-        if os.path.isfile(dirname):
-            parser.error(dirname + " exists and is a file")
-        elif not os.path.isdir(dirname):
-            os.makedirs(dirname)
-    cf_utils.get_userdata(args.file)
-    return
-
-
-def get_account_id():
-    """Get current account id. Either from instance metadata or current cli
-    configuration.
-    """
-    parser = get_parser()
-    parser.parse_args()
-    print(cf_utils.resolve_account())
-
-
 def colorprint(data, output_format="yaml"):
     """ Colorized print for either a yaml or a json document given as argument
     """
@@ -216,52 +191,6 @@ def json_to_yaml():
         print(doc)
 
 
-def read_and_follow():
-    """Read and print a file and keep following the end for new data
-    """
-    parser = get_parser()
-    parser.add_argument("file", help="File to follow").completer = FilesCompleter()
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    if not os.path.isfile(args.file):
-        parser.error(args.file + " not found")
-    cf_utils.read_and_follow(args.file, sys.stdout.write)
-
-
-def logs_to_cloudwatch():
-    """Read a file and send rows to cloudwatch and keep following the end for new data.
-    The log group will be the stack name that created instance and the logstream
-    will be the instance id and filename.
-    """
-    parser = get_parser()
-    parser.add_argument("file", help="File to follow").completer = FilesCompleter()
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    if not os.path.isfile(args.file):
-        parser.error(args.file + " not found")
-    cf_utils.send_logs_to_cloudwatch(args.file)
-
-
-def signal_cf_status():
-    """Signal CloudFormation status to a logical resource in CloudFormation
-    that is either given on the command line or resolved from CloudFormation
-    tags
-    """
-    parser = get_parser()
-    parser.add_argument("status",
-                        help="Status to indicate: SUCCESS | FAILURE").completer\
-        = ChoicesCompleter(("SUCCESS", "FAILURE"))
-    parser.add_argument("-r", "--resource", help="Logical resource name to " +
-                                                 "signal. Looked up from " +
-                                                 "cloudformation tags by " +
-                                                 "default")
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    if args.status != "SUCCESS" and args.status != "FAILURE":
-        parser.error("Status needs to be SUCCESS or FAILURE")
-    cf_utils.signal_status(args.status, resource_name=args.resource)
-
-
 def associate_eip():
     """Associate an Elastic IP for the instance that this script runs on
     """
@@ -289,101 +218,9 @@ def associate_eip():
                         default="paramEipAllocationId")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    cf_utils.associate_eip(eip=args.ip, allocation_id=args.allocationid,
-                           eip_param=args.eipparam,
-                           allocation_id_param=args.allocationidparam)
-
-
-def instance_id():
-    """ Get id for instance
-    """
-    parser = get_parser()
-    argcomplete.autocomplete(parser)
-    parser.parse_args()
-    if is_ec2():
-        info = InstanceInfo()
-        print(info.instance_id())
-    else:
-        sys.exit(1)
-
-
-def ec2_region():
-    """ Get default region - the region of the instance if run in an EC2 instance
-    """
-    parser = get_parser()
-    argcomplete.autocomplete(parser)
-    parser.parse_args()
-    print(region())
-
-
-def tag():
-    """ Get the value of a tag for an ec2 instance
-    """
-    parser = get_parser()
-    parser.add_argument("name", help="The name of the tag to get")
-    args = parser.parse_args()
-    argcomplete.autocomplete(parser)
-    if is_ec2():
-        info = InstanceInfo()
-        value = info.tag(args.name)
-        if value is not None:
-            print(value)
-        else:
-            sys.exit("Tag " + args.name + " not found")
-    else:
-        parser.error("Only makes sense on an EC2 instance")
-
-
-def stack_name():
-    """ Get name of the stack that created this instance
-    """
-    parser = get_parser()
-    argcomplete.autocomplete(parser)
-    parser.parse_args()
-    if is_ec2():
-        info = InstanceInfo()
-        print(info.stack_name())
-    else:
-        parser.error("Only makes sense on an EC2 instance cretated from a CF stack")
-
-
-def stack_id():
-    """ Get id of the stack the creted this instance
-    """
-    parser = get_parser()
-    argcomplete.autocomplete(parser)
-    parser.parse_args()
-    if is_ec2():
-        info = InstanceInfo()
-        print(info.stack_id())
-    else:
-        parser.error("Only makes sense on an EC2 instance cretated from a CF stack")
-
-
-def logical_id():
-    """ Get the logical id that is expecting a signal from this instance
-    """
-    parser = get_parser()
-    argcomplete.autocomplete(parser)
-    parser.parse_args()
-    if is_ec2():
-        info = InstanceInfo()
-        print(info.logical_id())
-    else:
-        parser.error("Only makes sense on an EC2 instance cretated from a CF stack")
-
-
-def cf_region():
-    """ Get region of the stack that created this instance
-    """
-    parser = get_parser()
-    argcomplete.autocomplete(parser)
-    parser.parse_args()
-    if is_ec2():
-        info = InstanceInfo()
-        print(info.stack_id().split(":")[3])
-    else:
-        parser.error("Only makes sense on an EC2 instance cretated from a CF stack")
+    interface.associate_eip(eip=args.ip, allocation_id=args.allocationid,
+                            eip_param=args.eipparam,
+                            allocation_id_param=args.allocationidparam)
 
 
 def update_stack():
@@ -442,28 +279,6 @@ def tail_stack_logs():
             return
 
 
-def get_logs():
-    """Get logs from multiple CloudWatch log groups and possibly filter them.
-    """
-    parser = get_parser()
-    parser.add_argument("log_group_pattern", help="Regular expression to filter log groups with")
-    parser.add_argument("-f", "--filter", help="CloudWatch filter pattern")
-    parser.add_argument("-s", "--start", help="Start time (x m|h|d|w ago | now | <seconds since epoc>)", nargs="+")
-    parser.add_argument("-e", "--end", help="End time (x m|h|d|w ago | now | <seconds since epoc>)", nargs="+")
-    parser.add_argument("-o", "--order", help="Best effort ordering of log entries", action="store_true")
-    parser.usage = "ndt logs log_group_pattern [-h] [-f FILTER] [-s START [START ...]] [-e END [END ...]] [-o]"
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    cwlogs_groups = CloudWatchLogsGroups(
-        log_group_filter=args.log_group_pattern,
-        log_filter=args.filter,
-        start_time=' '.join(args.start) if args.start else None,
-        end_time=' '.join(args.end) if args.end else None,
-        sort=args.order
-    )
-    cwlogs_groups.get_logs()
-
-
 def resolve_include():
     """Find a file from the first of the defined include paths
     """
@@ -509,7 +324,7 @@ def assume_role():
                                                 "the duration of the session.", required=False)
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    creds = cf_utils.assume_role(args.role_arn, mfa_token_name=args.mfa_token,
+    creds = utils.assume_role(args.role_arn, mfa_token_name=args.mfa_token,
                                  duration_minutes=args.duration)
     if args.profile:
         update_profile(args.profile, creds)
@@ -545,96 +360,6 @@ def session_to_env():
         print("AWS_SESSION_EXPIRATION=\"" + creds['Expiration'].strftime("%a, %d %b %Y %H:%M:%S +0000") + "\"")
         print("export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION")
 
-def get_parameter():
-    """Get a parameter value from the stack
-    """
-    parser = get_parser()
-    parser.add_argument("parameter", help="The name of the parameter to print")
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    info = InstanceInfo()
-    print(info.stack_data(args.parameter))
-
-
-def volume_from_snapshot():
-    """ Create a volume from an existing snapshot and mount it on the given
-    path. The snapshot is identified by a tag key and value. If no tag is
-    found, an empty volume is created, attached, formatted and mounted.
-    """
-    parser = get_parser()
-    parser.add_argument("tag_key", help="Key of the tag to find volume with")
-    parser.add_argument("tag_value", help="Value of the tag to find volume with")
-    parser.add_argument("mount_path", help="Where to mount the volume")
-    parser.add_argument("size_gb", nargs="?", help="Size in GB for the volum" +
-                                                   "e. If different from sna" +
-                                                   "pshot size, volume and " +
-                                                   "filesystem are resized",
-                        default=None, type=int)
-    parser.add_argument("-n", "--no_delete_on_termination",
-                        help="Whether to skip deleting the volume on termi" +
-                             "nation, defaults to false", action="store_true")
-    parser.add_argument("-c", "--copytags", nargs="*", help="Tag to copy to the volume from instance. Multiple values allowed.")
-    parser.add_argument("-t", "--tags", nargs="*", help="Tag to add to the volume in the format name=value. Multiple values allowed.")
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    tags = {}
-    if args.tags:
-        for tag in args.tags:
-            try:
-                key, value = tag.split('=', 1)
-                tags[key] = value
-            except ValueError:
-                parser.error("Invalid tag/value input: " + tag)
-    if is_ec2():
-        volumes.volume_from_snapshot(args.tag_key, args.tag_value, args.mount_path,
-                                     size_gb=args.size_gb,
-                                     del_on_termination=not args.no_delete_on_termination,
-                                     copytags=args.copytags, tags=tags)
-    else:
-        parser.error("Only makes sense on an EC2 instance")
-
-
-def snapshot_from_volume():
-    """ Create a snapshot of a volume identified by it's mount path
-    """
-    parser = get_parser()
-    parser.add_argument("-w", "--wait", help="Wait for the snapshot to finish" +
-                        " before returning",
-                        action="store_true")
-    parser.add_argument("tag_key", help="Key of the tag to find volume with")
-    parser.add_argument("tag_value", help="Value of the tag to find volume with")
-    parser.add_argument("mount_path", help="Where to mount the volume")
-    parser.add_argument("-c", "--copytags", nargs="*", help="Tag to copy to the snapshot from instance. Multiple values allowed.")
-    parser.add_argument("-t", "--tags", nargs="*", help="Tag to add to the snapshot in the format name=value. Multiple values allowed.")
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    tags = {}
-    if args.tags:
-        for tag in args.tags:
-            try:
-                key, value = tag.split('=', 1)
-                tags[key] = value
-            except ValueError:
-                parser.error("Invalid tag/value input: " + tag)
-    if is_ec2():
-        print(volumes.create_snapshot(args.tag_key, args.tag_value,
-                                      args.mount_path, wait=args.wait, tags=tags, copytags=args.copytags))
-    else:
-        parser.error("Only makes sense on an EC2 instance")
-
-
-def detach_volume():
-    """ Create a snapshot of a volume identified by it's mount path
-    """
-    parser = get_parser()
-    parser.add_argument("mount_path", help="Where to mount the volume")
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    if is_ec2():
-        volumes.detach_volume(args.mount_path)
-    else:
-        parser.error("Only makes sense on an EC2 instance")
-
 
 def clean_snapshots():
     """Clean snapshots that are older than a number of days (30 by default) and
@@ -650,13 +375,15 @@ def clean_snapshots():
     parser.add_argument("-d", "--days", help="The number of days that is the" +
                                              "minimum age for snapshots to " +
                                              "be deleted", type=int, default=30)
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Do not delete, but print what would be deleted")
     parser.add_argument("tags", help="The tag values to select deleted " +
                                      "snapshots", nargs="+")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     if args.region:
         os.environ['AWS_DEFAULT_REGION'] = args.region
-    volumes.clean_snapshots(args.days, args.tags)
+    ebs.clean_snapshots(args.days, args.tags, dry_run=args.dry_run)
 
 
 def setup_cli():
@@ -683,10 +410,10 @@ def show_stack_params_and_outputs():
     parser.add_argument("-p", "--parameter", help="Name of paremeter if only" +
                                                   " one parameter required")
     parser.add_argument("stack_name", help="The stack name to show").completer = \
-        ChoicesCompleter(stacks())
+        ChoicesCompleter(_best_effort_stacks())
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    resp = stack_params_and_outputs(args.region, args.stack_name)
+    resp, _ = stack_params_and_outputs_and_stack(stack_name=args.stack_name, stack_region=args.region)
     if args.parameter:
         if args.parameter in resp:
             print(resp[args.parameter])
@@ -694,6 +421,7 @@ def show_stack_params_and_outputs():
             parser.error("Parameter " + args.parameter + " not found")
     else:
         print(json.dumps(resp, indent=2))
+
 
 def show_terraform_params():
     """ Show available parameters for a terraform subcomponent """
@@ -724,7 +452,6 @@ def cli_get_images():
     parser.add_argument("job_name", help="The job name to look for")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    set_region()
     images = get_images(args.job_name)
     for image in images:
         print(image['ImageId'] + ":" + image['Name'])
@@ -757,20 +484,6 @@ def cli_share_to_another_region():
     args = parser.parse_args()
     share_to_another_region(args.ami_id, args.to_region, args.ami_name,
                             args.account_id)
-
-
-def cli_register_private_dns():
-    """ Register local private IP in route53 hosted zone usually for internal
-    use.
-    """
-    parser = get_parser()
-    parser.add_argument("dns_name", help="The name to update in route 53")
-    parser.add_argument("hosted_zone", help="The name of the hosted zone to update")
-    parser.add_argument("-t", "--ttl", help="Time to live for the record. 60 by default",
-                        default="60")
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    register_private_dns(args.dns_name, args.hosted_zone, ttl=args.ttl)
 
 
 def cli_interpolate_file():
@@ -1070,27 +783,6 @@ def map_to_properties(map):
         ret += key + "=" + val + os.linesep
     return ret
 
-def wait_for_metadata():
-    """ Waits for metadata service to be available. All errors are ignored until
-    time expires or a socket can be established to the metadata service """
-    parser = get_parser()
-    parser.add_argument('--timeout', '-t', type=int, help="Maximum time to wait in seconds for the metadata service to be available", default=300)
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-    start = datetime.utcnow().replace(tzinfo=tzutc())
-    cutoff = start + timedelta(seconds=args.timeout)
-    timeout = args.timeout
-    connected = False
-    while not connected:
-        try:
-            connected = cf_utils.wait_net_service("169.254.169.254", 80, timeout)
-        except:
-            pass
-        if datetime.utcnow().replace(tzinfo=tzutc()) >= cutoff:
-            print("Timed out waiting for metadata service")
-            sys.exit(1)
-        time.sleep(1)
-        timeout = max(1, args.timeout - (datetime.utcnow().replace(tzinfo=tzutc()) - start).total_seconds())
 
 def cli_assumed_role_name():
     """ Read the name of the assumed role if currently defined """
@@ -1098,6 +790,7 @@ def cli_assumed_role_name():
     argcomplete.autocomplete(parser)
     _ = parser.parse_args()
     print(assumed_role_name())
+
 
 def cli_list_jobs():
     """ Prints a line for every runnable job in this git repository, in all branches and
@@ -1119,11 +812,13 @@ def cli_list_jobs():
     else:
         print("\n".join(ret))
 
+
 def branch_components(prefix, parsed_args, **kwargs):
     if parsed_args.branch:
         return [c.name for c in Project(branch=parsed_args.branch).get_components()]
     else:
         return [c.name for c in Project().get_components()]
+
 
 def cli_list_components():
     """ Prints the components in a branch, by default the current branch """
