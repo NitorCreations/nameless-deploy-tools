@@ -335,15 +335,18 @@ optional arguments:
 ## `ndt detach-volume`
 
 ```bash
-usage: ndt detach-volume [-h] mount_path
+usage: ndt detach-volume [-h] [-d] [-i VOLUME_ID] mount_path
 
 Create a snapshot of a volume identified by it\'s mount path
 
 positional arguments:
-  mount_path  Where to mount the volume
+  mount_path            Mount point of the volume to be detached
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help            show this help message and exit
+  -d, --delete          Delete volume after detaching
+  -i VOLUME_ID, --volume-id VOLUME_ID
+                        Volume id to detach
 ```
 
 ## `ndt ec2-clean-snapshots`
@@ -389,7 +392,7 @@ usage: ndt ec2-get-userdata [-h] file
 Get userdata defined for an instance into a file
 
 positional arguments:
-  file        File to write userdata into
+  file        File to write userdata into. \'-\' for stdout
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -411,7 +414,8 @@ optional arguments:
 ```bash
 usage: ndt ec2-region [-h]
 
-Get default region - the region of the instance if run in an EC2 instance
+Get current default region. Defaults to the region of the instance on ec2 if
+not otherwise defined.
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -877,7 +881,8 @@ optional arguments:
 ```bash
 usage: ndt region [-h]
 
-Get default region - the region of the instance if run in an EC2 instance
+Get current default region. Defaults to the region of the instance on ec2 if
+not otherwise defined.
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -997,7 +1002,7 @@ optional arguments:
 
 ```bash
 usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]]
+                                [-t [TAGS [TAGS ...]]] [-i]
                                 tag_key tag_value mount_path
 
 Create a snapshot of a volume identified by it\'s mount path
@@ -1016,6 +1021,8 @@ optional arguments:
   -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
                         Tag to add to the snapshot in the format name=value.
                         Multiple values allowed.
+  -i, --ignore-missing-copytags
+                        If set, missing copytags are ignored.
 ```
 
 ## `ndt terraform-pull-state`
@@ -1129,7 +1136,7 @@ optional arguments:
 
 ```bash
 usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]]
+                                [-t [TAGS [TAGS ...]]] [-i]
                                 tag_key tag_value mount_path [size_gb]
 
 Create a volume from an existing snapshot and mount it on the given path. The
@@ -1154,6 +1161,8 @@ optional arguments:
   -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
                         Tag to add to the volume in the format name=value.
                         Multiple values allowed.
+  -i, --ignore-missing-copytags
+                        If set, missing copytags are ignored.
 ```
 
 ## `ndt yaml-to-json`
