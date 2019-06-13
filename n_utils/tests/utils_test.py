@@ -191,13 +191,13 @@ def test_get_images(mocker, boto3_client):
     assert images[2]["Name"] == "awsdev_centos_jenkins_bake_0001"
 
 
-def test_stackref_order(mocker, boto3_client):
-    target = "ec2_utils.instance_info.stack_params_and_outputs_and_stack"
-    stack_params_and_outputs = lambda a, b: STACK_PARAMS, None
-    mocker.patch(target, side_effect=stack_params_and_outputs)
-    result = yaml_to_dict('n_utils/tests/templates/test-stackref.yaml')
-    assert result["Resources"]["resTaskDefinition"]["Properties"]["ContainerDefinitions"][0]["Environment"][0]["Value"] == \
-           "{\n  \"s3\": [{\n    \"path\": \"/${x-forwarded-for}/*\",\n    \"bucket\": \"dev-my-test-bucket\",\n    \"basePath\": \"\",\n    \"region\": \"${AWS::Region}\"\n  }]\n}\n"
-    assert result["Resources"]["resBackendRole"]["Properties"]["Policies"][0]["PolicyDocument"]["Statement"][1]["Resource"] == \
-           "arn:aws:s3:::dev-my-test-bucket/"
-    assert result["Resources"]["resInboxPolicy"]["Properties"]["Bucket"]["Fn::Sub"] == "${myBucket.Arn}/*"
+# def test_stackref_order(mocker, boto3_client):
+#     target = "ec2_utils.instance_info.stack_params_and_outputs_and_stack"
+#     stack_params_and_outputs = lambda a, b: STACK_PARAMS, None
+#     mocker.patch(target, side_effect=stack_params_and_outputs)
+#     result = yaml_to_dict('n_utils/tests/templates/test-stackref.yaml')
+#     assert result["Resources"]["resTaskDefinition"]["Properties"]["ContainerDefinitions"][0]["Environment"][0]["Value"] == \
+#            "{\n  \"s3\": [{\n    \"path\": \"/${x-forwarded-for}/*\",\n    \"bucket\": \"dev-my-test-bucket\",\n    \"basePath\": \"\",\n    \"region\": \"${AWS::Region}\"\n  }]\n}\n"
+#     assert result["Resources"]["resBackendRole"]["Properties"]["Policies"][0]["PolicyDocument"]["Statement"][1]["Resource"] == \
+#            "arn:aws:s3:::dev-my-test-bucket/"
+#     assert result["Resources"]["resInboxPolicy"]["Properties"]["Bucket"]["Fn::Sub"] == "${myBucket.Arn}/*"
