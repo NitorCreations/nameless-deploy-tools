@@ -1230,17 +1230,25 @@ optional arguments:
 ## `[ndt ]cf-logs-to-cloudwatch`
 
 ```bash
-usage: cf-logs-to-cloudwatch [-h] file
+usage: cf-logs-to-cloudwatch [-h] [-g GROUP] [-s STREAM] file
 
 Read a file and send rows to cloudwatch and keep following the end for new
-data. The log group will be the stack name that created instance and the
-logstream will be the instance id and filename.
+data. The log group will be the stack name that created instance if not given
+as an argument. The logstream will be the instance id and filename if not
+given as an argument. Group and stream aare created if they do not exist.
 
 positional arguments:
-  file        File to follow
+  file                  File to follow
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help            show this help message and exit
+  -g GROUP, --group GROUP
+                        Log group to log to. Defaults to the stack name that
+                        created the instance if not given and instance is
+                        created with a CloudFormation stack
+  -s STREAM, --stream STREAM
+                        The log stream name to log to. The instance id and
+                        filename if not given
 ```
 
 ## `[ndt ]ec2-associate-eip`
@@ -1270,17 +1278,18 @@ optional arguments:
 ## `[ndt ]logs-to-cloudwatch`
 
 ```bash
-usage: logs-to-cloudwatch [-h] file
-
-Read a file and send rows to cloudwatch and keep following the end for new
-data. The log group will be the stack name that created instance and the
-logstream will be the instance id and filename.
-
-positional arguments:
-  file        File to follow
-
-optional arguments:
-  -h, --help  show this help message and exit
+Traceback (most recent call last):
+  File "/usr/local/bin/logs-to-cloudwatch", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'logs-to-cloudwatch\')()
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 489, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2843, in load_entry_point
+    return ep.load()
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2434, in load
+    return self.resolve()
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2444, in resolve
+    raise ImportError(str(exc))
+ImportError: \'module\' object has no attribute \'logs_to_cloudwatch\'
 ```
 
 ## `[ndt ]n-include`
@@ -1314,19 +1323,18 @@ optional arguments:
 ## `[ndt ]signal-cf-status`
 
 ```bash
-usage: signal-cf-status [-h] [-r RESOURCE] status
-
-Signal CloudFormation status to a logical resource in CloudFormation that is
-either given on the command line or resolved from CloudFormation tags
-
-positional arguments:
-  status                Status to indicate: SUCCESS | FAILURE
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -r RESOURCE, --resource RESOURCE
-                        Logical resource name to signal. Looked up from
-                        cloudformation tags by default
+Traceback (most recent call last):
+  File "/usr/local/bin/signal-cf-status", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'signal-cf-status\')()
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 489, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2843, in load_entry_point
+    return ep.load()
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2434, in load
+    return self.resolve()
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2444, in resolve
+    raise ImportError(str(exc))
+ImportError: \'module\' object has no attribute \'signal_cf_status\'
 ```
 
 ## `create-shell-archive.sh`
