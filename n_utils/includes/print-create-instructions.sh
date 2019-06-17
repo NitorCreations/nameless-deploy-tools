@@ -49,8 +49,7 @@ STACK=$2
 
 if [ -d $COMPONENT/image ]; then
   echo "You can bake the component image by running 'ndt bake-image $COMPONENT'"
-  eval "$(ndt load-parameters "$1")"
-  AMI_SUFFIX=" \"\" $JENKINS_JOB_PREFIX-$1-bake"
+  eval "$(ndt load-parameters -e "$1")"
 fi
 
 PREFIX=$COMPONENT/docker-
@@ -61,4 +60,4 @@ if ls $COMPONENT/docker-* > /dev/null 2>&1; then
   done
 fi
 
-echo "You can deploy the stack $STACK by running 'ndt deploy-stack $COMPONENT $STACK$AMI_SUFFIX'"
+echo "You can deploy the stack $STACK by running 'ndt deploy-stack $COMPONENT $STACK'"
