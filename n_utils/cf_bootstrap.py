@@ -29,6 +29,7 @@ import shutil
 import subprocess
 import stat
 import sys
+from ast import literal_eval
 from copy import deepcopy
 from collections import OrderedDict
 from subprocess import Popen, PIPE
@@ -40,6 +41,7 @@ from argcomplete.completers import ChoicesCompleter
 import boto3
 import ipaddr
 from awscli.customizations.configure.writer import ConfigFileWriter
+from n_utils import _to_str
 from n_utils.ndt import find_include, find_all_includes
 from n_utils.aws_infra_util import yaml_load, yaml_save
 from n_utils.utils import has_output_selector, select_stacks
@@ -48,6 +50,13 @@ from n_utils.utils import has_output_selector, select_stacks
 def enum(**enums):
     return type('Enum', (), enums)
 
+def type_guess(val):
+    if not val:
+        return None
+    try:
+        return literal_eval(val)
+    except:
+        return _to_str(val)
 
 BRANCH_MODES = enum(SINGLE_STACK='single', MULTI_STACK='multi')
 
@@ -136,7 +145,7 @@ def has_entry(prefix, name, file_name):
 
 def setup_cli(name=None, key_id=None, secret=None, region=None):
     if name is None:
-        name = eval(input("Profile name: "))
+        name = type_guess(input("Profile name: "))
     home_dir = os.path.expanduser("~")
     config_file = os.path.join(home_dir, ".aws", "config")
     credentials_file = os.path.join(home_dir, ".aws", "credentials")
@@ -145,11 +154,11 @@ def setup_cli(name=None, key_id=None, secret=None, region=None):
         print("Profile " + name + " already exists. Not overwriting.")
         return
     if key_id is None:
-        key_id = eval(input("Key ID: "))
+        key_id = type_guess(input("Key ID: "))
     if secret is None:
-        secret = eval(input("Key secret: "))
+        secret = type_guess(input("Key secret: "))
     if region is None:
-        region = eval(input("Default region: "))
+        region = type_guess(input("Default region: "))
     writer = ConfigFileWriter()
     config_values = {
         "__section__": "profile " + name,
@@ -305,7 +314,7 @@ def _map_ssh_key(context, param, value):
     key_name = None
     default_name = "ndt-" + context.__class__.__name__.lower() + "-instance"
     if value == "1":
-        key_name = eval(input("Name for new key pair (" + default_name + "): "))
+        key_name = type_guess(input("Name for new key pair (" + default_name + "): "))
         if not key_name:
             key_name = default_name
         ec2 = boto3.client("ec2")
@@ -431,10 +440,7 @@ class ContextClassBase(object):
             else:
                 default = self.getattr(param + "_default")()
                 prompt = self.format_prompt(param, default=default)
-                val = input(prompt)
-                setval = None
-                if val:
-                    setval = eval(val)
+                setval = type_guess(input(prompt))
                 if not setval:
                     setval = default
                 if param in self.value_mappers:
@@ -505,7 +511,7 @@ class ContextClassBase(object):
                     stack_props_file.write("STACK_NAME=$ORIG_STACK_NAME\n")
         stack_template = os.path.join(stack_dir, "template.yaml")
         if os.path.exists(stack_template) and not yes:
-            answer = eval(input("Overwrite " + self.stack_name + " stack? (n): "))
+            answer = type_guess(input("Overwrite " + self.stack_name + " stack? (n): "))
             if not answer or not answer.lower() == "y":
                 return False
         with open(stack_template, "w") as stack_file:
