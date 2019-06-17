@@ -61,6 +61,7 @@ setup(name='nameless_deploy_tools',
       tests_require=[
           'pytest',
           'pytest-mock',
-          'pytest-cov'
+          'pytest-cov',
+          'coverage'
       ],
       zip_safe=False)
