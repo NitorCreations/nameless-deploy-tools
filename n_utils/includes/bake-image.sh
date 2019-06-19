@@ -126,6 +126,8 @@ else
   imagedir="${component}/image"
 fi
 
+[ -d "$imagedir" ] || die "Imagedir $imagedir does not exist"
+
 VAR_AMI="AMIID_${IMAGETYPE}"
 AMI="${!VAR_AMI}"
 

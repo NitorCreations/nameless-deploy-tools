@@ -80,6 +80,8 @@ else
   BUILD_NUMBER=$(printf "%04d\n" $BUILD_NUMBER)
 fi
 
+[ -d "$component/docker-$ORIG_DOCKER_NAME" ] || die "Docker directory $component/docker-$ORIG_DOCKER_NAME does not exist"
+
 eval "$(ndt load-parameters "$component" -d "$docker" -e)"
 
 if [ -x "$component/docker-$ORIG_DOCKER_NAME/pre_build.sh" ]; then
