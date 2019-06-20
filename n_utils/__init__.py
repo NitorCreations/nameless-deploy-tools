@@ -32,7 +32,7 @@ NDT_AND_CONSOLE = [
     'cf-logs-to-cloudwatch=ec2_utils.cli:log_to_cloudwatch',
     'logs-to-cloudwatch=ec2_utils.cli:log_to_cloudwatch',
     'associate-eip=n_utils.cli:associate_eip',
-    'signal-cf-status=n_utils.cli:signal_cf_status',
+    'signal-cf-status=ec2_utils.cli:cf_signal_status',
     'ec2-associate-eip=n_utils.cli:associate_eip'
 ]
 NDT_ONLY = [

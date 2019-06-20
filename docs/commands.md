@@ -1278,18 +1278,25 @@ optional arguments:
 ## `[ndt ]logs-to-cloudwatch`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/logs-to-cloudwatch", line 11, in <module>
-    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'logs-to-cloudwatch\')()
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 489, in load_entry_point
-    return get_distribution(dist).load_entry_point(group, name)
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2843, in load_entry_point
-    return ep.load()
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2434, in load
-    return self.resolve()
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2444, in resolve
-    raise ImportError(str(exc))
-ImportError: \'module\' object has no attribute \'logs_to_cloudwatch\'
+usage: logs-to-cloudwatch [-h] [-g GROUP] [-s STREAM] file
+
+Read a file and send rows to cloudwatch and keep following the end for new
+data. The log group will be the stack name that created instance if not given
+as an argument. The logstream will be the instance id and filename if not
+given as an argument. Group and stream aare created if they do not exist.
+
+positional arguments:
+  file                  File to follow
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -g GROUP, --group GROUP
+                        Log group to log to. Defaults to the stack name that
+                        created the instance if not given and instance is
+                        created with a CloudFormation stack
+  -s STREAM, --stream STREAM
+                        The log stream name to log to. The instance id and
+                        filename if not given
 ```
 
 ## `[ndt ]n-include`
