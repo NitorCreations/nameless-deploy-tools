@@ -1330,18 +1330,19 @@ optional arguments:
 ## `[ndt ]signal-cf-status`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/local/bin/signal-cf-status", line 11, in <module>
-    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'signal-cf-status\')()
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 489, in load_entry_point
-    return get_distribution(dist).load_entry_point(group, name)
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2843, in load_entry_point
-    return ep.load()
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2434, in load
-    return self.resolve()
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2444, in resolve
-    raise ImportError(str(exc))
-ImportError: \'module\' object has no attribute \'signal_cf_status\'
+usage: signal-cf-status [-h] [-r RESOURCE] status
+
+Signal CloudFormation status to a logical resource in CloudFormation that is
+either given on the command line or resolved from CloudFormation tags
+
+positional arguments:
+  status                Status to indicate: SUCCESS | FAILURE
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r RESOURCE, --resource RESOURCE
+                        Logical resource name to signal. Looked up from
+                        cloudformation tags by default
 ```
 
 ## `create-shell-archive.sh`
