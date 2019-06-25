@@ -1,10 +1,10 @@
 FROM nitor/docker-base:latest
 
-ENV NODE_VERSION=8.11.1 \
- YARN_VERSION=1.5.1 \
+ENV NODE_VERSION=10.16.0 \
+ YARN_VERSION=1.17.2 \
  JAVA_HOME=/docker-java-home \
- GRADLE_VERSION=4.6 \
- MAVEN_VERSION=3.5.4 \
+ GRADLE_VERSION=5.4.1 \
+ MAVEN_VERSION=3.6.1 \
  PHANTOMJS_VERSION=2.1.1
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-8-jdk git openssh-client unzip chromium-bsu jq gpg
@@ -22,6 +22,11 @@ RUN set -ex \
     B9AE9905FFD7803F25714661B63B535A4C206CA9 \
     56730D5401028683275BD23C23EFEFE93C4CFFFE \
     77984A986EBC2AA786BC0F66B01FBB92821C587A \
+    4ED778F539E3634C779C87C6D7062848A1AB005C \
+    B9E2F5981AA6E0CD28160D9FF13993A75599653C \
+    8FCCA13FEF1D0C2E91008E09770F7A9A5AE15600 \
+    A48C2BEE680E841632CD4E44F07496B3EB3C1762 \
+    6A010C5166006599AA17F08146C2130DFD2497F5 \
   ; do \
     gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
     gpg --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
@@ -56,11 +61,6 @@ RUN set -ex \
   && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
   && set -ex \
-  && for key in 6A010C5166006599AA17F08146C2130DFD2497F5; do \
-    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-    gpg --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
-  done \
   && curl -fSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
   && curl -fSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
   && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
