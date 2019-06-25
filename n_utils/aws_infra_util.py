@@ -38,6 +38,7 @@ from botocore.exceptions import ClientError
 from copy import deepcopy
 from ec2_utils.clients import region
 from ec2_utils.instance_info import resolve_account, stack_params_and_outputs_and_stack
+from n_utils import _to_str
 from n_utils.utils import expand_vars, get_images, ParamNotAvailable
 from n_utils.git_utils import Git
 from n_utils.ndt import find_include
@@ -248,17 +249,17 @@ def _process_value(value, used_params):
     #   b) resolving basic variables used in terraform backend configuration
     if  "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
         if value.strip().startswith("StackRef:"):
-            stackref_doc = yaml_load(StringIO(unicode(value)))
+            stackref_doc = yaml_load(StringIO(_to_str(value)))
             stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
             if stack_value:
                 value = stack_value
         if value.strip().startswith("TFRef:"):
-            tfref_doc = yaml_load(StringIO(unicode(value)))
+            tfref_doc = yaml_load(StringIO(_to_str(value)))
             tf_value = _resolve_tfref_from_dict(tfref_doc['TFRef'])
             if tf_value:
                 value = tf_value
         if value.strip().startswith("Encrypt:"):
-            enc_doc = yaml_load(StringIO(unicode(value)))
+            enc_doc = yaml_load(StringIO(_to_str(value)))
             enc_conf = enc_doc["Encrypt"]
             if isinstance(enc_conf, OrderedDict):
                 to_encrypt = yaml_save(enc_conf["value"])
