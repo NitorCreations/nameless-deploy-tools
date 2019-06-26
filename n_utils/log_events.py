@@ -58,18 +58,12 @@ from builtins import object
 from past.utils import old_div
 from botocore.exceptions import ClientError
 from collections import deque
-from datetime import datetime, timedelta
 from dateutil import tz
 from dateutil.parser import parse
 from dateutil.tz import tzutc
 from termcolor import colored
-from threading import Event, Thread, BoundedSemaphore
 import boto3
-import locale
-import os
 import sys
-import time
-import re
 from botocore.compat import total_seconds
 from ec2_utils.logs import fmttime, millis2iso, timestamp, \
     uprint, validatestarttime, parse_datetime, LogWorkerThread

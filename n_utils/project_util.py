@@ -1,6 +1,5 @@
 from __future__ import print_function
 from os import linesep
-from os.path import expanduser, join, exists
 from sys import argv
 from n_utils.profile_util import enable_profile
 import locale

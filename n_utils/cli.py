@@ -26,11 +26,8 @@ import sys
 import time
 import re
 import inspect
-from datetime import datetime, timedelta
 from dateutil.parser import parse
 from dateutil.tz import tzutc
-from inspect import trace, getframeinfo
-from subprocess import PIPE, Popen
 import argcomplete
 import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter

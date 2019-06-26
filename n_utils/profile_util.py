@@ -6,13 +6,11 @@ from builtins import str
 import argparse
 import os
 import re
-import time
 from collections import OrderedDict
 from configparser import ConfigParser
 from datetime import datetime
 from os import R_OK, access
 from os.path import exists, expanduser, isfile, join
-from subprocess import call
 
 import argcomplete
 from argcomplete.completers import ChoicesCompleter

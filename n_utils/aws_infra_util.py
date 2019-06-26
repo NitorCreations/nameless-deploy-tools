@@ -26,9 +26,6 @@ import subprocess
 import sys
 import yaml
 import six
-import tempfile
-import tarfile
-import shutil
 from base64 import b64encode
 from collections import OrderedDict
 from glob import glob

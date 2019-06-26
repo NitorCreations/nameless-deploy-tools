@@ -27,17 +27,13 @@ import os
 import random
 import re
 import shutil
-import stat
 import string
-import sys
 import tempfile
 import time
 import tempfile
 import six
 from copy import deepcopy
-from collections import deque, OrderedDict
-from os.path import expanduser
-from threading import Event, Lock, Thread
+from collections import OrderedDict
 from operator import itemgetter
 
 import boto3
