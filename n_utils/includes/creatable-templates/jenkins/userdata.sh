@@ -21,10 +21,6 @@ cd $HOME
 
 source $(n-include cloud_init_functions.sh)
 source $(n-include tool_installers.sh)
-update_aws_utils
-# reload scripts sourced above in case they changed:
-source $(n-include cloud_init_functions.sh)
-source $(n-include tool_installers.sh)
 
 source $(n-include aws_tools.sh)
 source $(n-include ebs-functions.sh)

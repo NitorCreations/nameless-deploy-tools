@@ -142,6 +142,10 @@ update_deploytools() {
   bash "$(n-include install_tools.sh)" "${DEPLOYTOOLS_VERSION}"
 }
 update_aws_utils () {
+  echo "###########################"
+  echo "#        DEPRECATED       #"
+  echo "###########################"
+  echo "Updating ndt as part of a bootup is no longer recommended"
   update_deploytools "$@"
 }
 
