@@ -5,7 +5,8 @@ ENV NODE_VERSION=10.16.0 \
  JAVA_HOME=/docker-java-home \
  GRADLE_VERSION=5.4.1 \
  MAVEN_VERSION=3.6.1 \
- PHANTOMJS_VERSION=2.1.1
+ PHANTOMJS_VERSION=2.1.1 \
+ LERNA_VERSION=3.15.0
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-8-jdk git openssh-client unzip chromium-bsu jq gpg
 RUN set -ex \
@@ -69,6 +70,7 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
+  && npm i -g lerna@$LERNA_VERSION \
   && pip install -U --no-cache-dir ansible boto awscli boto3 nitor-vault \
   && npm i -g npm serverless \
   && wget -nv -O - "http://www.nic.funet.fi/pub/mirrors/apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" | tar -xzf - -C /opt \
