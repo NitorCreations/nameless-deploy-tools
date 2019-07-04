@@ -1,13 +1,6 @@
-from __future__ import print_function
-
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
 import argparse
 import os
 import re
-from collections import OrderedDict
-from configparser import ConfigParser
 from datetime import datetime
 from os import R_OK, access
 from os.path import exists, expanduser, isfile, join
@@ -16,7 +9,11 @@ import argcomplete
 from argcomplete.completers import ChoicesCompleter
 from dateutil.parser import parse
 from dateutil.tz import tzutc
+from n_utils import _to_str
 
+def ConfigParser():
+    import configparser
+    return configparser.ConfigParser()
 
 def read_expiring_profiles():
     ret = []
@@ -54,6 +51,7 @@ def read_profiles():
 
 def get_profile(profile):
     home = expanduser("~")
+    from collections import OrderedDict
     ret = OrderedDict()
     config = join(home, ".aws", "config")
     profile_section = "profile " + profile
@@ -123,8 +121,7 @@ def print_profile(profile_name, params):
         upper_param = key.upper()
         if key == "aws_session_expiration":
             d = parse(value)
-            epoc = int((d - datetime.utcfromtimestamp(0).replace(tzinfo=tzutc())).total_seconds())
-            print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=\"" + str(epoc) + "\"")
+            print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=\"" + _to_str(_epoc_secs(d)) + "\"")
             params.append("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile)
         params.append(upper_param)
         if value.startswith("\""):
@@ -148,7 +145,7 @@ def print_profile_expiry(profile):
     safe_profile = re.sub("[^A-Z0-9]", "_", profile.upper())
     expiry = read_profile_expiry(profile)
     epoc = _epoc_secs(parse(expiry).replace(tzinfo=tzutc()))
-    print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=" + str(epoc))
+    print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=" + _to_str(epoc))
     print("AWS_SESSION_EXPIRATION_" + safe_profile + "=" + expiry)
     print("export AWS_SESSION_EXPIRATION_" + safe_profile + " AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
 
@@ -250,7 +247,7 @@ def enable_profile(profile_type, profile):
                 command.append(profile_data["ndt_mfa_token"])
             if "ndt_default_duration_hours" in profile_data:
                 command.append("-d")
-                duration = str(int(profile_data["ndt_default_duration_hours"]) * 60)
+                duration = _to_str(int(profile_data["ndt_default_duration_hours"]) * 60)
                 command.append(duration)
             command.append("-p")
             command.append(profile)

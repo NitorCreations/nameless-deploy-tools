@@ -33,9 +33,9 @@ setup(name='nameless_deploy_tools',
           'pytest-runner'
       ],
       install_requires=[
+          'threadlocal-aws==0.5',
           'future',
           'pyaml',
-          'boto3',
           'awscli',
           'requests',
           'termcolor',

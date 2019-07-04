@@ -13,14 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-from __future__ import print_function
 from builtins import str
 import time
-import boto3
-
+from threadlocal_aws.clients import cloudfront, route53
 
 def distributions():
-    pages = boto3.client("cloudfront").get_paginator('list_distributions')
+    pages = cloudfront().get_paginator('list_distributions')
     print(pages.paginate())
     for page in pages.paginate():
         print(page)
@@ -30,7 +28,7 @@ def distributions():
 
 
 def distribution_comments():
-    pages = boto3.client("cloudfront").get_paginator('list_distributions')
+    pages = cloudfront().get_paginator('list_distributions')
     for page in pages.paginate():
         distribution_list = page.get('DistributionList')
         for distribution in distribution_list['Items']:
@@ -38,15 +36,14 @@ def distribution_comments():
 
 
 def get_distribution_by_id(distribution_id):
-    cloudfront = boto3.client("cloudfront")
-    ret = cloudfront.get_distribution(Id=distribution_id)['Distribution']
+    ret = cloudfront().get_distribution(Id=distribution_id)['Distribution']
     ret['DistributionConfig']['Id'] = distribution_id
     ret['DistributionConfig']['DomainName'] = ret['DomainName']
     return [ret['DistributionConfig']]
 
 
 def get_distribution_by_comment(comment):
-    pages = boto3.client("cloudfront").get_paginator('list_distributions')
+    pages = cloudfront().get_paginator('list_distributions')
     ret = []
     for page in pages.paginate():
         distribution_list = page.get('DistributionList')
@@ -60,7 +57,7 @@ def get_distribution_by_comment(comment):
 
 
 def hosted_zones():
-    pages = boto3.client('route53').get_paginator('list_hosted_zones')
+    pages = route53().get_paginator('list_hosted_zones')
     for page in pages.paginate():
         for hosted_zone in page.get('HostedZones', []):
             yield hosted_zone
@@ -82,19 +79,18 @@ def upsert_cloudfront_records(args):
                 if not change['HostedZoneId'] in changes:
                     changes[change['HostedZoneId']] = []
                 changes[change['HostedZoneId']].append(change['Change'])
-    route53 = boto3.client('route53')
     requests = []
     for req in changes:
-        requests.append(route53.change_resource_record_sets(HostedZoneId=req,
-                                                            ChangeBatch={
-                                                                'Changes': changes[req]
-                                                            })['ChangeInfo'])
+        requests.append(route53().change_resource_record_sets(HostedZoneId=req,
+                                                              ChangeBatch={
+                                                                 'Changes': changes[req]
+                                                              })['ChangeInfo'])
     if args.wait:
         not_synced_count = 1
         while not_synced_count > 0:
             not_synced_count = 0
             for req in requests:
-                if not route53.get_change(Id=req['Id'])['ChangeInfo']['Status'] == 'INSYNC':
+                if not route53().get_change(Id=req['Id'])['ChangeInfo']['Status'] == 'INSYNC':
                     not_synced_count = not_synced_count + 1
             if not_synced_count > 0:
                 print("Waiting for requests to sync - " + str(not_synced_count) + " not synced")

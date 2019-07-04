@@ -16,7 +16,6 @@
 
 """ Utilities to bootsrap AWS accounts into use with nameless-deploy-tools
 """
-from __future__ import print_function
 
 from builtins import zip
 from builtins import input
@@ -38,14 +37,13 @@ import argparse
 import argcomplete
 from argcomplete.completers import ChoicesCompleter
 
-import boto3
 import ipaddr
 from awscli.customizations.configure.writer import ConfigFileWriter
 from n_utils import _to_str
 from n_utils.ndt import find_include, find_all_includes
 from n_utils.aws_infra_util import yaml_load, yaml_save
 from n_utils.utils import has_output_selector, select_stacks
-
+from threadlocal_aws.clients import ec2, route53
 
 def enum(**enums):
     return type('Enum', (), enums)
@@ -244,8 +242,7 @@ def _get_network_yaml(network, vpc_cidr, subnet_prefixlen, subnet_base, network_
     subnet_bits = 32 - int(subnet_prefixlen)
     subnet_size = 2 ** subnet_bits
     last_subnet = subnet_base - subnet_size
-    ec2 = boto3.client("ec2")
-    az_response = ec2.describe_availability_zones()
+    az_response = ec2().describe_availability_zones()
     az_names = sorted([az_data['ZoneName'] for az_data in
                        az_response['AvailabilityZones']])
     network_yaml['Parameters']['paramVPCCidr']['Default'] = _nts(vpc_cidr)
@@ -317,8 +314,7 @@ def _map_ssh_key(context, param, value):
         key_name = type_guess(input("Name for new key pair (" + default_name + "): "))
         if not key_name:
             key_name = default_name
-        ec2 = boto3.client("ec2")
-        key_res = ec2.create_key_pair(KeyName=key_name)
+        key_res = ec2().create_key_pair(KeyName=key_name)
         if key_res and "KeyMaterial" in key_res:
             proc = Popen(["store-secret.sh", key_name + ".pem"],
                          stdout=PIPE, stdin=PIPE, stderr=PIPE)
@@ -336,11 +332,10 @@ def _map_ssh_key(context, param, value):
 def _map_elastic_ip(context, param, value):
     eip = None
     if value == "1":
-        ec2 = boto3.client("ec2")
-        eip_res = ec2.allocate_address(Domain='vpc')
+        eip_res = ec2().allocate_address(Domain='vpc')
         if eip_res and "PublicIp" in eip_res:
             eip = eip_res["PublicIp"]
-        ec2.create_tags(Resources=[eip_res['AllocationId']],
+        ec2().create_tags(Resources=[eip_res['AllocationId']],
                         Tags=[{
                             "Key": "Name",
                             "Value": context.__class__.__name__.lower()
@@ -454,8 +449,7 @@ class ContextClassBase(object):
         if "ssh_key" not in self.ask_fields:
             self.ask_fields.append("ssh_key")
         index = 2
-        ec2 = boto3.client("ec2")
-        keys = ec2.describe_key_pairs()
+        keys = ec2().describe_key_pairs()
         if keys and "KeyPairs" in keys:
             for key in keys["KeyPairs"]:
                 self.ssh_keys.append(key["KeyName"])
@@ -474,8 +468,7 @@ class ContextClassBase(object):
         if "elastic_ip" not in self.ask_fields:
             self.ask_fields.append("elastic_ip")
         index = 2
-        ec2 = boto3.client("ec2")
-        eips = ec2.describe_addresses()
+        eips = ec2().describe_addresses()
         if eips and "Addresses" in eips:
             for address in eips["Addresses"]:
                 if "InstanceId" not in address:
@@ -644,7 +637,7 @@ class Route53(ContextClassBase):
 
     def _ask_hosted_zone(self):
         self.hosted_zone = "Hosted zone ({0}):\n"
-        self.hosted_zones = boto3.client('route53').list_hosted_zones()['HostedZones']
+        self.hosted_zones = route53().list_hosted_zones()['HostedZones']
         self.hosted_zone_default = lambda: "1"
         if self.hosted_zones:
             index = 1
@@ -708,8 +701,7 @@ class Jenkins(ContextClassBase):
 
     def set_template(self, template):
         ContextClassBase.set_template(self, template)
-        ec2 = boto3.client("ec2")
-        az_response = ec2.describe_availability_zones()
+        az_response = ec2().describe_availability_zones()
         az_names = sorted([az_data['ZoneName'] for az_data in
                            az_response['AvailabilityZones']])
         for az_name in az_names:

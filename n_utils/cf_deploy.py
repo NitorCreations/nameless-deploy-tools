@@ -25,7 +25,6 @@ import sys
 import time
 import six
 from datetime import datetime
-import boto3
 
 from botocore.exceptions import ClientError
 from pygments import highlight, lexers, formatters
@@ -36,6 +35,7 @@ from n_utils import aws_infra_util
 from n_utils.utils import get_images
 from ec2_utils.logs import CloudWatchLogsThread, fmttime
 from n_utils.log_events import CloudFormationEvents
+from threadlocal_aws.clients import cloudformation, s3
 
 REDIRECTED = False
 
@@ -59,10 +59,7 @@ def log(message):
 
 
 def update_stack(stack_name, template, params, dry_run=False, session=None, tags=None):
-    if session:
-        clf = session.client('cloudformation')
-    else:
-        clf = boto3.client('cloudformation')
+    clf = cloudformation(session=session)
     chset_name = stack_name + "-" + time.strftime("%Y%m%d%H%M%S",
                                                   time.gmtime())
     params = get_template_arguments(stack_name, template, params)
@@ -104,25 +101,17 @@ def update_stack(stack_name, template, params, dry_run=False, session=None, tags
 
 
 def create_stack(stack_name, template, params, session=None, tags=None):
-    if session:
-        clf = session.client('cloudformation')
-    else:
-        clf = boto3.client('cloudformation')
     params = get_template_arguments(stack_name, template, params)
     if tags:
         params["Tags"] = tags
-    clf.create_stack(**params)
+    cloudformation(session=session).create_stack(**params)
     return
 
 
 def get_stack_operation(stack_name, session=None):
-    if session:
-        clf = session.client('cloudformation')
-    else:
-        clf = boto3.client('cloudformation')
     stack_oper = "create_stack"
     try:
-        stack_data = clf.describe_stacks(StackName=stack_name)
+        stack_data = cloudformation(session=session).describe_stacks(StackName=stack_name)
         # Dump original status, for the record
         status = stack_data['Stacks'][0]['StackStatus']
         log("Status: \033[32;1m" + status + "\033[m")
@@ -142,13 +131,9 @@ def get_end_status(stack_name, session=None):
     cf_events = CloudFormationEvents(log_group_name=stack_name)
     cf_events.start()
     log("Waiting for stack operation to complete:")
-    if session:
-        clf = session.client('cloudformation')
-    else:
-        clf = boto3.client('cloudformation')
     status = "_IN_PROGRESS"
     while True:
-        stack_info = clf.describe_stacks(StackName=stack_name)
+        stack_info = cloudformation(session=session).describe_stacks(StackName=stack_name)
         status = stack_info['Stacks'][0]['StackStatus']
         if "ROLLBACK" in status:
             color = "\033[31;1m"
@@ -174,15 +159,11 @@ def get_template_arguments(stack_name, template, params, session=None):
               "Parameters": params, "Capabilities": ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]}
     if 'CF_BUCKET' in os.environ and os.environ['CF_BUCKET']:
         bucket = os.environ['CF_BUCKET']
-        if session:
-            s3cli = session.client('s3')
-        else:
-            s3cli = boto3.client('s3')
         template_hash = hashlib.md5()
         template_hash.update(template)
         template_hash.update(aws_infra_util.json_save_small(params))
         key = stack_name + '-' + template_hash.hexdigest()
-        s3cli.put_object(Body=template, Bucket=bucket, Key=key)
+        s3(session=session).put_object(Body=template, Bucket=bucket, Key=key)
         params['TemplateURL'] = "https://s3.amazonaws.com/" + bucket + "/" + key
     else:
         params["TemplateBody"] = template
@@ -192,10 +173,7 @@ def get_template_arguments(stack_name, template, params, session=None):
 def delete(stack_name, regn, session=None):
     os.environ['AWS_DEFAULT_REGION'] = regn
     log("**** Deleting stack '" + stack_name + "'")
-    if session:
-        clf = session.client('cloudformation')
-    else:
-        clf = boto3.client('cloudformation')
+    clf = cloudformation(session=session)
     cf_events = CloudFormationEvents(log_group_name=stack_name)
     cf_events.start()
     clf.delete_stack(StackName=stack_name)
@@ -238,11 +216,7 @@ def resolve_ami(template_doc, session=None):
     elif ami_id and 'Parameters' in template_doc and \
             'paramAmi'in template_doc['Parameters']:
         log("Looking for ami metadata with id " + ami_id)
-        if session:
-            ec2 = session.client('ec2')
-        else:
-            ec2 = boto3.client('ec2')
-        ami_meta = ec2.describe_images(ImageIds=[ami_id])
+        ami_meta = ec2(session=session).describe_images(ImageIds=[ami_id])
         log("Result: " + aws_infra_util.json_save(ami_meta))
         image = ami_meta['Images'][0]
         ami_name = image['Name']

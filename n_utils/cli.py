@@ -14,7 +14,6 @@
 
 """ Command line tools for nameless-deploy-tools
 """
-from __future__ import print_function
 
 from builtins import input
 from builtins import str
@@ -745,7 +744,7 @@ def cli_load_parameters():
     if (args.stack or args.serverless or args.docker or not isinstance(args.image, NoneType)) \
        and not args.component:
         parser.error("image, stack, doker or serverless do not make sense without component")
-    print(transform(load_parameters(**vars(args))), end="")
+    print(transform(load_parameters(**vars(args))))
 
 def component_typed_subcomponents(sc_type, prefix, parsed_args, **kwargs):
     p_args = {}

@@ -1,4 +1,3 @@
-from __future__ import print_function
 from os import linesep
 from sys import argv
 from n_utils.profile_util import enable_profile
@@ -38,7 +37,7 @@ def load_project_env():
         ret = ret + "export AWS_REGION=" + vars["ndt.aws.region"] + \
             " AWS_DEFAULT_REGION=" + vars["ndt.aws.region"] + linesep
     if do_print:
-        print(ret, end="")
+        print(ret.strip())
 
 
 def ndt_register_complete():
@@ -69,8 +68,7 @@ def ndt_register_complete():
         compopt -o nospace
     fi
 }
-complete -o nospace -F _ndt_complete "ndt"
-""", end="")
+complete -o nospace -F _ndt_complete "ndt" """)
     if len(argv) > 1 and argv[1] == "--project-env":
         print("""_projectenv_hook() {
   local previous_exit_status=$?;
@@ -79,5 +77,4 @@ complete -o nospace -F _ndt_complete "ndt"
 };
 if ! [[ "$PROMPT_COMMAND" =~ _projectenv_hook ]]; then
   PROMPT_COMMAND="_projectenv_hook;$PROMPT_COMMAND";
-fi
-""", end="")
+fi""")

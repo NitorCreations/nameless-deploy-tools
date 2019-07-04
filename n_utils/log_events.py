@@ -1,4 +1,3 @@
-from __future__ import division
 # Copyright 2017-2018 Nitor Creations Oy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,30 +50,25 @@ from __future__ import division
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-from future import standard_library
-standard_library.install_aliases()
-from builtins import range
 from builtins import object
-from past.utils import old_div
 from botocore.exceptions import ClientError
 from collections import deque
 from dateutil import tz
 from dateutil.parser import parse
 from dateutil.tz import tzutc
 from termcolor import colored
-import boto3
 import sys
 from botocore.compat import total_seconds
 from ec2_utils.logs import fmttime, millis2iso, timestamp, \
     uprint, validatestarttime, parse_datetime, LogWorkerThread
 import queue
+from threadlocal_aws.clients import cloudformation
 
 class CloudFormationEvents(LogWorkerThread):
     def __init__(self, log_group_name, start_time=None):
         LogWorkerThread.__init__(self)
         self.log_group_name = log_group_name
         self.start_time = validatestarttime(start_time)
-        self.client = boto3.client('cloudformation')
 
     def list_logs(self):
         do_wait = object()
@@ -90,7 +84,7 @@ class CloudFormationEvents(LogWorkerThread):
                 unseen_events = deque()
                 response = {}
                 try:
-                    response = self.client.describe_stack_events(**kwargs)
+                    response = cloudformation().describe_stack_events(**kwargs)
                 except ClientError:
                     pass
                 for event in response.get('StackEvents', []):

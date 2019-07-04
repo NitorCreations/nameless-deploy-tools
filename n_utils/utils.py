@@ -16,7 +16,6 @@
 
 """ Utilities to work with instances made by nameless-deploy-tools stacks
 """
-from __future__ import print_function
 
 from builtins import str
 from builtins import range
@@ -36,7 +35,6 @@ from copy import deepcopy
 from collections import OrderedDict
 from operator import itemgetter
 
-import boto3
 from botocore.exceptions import ClientError, EndpointConnectionError
 import requests
 from requests.exceptions import ConnectionError
@@ -46,6 +44,7 @@ from ec2_utils.clients import region, route53, sts, cloudformation, ec2
 from ec2_utils.instance_info import resolve_account, info, is_ec2, stack_params_and_outputs_and_stack
 from n_vault import Vault
 from n_utils.mfa_utils import mfa_read_token, mfa_generate_code
+from threadlocal_aws.clients import ec2
 
 NoneType = type(None)
 ACCOUNT_ID = None
@@ -92,10 +91,8 @@ def assumed_role_name():
     return ROLE_NAME
 
 def share_to_another_region(ami_id, regn, ami_name, account_ids, timeout_sec=900):
-    ec2 = boto3.client('ec2', region_name=regn)
     if not regn == region():
-        resp = ec2.copy_image(SourceRegion=region(), SourceImageId=ami_id,
-                              Name=ami_name)
+        resp = ec2(region=regn).copy_image(SourceRegion=region(), SourceImageId=ami_id, Name=ami_name)
         ami_id = resp['ImageId']
     status = "initial"
     start = time.time()
@@ -122,9 +119,8 @@ def _has_job_tag(image, image_name_prefix):
 
 def get_images(image_name_prefix, job_tag_function=_has_job_tag):
     image_name_prefix = re.sub(r'\W', '_', image_name_prefix)
-    ec2 = boto3.client('ec2')
-    ami_data = ec2.describe_images(Filters=[{'Name': 'tag-value',
-                                             'Values': [image_name_prefix + "_*"]}])
+    ami_data = ec2().describe_images(Filters=[{'Name': 'tag-value',
+                                               'Values': [image_name_prefix + "_*"]}])
     if len(ami_data['Images']) > 0:
         return [image for image in sorted(ami_data['Images'],
                                           key=itemgetter('CreationDate'),
