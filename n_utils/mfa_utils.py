@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import base64
+import json
+import os
 # Copyright 2017 Nitor Creations Oy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +17,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 from builtins import object
-import os
-import yaml
-import pyotp
 from os import walk
-from n_utils.yuuuu3332111i1l1i import IiII1IiiIiI1, I11iIi1I
-import json
-import base64
+
+import pyotp
 import pyqrcode
+import yaml
 from Cryptodome.Cipher import AES
-from Cryptodome.Util import Counter
 from Cryptodome.Hash import SHA256
+from Cryptodome.Util import Counter
+
 from n_utils import _to_bytes, _to_str
+from n_utils.yuuuu3332111i1l1i import IiII1IiiIiI1, I11iIi1I
+
 
 def mfa_add_token(args):
     """ Adds or overwrites an MFA token to be used with role assumption.

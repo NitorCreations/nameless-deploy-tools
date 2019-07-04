@@ -50,14 +50,16 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-from builtins import object
-from botocore.exceptions import ClientError
-from collections import deque
-from termcolor import colored
 import sys
-from ec2_utils.logs import fmttime, millis2iso, timestamp, \
-    uprint, validatestarttime, parse_datetime, LogWorkerThread
+from builtins import object
+from collections import deque
+
+from botocore.exceptions import ClientError
+from ec2_utils.logs import fmttime, timestamp, \
+    uprint, validatestarttime, LogWorkerThread
+from termcolor import colored
 from threadlocal_aws.clients import cloudformation
+
 
 class CloudFormationEvents(LogWorkerThread):
     def __init__(self, log_group_name, start_time=None):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import time
 # Copyright 2017 Nitor Creations Oy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 from builtins import str
-import time
+
 from threadlocal_aws.clients import cloudfront, route53
+
 
 def distributions():
     pages = cloudfront().get_paginator('list_distributions')

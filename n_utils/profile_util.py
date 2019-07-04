@@ -9,7 +9,9 @@ import argcomplete
 from argcomplete.completers import ChoicesCompleter
 from dateutil.parser import parse
 from dateutil.tz import tzutc
+
 from n_utils import _to_str
+
 
 def ConfigParser():
     import configparser

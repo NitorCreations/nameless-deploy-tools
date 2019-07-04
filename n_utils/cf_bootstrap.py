@@ -17,33 +17,34 @@
 """ Utilities to bootsrap AWS accounts into use with nameless-deploy-tools
 """
 
-from builtins import zip
-from builtins import input
-from builtins import str
-from builtins import object
+import argparse
 import os
 import random
 import re
 import shutil
-import subprocess
 import stat
+import subprocess
 import sys
 from ast import literal_eval
-from copy import deepcopy
+from builtins import input
+from builtins import object
+from builtins import str
+from builtins import zip
 from collections import OrderedDict
+from copy import deepcopy
 from subprocess import Popen, PIPE
 
-import argparse
 import argcomplete
-from argcomplete.completers import ChoicesCompleter
-
 import ipaddr
+from argcomplete.completers import ChoicesCompleter
 from awscli.customizations.configure.writer import ConfigFileWriter
-from n_utils import _to_str
-from n_utils.ndt import find_include, find_all_includes
-from n_utils.aws_infra_util import yaml_load, yaml_save
-from n_utils.utils import has_output_selector, select_stacks
 from threadlocal_aws.clients import ec2, route53
+
+from n_utils import _to_str
+from n_utils.aws_infra_util import yaml_load, yaml_save
+from n_utils.ndt import find_include, find_all_includes
+from n_utils.utils import has_output_selector, select_stacks
+
 
 def enum(**enums):
     return type('Enum', (), enums)

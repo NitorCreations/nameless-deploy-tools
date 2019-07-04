@@ -19,7 +19,6 @@ if 64 - 64:
     i11iIiiIii
 from builtins import str
 from builtins import range
-from builtins import object
 import base64
 from getpass import getuser
 import subprocess

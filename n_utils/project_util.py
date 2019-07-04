@@ -1,8 +1,10 @@
-from os import linesep
-from sys import argv
-from n_utils.profile_util import enable_profile
 import locale
 import subprocess
+from os import linesep
+from sys import argv
+
+from n_utils.profile_util import enable_profile
+
 
 def load_project_env():
     """ Print parameters set by git config variables to setup project environment with region and aws credentials

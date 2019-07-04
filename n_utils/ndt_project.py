@@ -1,9 +1,10 @@
-from builtins import object
-import sys
 import inspect
+import re
+import sys
+from builtins import object
 from operator import attrgetter
 from os import sep, path, mkdir
-import re
+
 try:
     from os import scandir
 except ImportError:

@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from builtins import object
-from builtins import str
 import collections
 import hashlib
 import locale
@@ -23,19 +21,21 @@ import os
 import re
 import sys
 import time
-import six
+from builtins import object
+from builtins import str
 from datetime import datetime
 
+import six
 from botocore.exceptions import ClientError
+from ec2_utils.logs import CloudWatchLogsThread, fmttime
 from pygments import highlight, lexers, formatters
 from pygments.styles import get_style_by_name
 from termcolor import colored
+from threadlocal_aws.clients import cloudformation, s3
 
 from n_utils import aws_infra_util
-from n_utils.utils import get_images
-from ec2_utils.logs import CloudWatchLogsThread, fmttime
 from n_utils.log_events import CloudFormationEvents
-from threadlocal_aws.clients import cloudformation, s3
+from n_utils.utils import get_images
 
 REDIRECTED = False
 

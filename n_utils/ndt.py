@@ -1,10 +1,12 @@
-from builtins import str
 import glob
+import locale
 import os
 import sys
-import locale
+from builtins import str
 from subprocess import PIPE, Popen
+
 from argcomplete import USING_PYTHON2, ensure_str, split_line
+
 from n_utils import COMMAND_MAPPINGS
 
 SYS_ENCODING = locale.getpreferredencoding()

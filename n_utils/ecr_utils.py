@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import base64
 # Copyright 2016-2017 Nitor Creations Oy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from builtins import str
-import base64
 
 from botocore.exceptions import ClientError
-
 from threadlocal_aws.clients import ecr
+
 
 def ensure_repo(name):
     repo = None

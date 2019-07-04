@@ -17,9 +17,6 @@
 """ Utilities to work with instances made by nameless-deploy-tools stacks
 """
 
-from builtins import str
-from builtins import range
-from builtins import object
 import io
 import json
 import os
@@ -29,17 +26,20 @@ import shutil
 import string
 import tempfile
 import time
-import tempfile
-import six
-from copy import deepcopy
+from builtins import object
+from builtins import range
+from builtins import str
 from collections import OrderedDict
+from copy import deepcopy
 from operator import itemgetter
 
+import six
 from ec2_utils.instance_info import resolve_account, info, is_ec2, stack_params_and_outputs_and_stack
 from n_vault import Vault
-from n_utils.mfa_utils import mfa_read_token, mfa_generate_code
 from threadlocal_aws import region
 from threadlocal_aws.clients import cloudformation, ec2, sts
+
+from n_utils.mfa_utils import mfa_read_token, mfa_generate_code
 
 NoneType = type(None)
 ACCOUNT_ID = None

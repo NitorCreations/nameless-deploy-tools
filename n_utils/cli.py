@@ -15,46 +15,48 @@
 """ Command line tools for nameless-deploy-tools
 """
 
-from builtins import input
-from builtins import str
 import argparse
+import inspect
 import json
 import locale
 import os
+import re
 import sys
 import time
-import re
-import inspect
+from builtins import input
+from builtins import str
+
 import argcomplete
 import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
-from pygments import highlight, lexers, formatters
-from pygments.styles import get_style_by_name
-from n_utils import aws_infra_util, cf_bootstrap, cf_deploy, utils, \
-     _to_bytes, _to_str
-from n_utils.cloudfront_utils import distributions, distribution_comments, \
-    upsert_cloudfront_records
-from n_utils.ecr_utils import ensure_repo, repo_uri
-from n_utils.utils import session_token, get_images, promote_image, \
-    share_to_another_region, interpolate_file, assumed_role_name
 from ec2_utils import ebs, interface
 from ec2_utils.instance_info import stack_params_and_outputs_and_stack
 from ec2_utils.logs import CloudWatchLogsThread
 from ec2_utils.utils import best_effort_stacks
+from pygments import highlight, lexers, formatters
+from pygments.styles import get_style_by_name
+from threadlocal_aws import region, regions
+
+from n_utils import aws_infra_util, cf_bootstrap, cf_deploy, utils, \
+    _to_bytes, _to_str
+from n_utils.account_utils import list_created_accounts, create_account
+from n_utils.aws_infra_util import load_parameters
+from n_utils.cloudfront_utils import distributions, distribution_comments, \
+    upsert_cloudfront_records
+from n_utils.ecr_utils import ensure_repo, repo_uri
+from n_utils.git_utils import Git
 from n_utils.log_events import CloudFormationEvents
 from n_utils.maven_utils import add_server
 from n_utils.mfa_utils import mfa_add_token, mfa_delete_token, mfa_generate_code, \
     mfa_generate_code_with_secret, list_mfa_tokens, mfa_backup_tokens, mfa_decrypt_backup_tokens, \
     mfa_to_qrcode, mfa_read_token
-from n_utils.account_utils import list_created_accounts, create_account
-from n_utils.aws_infra_util import load_parameters
 from n_utils.ndt import find_include, find_all_includes, include_dirs
-from n_utils.profile_util import update_profile
-from n_utils.ndt_project import list_jobs, list_components
-from n_utils.git_utils import Git
 from n_utils.ndt_project import Project
+from n_utils.ndt_project import list_jobs, list_components
+from n_utils.profile_util import update_profile
 from n_utils.tf_utils import pull_state, jmespath_var, flat_state
-from threadlocal_aws import region, regions
+from n_utils.utils import session_token, get_images, promote_image, \
+    share_to_another_region, interpolate_file, assumed_role_name
 
 SYS_ENCODING = locale.getpreferredencoding()
 
