@@ -33,7 +33,6 @@ setup(name='nameless_deploy_tools',
           'pytest-runner'
       ],
       install_requires=[
-          'threadlocal-aws==0.5',
           'future',
           'pyaml',
           'awscli',
@@ -51,7 +50,7 @@ setup(name='nameless_deploy_tools',
           'configparser',
           'scandir',
           'jmespath',
-          'ec2-utils==0.10'
+          'ec2-utils==0.12'
       ] + ([
           'win-unicode-console',
           'wmi',
