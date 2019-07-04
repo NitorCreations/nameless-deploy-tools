@@ -35,16 +35,11 @@ from copy import deepcopy
 from collections import OrderedDict
 from operator import itemgetter
 
-from botocore.exceptions import ClientError, EndpointConnectionError
-import requests
-from requests.exceptions import ConnectionError
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
-from ec2_utils.clients import region, route53, sts, cloudformation, ec2
 from ec2_utils.instance_info import resolve_account, info, is_ec2, stack_params_and_outputs_and_stack
 from n_vault import Vault
 from n_utils.mfa_utils import mfa_read_token, mfa_generate_code
-from threadlocal_aws.clients import ec2
+from threadlocal_aws import region
+from threadlocal_aws.clients import cloudformation, ec2, sts
 
 NoneType = type(None)
 ACCOUNT_ID = None

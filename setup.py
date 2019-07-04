@@ -50,7 +50,7 @@ setup(name='nameless_deploy_tools',
           'configparser',
           'scandir',
           'jmespath',
-          'ec2-utils==0.12'
+          'ec2-utils==0.13'
       ] + ([
           'win-unicode-console',
           'wmi',

@@ -1,6 +1,4 @@
-from n_utils.utils import get_images, INSTANCE_IDENTITY_URL
-from n_utils.aws_infra_util import yaml_to_dict
-from dateutil.parser import parse
+from n_utils.utils import get_images
 
 
 def describe_images(Filters=None):

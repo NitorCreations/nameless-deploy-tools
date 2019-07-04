@@ -18,7 +18,6 @@ import base64
 
 from botocore.exceptions import ClientError
 
-from ec2_utils.clients import region
 from threadlocal_aws.clients import ecr
 
 def ensure_repo(name):

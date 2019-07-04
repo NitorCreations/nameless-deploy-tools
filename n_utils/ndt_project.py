@@ -5,9 +5,9 @@ from operator import attrgetter
 from os import sep, path, mkdir
 import re
 try:
-    from os import scandir, walk
+    from os import scandir
 except ImportError:
-    from scandir import scandir, walk
+    from scandir import scandir
 
 from n_utils.git_utils import Git
 from n_utils.aws_infra_util import load_parameters

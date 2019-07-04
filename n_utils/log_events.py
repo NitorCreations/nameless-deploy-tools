@@ -53,15 +53,10 @@
 from builtins import object
 from botocore.exceptions import ClientError
 from collections import deque
-from dateutil import tz
-from dateutil.parser import parse
-from dateutil.tz import tzutc
 from termcolor import colored
 import sys
-from botocore.compat import total_seconds
 from ec2_utils.logs import fmttime, millis2iso, timestamp, \
     uprint, validatestarttime, parse_datetime, LogWorkerThread
-import queue
 from threadlocal_aws.clients import cloudformation
 
 class CloudFormationEvents(LogWorkerThread):
