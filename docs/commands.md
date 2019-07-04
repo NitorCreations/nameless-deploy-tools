@@ -1221,7 +1221,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'threadlocal-aws==0.5\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.12\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]cf-logs-to-cloudwatch`
@@ -1242,7 +1242,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'threadlocal-aws==0.5\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.12\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]ec2-associate-eip`
@@ -1263,7 +1263,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'threadlocal-aws==0.5\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.12\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]logs-to-cloudwatch`
@@ -1284,7 +1284,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'threadlocal-aws==0.5\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.12\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]n-include`
@@ -1305,7 +1305,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'threadlocal-aws==0.5\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.12\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]n-include-all`
@@ -1326,7 +1326,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'threadlocal-aws==0.5\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.12\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]signal-cf-status`
@@ -1347,7 +1347,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'threadlocal-aws==0.5\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.12\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `create-shell-archive.sh`
