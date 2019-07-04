@@ -32,7 +32,6 @@ from yaml import ScalarNode, SequenceNode, MappingNode
 from io import StringIO
 from botocore.exceptions import ClientError
 from copy import deepcopy
-from ec2_utils.clients import region
 from ec2_utils.instance_info import resolve_account, stack_params_and_outputs_and_stack
 from n_utils import _to_str
 from n_utils.utils import expand_vars, get_images, ParamNotAvailable
@@ -41,6 +40,7 @@ from n_utils.ndt import find_include
 from n_utils.ecr_utils import repo_uri
 from n_utils.tf_utils import pull_state, flat_state, jmespath_var
 from n_vault import Vault
+from threadlocal_aws import region
 stacks = dict()
 terraforms = dict()
 parameters = dict()
