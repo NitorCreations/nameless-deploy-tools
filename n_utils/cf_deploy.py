@@ -31,7 +31,7 @@ from ec2_utils.logs import CloudWatchLogsThread, fmttime
 from pygments import highlight, lexers, formatters
 from pygments.styles import get_style_by_name
 from termcolor import colored
-from threadlocal_aws.clients import cloudformation, s3
+from threadlocal_aws.clients import cloudformation, s3, ec2
 
 from n_utils import aws_infra_util
 from n_utils.log_events import CloudFormationEvents
