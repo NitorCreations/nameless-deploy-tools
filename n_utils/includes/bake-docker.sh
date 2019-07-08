@@ -80,7 +80,7 @@ else
   BUILD_NUMBER=$(printf "%04d\n" $BUILD_NUMBER)
 fi
 
-[ -d "$component/docker-$ORIG_DOCKER_NAME" ] || die "Docker directory $component/docker-$ORIG_DOCKER_NAME does not exist"
+[ -d "$component/docker-$docker" ] || die "Docker directory $component/docker-$docker does not exist"
 
 eval "$(ndt load-parameters "$component" -d "$docker" -e)"
 
