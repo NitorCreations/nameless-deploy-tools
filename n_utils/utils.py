@@ -96,7 +96,7 @@ def share_to_another_region(ami_id, regn, ami_name, account_ids, timeout_sec=900
         if time.time() - start > timeout_sec:
             raise Exception("Failed waiting for status 'available' for " +
                             ami_id + " (timeout: " + str(timeout_sec) + ")")
-        images_resp = ec2.describe_images(ImageIds=[ami_id])
+        images_resp = ec2().describe_images(ImageIds=[ami_id])
         status = images_resp['Images'][0]['State']
     perms = {"Add": []}
     my_acco = resolve_account()
@@ -104,7 +104,7 @@ def share_to_another_region(ami_id, regn, ami_name, account_ids, timeout_sec=900
         if not acco == my_acco:
             perms['Add'].append({"UserId": acco})
     if len(perms['Add']) > 0:
-        ec2.modify_image_attribute(ImageId=ami_id, LaunchPermission=perms)
+        ec2().modify_image_attribute(ImageId=ami_id, LaunchPermission=perms)
 
 def _has_job_tag(image, image_name_prefix):
     for tag in image['Tags']:
