@@ -114,4 +114,9 @@ if [ -n "$DRYRUN" ]; then
   exit 0
 fi
 
+set -e
 sls deploy $VERBOSE -s $paramEnvId
+
+if [ -x "./post_deploy.sh" ]; then
+  "./post_deploy.sh"
+fi

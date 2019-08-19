@@ -106,4 +106,9 @@ if [ -n "$DRYRUN" ]; then
   exit 0
 fi
 
+set -e
 cdk deploy
+
+if [ -x "./post_deploy.sh" ]; then
+  "./post_deploy.sh"
+fi
