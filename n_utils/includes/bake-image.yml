@@ -131,7 +131,7 @@
     - apt: update_cache=yes upgrade=dist
       when: ansible_os_family == "Debian"
     - apt:
-        name: ["python-pip", "git", "build-essential", "gcc", "libpython2.7-dev", "libffi-dev", "libssl-dev", "jq", "nvme-cli"]
+        name: ["python-pip", "git", "build-essential", "gcc", "libpython2.7-dev", "libffi-dev", "libssl-dev", "jq", "nvme-cli", "checkpolicy", "semodule-utils"]
       when: ansible_os_family == "Debian"
     - yum:
         name: epel-release
