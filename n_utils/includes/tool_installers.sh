@@ -21,7 +21,7 @@ if [ -z "$DEPLOYTOOLS_VERSION" ]; then
   fi
 fi
 if [ -z "$MAVEN_VERSION" ]; then
-  MAVEN_VERSION=3.3.9
+  MAVEN_VERSION=3.6.2
 fi
 if [ -z "$PHANTOMJS_VERSION" ]; then
   PHANTOMJS_VERSION=2.1.1
