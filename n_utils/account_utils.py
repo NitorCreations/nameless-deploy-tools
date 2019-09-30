@@ -46,7 +46,7 @@ def create_account(email, account_name, role_name="OrganizationAccountAccessRole
     os.environ['paramManagedAccount'] = account_id
     os.environ['paramManageRole'] = role_name
     template = find_include("manage-account.yaml")
-    cf_deploy.deploy("managed-account-" + account_name + "-" + account_id, template, region())
+    cf_deploy.deploy("managed-account-" + account_name, template, region())
 
     if trusted_accounts:
         role_arn = "arn:aws:iam::" + account_id + ":role/" + role_name
