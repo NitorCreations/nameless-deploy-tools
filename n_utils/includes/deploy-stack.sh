@@ -119,6 +119,7 @@ cd ../..
 set -e
 cf-update-stack "${STACK_NAME}" "${component}/stack-${ORIG_STACK_NAME}/template.yaml" "$REGION" $DRY_RUN
 
+cd ${component}/stack-${ORIG_STACK_NAME}
 if [ -x "./post_deploy.sh" ]; then
   "./post_deploy.sh"
 fi
