@@ -56,7 +56,7 @@ install_cftools() {
   cd ..
 }
 install_maven() {
-  wget -O - http://mirror.netinch.com/pub/apache/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzvf - -C /opt/
+  wget -O - https://www-eu.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzvf - -C /opt/
   ln -snf /opt/apache-maven-$MAVEN_VERSION /opt/maven
   ln -snf  /opt/maven/bin/mvn /usr/bin/mvn
 }
