@@ -110,6 +110,12 @@ elif which assume-deploy-role.sh > /dev/null && [ -z "$AWS_SESSION_TOKEN" ]; the
   eval $(assume-deploy-role.sh)
 fi
 
+cd ${component}/stack-${ORIG_STACK_NAME}
+if [ -x "./pre_deploy.sh" ]; then
+  "./pre_deploy.sh"
+fi
+cd ../..
+
 set -e
 cf-update-stack "${STACK_NAME}" "${component}/stack-${ORIG_STACK_NAME}/template.yaml" "$REGION" $DRY_RUN
 
