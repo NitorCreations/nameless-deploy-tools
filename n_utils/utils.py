@@ -203,10 +203,10 @@ def _apply_simple_regex(RE, line, params, vault, vault_keys):
 def expand_vars(line, params, vault, vault_keys):
     if isinstance(line, OrderedDict) or isinstance(line, dict):
         ret = OrderedDict(list(line.items()))
-        if "Fn::" in [x[:4] for x in list(ret.keys())]:
+        if "Fn::" in [x[:4] for x in list(ret.keys()) if isinstance(x, six.string_types)]:
             return expand_only_double_paranthesis_params(ret, params, vault, vault_keys)
         for key, value in list(line.items()):
-            if key.startswith("Fn::"):
+            if isinstance(key, six.string_types) and key.startswith("Fn::"):
                 new_value = expand_only_double_paranthesis_params(value, params, vault, vault_keys)
                 ret = OrderedDict([(key, new_value) if k == key else (k, v) for k, v in list(ret.items())])
             else:

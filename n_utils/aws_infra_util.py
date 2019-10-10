@@ -31,6 +31,7 @@ from yaml import ScalarNode, SequenceNode, MappingNode
 from io import StringIO
 from botocore.exceptions import ClientError
 from copy import deepcopy
+from jmespath import search
 from ec2_utils.instance_info import resolve_account, stack_params_and_outputs_and_stack
 from n_utils import _to_str
 from n_utils.utils import expand_vars, get_images, ParamNotAvailable
@@ -244,17 +245,17 @@ def _process_value(value, used_params):
     #   b) resolving basic variables used in terraform backend configuration
     if  "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
         if value.strip().startswith("StackRef:"):
-            stackref_doc = yaml_load(StringIO(_to_str(value)))
+            stackref_doc = yaml_load(StringIO(unicode(_to_str(value))))
             stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
             if stack_value:
                 value = stack_value
         if value.strip().startswith("TFRef:"):
-            tfref_doc = yaml_load(StringIO(_to_str(value)))
+            tfref_doc = yaml_load(StringIO(unicode(_to_str(value))))
             tf_value = _resolve_tfref_from_dict(tfref_doc['TFRef'])
             if tf_value:
                 value = tf_value
         if value.strip().startswith("Encrypt:"):
-            enc_doc = yaml_load(StringIO(_to_str(value)))
+            enc_doc = yaml_load(StringIO(unicode(_to_str(value))))
             enc_conf = enc_doc["Encrypt"]
             if isinstance(enc_conf, OrderedDict):
                 to_encrypt = yaml_save(enc_conf["value"])
@@ -264,6 +265,14 @@ def _process_value(value, used_params):
             del enc_conf["value"]
             vault = Vault(**enc_conf)
             value = b64encode(vault.direct_encrypt(value))
+        if value.strip().startswith("YamlRef:"):
+            yamlref_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            if "file" in yamlref_doc["YamlRef"] and "jmespath" in yamlref_doc["YamlRef"]:
+                yaml_file = yamlref_doc["YamlRef"]["file"]
+                contents = yaml_load(open(yaml_file))
+                value = search(yamlref_doc["YamlRef"]["jmespath"], contents)
+                if value:
+                    value = expand_vars(value, used_params, None, [])
     return value
 
 def import_parameter_file(filename, params):
@@ -734,6 +743,8 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 gotImportErrors = True
         elif 'Fn::ImportYaml' in data:
             val = data['Fn::ImportYaml']
+            if "jmespath" in data and data["jmespath"]:
+                jmespath = data["jmespath"]
             file = expand_vars(val, templateParams, None, [])
             yaml_file = resolve_file(file, basefile)
             del data['Fn::ImportYaml']
@@ -768,6 +779,8 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                           yaml_file + "\" that isn't an associative array or" +
                           " a list in file " + basefile)
                     gotImportErrors = True
+                if jmespath:
+                    data = search(jmespath, data)
             else:
                 if not ('optional' in data and data['optional']):
                     print("ERROR: " + val + ": Can't import file \"" + val +
@@ -777,7 +790,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 else:
                     for k in data:
                         del data[k]
-            if "optional" in data:
+            if data and "optional" in data:
                 del data["optional"]
         elif 'Fn::Merge' in data:
             merge_list = data['Fn::Merge']['Source'] if 'Source' in data['Fn::Merge'] else data['Fn::Merge']
@@ -860,7 +873,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 param_refresh_callback()
             for k, val in list(data.items()):
                 if k != 'Parameters':
-                    data[k] = expand_vars(_preprocess_template(val, root, basefile, path + k + "_", templateParams), templateParams, None, [])
+                    data[k] = expand_vars(_preprocess_template(val, root, basefile, path + _to_str(k) + "_", templateParams), templateParams, None, [])
     elif isinstance(data, list):
         for i in range(0, len(data)):
             data[i] = _preprocess_template(data[i], root, basefile, path + str(i) + "_", templateParams)
@@ -1042,7 +1055,7 @@ def locate_launchconf_metadata(data):
     if "Resources" in data:
         resources = data["Resources"]
         for val in list(resources.values()):
-            if "Type" in val and val["Type"] == "AWS::AutoScaling::LaunchConfiguration" and \
+            if val and "Type" in val and val["Type"] == "AWS::AutoScaling::LaunchConfiguration" and \
                     "Metadata" in val:
                 return val["Metadata"]
     return None
