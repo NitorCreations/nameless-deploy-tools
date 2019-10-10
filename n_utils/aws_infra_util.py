@@ -743,6 +743,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 gotImportErrors = True
         elif 'Fn::ImportYaml' in data:
             val = data['Fn::ImportYaml']
+            jmespath = None
             if "jmespath" in data and data["jmespath"]:
                 jmespath = data["jmespath"]
             file = expand_vars(val, templateParams, None, [])
