@@ -469,10 +469,10 @@ optional arguments:
 ## `ndt enable-profile`
 
 ```bash
-usage: ndt enable-profile [-h] [-i | -a | -n] profile
+usage: ndt enable-profile [-h] [-i | -a | -f | -n] profile
 
-Enable a configured profile. Simple IAM user, AzureAD and ndt assume-role
-profiles are supported
+Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-
+role profiles are supported
 
 positional arguments:
   profile      The profile to enable
@@ -481,6 +481,7 @@ optional arguments:
   -h, --help   show this help message and exit
   -i, --iam    IAM user type profile
   -a, --azure  Azure login type profile
+  -f, --adfs   ADFS login type profile
   -n, --ndt    NDT assume role type profile
 ```
 
