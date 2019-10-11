@@ -23,6 +23,8 @@ def load_project_env():
     ret = ""
     if "ndt.profile.azure" in vars:
         enable_profile("azure", vars["ndt.profile.azure"])
+    if "ndt.profile.adfs" in vars:
+        enable_profile("adfs", vars["ndt.profile.adfs"])
     if "ndt.profile.iam" in vars:
         enable_profile("iam", vars["ndt.profile.iam"])
     if "ndt.profile.ndt" in vars:

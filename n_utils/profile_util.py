@@ -111,6 +111,9 @@ def profile_to_env():
                 if profile_entry in parser.sections() and parser.has_option(profile_entry, "azure_default_role_arn"):
                     params.append(role_param)
                     print(role_param + "=\"" + parser.get(profile_entry, "azure_default_role_arn") + "\"")
+                if profile_entry in parser.sections() and parser.has_option(profile_entry, "adfs_role_arn"):
+                    params.append(role_param)
+                    print(role_param + "=\"" + parser.get(profile_entry, "adfs_role_arn") + "\"")
     if args.role_arn:
         params.append(role_param)
         print(role_param + "=\"" + args.role_arn + "\"")
@@ -178,11 +181,12 @@ def update_profile(profile, creds):
         parser.write(credfile)
 
 def cli_enable_profile():
-    """Enable a configured profile. Simple IAM user, AzureAD and ndt assume-role profiles are supported"""
+    """Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-role profiles are supported"""
     parser = argparse.ArgumentParser(description=cli_enable_profile.__doc__)
     type_select = parser.add_mutually_exclusive_group(required=False)
     type_select.add_argument("-i", "--iam", action="store_true", help="IAM user type profile")
     type_select.add_argument("-a", "--azure", action="store_true", help="Azure login type profile")
+    type_select.add_argument("-f", "--adfs", action="store_true", help="ADFS login type profile")
     type_select.add_argument("-n", "--ndt", action="store_true", help="NDT assume role type profile")
     if "_ARGCOMPLETE" in os.environ:
         parser.add_argument("profile", help="The profile to enable").completer = \
@@ -195,6 +199,8 @@ def cli_enable_profile():
         profile_type = "iam"
     elif args.azure:
         profile_type = "azure"
+    elif args.adfs:
+        profile_type = "adfs"
     elif args.ndt:
         profile_type = "ndt"
     else:
@@ -203,6 +209,8 @@ def cli_enable_profile():
             profile_type = "azure"
         elif "ndt_role_arn" in profile:
             profile_type = "ndt"
+        elif "adfs_login_url" in profile:
+            profile_type = "adfs"
         else:
             profile_type = "iam"
     enable_profile(profile_type, args.profile)
@@ -212,7 +220,7 @@ def enable_profile(profile_type, profile):
     safe_profile = re.sub("[^A-Z0-9]", "_", profile.upper())
     if profile_type == "iam":
         _print_profile_switch(profile)
-    elif profile_type == "azure":
+    elif profile_type == "azure" or profile_type == "adfs":
         _print_profile_switch(profile)
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
@@ -221,7 +229,10 @@ def enable_profile(profile_type, profile):
         if expiry < _epoc_secs(datetime.now(tzutc())):
             if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
                 print("unset AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
-            print("aws-azure-login --profile " + profile + " --no-prompt")
+            if profile_type == "azure":
+                print("aws-azure-login --profile " + profile + " --no-prompt")
+            else:
+                print("adfs-aws-login --profile " + profile + " --no-prompt")
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             print_profile_expiry(profile)
     elif profile_type == "ndt":
@@ -239,6 +250,8 @@ def enable_profile(profile_type, profile):
             origin_profile_data = get_profile(origin_profile)
             if "azure_tenant_id" in origin_profile_data:
                 origin_type = "azure"
+            elif "adfs_login_url" in origin_profile_data:
+                origin_type = "adfs"
             else:
                 origin_type = "iam"
             enable_profile(origin_type, origin_profile)
