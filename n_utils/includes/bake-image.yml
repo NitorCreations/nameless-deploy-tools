@@ -73,7 +73,7 @@
       with_items: "{{ ec2_prototype_instance.tagged_instances }}"
       when: private_subnet == "no"
 
-    - wait_for: host={{ item.public_dns_name }} port=22 delay=60 timeout=320 state=started search_regex=OpenSSH
+    - wait_for: host={{ item.public_ip }} port=22 delay=60 timeout=320 state=started search_regex=OpenSSH
       with_items: "{{ ec2_prototype_instance.tagged_instances }}"
       when: private_subnet == "no"
 
@@ -81,7 +81,7 @@
       with_items: "{{ ec2_prototype_instance.tagged_instances }}"
       when: private_subnet == "yes"
 
-    - wait_for: host={{ item.private_dns_name }} port=22 delay=60 timeout=320 state=started search_regex=OpenSSH
+    - wait_for: host={{ item.private_ip }} port=22 delay=60 timeout=320 state=started search_regex=OpenSSH
       with_items: "{{ ec2_prototype_instance.tagged_instances }}"
       when: private_subnet == "yes"
 
