@@ -64,12 +64,12 @@
     - set_fact:
         ec2_prototype_instance: "{{ ec2_prototype_instance }}"
 
-- name: Add new instance to host group {{ job_name }}-ami-instance
+- name: Add new instance to host group {{ job_name }}_ami_instance
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
-    - add_host: hostname={{ item.public_ip }} groupname={{ job_name }}-ami-instance
+    - add_host: hostname={{ item.public_ip }} groupname={{ job_name }}_ami_instance
       with_items: "{{ ec2_prototype_instance.tagged_instances }}"
       when: private_subnet == "no"
 
@@ -77,7 +77,7 @@
       with_items: "{{ ec2_prototype_instance.tagged_instances }}"
       when: private_subnet == "no"
 
-    - add_host: hostname={{ item.private_ip }} groupname={{ job_name }}-ami-instance
+    - add_host: hostname={{ item.private_ip }} groupname={{ job_name }}_ami_instance
       with_items: "{{ ec2_prototype_instance.tagged_instances }}"
       when: private_subnet == "yes"
 
@@ -89,7 +89,7 @@
       pause: "seconds={{ pause_seconds }}"
 
 - name: Ensure python2 on ubuntu
-  hosts: "{{ job_name }}-ami-instance"
+  hosts: "{{ job_name }}_ami_instance"
   become: no
   gather_facts: no
   tasks:
@@ -97,7 +97,7 @@
       raw: if egrep '^ID=ubuntu$' /etc/os-release > /dev/null; then sudo apt-get update -qq && sudo apt-get install -qq python2.7 && sudo ln -snf /usr/bin/python2.7 /usr/bin/python; else echo not ubuntu; fi
 
 - name: Prepare AMI instance - run pre_install, install/update packages and finally post_install
-  hosts: "{{ job_name }}-ami-instance"
+  hosts: "{{ job_name }}_ami_instance"
   become: yes
   tasks:
     - script: "{{ prepare_script }}"
