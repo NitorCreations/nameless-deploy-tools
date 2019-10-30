@@ -191,7 +191,7 @@ optional arguments:
 ```bash
 usage: ndt cf-stack-id [-h]
 
-Get id of the stack the creted this instance
+Get id of the stack the created this instance
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -293,7 +293,6 @@ optional arguments:
 ## `ndt deploy-stack`
 
 ```bash
-ami that is tagged with the bake-job name
 usage: ndt deploy-stack [-d] [-h] component stack-name ami-id bake-job
 
 Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it.
@@ -1075,7 +1074,7 @@ Exports ndt parameters into component/serverless-name/variables.yml
 and runs sls remove -s $paramEnvId for the same
 
 positional arguments:
-  component   the component directory where the serverless directory is
+  component       the component directory where the serverless directory is
   serverless-name the name of the serverless directory that has the template
                   For example for lambda/serverless-sender/template.yaml
                   you would give sender
@@ -1111,10 +1110,10 @@ Exports ndt parameters into component/terraform-name/terraform.tfvars as json
 and runs terraform destroy for the same
 
 positional arguments:
-  component   the component directory where the terraform directory is
+  component      the component directory where the terraform directory is
   terraform-name the name of the terraform directory that has the template
-                  For example for lambda/terraform-sender/template.yaml
-                  you would give sender
+                 For example for lambda/terraform-sender/template.yaml
+                 you would give sender
 
 optional arguments:
   -h, --help    show this help message and exit
@@ -1352,11 +1351,11 @@ optional arguments:
 ## `create-shell-archive.sh`
 
 ```bash
-file  one or more files to package into the archive
 usage: create-shell-archive.sh [-h] [<file> ...]
 
 Creates a self-extracting bash archive, suitable for storing in e.g. Lastpass SecureNotes
 positional arguments:
+  file    one or more files to package into the archive
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -1365,9 +1364,9 @@ optional arguments:
 ## `encrypt-and-mount.sh`
 
 ```bash
-Mounts a local block device as an encrypted volume. Handy for things like local database installs.
 usage: encrypt-and-mount.sh [-h] blk-device mount-path
 
+Mounts a local block device as an encrypted volume. Handy for things like local database installs.
 
 positional arguments
   blk-device  the block device you want to encrypt and mount
@@ -1396,7 +1395,6 @@ optional arguments:
 ## `lastpass-fetch-notes.sh`
 
 ```bash
---optional  marks that following files will not fail and exit the script in they do not exist
 usage: lasptass-fetch-notes.sh [-h] mode file [file ...] [--optional file ...]
 
 Fetches secure notes from lastpass that match the basename of each listed file.
@@ -1408,6 +1406,7 @@ positional arguments
 
 optional arguments:
   -h, --help  show this help message and exit
+  --optional  marks that following files will not fail and exit the script in they do not exist
 ```
 
 ## `lpssh`
@@ -1430,9 +1429,9 @@ optional arguments:
 ## `mount-and-format.sh`
 
 ```bash
-Mounts a local block device as an encrypted volume. Handy for things like local database installs.
 usage: mount-and-format.sh [-h] blk-device mount-path
 
+Mounts a local block device as an encrypted volume. Handy for things like local database installs.
 
 positional arguments
   blk-device  the block device you want to mount and formant
@@ -1445,10 +1444,11 @@ optional arguments:
 ## `setup-fetch-secrets.sh`
 
 ```bash
-Please run as root
 usage: setup-fetch-secrets.sh [-h] <lpass|s3|vault>
 
 Sets up a global fetch-secrets.sh that fetches secrets from either LastPass, S3 or nitor-vault
+
+Please run as root.
 
 positional arguments
   lpass|s3|vault   the selected secrets backend.
