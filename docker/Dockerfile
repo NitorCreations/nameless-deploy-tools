@@ -86,6 +86,6 @@ RUN set -ex \
   && wget -O /usr/bin/lein "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein" \
   && chmod 755 /usr/bin/lein \
   && lein version
-RUN pip install --no-cache-dir nameless-deploy-tools==1.106
+RUN pip install --no-cache-dir nameless-deploy-tools==1.107
 
 ENTRYPOINT ["dockerd-entrypoint.sh"]
