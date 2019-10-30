@@ -29,6 +29,7 @@ from collections import OrderedDict
 from glob import glob
 from yaml import ScalarNode, SequenceNode, MappingNode
 from io import StringIO
+from operator import itemgetter
 from botocore.exceptions import ClientError
 from copy import deepcopy
 from jmespath import search
@@ -41,11 +42,13 @@ from n_utils.ecr_utils import repo_uri
 from n_utils.tf_utils import pull_state, flat_state, jmespath_var
 from n_vault import Vault
 from threadlocal_aws import region
-from threadlocal_aws.clients import ssm
+from threadlocal_aws.clients import ssm, ec2
 
 stacks = dict()
 terraforms = dict()
 parameters = dict()
+ssm_params = dict()
+product_amis = dict()
 CFG_PREFIX = "AWS::CloudFormation::Init_config_files_"
 
 ############################################################################
@@ -225,6 +228,33 @@ def _resolve_tfref_from_dict(tfref_var):
     else:
         return None
 
+def _resolve_ssm_parameter(ssm_key):
+    value = None
+    if ssm_key in ssm_params:
+        value = ssm_params[ssm_key]
+    else:
+        ssm_resp = ssm().get_parameter(Name=ssm_key)
+        if "Parameter" in ssm_resp and "Value" in ssm_resp["Parameter"]:
+            value = ssm_resp["Parameter"]["Value"]
+            ssm_params[ssm_key] = value
+    return value
+
+def _resolve_product_ami(product_code):
+    value = None
+    if product_code in product_amis:
+        value = product_amis[product_code]
+    else:
+        ami_resp = ec2().describe_images(Filters=[
+            {"Name": "product-code", "Values": [product_code]}],
+            Owners=["aws-marketplace"])
+        ami_ids =  [image["ImageId"] for image in sorted(ami_resp['Images'],
+                                                         key=itemgetter('CreationDate'),
+                                                         reverse=True)]
+        if ami_ids:
+            value = ami_ids[0]
+            product_amis[product_code] = value
+    return value
+
 def _process_infra_prop_line(line, params, used_params):
     key_val = line.split("=", 1)
     if len(key_val) == 2:
@@ -279,9 +309,16 @@ def _process_value(value, used_params):
             ssmref_doc = yaml_load(StringIO(unicode(_to_str(value))))
             if "SsmRef" in ssmref_doc:
                 ssm_key = ssmref_doc["SsmRef"]
-                ssm_resp = ssm().get_parameter(Name=ssm_key)
-                if "Parameter" in ssm_resp and "Value" in ssm_resp["Parameter"]:
-                    value = ssm_resp["Parameter"]["Value"]
+                ssm_value = _resolve_ssm_parameter(ssm_key)
+                if ssm_value:
+                    value = ssm_value
+        if value.strip().startswith("ProductAmi:"):
+            product_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            if "ProductAmi" in product_doc:
+                product_code = product_doc["ProductAmi"]
+                product_ami = _resolve_product_ami(product_code)
+                if product_ami:
+                    value = product_ami
     return value
 
 def import_parameter_file(filename, params):
@@ -879,10 +916,10 @@ def _preprocess_template(data, root, basefile, path, templateParams):
         elif 'SsmRef' in data:
             ssm_key = expand_vars(data['SsmRef'], templateParams, None, [])
             ssm_resp = ssm().get_parameter(Name=ssm_key)
-            ssm_value = None
-            if "Parameter" in ssm_resp and "Value" in ssm_resp["Parameter"]:
-                 ssm_value = ssm_resp["Parameter"]["Value"]
-            return ssm_value
+            return _resolve_ssm_parameter(ssm_key)
+        elif 'ProductAmi' in data:
+            product_code = expand_vars(data['ProductAmi'], templateParams, None, [])
+            return _resolve_product_ami(product_code)
         else:
             if 'Parameters' in data:
                 data['Parameters'] = _preprocess_template(data['Parameters'], root, basefile, path + "Parameters_",
