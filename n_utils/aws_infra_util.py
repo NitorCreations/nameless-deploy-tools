@@ -41,6 +41,8 @@ from n_utils.ecr_utils import repo_uri
 from n_utils.tf_utils import pull_state, flat_state, jmespath_var
 from n_vault import Vault
 from threadlocal_aws import region
+from threadlocal_aws.clients import ssm
+
 stacks = dict()
 terraforms = dict()
 parameters = dict()
@@ -273,6 +275,13 @@ def _process_value(value, used_params):
                 value = search(yamlref_doc["YamlRef"]["jmespath"], contents)
                 if value:
                     value = expand_vars(value, used_params, None, [])
+        if value.strip().startswith("SsmRef:"):
+            ssmref_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            if "SsmRef" in ssmref_doc:
+                ssm_key = ssmref_doc["SsmRef"]
+                ssm_resp = ssm().get_parameter(Name=ssm_key)
+                if "Parameter" in ssm_resp and "Value" in ssm_resp["Parameter"]:
+                    value = ssm_resp["Parameter"]["Value"]
     return value
 
 def import_parameter_file(filename, params):
@@ -867,6 +876,13 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             return b64encode(vault.direct_encrypt(resolved_value))
         elif 'Ref' in data:
             data['__source'] = basefile
+        elif 'SsmRef' in data:
+            ssm_key = expand_vars(data['SsmRef'], templateParams, None, [])
+            ssm_resp = ssm().get_parameter(Name=ssm_key)
+            ssm_value = None
+            if "Parameter" in ssm_resp and "Value" in ssm_resp["Parameter"]:
+                 ssm_value = ssm_resp["Parameter"]["Value"]
+            return ssm_value
         else:
             if 'Parameters' in data:
                 data['Parameters'] = _preprocess_template(data['Parameters'], root, basefile, path + "Parameters_",
