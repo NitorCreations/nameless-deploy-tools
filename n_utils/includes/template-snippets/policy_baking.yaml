@@ -59,3 +59,4 @@ PolicyDocument:
     - route53:GetChangeRequest
     - route53:ListHostedZones
     - sts:DecodeAuthorizationMessage
+    - ssm:GetParameter
