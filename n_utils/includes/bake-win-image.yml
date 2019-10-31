@@ -52,7 +52,6 @@
         assign_public_ip: yes
         group_id: "{{ sg_id }}"
         monitoring: no
-        key_name: "{{ aws_key_name }}"
         user_data: "{{ lookup('template', bake_userdata ) }}"
         volumes:
           - device_name: /dev/sda1
