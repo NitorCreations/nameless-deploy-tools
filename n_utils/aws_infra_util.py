@@ -43,6 +43,8 @@ from n_utils.tf_utils import pull_state, flat_state, jmespath_var
 from n_vault import Vault
 from threadlocal_aws import region
 from threadlocal_aws.clients import ssm, ec2
+from cloudformation_utils.tools import process_script_decorated as import_script, \
+    cloudformation_yaml_loads as yaml_load
 
 stacks = dict()
 terraforms = dict()
@@ -54,115 +56,6 @@ CFG_PREFIX = "AWS::CloudFormation::Init_config_files_"
 ############################################################################
 # _THE_ yaml & json deserialize/serialize functions
 
-
-def descalar(target):
-    if isinstance(target, ScalarNode) or isinstance(target, SequenceNode) or \
-       isinstance(target, MappingNode):
-        if target.tag in INTRISINC_FUNCS:
-            return INTRISINC_FUNCS[target.tag](None, '', target)
-        else:
-            return descalar(target.value)
-    elif isinstance(target, list):
-        ret = []
-        for nxt in target:
-            ret.append(descalar(nxt))
-        return ret
-    else:
-        return target
-
-
-def base64_ctor(loader, tag_suffix, node):
-    return {'Fn::Base64': descalar(node.value)}
-
-
-def findinmap_ctor(loader, tag_suffix, node):
-    return {'Fn::FindInMap': descalar(node.value)}
-
-
-def getatt_ctor(loader, tag_suffix, node):
-    return {'Fn::GetAtt': descalar(node.value)}
-
-
-def getazs_ctor(loader, tag_suffix, node):
-    return {'Fn::GetAZs': descalar(node.value)}
-
-
-def importvalue_ctor(loader, tag_suffix, node):
-    return {'Fn::ImportValue': descalar(node.value)}
-
-
-def join_ctor(loader, tag_suffix, node):
-    return {'Fn::Join': descalar(node.value)}
-
-
-def select_ctor(loader, tag_suffix, node):
-    return {'Fn::Select': descalar(node.value)}
-
-
-def split_ctor(loader, tag_suffix, node):
-    return {'Fn::Split': descalar(node.value)}
-
-
-def sub_ctor(loader, tag_suffix, node):
-    return {'Fn::Sub': descalar(node.value)}
-
-
-def ref_ctor(loader, tag_suffix, node):
-    return {'Ref': descalar(node.value)}
-
-
-def and_ctor(loader, tag_suffix, node):
-    return {'Fn::And': descalar(node.value)}
-
-
-def equals_ctor(loader, tag_suffix, node):
-    return {'Fn::Equals': descalar(node.value)}
-
-
-def if_ctor(loader, tag_suffix, node):
-    return {'Fn::If': descalar(node.value)}
-
-
-def not_ctor(loader, tag_suffix, node):
-    return {'Fn::Not': descalar(node.value)}
-
-
-def or_ctor(loader, tag_suffix, node):
-    return {'Fn::Or': descalar(node.value)}
-
-
-def importfile_ctor(loader, tag_suffix, node):
-    return {'Fn::ImportFile': descalar(node.value)}
-
-
-def importyaml_ctor(loader, tag_suffix, node):
-    return {'Fn::ImportYaml': descalar(node.value)}
-
-
-def merge_ctor(loader, tag_suffix, node):
-    return {'Fn::Merge': descalar(node.value)}
-
-
-INTRISINC_FUNCS = {
-    '!Base64': base64_ctor,
-    '!FindInMap': findinmap_ctor,
-    '!GetAtt': getatt_ctor,
-    '!GetAZs': getazs_ctor,
-    '!ImportValue': importvalue_ctor,
-    '!Join': join_ctor,
-    '!Select': select_ctor,
-    '!Split': split_ctor,
-    '!Sub': sub_ctor,
-    '!Ref': ref_ctor,
-    '!And': and_ctor,
-    '!Equals': equals_ctor,
-    '!If': if_ctor,
-    '!Not': not_ctor,
-    '!Or': or_ctor,
-    '!ImportFile': importfile_ctor,
-    '!ImportYaml': importyaml_ctor,
-    '!Merge': merge_ctor
-}
 
 SOURCED_PARAMS = None
 
@@ -532,24 +425,6 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
         parameters[params_key] = ret
         return ret
 
-
-def yaml_load(stream):
-    for name in INTRISINC_FUNCS:
-        yaml.add_multi_constructor(name, INTRISINC_FUNCS[name], Loader=yaml.SafeLoader)
-
-    class OrderedLoader(yaml.SafeLoader):
-        pass
-
-    def construct_mapping(loader, node):
-        loader.flatten_mapping(node)
-        return OrderedDict(loader.construct_pairs(node))
-    OrderedLoader.add_constructor(
-        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-        construct_mapping)
-
-    return yaml.load(stream, OrderedLoader)
-
-
 def yaml_save(data):
     class OrderedDumper(yaml.SafeDumper):
         pass
@@ -578,84 +453,6 @@ def json_save_small(data):
 ############################################################################
 # import_scripts
 gotImportErrors = False
-
-# the CF_ prefix is expected already to have been stripped
-
-
-def decode_parameter_name(name):
-    return re.sub('__', '::', name)
-
-# the "var " prefix is to support javascript as well
-VAR_DECL_RE = re.compile(
-    r'^((\s*var\s+)|(\s*const\s+))?CF_([^\s=]+)[\s="\']*([^#"\'\`]*)(?:["\'\s\`]*)(#optional)?')
-EMBED_DECL_RE = re.compile(
-    r'^(.*?=\s*)?(.*?)(?:(?:\`?#|//)CF([^#\`]*))[\"\`\s]*(#optional)?')
-IN_PLACE_RE = re.compile(r'^([^\$]*?)\$CF{([^}\|]*)(\|[^}]*)?}(#optional)?(.*)')
-
-def import_script(filename):
-    arr = []
-    with open(filename) as fd:
-        for line in fd:
-            next_arr = do_replace(line, filename)
-            arr = arr + next_arr
-    return arr
-
-def do_replace(line, filename):
-    arr = []
-    result = VAR_DECL_RE.match(line)
-    if result:
-        js_prefix = result.group(1)
-        encoded_varname = result.group(4)
-        var_name = decode_parameter_name(encoded_varname)
-        ref = OrderedDict()
-        ref['Ref'] = var_name
-        ref['__source'] = filename
-        if str(result.group(6)) == "#optional":
-            ref['__optional'] = "true"
-            ref['__default'] = str(result.group(5)).strip(" \"'")
-        arr.append(line[0:result.end(4)] + "='")
-        arr.append(ref)
-        if js_prefix:
-            arr.append("';\n")
-        else:
-            arr.append("'\n")
-    else:
-        result = EMBED_DECL_RE.match(line)
-        if result:
-            prefix = result.group(1)
-            if not prefix:
-                prefix = result.group(2)
-                default_val = ""
-            else:
-                default_val = str(result.group(2)).strip(" \"'")
-            arr.append(prefix + "'")
-            for entry in yaml_load("[" + result.group(3) + "]"):
-                apply_source(entry, filename, str(result.group(4)),
-                                default_val)
-                arr.append(entry)
-            if filename.endswith(".ps1"):
-                arr.append("'\r\n")
-            else:
-                arr.append("'\n")
-        else:
-            result = IN_PLACE_RE.match(line)
-            if result:
-                arr.append(result.group(1))
-                var_name = decode_parameter_name(result.group(2))
-                ref = OrderedDict()
-                ref['Ref'] = var_name
-                ref['__source'] = filename
-                if str(result.group(4)) == "#optional":
-                    ref['__optional'] = "true"
-                    if result.group(3):
-                        ref['__default'] = str(result.group(3)[1:])
-                    else:
-                        ref['__default'] = ""
-                arr.append(ref)
-                arr = arr + do_replace(result.group(5), filename)
-            else:
-                arr.append(line)
-    return arr
 
 
 def resolve_file(filename, basefile):
@@ -946,12 +743,17 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
                 del data['__source']
             else:
                 filename = "unknown"
+            if '__source_line' in data:
+                file_line = data['__source_line']
+                del data['__source_line']
+            else:
+                file_line = 0
             if var_name not in templateParams:
                 if '__optional' in data:
                     data = data['__default']
                 else:
                     print("ERROR: " + path + ": Referenced parameter \"" +
-                          var_name + "\" in file " + filename +
+                          var_name + "\" in file " + filename + ":" + file_line + \
                           " not declared in template parameters in " +
                           templateFile)
                     gotImportErrors = True

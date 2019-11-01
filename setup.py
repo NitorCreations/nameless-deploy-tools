@@ -50,7 +50,8 @@ setup(name='nameless-deploy-tools',
           'configparser',
           'scandir',
           'jmespath',
-          'ec2-utils==0.18'
+          'ec2-utils==0.18',
+          'cloudformation-utils==0.0.1'
       ] + ([
           'win-unicode-console',
           'wmi',
