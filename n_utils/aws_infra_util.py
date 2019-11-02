@@ -51,6 +51,7 @@ terraforms = dict()
 parameters = dict()
 ssm_params = dict()
 product_amis = dict()
+owner_amis = dict()
 CFG_PREFIX = "AWS::CloudFormation::Init_config_files_"
 
 ############################################################################
@@ -148,6 +149,20 @@ def _resolve_product_ami(product_code):
             product_amis[product_code] = value
     return value
 
+def _resolve_onwer_named_ami(owner, name):
+    value = None
+    if (owner, name) in owner_amis:
+        return owner_amis[(owner, name)]
+    else:
+        ami_resp = ec2().describe_images(Owners=[owner], Filters=[{"Name": "name", "Values":[name]}])
+        ami_ids =  [image["ImageId"] for image in sorted(ami_resp['Images'],
+                                                         key=itemgetter('CreationDate'),
+                                                         reverse=True)]
+        if ami_ids:
+            value = ami_ids[0]
+            product_amis[(owner, name)] = value
+    return value
+
 def _process_infra_prop_line(line, params, used_params):
     key_val = line.split("=", 1)
     if len(key_val) == 2:
@@ -212,6 +227,14 @@ def _process_value(value, used_params):
                 product_ami = _resolve_product_ami(product_code)
                 if product_ami:
                     value = product_ami
+        if value.strip().startswith("OwnerNamedAmi:"):
+            product_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            if "OwnerNamedAmi" in product_doc and "owner" in product_doc["OwnerNamedAmi"] and "name" in product_doc["OwnerNamedAmi"]:
+                owner = product_doc["OwnerNamedAmi"]["owner"]
+                name = product_doc["OwnerNamedAmi"]["name"]
+                owner_ami = _resolve_onwer_named_ami(owner, name)
+                if owner_ami:
+                    value = owner_ami
     return value
 
 def import_parameter_file(filename, params):
@@ -717,6 +740,10 @@ def _preprocess_template(data, root, basefile, path, templateParams):
         elif 'ProductAmi' in data:
             product_code = expand_vars(data['ProductAmi'], templateParams, None, [])
             return _resolve_product_ami(product_code)
+        elif 'OwnerNamedAmi' in data:
+            owner_named = expand_vars(data['OwnerNamedAmi'], templateParams, None, [])
+            if "owner" in owner_named and "name" in owner_named:
+                return _resolve_onwer_named_ami(owner_named["owner"], owner_named["name"])
         else:
             if 'Parameters' in data:
                 data['Parameters'] = _preprocess_template(data['Parameters'], root, basefile, path + "Parameters_",
