@@ -28,7 +28,6 @@ from base64 import b64encode
 from collections import OrderedDict
 from glob import glob
 from yaml import ScalarNode, SequenceNode, MappingNode
-from io import StringIO
 from operator import itemgetter
 from botocore.exceptions import ClientError
 from copy import deepcopy
@@ -185,17 +184,17 @@ def _process_value(value, used_params):
     #   b) resolving basic variables used in terraform backend configuration
     if  "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
         if value.strip().startswith("StackRef:"):
-            stackref_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            stackref_doc = yaml_load(_to_str(value))
             stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
             if stack_value:
                 value = stack_value
         if value.strip().startswith("TFRef:"):
-            tfref_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            tfref_doc = yaml_load(_to_str(value))
             tf_value = _resolve_tfref_from_dict(tfref_doc['TFRef'])
             if tf_value:
                 value = tf_value
         if value.strip().startswith("Encrypt:"):
-            enc_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            enc_doc = yaml_load(_to_str(value))
             enc_conf = enc_doc["Encrypt"]
             if isinstance(enc_conf, OrderedDict):
                 to_encrypt = yaml_save(enc_conf["value"])
@@ -206,7 +205,7 @@ def _process_value(value, used_params):
             vault = Vault(**enc_conf)
             value = b64encode(vault.direct_encrypt(value))
         if value.strip().startswith("YamlRef:"):
-            yamlref_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            yamlref_doc = yaml_load(_to_str(value))
             if "file" in yamlref_doc["YamlRef"] and "jmespath" in yamlref_doc["YamlRef"]:
                 yaml_file = yamlref_doc["YamlRef"]["file"]
                 contents = yaml_load(open(yaml_file))
@@ -214,21 +213,21 @@ def _process_value(value, used_params):
                 if value:
                     value = expand_vars(value, used_params, None, [])
         if value.strip().startswith("SsmRef:"):
-            ssmref_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            ssmref_doc = yaml_load(_to_str(value))
             if "SsmRef" in ssmref_doc:
                 ssm_key = ssmref_doc["SsmRef"]
                 ssm_value = _resolve_ssm_parameter(ssm_key)
                 if ssm_value:
                     value = ssm_value
         if value.strip().startswith("ProductAmi:"):
-            product_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            product_doc = yaml_load(_to_str(value))
             if "ProductAmi" in product_doc:
                 product_code = product_doc["ProductAmi"]
                 product_ami = _resolve_product_ami(product_code)
                 if product_ami:
                     value = product_ami
         if value.strip().startswith("OwnerNamedAmi:"):
-            product_doc = yaml_load(StringIO(unicode(_to_str(value))))
+            product_doc = yaml_load(_to_str(value))
             if "OwnerNamedAmi" in product_doc and "owner" in product_doc["OwnerNamedAmi"] and "name" in product_doc["OwnerNamedAmi"]:
                 owner = product_doc["OwnerNamedAmi"]["owner"]
                 name = product_doc["OwnerNamedAmi"]["name"]
