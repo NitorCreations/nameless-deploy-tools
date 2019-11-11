@@ -34,6 +34,7 @@ from copy import deepcopy
 from operator import itemgetter
 
 import six
+from botocore.exceptions import ClientError
 from ec2_utils.instance_info import resolve_account, info, is_ec2, stack_params_and_outputs_and_stack
 from n_vault import Vault
 from threadlocal_aws import region
@@ -96,15 +97,18 @@ def share_to_another_region(ami_id, regn, ami_name, account_ids, timeout_sec=900
         if time.time() - start > timeout_sec:
             raise Exception("Failed waiting for status 'available' for " +
                             ami_id + " (timeout: " + str(timeout_sec) + ")")
-        images_resp = ec2().describe_images(ImageIds=[ami_id])
-        status = images_resp['Images'][0]['State']
+        try:
+            images_resp = ec2(region=regn).describe_images(ImageIds=[ami_id])
+            status = images_resp['Images'][0]['State']
+        except ClientError:
+            print("Did not find image " + ami_id)
     perms = {"Add": []}
     my_acco = resolve_account()
     for acco in account_ids:
         if not acco == my_acco:
             perms['Add'].append({"UserId": acco})
     if len(perms['Add']) > 0:
-        ec2().modify_image_attribute(ImageId=ami_id, LaunchPermission=perms)
+        ec2(region=regn).modify_image_attribute(ImageId=ami_id, LaunchPermission=perms)
 
 def _has_job_tag(image, image_name_prefix):
     for tag in image['Tags']:
