@@ -658,6 +658,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                         del data[k]
             if data and "optional" in data:
                 del data["optional"]
+            data = _preprocess_template(data, root, yaml_file, path, templateParams)
         elif 'Fn::Merge' in data:
             merge_list = data['Fn::Merge']['Source'] if 'Source' in data['Fn::Merge'] else data['Fn::Merge']
             result = data['Fn::Merge']['Result'] if 'Result' in data['Fn::Merge'] else OrderedDict()
@@ -779,7 +780,7 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
                     data = data['__default']
                 else:
                     print("ERROR: " + path + ": Referenced parameter \"" +
-                          var_name + "\" in file " + filename + ":" + file_line + \
+                          var_name + "\" in file " + filename + ":" + str(file_line) + \
                           " not declared in template parameters in " +
                           templateFile)
                     gotImportErrors = True
