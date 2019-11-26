@@ -1,15 +1,15 @@
 FROM nitor/docker-base:latest
 
-ENV NODE_VERSION=10.16.0 \
- YARN_VERSION=1.17.2 \
+ENV NODE_VERSION=12.13.1 \
+ YARN_VERSION=1.19.1 \
  JAVA_HOME=/docker-java-home \
- GRADLE_VERSION=5.4.1 \
- MAVEN_VERSION=3.6.1 \
+ GRADLE_VERSION=6.0.1 \
+ MAVEN_VERSION=3.6.2 \
  PHANTOMJS_VERSION=2.1.1 \
- LERNA_VERSION=3.15.0 \
- SERVERLESS_VERSION=1.46.0
+ LERNA_VERSION=3.19.0 \
+ SERVERLESS_VERSION=1.58.0
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-8-jdk git openssh-client unzip chromium-bsu jq gpg
+RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git openssh-client unzip chromium-bsu jq gpg parallel
 RUN set -ex \
   && groupadd --gid 1010 node \
   && useradd --uid 1010 --gid node --shell /bin/bash --create-home node \
@@ -42,7 +42,7 @@ RUN set -ex \
 	} > /usr/local/bin/docker-java-home \
   && chmod +x /usr/local/bin/docker-java-home \
   && ARCH= && dpkgArch="$(dpkg --print-architecture)" \
-  && ln -svT "/usr/lib/jvm/java-8-openjdk-${dpkgArch}" /docker-java-home \
+  && ln -svT "/usr/lib/jvm/java-11-openjdk-${dpkgArch}" /docker-java-home \
   && if [ ! -d /usr/share/man/man1 ]; then \
 		mkdir -p /usr/share/man/man1; \
 	 fi \
