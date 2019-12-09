@@ -21,6 +21,8 @@ PolicyDocument:
     Action:
     - 'cloudformation:DescribeStacks'
     - 'cloudformation:DescribeResources'
+    - 'cloudformation:SignalResource'
+    - 'ec2:DescribeTags'
   - Effect: Allow
     Resource: 'arn:aws:logs:*:*:*'
     Action:
@@ -28,8 +30,3 @@ PolicyDocument:
     - 'logs:CreateLogStream'
     - 'logs:PutLogEvents'
     - 'logs:DescribeLogStreams'
-  - Effect: Allow
-    Resource: '*'
-    Action:
-    - 'ec2:DescribeTags'
-    - 'cloudformation:SignalResource'

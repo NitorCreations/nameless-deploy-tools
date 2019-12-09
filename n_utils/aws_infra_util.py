@@ -34,7 +34,7 @@ from copy import deepcopy
 from jmespath import search
 from ec2_utils.instance_info import resolve_account, stack_params_and_outputs_and_stack
 from n_utils import _to_str
-from n_utils.utils import expand_vars, get_images, ParamNotAvailable
+from n_utils.utils import expand_vars, expand_only_double_paranthesis_params, get_images, ParamNotAvailable
 from n_utils.git_utils import Git
 from n_utils.ndt import find_include
 from n_utils.ecr_utils import repo_uri
@@ -598,8 +598,10 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             file = expand_vars(val, templateParams, None, [])
             script_import = resolve_file(file, basefile)
             if script_import:
+                params = OrderedDict(list(templateParams.items()))
+                params.update(data)
                 data.clear()
-                contents = import_script(script_import)
+                contents = expand_only_double_paranthesis_params(import_script(script_import), params, None, [])
                 data['Fn::Join'] = ["", contents]
             else:
                 print("ERROR: " + val + ": Can't import file \"" + val +
