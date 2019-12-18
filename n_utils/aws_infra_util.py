@@ -56,6 +56,11 @@ CFG_PREFIX = "AWS::CloudFormation::Init_config_files_"
 ############################################################################
 # _THE_ yaml & json deserialize/serialize functions
 
+yaml.SafeDumper.yaml_representers[None] = lambda self, data: \
+    yaml.representer.SafeRepresenter.represent_str(
+        self,
+        _to_str(data),
+    )
 
 SOURCED_PARAMS = None
 
