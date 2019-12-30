@@ -32,7 +32,7 @@ from operator import itemgetter
 from botocore.exceptions import ClientError
 from copy import deepcopy
 from jmespath import search
-from ec2_utils.instance_info import resolve_account, stack_params_and_outputs_and_stack
+from ec2_utils.instance_info import resolve_account, stack_params_and_outputs_and_stack, dthandler
 from n_utils import _to_str
 from n_utils.utils import expand_vars, expand_only_double_paranthesis_params, get_images, ParamNotAvailable
 from n_utils.git_utils import Git
@@ -470,11 +470,11 @@ def json_load(stream):
 
 
 def json_save(data):
-    return json.dumps(data, indent=2)
+    return json.dumps(data, indent=2, default=dthandler)
 
 
 def json_save_small(data):
-    return json.dumps(data, indent=None)
+    return json.dumps(data, indent=None, default=dthandler)
 
 
 ############################################################################

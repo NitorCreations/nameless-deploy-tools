@@ -30,7 +30,7 @@ import argcomplete
 import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
 from ec2_utils import ebs, interface
-from ec2_utils.instance_info import stack_params_and_outputs_and_stack
+from ec2_utils.instance_info import stack_params_and_outputs_and_stack, dthandler
 from ec2_utils.logs import CloudWatchLogsThread
 from ec2_utils.utils import best_effort_stacks
 from pygments import highlight, lexers, formatters
@@ -144,7 +144,7 @@ def yaml_to_json():
     if args.small:
         dump = lambda out_doc: json.dumps(out_doc)
     else:
-        dump = lambda out_doc: json.dumps(out_doc, indent=2)
+        dump = lambda out_doc: json.dumps(out_doc, indent=2, default=dthandler)
     if args.colorize:
         colorprint(dump(doc), output_format="json")
     else:
