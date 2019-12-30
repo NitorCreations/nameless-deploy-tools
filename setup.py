@@ -51,7 +51,8 @@ setup(name='nameless-deploy-tools',
           'scandir',
           'jmespath',
           'ec2-utils==0.18',
-          'cloudformation-utils==0.0.2'
+          'cloudformation-utils==0.0.2',
+          'PyYAML==5.2'
       ] + ([
           'win-unicode-console',
           'wmi',
