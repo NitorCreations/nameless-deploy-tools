@@ -1225,9 +1225,9 @@ Traceback (most recent call last):
     return cls._build_from_requirements(__requires__)
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 598, in _build_from_requirements
     dists = ws.resolve(reqs, Environment())
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'PyYAML==5.2\' distribution was not found and is required by nameless-deploy-tools
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 791, in resolve
+    raise VersionConflict(dist, req).with_context(dependent_req)
+pkg_resources.ContextualVersionConflict: (PyYAML 5.2 (/usr/local/lib/python2.7/dist-packages), Requirement.parse(\'PyYAML<5.2,>=3.10; python_version != "2.6" and python_version != "3.3"\'), set([\'awscli\']))
 ```
 
 ## `[ndt ]cf-logs-to-cloudwatch`
@@ -1246,9 +1246,9 @@ Traceback (most recent call last):
     return cls._build_from_requirements(__requires__)
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 598, in _build_from_requirements
     dists = ws.resolve(reqs, Environment())
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'PyYAML==5.2\' distribution was not found and is required by nameless-deploy-tools
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 791, in resolve
+    raise VersionConflict(dist, req).with_context(dependent_req)
+pkg_resources.ContextualVersionConflict: (PyYAML 5.2 (/usr/local/lib/python2.7/dist-packages), Requirement.parse(\'PyYAML<5.2,>=3.10; python_version != "2.6" and python_version != "3.3"\'), set([\'awscli\']))
 ```
 
 ## `[ndt ]ec2-associate-eip`
@@ -1267,9 +1267,9 @@ Traceback (most recent call last):
     return cls._build_from_requirements(__requires__)
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 598, in _build_from_requirements
     dists = ws.resolve(reqs, Environment())
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'PyYAML==5.2\' distribution was not found and is required by nameless-deploy-tools
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 791, in resolve
+    raise VersionConflict(dist, req).with_context(dependent_req)
+pkg_resources.ContextualVersionConflict: (PyYAML 5.2 (/usr/local/lib/python2.7/dist-packages), Requirement.parse(\'PyYAML<5.2,>=3.10; python_version != "2.6" and python_version != "3.3"\'), set([\'awscli\']))
 ```
 
 ## `[ndt ]logs-to-cloudwatch`
@@ -1288,9 +1288,9 @@ Traceback (most recent call last):
     return cls._build_from_requirements(__requires__)
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 598, in _build_from_requirements
     dists = ws.resolve(reqs, Environment())
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'PyYAML==5.2\' distribution was not found and is required by nameless-deploy-tools
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 791, in resolve
+    raise VersionConflict(dist, req).with_context(dependent_req)
+pkg_resources.ContextualVersionConflict: (PyYAML 5.2 (/usr/local/lib/python2.7/dist-packages), Requirement.parse(\'PyYAML<5.2,>=3.10; python_version != "2.6" and python_version != "3.3"\'), set([\'awscli\']))
 ```
 
 ## `[ndt ]n-include`
@@ -1309,9 +1309,9 @@ Traceback (most recent call last):
     return cls._build_from_requirements(__requires__)
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 598, in _build_from_requirements
     dists = ws.resolve(reqs, Environment())
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'PyYAML==5.2\' distribution was not found and is required by nameless-deploy-tools
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 791, in resolve
+    raise VersionConflict(dist, req).with_context(dependent_req)
+pkg_resources.ContextualVersionConflict: (PyYAML 5.2 (/usr/local/lib/python2.7/dist-packages), Requirement.parse(\'PyYAML<5.2,>=3.10; python_version != "2.6" and python_version != "3.3"\'), set([\'awscli\']))
 ```
 
 ## `[ndt ]n-include-all`
@@ -1330,9 +1330,9 @@ Traceback (most recent call last):
     return cls._build_from_requirements(__requires__)
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 598, in _build_from_requirements
     dists = ws.resolve(reqs, Environment())
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'PyYAML==5.2\' distribution was not found and is required by nameless-deploy-tools
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 791, in resolve
+    raise VersionConflict(dist, req).with_context(dependent_req)
+pkg_resources.ContextualVersionConflict: (PyYAML 5.2 (/usr/local/lib/python2.7/dist-packages), Requirement.parse(\'PyYAML<5.2,>=3.10; python_version != "2.6" and python_version != "3.3"\'), set([\'awscli\']))
 ```
 
 ## `[ndt ]signal-cf-status`
@@ -1351,9 +1351,9 @@ Traceback (most recent call last):
     return cls._build_from_requirements(__requires__)
   File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 598, in _build_from_requirements
     dists = ws.resolve(reqs, Environment())
-  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 786, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'PyYAML==5.2\' distribution was not found and is required by nameless-deploy-tools
+  File "/usr/local/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 791, in resolve
+    raise VersionConflict(dist, req).with_context(dependent_req)
+pkg_resources.ContextualVersionConflict: (PyYAML 5.2 (/usr/local/lib/python2.7/dist-packages), Requirement.parse(\'PyYAML<5.2,>=3.10; python_version != "2.6" and python_version != "3.3"\'), set([\'awscli\']))
 ```
 
 ## `create-shell-archive.sh`
