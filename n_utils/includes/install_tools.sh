@@ -33,10 +33,10 @@ fi
 python -m pip install -U pip --ignore-installed
 pip install -U setuptools awscli boto3
 # If alpha, get first all non-alpha dependencies
-pip install -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION"
+pip install -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" --ignore-installed
 if [ "$1" = "alpha" ]; then
   # Upgrade just ndt to alpha
-  pip install -U --pre --no-deps "nameless-deploy-tools"
+  pip install -U --pre --no-deps "nameless-deploy-tools" --ignore-installed
 fi
 aws configure set default.s3.signature_version s3v4
 rm -f /opt/nameless/instance-data.json
