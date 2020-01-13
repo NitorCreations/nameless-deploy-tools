@@ -13,11 +13,11 @@
 FROM ubuntu:18.04
 
 ENV DOCKER_BUCKET="download.docker.com" \
-    DOCKER_VERSION="18.03.1-ce" \
+    DOCKER_VERSION="19.03.5" \
     DOCKER_CHANNEL="stable" \
-    DOCKER_SHA256="0e245c42de8a21799ab11179a4fce43b494ce173a8a2d6567ea6825d6c5265aa" \
+    DOCKER_SHA256="50cdf38749642ec43d6ac50f4a3f1f7f6ac688e8d8b4e1c5b7be06e1a82f06e9" \
     DIND_COMMIT="52379fa76dee07ca038624d639d9e14f4fb719ff" \
-    DOCKER_COMPOSE_VERSION="1.16.1"
+    DOCKER_COMPOSE_VERSION="1.25.0"
 
 # Building git from source code:
 #   Ubuntu's default git package is built with broken gnutls. Rebuild git with openssl.
