@@ -230,7 +230,11 @@ def enable_profile(profile_type, profile):
             if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
                 print("unset AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
             if profile_type == "azure":
-                print("aws-azure-login --profile " + profile + " --no-prompt")
+                profile_data = get_profile(profile)
+                gui_mode = ""
+                if "azure_login_mode" in profile_data and profile_data["azure_login_mode"] == "gui":
+                    gui_mode =  " --mode=gui"
+                print("aws-azure-login --profile " + profile + gui_mode + " --no-prompt")
             else:
                 print("adfs-aws-login --profile " + profile + " --no-prompt")
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
