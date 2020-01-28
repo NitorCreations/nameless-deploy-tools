@@ -90,6 +90,7 @@ MARK
   SSLCertificateFile /etc/certs/%domain%.crt
   SSLCertificateKeyFile /etc/certs/%domain%.key.clear
   SSLCertificateChainFile /etc/certs/%zone%.chain
+  AllowEncodedSlashes NoDecode
   ProxyPass /.well-known !
   ProxyPass / http://localhost:8080/
   RequestHeader set X-Forwarded-Proto "https"
