@@ -191,7 +191,7 @@
   connection: local
   gather_facts: no
   tasks:
-    - ec2_instance_facts:
+    - ec2_instance_info:
         region: "{{ aws_region }}"
         filters:
           instance-state-name: [running, pending]
