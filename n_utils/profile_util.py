@@ -26,7 +26,7 @@ def read_expiring_profiles():
         with open(credentials) as credfile:
             parser.readfp(credfile)
             for profile in parser.sections():
-                if parser.has_option(profile, "aws_session_expiration"):
+                if parser.has_option(profile, "aws_session_expiration") or parser.has_option(profile, "aws_expiration"):
                     ret.append(profile)
     return ret
 
@@ -126,7 +126,7 @@ def print_profile(profile_name, params):
     profile = get_profile(profile_name)
     for key, value in list(profile.items()):
         upper_param = key.upper()
-        if key == "aws_session_expiration":
+        if key == "aws_session_expiration" or key == "aws_expiration":
             d = parse(value)
             print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=\"" + _to_str(_epoc_secs(d)) + "\"")
             params.append("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile)
@@ -179,6 +179,7 @@ def update_profile(profile, creds):
             parser.set(profile, "aws_secret_access_key", creds['SecretAccessKey'])
             parser.set(profile, "aws_session_token", creds['SessionToken'])
             parser.set(profile, "aws_session_expiration", creds['Expiration'].strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
+            parser.set(profile, "aws_expiration", creds['Expiration'].strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
     with open(credentials, 'wb') as credfile:
         parser.write(credfile)
 
