@@ -81,8 +81,8 @@ def read_profile_expiry(profile):
         parser = ConfigParser()
         with open(credentials) as credfile:
             parser.readfp(credfile)
-            if parser.has_option(profile, "aws_session_expiration"):
-                return parser.get(profile, "aws_session_expiration")
+            if parser.has_option(profile, "aws_expiration"):
+                return parser.get(profile, "aws_expiration")
     return "1970-01-01T00:00:00.000Z"
 
 def profile_to_env():
