@@ -1,6 +1,6 @@
 FROM nitor/docker-base:latest
 
-ENV NODE_VERSION=12.14.1 \
+ENV NODE_VERSION=12.16.1 \
  YARN_VERSION=1.22.0 \
  JAVA_HOME=/docker-java-home \
  GRADLE_VERSION=6.0.1 \
