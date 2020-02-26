@@ -1,13 +1,13 @@
 FROM nitor/docker-base:latest
 
 ENV NODE_VERSION=12.14.1 \
- YARN_VERSION=1.21.1 \
+ YARN_VERSION=1.22.0 \
  JAVA_HOME=/docker-java-home \
  GRADLE_VERSION=6.0.1 \
  MAVEN_VERSION=3.6.3 \
  PHANTOMJS_VERSION=2.1.1 \
  LERNA_VERSION=3.20.2 \
- SERVERLESS_VERSION=1.60.5
+ SERVERLESS_VERSION=1.64.1
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git openssh-client unzip chromium-bsu jq gpg parallel
 RUN set -ex \
