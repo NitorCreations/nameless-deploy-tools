@@ -110,7 +110,11 @@
       dest: "C:\\nameless\\"
     with_items: "{{ files }}"
   - win_chocolatey:
-      name: [ "python2", "awscli", "sync" ]
+      state: latest
+      name: [ "python" ]
+      version: "3.7.6"
+  - win_chocolatey:
+      name: [ "awscli", "sync" ]
     when: base_ami_id == "clean"
   - win_shell: "C:\\nameless\\prepare.ps1"
     args:
