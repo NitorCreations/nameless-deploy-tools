@@ -284,7 +284,7 @@ cat > ansible.cfg << MARKER
 [defaults]
 retry_files_enabled = False
 MARKER
-if python -u $(which ansible-playbook) \
+if $(which ansible-playbook) \
   -vvvv \
   --flush-cache \
   $PLAYBOOK \
