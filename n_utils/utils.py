@@ -284,10 +284,15 @@ def _process_line_re(line, params, vault, vault_keys, matcher):
         if isinstance(param_value, NoneType) or isinstance(param_value, ParamNotAvailable):
             next_start = match.end()
         else:
-            ret = ret[:match.start()] + param_value + ret[match.end():]
+            ret = ret[:match.start()] + _try_decode(param_value) + ret[match.end():]
         match = matcher.search(ret, next_start)
     return ret
 
+def _try_decode(param):
+    try:
+        return param.decode('utf-8')
+    except:
+        return param
 
 def _var_default(value, arg):
     if value:
