@@ -40,6 +40,7 @@ from n_vault import Vault
 from threadlocal_aws import region
 from threadlocal_aws.clients import cloudformation, ec2, sts
 
+from n_utils import _to_str
 from n_utils.mfa_utils import mfa_read_token, mfa_generate_code
 
 NoneType = type(None)
@@ -284,7 +285,7 @@ def _process_line_re(line, params, vault, vault_keys, matcher):
         if isinstance(param_value, NoneType) or isinstance(param_value, ParamNotAvailable):
             next_start = match.end()
         else:
-            ret = ret[:match.start()] + param_value + ret[match.end():]
+            ret = ret[:match.start()] + _to_str(param_value) + ret[match.end():]
         match = matcher.search(ret, next_start)
     return ret
 
