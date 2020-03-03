@@ -86,7 +86,7 @@ MARK
   ServerName https://%domain%
   Alias /.well-known /var/www/%domain%/.well-known
   SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
-  SSLCipherSuite HIGH
+  SSLCipherSuite ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
   SSLCertificateFile /etc/certs/%domain%.crt
   SSLCertificateKeyFile /etc/certs/%domain%.key.clear
   SSLCertificateChainFile /etc/certs/%zone%.chain
