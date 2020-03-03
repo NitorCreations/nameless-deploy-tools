@@ -70,7 +70,7 @@ apache_prepare_ssl_conf() {
     a2dissite 000-default
     sed -i -e 's/#.*$//' -e '/^$/d' -e '/<\/IfModule>/d' -e '/SSLProtocol/d' /etc/apache2/mods-enabled/ssl.conf
     cat >> /etc/apache2/mods-enabled/ssl.conf << MARK
-  SSLProtocol all -SSLv2 -SSLv3
+  SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
 </IfModule>
 MARK
   fi
@@ -85,8 +85,8 @@ MARK
   cat >> ${APACHE_SSL_CONF} << MARKER
   ServerName https://%domain%
   Alias /.well-known /var/www/%domain%/.well-known
-  SSLProtocol all -SSLv2 -SSLv3
-  SSLCipherSuite ALL:!DH:!EXPORT:!RC4:+HIGH:+MEDIUM:!LOW:!aNULL:!eNULL
+  SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+  SSLCipherSuite HIGH
   SSLCertificateFile /etc/certs/%domain%.crt
   SSLCertificateKeyFile /etc/certs/%domain%.key.clear
   SSLCertificateChainFile /etc/certs/%zone%.chain
