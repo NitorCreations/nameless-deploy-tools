@@ -187,6 +187,9 @@ else
   PASSWD_ARG="$PASSWD_ARG \"ansible_winrm_server_cert_validation\": \"ignore\","
   PASSWD_ARG="$PASSWD_ARG \"prepare_script\": \"$(n-include prepare.ps1)\"}"
   [ "$VOLUME_SIZE" ] || VOLUME_SIZE=30
+  [ "$WIN_PYTHON_VERSION" ] || WIN_PYTHON_VERSION="3.7.6"
+  extra_args[${#extra_args[@]}]=-e
+  extra_args[${#extra_args[@]}]="win_python_version=$WIN_PYTHON_VERSION"
 fi
 if [ -z "$BUILD_NUMBER" ]; then
   BUILD_NUMBER=$TSTAMP

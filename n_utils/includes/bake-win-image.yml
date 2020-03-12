@@ -112,7 +112,7 @@
   - win_chocolatey:
       state: latest
       name: [ "python" ]
-      version: "3.7.6"
+      version: "{{ win_python_version }}"
   - win_chocolatey:
       name: [ "awscli", "sync" ]
     when: base_ami_id == "clean"
