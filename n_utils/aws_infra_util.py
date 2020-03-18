@@ -131,7 +131,7 @@ def _resolve_ssm_parameter(ssm_key):
     if ssm_key in ssm_params:
         value = ssm_params[ssm_key]
     else:
-        ssm_resp = ssm().get_parameter(Name=ssm_key)
+        ssm_resp = ssm().get_parameter(Name=ssm_key, WithDecryption=True)
         if "Parameter" in ssm_resp and "Value" in ssm_resp["Parameter"]:
             value = ssm_resp["Parameter"]["Value"]
             ssm_params[ssm_key] = value
@@ -742,7 +742,6 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             data['__source'] = basefile
         elif 'SsmRef' in data:
             ssm_key = expand_vars(data['SsmRef'], templateParams, None, [])
-            ssm_resp = ssm().get_parameter(Name=ssm_key)
             return _resolve_ssm_parameter(ssm_key)
         elif 'ProductAmi' in data:
             product_code = expand_vars(data['ProductAmi'], templateParams, None, [])
