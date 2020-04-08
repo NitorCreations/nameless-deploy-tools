@@ -50,7 +50,7 @@ setup(name='nameless-deploy-tools',
           'configparser',
           'scandir',
           'jmespath',
-          'ec2-utils==0.20',
+          'ec2-utils==0.21',
           'cloudformation-utils==0.0.2',
           'PyYAML==5.2'
       ] + ([
