@@ -661,7 +661,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                           basefile)
                     gotImportErrors = True
                 else:
-                    for k in data:
+                    for k in list(data):
                         del data[k]
             if data and "optional" in data:
                 del data["optional"]
