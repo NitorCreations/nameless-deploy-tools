@@ -115,7 +115,7 @@ if [ -n "$DRYRUN" ]; then
 fi
 
 set -e
-sls deploy $VERBOSE -s $paramEnvId
+sls deploy --conceal $VERBOSE -s $paramEnvId
 
 if [ -x "./post_deploy.sh" ]; then
   "./post_deploy.sh"
