@@ -1,42 +1,65 @@
-import locale
-import subprocess
-from os import linesep
+from locale import getpreferredencoding
+from os import linesep, environ, devnull
 from sys import argv
-
 from n_utils.profile_util import enable_profile
+from subprocess import Popen, PIPE
 
+SYS_ENCODING = getpreferredencoding()
 
 def load_project_env():
     """ Print parameters set by git config variables to setup project environment with region and aws credentials
     """
-    proc = subprocess.Popen(["git", "config", "--list", "--local"], stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    out = proc.communicate()
+    proc = Popen(["git", "config", "--list", "--local"], stdout=PIPE, stderr=open(devnull, 'w'))
+    proc2 = Popen(["git", "rev-parse", "--abbrev-ref", "HEAD"], stdout=PIPE, stderr=open(devnull, 'w'))
+    stdout, _ = proc2.communicate()
+    current_branch = "master"
+    if proc2.returncode == 0:
+        current_branch = stdout.decode(SYS_ENCODING).strip()
+    out, _ = proc.communicate()
     if proc.returncode:
         return
     vars = {}
-    for line in out[0].decode(locale.getpreferredencoding()).split("\n"):
+    for line in out.decode(SYS_ENCODING).split("\n"):
         if line:
             next = line.split("=", 1)
             vars[next[0]] = next[1]
     do_print = False
     ret = ""
-    if "ndt.profile.azure" in vars:
+    if f"ndt.profile.{current_branch}.azure" in vars:
+        enable_profile("azure", vars[f"ndt.profile.{current_branch}.azure"])
+    elif "ndt.profile.azure" in vars:
         enable_profile("azure", vars["ndt.profile.azure"])
-    if "ndt.profile.adfs" in vars:
+    if f"ndt.profile.{current_branch}.adfs" in vars:
+        enable_profile("adfs", vars[f"ndt.profile.{current_branch}.adfs"])
+    elif "ndt.profile.adfs" in vars:
         enable_profile("adfs", vars["ndt.profile.adfs"])
-    if "ndt.profile.iam" in vars:
+    if f"ndt.profile.{current_branch}.iam" in vars:
+        enable_profile("iam", vars[f"ndt.profile.{current_branch}.iam"])
+    elif "ndt.profile.iam" in vars:
         enable_profile("iam", vars["ndt.profile.iam"])
-    if "ndt.profile.ndt" in vars:
+    if f"ndt.profile.{current_branch}.ndt" in vars:
+        enable_profile("ndt", vars[f"ndt.profile.{current_branch}.ndt"])
+    elif "ndt.profile.ndt" in vars:
         enable_profile("ndt", vars["ndt.profile.ndt"])
-    if "ndt.source.env" in vars:
+    if f"ndt.source.{current_branch}.env" in vars:
+        do_print = True
+        ret = ret + ". " + vars[f"ndt.source.{current_branch}.env"] + linesep
+    elif "ndt.source.env" in vars:
         do_print = True
         ret = ret + ". " + vars["ndt.source.env"] + linesep
-    if "ndt.aws.profile" in vars:
+    if f"ndt.aws.{current_branch}.profile" in vars:
+        do_print = True
+        ret = ret + "export AWS_PROFILE=" + vars[f"ndt.aws.{current_branch}.profile"] + \
+            " AWS_DEFAULT_PROFILE=" + vars[f"ndt.aws.{current_branch}.profile"] + linesep
+    elif "ndt.aws.profile" in vars:
         do_print = True
         ret = ret + "export AWS_PROFILE=" + vars["ndt.aws.profile"] + \
             " AWS_DEFAULT_PROFILE=" + vars["ndt.aws.profile"] + linesep
-    if "ndt.aws.region" in vars:
+    if f"ndt.aws.{current_branch}.region" in vars:
+        do_print = True
+        ret = ret + "export AWS_REGION=" + vars[f"ndt.aws.{current_branch}.region"] + \
+            " AWS_DEFAULT_REGION=" + vars[f"ndt.aws.{current_branch}.region"] + linesep
+    elif "ndt.aws.region" in vars:
         do_print = True
         ret = ret + "export AWS_REGION=" + vars["ndt.aws.region"] + \
             " AWS_DEFAULT_REGION=" + vars["ndt.aws.region"] + linesep
