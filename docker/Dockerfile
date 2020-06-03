@@ -1,15 +1,15 @@
 FROM nitor/docker-base:latest
 
-ENV NODE_VERSION=12.16.1 \
- YARN_VERSION=1.22.0 \
+ENV NODE_VERSION=12.18.0 \
+ YARN_VERSION=1.22.4 \
  JAVA_HOME=/docker-java-home \
  GRADLE_VERSION=6.0.1 \
  MAVEN_VERSION=3.6.3 \
  PHANTOMJS_VERSION=2.1.1 \
- LERNA_VERSION=3.20.2 \
- SERVERLESS_VERSION=1.64.1
+ LERNA_VERSION=3.22.0 \
+ SERVERLESS_VERSION=1.72.0
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git openssh-client unzip chromium-bsu jq gpg parallel
+RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git openssh-client unzip chromium-bsu jq gpg parallel dirmngr
 RUN set -ex \
   && groupadd --gid 1010 node \
   && useradd --uid 1010 --gid node --shell /bin/bash --create-home node \
@@ -87,5 +87,7 @@ RUN set -ex \
   && chmod 755 /usr/bin/lein \
   && lein version
 RUN pip install --no-cache-dir nameless-deploy-tools==1.138
+
+VOLUME /var/lib/docker
 
 ENTRYPOINT ["dockerd-entrypoint.sh"]

@@ -17,14 +17,12 @@ ENV DOCKER_BUCKET="download.docker.com" \
     DOCKER_CHANNEL="stable" \
     DOCKER_SHA256="1c03c78be198d9085e7dd6806fc5d93264baaf0c7ea17f584d00af48eae508ee" \
     DIND_COMMIT="52379fa76dee07ca038624d639d9e14f4fb719ff" \
-    DOCKER_COMPOSE_VERSION="1.25.0"
+    DOCKER_COMPOSE_VERSION="1.25.5"
 
-# Building git from source code:
-#   Ubuntu's default git package is built with broken gnutls. Rebuild git with openssl.
-##########################################################################
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
-       wget python python2.7-dev fakeroot ca-certificates \
+       apt-transport-https gnupg-agent software-properties-common wget \
+       python3 python3-dev fakeroot ca-certificates \
        tar gzip zip autoconf automake \
        bzip2 file g++ gcc imagemagick \
        libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev \
@@ -60,7 +58,9 @@ RUN set -x \
 # Install dependencies by all python images equivalent to buildpack-deps:jessie
 # on the public repos.
 
-RUN wget "https://bootstrap.pypa.io/get-pip.py" -O /tmp/get-pip.py \
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
+    && update-alternatives  --set python /usr/bin/python3 \
+    && wget "https://bootstrap.pypa.io/get-pip.py" -O /tmp/get-pip.py \
     && python /tmp/get-pip.py \
     && pip install awscli \
     && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -68,5 +68,6 @@ RUN wget "https://bootstrap.pypa.io/get-pip.py" -O /tmp/get-pip.py \
 VOLUME /var/lib/docker
 
 COPY dockerd-entrypoint.sh /usr/bin/dockerd-entrypoint.sh
+COPY start-docker.sh /usr/bin/start-docker.sh
 
 ENTRYPOINT ["dockerd-entrypoint.sh"]
