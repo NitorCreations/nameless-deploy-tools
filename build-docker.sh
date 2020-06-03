@@ -4,7 +4,7 @@ NEW_VERSION=$1
 
 docker build -t ndt docker
 set +x
-docker login -u "$(git config docker.username)" -p "$(lpass show --password docker.com)"
+docker login -u "$(bw get username hub.docker.com)" --password-stdin bw get item hub.docker.com | jq -r '.fields[]|select(.name == "Access Token").value'
 set -x
 docker tag ndt:latest nitor/ndt:$NEW_VERSION
 docker push nitor/ndt:$NEW_VERSION
