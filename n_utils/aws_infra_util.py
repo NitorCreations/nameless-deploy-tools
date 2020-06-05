@@ -301,7 +301,7 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
                 job = re.sub(r'\W', '_', image_params["JOB_NAME"])
             else:
                 prefix = ""
-                prefix = image_params["JENKINS_JOB_PREFIX"]
+                prefix = image_params["BUILD_JOB_PREFIX"]
                 job = prefix + "_" + component + "_bake"
                 if image:
                     job = job + "_" + image
@@ -326,8 +326,8 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
                 repl_suffix += "_" + image
             if not image_params:
                 image_params = load_parameters(component=component, image=image, branch=imagebranch, git=git)
-            this_branch_prefix = re.sub(r'\W', '_', component_params["JENKINS_JOB_PREFIX"] + "_")
-            image_branch_prefix = re.sub(r'\W', '_', image_params["JENKINS_JOB_PREFIX"] + "_")
+            this_branch_prefix = re.sub(r'\W', '_', component_params["BUILD_JOB_PREFIX"] + "_")
+            image_branch_prefix = re.sub(r'\W', '_', image_params["BUILD_JOB_PREFIX"] + "_")
             job = lreplace(image_branch_prefix, this_branch_prefix, job)
             job = rreplace(suffix, repl_suffix, job)
             images = get_images(job)
@@ -447,8 +447,13 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
         if "ORIG_DOCKER_NAME" in os.environ:
             if "DOCKER_NAME" not in ret:
                 ret["DOCKER_NAME"] = component + "/" + ret["paramEnvId"] + "-" + ret["ORIG_DOCKER_NAME"]
+        if "BUILD_JOB_PREFIX" not in ret:
+            if "JENKINS_JOB_PREFIX" in ret:
+                ret["BUILD_JOB_PREFIX"] = ret["JENKINS_JOB_PREFIX"]
+            else:
+                ret["BUILD_JOB_PREFIX"] = "ndt" + ret["paramEnvId"]
         if "JENKINS_JOB_PREFIX" not in ret:
-            ret["JENKINS_JOB_PREFIX"] = "ndt" + ret["paramEnvId"]
+            ret["JENKINS_JOB_PREFIX"] = ret["BUILD_JOB_PREFIX"]
         parameters[params_key] = ret
         return ret
 

@@ -198,9 +198,9 @@ else
 fi
 if [ -z "$JOB_NAME" ]; then
   if [ -n "$1" ]; then
-    JOB_NAME="${JENKINS_JOB_PREFIX}-${component}-bake-$1"
+    JOB_NAME="${BUILD_JOB_PREFIX}-${component}-bake-$1"
   else
-    JOB_NAME="${JENKINS_JOB_PREFIX}-${component}-bake"
+    JOB_NAME="${BUILD_JOB_PREFIX}-${component}-bake"
   fi
 fi
 if [ "$IMAGETYPE" != "windows" ]; then

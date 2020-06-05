@@ -41,13 +41,13 @@ if [ "$_ARGCOMPLETE" ]; then
       ;;
     4)
       eval "$(ndt load-parameters "$IMAGE_DIR" -s "$STACK" -e)"
-      JOB_NAME="${JENKINS_JOB_PREFIX}_${IMAGE}_bake"
+      JOB_NAME="${BUILD_JOB_PREFIX}_${IMAGE}_bake"
       IMAGE_IDS="$(get_imageids $IMAGE_DIR $JOB_NAME)"
       compgen -W "$IMAGE_IDS" -- $COMP_CUR
       ;;
     5)
       eval "$(ndt load-parameters "$IMAGE_DIR" -s "$STACK" -e)"
-      echo "${JENKINS_JOB_PREFIX}_${IMAGE}_bake"
+      echo "${BUILD_JOB_PREFIX}_${IMAGE}_bake"
       ;;
     *)
       exit 1

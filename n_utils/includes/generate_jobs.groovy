@@ -2,7 +2,7 @@ public class Settings {
     public final gitUrl
     public final gitCredentials
     private final workspace
-	private final jobPropertiesDir
+    private final jobPropertiesDir
     private final Map propFiles = [:]
     private final Map jobTriggers = [:]
     private final Map stackImageMap = [:]
@@ -25,7 +25,7 @@ public class Settings {
                     stackImageMap["$gitBranch-$imageDir-$stackName"] = imageJobName
                 }
                 def properties = loadStackProps(gitBranch, imageDir, stackName)
-                def jobPrefix = properties.JENKINS_JOB_PREFIX
+                def jobPrefix = properties.BUILD_JOB_PREFIX
                 if ("y" != properties.MANUAL_DEPLOY) {
                     if (jobTriggers["$gitBranch-$imageDir"] == null) {
                         jobTriggers["$gitBranch-$imageDir"] = [jobName]
@@ -96,11 +96,11 @@ public class Settings {
     public Properties loadDockerProps(gitBranch, imageDir, dockerName, quiet=false) {
         return loadProps("docker-$gitBranch-$imageDir-${dockerName}.properties", quiet)
     }
-	/**
-	 * Gets triggers defined for a bake job
-	 **/
+    /**
+     * Gets triggers defined for a bake job
+     **/
     public List getJobTriggers(gitBranch, imageDir) {
-    	return jobTriggers["$gitBranch-$imageDir"]
+        return jobTriggers["$gitBranch-$imageDir"]
     }
     /**
      * Get image job name that matches the stack job
@@ -126,20 +126,20 @@ public class Settings {
         if (properties.JENKINS_JOB_NAME != null) {
             return properties.JENKINS_JOB_NAME
         } else {
-            if (properties.JENKINS_JOB_PREFIX == null) {
+            if (properties.BUILD_JOB_PREFIX == null) {
                 return null
             }
-        	def jobPrefix = properties.JENKINS_JOB_PREFIX
+            def jobPrefix = properties.BUILD_JOB_PREFIX
             if (stackName != null && stackName != "-") {
                 if (jobType == "stack") {
-            	    return "$jobPrefix-$imageDir-deploy-$stackName"
+                    return "$jobPrefix-$imageDir-deploy-$stackName"
                 } else if (jobType == "docker") {
                     return "$jobPrefix-$imageDir-docker-bake-$stackName"
                 }
             } else if (properties.BAKE_IMAGE_BRANCH != null && properties.BAKE_IMAGE_BRANCH != gitBranch) {
-    			return "$jobPrefix-$imageDir-promote"
+                return "$jobPrefix-$imageDir-promote"
             } else {
-    			return "$jobPrefix-$imageDir-bake"
+                return "$jobPrefix-$imageDir-bake"
             }
         }
     }
@@ -172,7 +172,7 @@ def private addSCMTriggers(job, properties, s) {
 def private addParamTriggers(job, gitBranch, imageDir, s) {
     if (s.getJobTriggers(gitBranch, imageDir) != null) {
         job.with {
-	        publishers {
+            publishers {
                 downstreamParameterized {
                     trigger(s.getJobTriggers(gitBranch, imageDir)) {
                         condition('SUCCESS')
@@ -194,7 +194,7 @@ for (jobDef in jobDefs) {
     def ( imageDir, gitBranch, jobType, stackName ) = jobDef.tokenize(':')
     Properties properties
     Properties imageProperties = s.loadImageProps(gitBranch, imageDir, true)
-    def jobPrefix = imageProperties.JENKINS_JOB_PREFIX
+    def jobPrefix = imageProperties.BUILD_JOB_PREFIX
     def jobName = s.getJobName(gitBranch, imageDir, jobType, stackName)
     if (jobName == null) {
         continue
@@ -202,7 +202,7 @@ for (jobDef in jobDefs) {
     def blockOnArray = [SEED_JOB.name]
     if (jobType == "stack") {
         properties = s.loadStackProps(gitBranch, imageDir, stackName)
-        jobPrefix = properties.JENKINS_JOB_PREFIX
+        jobPrefix = properties.BUILD_JOB_PREFIX
         if ("y" == properties.SKIP_STACK_JOB || (imageDir == "bootstrap" && "n" != properties.SKIP_STACK_JOB)) {
             continue
         }
@@ -321,7 +321,7 @@ ndt undeploy-stack $imageDir $stackName
         }
     } else if (jobType == "docker") {
         properties = s.loadDockerProps(gitBranch, imageDir, stackName)
-        jobPrefix = properties.JENKINS_JOB_PREFIX
+        jobPrefix = properties.BUILD_JOB_PREFIX
         if ("y" == properties.SKIP_DOCKER_JOB || (imageDir == "bootstrap" && "n" != properties.SKIP_DOCKER_JOB)) {
             continue
         }
@@ -340,7 +340,7 @@ ndt undeploy-stack $imageDir $stackName
                     branch(gitBranch)
                 }
             }
-			blockOn(blockOnArray)
+            blockOn(blockOnArray)
         }
         job.with {
             steps {
@@ -366,7 +366,7 @@ ndt undeploy-stack $imageDir $stackName
         if ("y" == properties.SKIP_IMAGE_JOB || (imageDir == "bootstrap" && "n" != properties.SKIP_IMAGE_JOB)) {
             continue
         }
-        jobPrefix = properties.JENKINS_JOB_PREFIX
+        jobPrefix = properties.BUILD_JOB_PREFIX
         def job = freeStyleJob(jobName) {
             scm {
                 git {
@@ -378,7 +378,7 @@ ndt undeploy-stack $imageDir $stackName
                     branch(gitBranch)
                 }
             }
-			blockOn(blockOnArray)
+            blockOn(blockOnArray)
         }
         job.with {
             configure { project ->
@@ -406,9 +406,9 @@ ndt undeploy-stack $imageDir $stackName
                     project / 'properties' / 'hudson.model.ParametersDefinitionProperty' / 'parameterDefinitions' << 'jp.ikedam.jenkins.plugins.extensible__choice__parameter.ExtensibleChoiceParameterDefinition' {
                         name 'AMI_ID'
                         editable 'false'
-    					choiceListProvider(class: "jp.ikedam.jenkins.plugins.extensible_choice_parameter.SystemGroovyChoiceListProvider") {
-        				    groovyScript {
-            				    script """def process = new ProcessBuilder(["ndt", "get-images", "$promotableJob"])
+                        choiceListProvider(class: "jp.ikedam.jenkins.plugins.extensible_choice_parameter.SystemGroovyChoiceListProvider") {
+                            groovyScript {
+                                script """def process = new ProcessBuilder(["ndt", "get-images", "$promotableJob"])
 .redirectErrorStream(true)
 .start()
 def ret = []
@@ -418,11 +418,11 @@ process.inputStream.eachLine {
 process.waitFor();
 return ret
 """
-            				    sandbox "false"
-        				    }
-        				    usePredefinedVariables "false"
-    					}
-					}
+                                sandbox "false"
+                            }
+                            usePredefinedVariables "false"
+                        }
+                    }
                 }
             }
         } else {
