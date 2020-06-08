@@ -441,6 +441,8 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
             ret["ORIG_STACK_NAME"] = os.environ["ORIG_STACK_NAME"]
             if "STACK_NAME" not in ret:
                 ret["STACK_NAME"] = component + "-" + ret["ORIG_STACK_NAME"] + "-" + ret["paramEnvId"]
+        if docker and "NEEDS_DOCKER" not in ret:
+            ret["NEEDS_DOCKER"] = "y"
         for k, v in list(os.environ.items()):
             if k.startswith("ORIG_") and k.endswith("_NAME"):
                 ret[k] = v

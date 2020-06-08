@@ -1,6 +1,7 @@
 import inspect
 import re
 import sys
+import json
 from builtins import object
 from operator import attrgetter
 from os import sep, path, mkdir
@@ -251,3 +252,114 @@ def _write_prop_files(param_files):
 
 def list_components(branch=None, json=None):
     return [c.name for c in Project(branch=branch).get_components()]
+
+DEFAULT_COMMAND_TEMPLATE = \
+"""version: 0.2
+
+phases:
+    build:
+        commands:
+            - echo $CODEBUILD_SOURCE_VERSION
+            - ndt {command} {component} {subcomponent}
+"""
+template = """{
+    "name": "",
+    "source": {
+        "type": {clone_type},
+        "location": {clone_url},
+        "gitCloneDepth": 1,
+        "gitSubmodulesConfig": {
+            "fetchSubmodules": false
+        },
+        "buildspec": "",
+        "reportBuildStatus": false,
+        "insecureSsl": false
+    },
+    "artifacts": {
+        "type": "NO_ARTIFACTS"
+    },
+    "cache": {
+        "type": "NO_CACHE"
+    },
+    "environment": {
+        "type": "LINUX_CONTAINER",
+        "image": "nitor/ndt:1.138",
+        "computeType": "BUILD_GENERAL1_SMALL",
+        "environmentVariables": [],
+        "privilegedMode": true,
+        "imagePullCredentialsType": "SERVICE_ROLE"
+    },
+    "serviceRole": "{service_role}",
+    "timeoutInMinutes": 60,
+    "queuedTimeoutInMinutes": 480,
+    "logsConfig": {
+        "cloudWatchLogs": {
+            "status": "ENABLED"
+        },
+        "s3Logs": {
+            "status": "DISABLED",
+            "encryptionDisabled": false
+        }
+    }
+}"""
+webhook_template = """{
+        "filterGroups": [
+            [
+                {
+                    "type": "EVENT",
+                    "pattern": "PULL_REQUEST_MERGED",
+                    "excludeMatchedPattern": false
+                },
+                {
+                    "type": "FILE_PATH",
+                    "pattern": "",
+                    "excludeMatchedPattern": false
+                },
+                {
+                    "type": "BASE_REF",
+                    "pattern": "",
+                    "excludeMatchedPattern": false
+                }
+            ]
+        ]
+}"""
+
+def upsert_codebuild_jobs():
+    template_args = json.loads(template)
+    webhook_args = json.loads(webhook_template)
+    branch = branch = Git().get_current_branch()
+    print(f"Listing jobs in {branch}")
+    jobs = list_jobs(export_job_properties=True, branch=branch, json=True)
+    account_id = resolve_account()
+    template_args["serviceRole"] = f"arn:aws:iam::{account_id}:role/service-role/codebuild-deploy-role"
+    template_args["environment"]["environmentVariables"].append({
+        "name": "GIT_BRANCH",
+        "value": branch,
+        "type": "PLAINTEXT"
+    })
+    template_args["sourceVersion"] = branch
+    for component in jobs["branches"][0]["components"]:
+        component_name = component["name"]
+        for subcomponent in component["subcomponents"]:
+            subcomponent_type = subcomponent["type"]
+            subcomponent_name = subcomponent["name"]
+            subcomponent_dir = component_name + "/" + subcomponent_type + "-" + subcomponent["properties"]["ORIG_" + subcomponent_type.upper() + "_NAME"]
+            subcomponent_command = subcomponent_type + " " + component_name + " " + subcomponent_name + "\n"
+            template_args["name"] = "deploy-" + component_name + "-" + subcomponent_name
+            template_args["source"]["buildspec"] = command_prefix + subcomponent_command
+            for flter in webhook_args["filterGroups"][0]:
+                if flter["type"] == "FILE_PATH":
+                    flter["pattern"] = subcomponent_dir + "/.*"
+                if flter["type"] == "BASE_REF":
+                    flter["pattern"] = f"^refs/heads/{branch}$"
+            webhook_args["projectName"] = template_args['name']
+            print(f"Updating {template_args['name']}")
+            print(json.dumps(template_args["environment"]["environmentVariables"]))
+            try:
+                codebuild().update_project(**template_args)
+                codebuild().update_webhook(**webhook_args)
+            except:
+                print(f"Project not found, creating {template_args['name']}")
+                codebuild().create_project(**template_args)
+                print(f"Creating webhook for {template_args['name']}")
+                codebuild().create_webhook(**webhook_args)

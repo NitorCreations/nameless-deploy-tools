@@ -40,11 +40,16 @@ file. Defaults to `${COMPONENT}-${ORIG_STACK_NAME}-${paramEnvId}`
 Works the same way as `STACK_NAME` for docker repository urls. Defaults to
 `[component]/$paramEnvId-$ORIG_DOCKER_NAME`
 
-### `JENKINS_JOB_PREFIX`
+### `JENKINS_JOB_PREFIX` (deprecated - use BUILD_JOB_PREFIX)
 
-The roots of ndt are in baking and deploying stacks via jenkins jobs, but this
-parameter has effects besides jenkins jobs. It is part of the default tag that
-baked AMI images are found with, which defaults to `${JENKINS_JOB_PREFIX}_[component]_bake`.
+Old parameter for prerfing build job names
+
+### `BUILD_JOB_PREFIX`
+
+The roots of ndt are in baking and deploying stacks via build tool jobs (e.g. 
+jenkins or codebuild), but this parameter has effects besides build jobs. It
+is part of the default tag that baked AMI images are found with, which defaults
+to `${BUILD_JOB_PREFIX}_[component]_bake`.
 If you are using `generate-jobs.groovy` and [Jenkins DSL plugin](https://github.com/jenkinsci/job-dsl-plugin/wiki)
 to create jobs for baking and deployments, this parameter is a part of the job
 names as above, but also each unique job prefix is given a view with mathching
