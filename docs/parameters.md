@@ -5,6 +5,8 @@ propagate changes through them. The parameters are the settings in `infra*.prope
 files that will be read before a template is pre-processed. The order of the files
 processed is as follows:
 
+* `branch.properties`
+* `[branch].properties`
 * `infra.properties`
 * `infra-[branch].properties`
 * `[component]/infra.properties`

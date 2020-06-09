@@ -376,7 +376,7 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
         prefix = ""
         if current_branch != branch:
             prefix = git.export_branch(branch) + os.sep
-        files = [prefix + "infra.properties", prefix + "infra-" + branch + ".properties"]
+        files = [prefix + "branch.properties", prefix + branch + ".properties", prefix + "infra.properties", prefix + "infra-" + branch + ".properties"]
         if component:
             files.append(prefix + component + os.sep + "infra.properties")
             files.append(prefix + component + os.sep + "infra-" + branch + ".properties")
