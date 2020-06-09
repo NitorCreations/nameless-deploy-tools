@@ -831,8 +831,23 @@ def cli_list_components():
         print("\n".join(ret))
 
 def cli_upsert_codebuild_projects():
-    """ Creates or updetes codebuild projects to deploy or bake ndt subcomponents """
-    parser = get_parser()
+    """ Creates or updates codebuild projects to deploy or bake ndt subcomponents.
+
+    The only mandatory parameter is CODEBUILD_SERVICE_ROLE, which defines the role that the codebuild project assumes for building
+    Other parameters that affect jobs are:
+    * BUILD_JOB_NAME - name for the codebuild project
+    * BUILD_SPEC - file or yaml snippet to use as the build definition.
+        - See https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
+        - subcomponent variables and special variables ${command}, ${component} and ${subcomponent} are available and will be substituted accordingly
+    * CODEBUILD_SOURCE_TYPE - one of BITBUCKET, CODECOMMIT, CODEPIPELINE, GITHUB, GITHUB_ENTERPRISE, NO_SOURCE, S3
+    * CODEBUILD_SOURCE_LOCATION - the location of the source code
+        - if either of the above is missing, then the source part of the build will be omitted
+    * CODEBUILD_EVENT_FILTER - the type of event to trigger the build.
+        - By default PULL_REQUEST_MERGED
+        - Other possible values: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED and PULL_REQUEST_REOPENED
+    * NEEDS_DOCKER - if 'y' (by default on for docker bakes and missing otheriwise), docker server is started inside the container for bakes and serverless python dockerized dependencies
+    """
+    parser = get_parser(formatter=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("-d", "--dry-run", action="store_true",
                         help="Do not actually create or update projects, just print configuration")
     argcomplete.autocomplete(parser)

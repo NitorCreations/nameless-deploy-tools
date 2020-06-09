@@ -405,6 +405,8 @@ def upsert_codebuild_projects(dry_run=False):
                     flter["pattern"] = subcomponent_dir + "/.*"
                 if flter["type"] == "BASE_REF":
                     flter["pattern"] = f"^refs/heads/{branch}$"
+                if flter["type"] == "EVENT" and "CODEBUILD_EVENT_FILTER" in subcomponent["properties"]:
+                    flter["pattern"] = subcomponent["properties"]["CODEBUILD_EVENT_FILTER"]
             webhook_args["projectName"] = component_args['name']
             print(f"Updating {component_args['name']}")
             if dry_run:
