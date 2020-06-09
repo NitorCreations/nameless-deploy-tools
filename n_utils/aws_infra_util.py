@@ -822,13 +822,18 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
     return data
 
 
-def import_scripts(data, basefile):
+def import_scripts(data, basefile, extra_parameters={}):
     global gotImportErrors
     gotImportErrors = False
-
-    data = expand_vars(data, _get_params(data, basefile), None, [])
-    data = _preprocess_template(data, data, basefile, "", _get_params(data, basefile))
-    data = _check_refs(data, basefile, "", _get_params(data, basefile), False)
+    params = _get_params(data, basefile)
+    params.update(extra_parameters)
+    data = expand_vars(data, params, None, [])
+    params = _get_params(data, basefile)
+    params.update(extra_parameters)
+    data = _preprocess_template(data, data, basefile, "", params)
+    params = _get_params(data, basefile)
+    params.update(extra_parameters)
+    data = _check_refs(data, basefile, "", params, False)
     if gotImportErrors:
         sys.exit(1)
     return data
@@ -912,7 +917,7 @@ def extract_scripts(data, prefix, path=""):
 # simple apis
 
 
-def yaml_to_dict(yaml_file_to_convert, merge=[]):
+def yaml_to_dict(yaml_file_to_convert, merge=[], extra_parameters={}):
     data = OrderedDict()
     with open(yaml_file_to_convert) as yaml_file:
         data = yaml_load(yaml_file)
@@ -924,7 +929,7 @@ def yaml_to_dict(yaml_file_to_convert, merge=[]):
         merge_data = OrderedDict()
         merge_data['Fn::Merge'] = merge
         data = merge_data
-    data = import_scripts(data, yaml_file_to_convert)
+    data = import_scripts(data, yaml_file_to_convert, extra_parameters=extra_parameters)
     _patch_launchconf(data)
     return data
 

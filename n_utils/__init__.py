@@ -90,7 +90,8 @@ NDT_ONLY = [
     'upsert-cloudfront-records=n_utils.cli:cli_upsert_cloudfront_records',
     'volume-from-snapshot=ec2_utils.cli:volume_from_snapshot',
     'yaml-to-json=n_utils.cli:yaml_to_json',
-    'yaml-to-yaml=n_utils.cli:yaml_to_yaml'
+    'yaml-to-yaml=n_utils.cli:yaml_to_yaml',
+    'upsert-codebuild-projects=n_utils.cli:cli_upsert_codebuild_projects'
 ]
 NDT_ONLY_SCRIPT = [
     'bake-docker.sh',

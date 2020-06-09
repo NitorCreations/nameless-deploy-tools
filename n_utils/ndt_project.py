@@ -1,11 +1,14 @@
 import inspect
+import os
 import re
 import sys
 import json
 from builtins import object
 from operator import attrgetter
 from os import sep, path, mkdir
-
+from threadlocal_aws.clients import codebuild
+from n_utils.aws_infra_util import yaml_to_dict, import_scripts, yaml_save
+from cloudformation_utils.tools import cloudformation_yaml_loads as yaml_loads
 try:
     from os import scandir
 except ImportError:
@@ -253,20 +256,20 @@ def _write_prop_files(param_files):
 def list_components(branch=None, json=None):
     return [c.name for c in Project(branch=branch).get_components()]
 
-DEFAULT_COMMAND_TEMPLATE = \
+DEFAULT_BUILD_SPEC = \
 """version: 0.2
 
 phases:
     build:
         commands:
             - echo $CODEBUILD_SOURCE_VERSION
-            - ndt {command} {component} {subcomponent}
+            - ndt ${command} ${component} ${subcomponent}
 """
 template = """{
     "name": "",
     "source": {
-        "type": {clone_type},
-        "location": {clone_url},
+        "type": "{clone_type}",
+        "location": "{clone_url}",
         "gitCloneDepth": 1,
         "gitSubmodulesConfig": {
             "fetchSubmodules": false
@@ -324,14 +327,12 @@ webhook_template = """{
         ]
 }"""
 
-def upsert_codebuild_jobs():
+def upsert_codebuild_projects(dry_run=False):
     template_args = json.loads(template)
     webhook_args = json.loads(webhook_template)
     branch = branch = Git().get_current_branch()
     print(f"Listing jobs in {branch}")
     jobs = list_jobs(export_job_properties=True, branch=branch, json=True)
-    account_id = resolve_account()
-    template_args["serviceRole"] = f"arn:aws:iam::{account_id}:role/service-role/codebuild-deploy-role"
     template_args["environment"]["environmentVariables"].append({
         "name": "GIT_BRANCH",
         "value": branch,
@@ -341,25 +342,80 @@ def upsert_codebuild_jobs():
     for component in jobs["branches"][0]["components"]:
         component_name = component["name"]
         for subcomponent in component["subcomponents"]:
+            component_args = template_args.copy()
             subcomponent_type = subcomponent["type"]
+            command = "deploy-" + subcomponent_type
+            if subcomponent_type in [ "docker", "image" ]:
+                command = "bake-" + subcomponent_type
             subcomponent_name = subcomponent["name"]
-            subcomponent_dir = component_name + "/" + subcomponent_type + "-" + subcomponent["properties"]["ORIG_" + subcomponent_type.upper() + "_NAME"]
-            subcomponent_command = subcomponent_type + " " + component_name + " " + subcomponent_name + "\n"
-            template_args["name"] = "deploy-" + component_name + "-" + subcomponent_name
-            template_args["source"]["buildspec"] = command_prefix + subcomponent_command
+            orig_name_param = "ORIG_" + subcomponent_type.upper() + "_NAME"
+            if orig_name_param in subcomponent["properties"]:
+                subcomponent_dir = component_name + "/" + subcomponent_type + "-" + subcomponent["properties"][orig_name_param]
+            else:
+                subcomponent_dir = component_name + "/" + subcomponent_type
+            if "BUILD_JOB_NAME" in subcomponent["properties"]:
+                component_args["name"] = subcomponent["properties"]["BUILD_JOB_NAME"]
+            else:
+                component_args["name"] = f"{subcomponent['properties']['BUILD_JOB_PREFIX']}-{component_name}-{command.split('-')[0]}-{subcomponent_name}"
+            if "CODEBUILD_SERVICE_ROLE" in subcomponent["properties"]:
+                component_args["serviceRole"] = subcomponent["properties"]["CODEBUILD_SERVICE_ROLE"]
+            else:
+                print(f"CODEBUILD_SERVICE_ROLE needs to be defined, skipping {component_name}/{subcomponent_name}")
+                continue
+            if "CODEBUILD_SOURCE_TYPE" in  subcomponent["properties"]:
+                component_args["source"]["type"] = subcomponent["properties"]["CODEBUILD_SOURCE_TYPE"]
+                if "CODEBUILD_SOURCE_LOCATION" in subcomponent["properties"]:
+                    component_args["source"]["location"] = subcomponent["properties"]["CODEBUILD_SOURCE_LOCATION"]
+                else:
+                    del component_args["source"]
+            else:
+                del component_args["source"]
+            extra_params = {"component": component_name, "command": command, "subcomponent": subcomponent_name}
+            if "source" in component_args:
+                if "BUILD_SPEC" in  subcomponent["properties"]:
+                    build_spec = subcomponent["properties"]["BUILD_SPEC"]
+                else:
+                    build_spec = DEFAULT_BUILD_SPEC
+                try:
+                    interpolated_build_spec = yaml_to_dict(build_spec, extra_parameters=extra_params)
+                except:
+                    interpolated_build_spec = yaml_loads(build_spec)
+                    interpolated_build_spec = import_scripts(interpolated_build_spec, subcomponent_dir + os.sep + "infra.properties", extra_parameters=extra_params)
+                component_args["source"]["buildspec"] = yaml_save(interpolated_build_spec)
+            # Make sure that builds that need docker, start docker
+            if "NEEDS_DOCKER" in subcomponent["properties"] and subcomponent["properties"]["NEEDS_DOCKER"] == "y" and "phases" in interpolated_build_spec:
+                start_docker_found = False
+                for phase in interpolated_build_spec["phases"]:
+                    if start_docker_found:
+                        break
+                    if "commands" in phase:
+                        for command in phase["commands"]:
+                            if command.strip() == "start-docker.sh":
+                                start_docker_found = True
+                                break
+                if not start_docker_found:
+                    phase = interpolated_build_spec["phases"]["build"]
+                    if "pre_build" in interpolated_build_spec["phases"]:
+                        phase = interpolated_build_spec["phases"]["pre_build"]
+                    if "commands" not in phase:
+                        phase["commands"] = []
+                    phase["commands"].insert(0, "start-docker.sh")
             for flter in webhook_args["filterGroups"][0]:
                 if flter["type"] == "FILE_PATH":
                     flter["pattern"] = subcomponent_dir + "/.*"
                 if flter["type"] == "BASE_REF":
                     flter["pattern"] = f"^refs/heads/{branch}$"
-            webhook_args["projectName"] = template_args['name']
-            print(f"Updating {template_args['name']}")
-            print(json.dumps(template_args["environment"]["environmentVariables"]))
-            try:
-                codebuild().update_project(**template_args)
-                codebuild().update_webhook(**webhook_args)
-            except:
-                print(f"Project not found, creating {template_args['name']}")
-                codebuild().create_project(**template_args)
-                print(f"Creating webhook for {template_args['name']}")
-                codebuild().create_webhook(**webhook_args)
+            webhook_args["projectName"] = component_args['name']
+            print(f"Updating {component_args['name']}")
+            if dry_run:
+                print(json.dumps(component_args, indent=2))
+                print(json.dumps(webhook_args, indent=2))
+            else:
+                try:
+                    codebuild().update_project(**component_args)
+                    codebuild().update_webhook(**webhook_args)
+                except:
+                    print(f"Project not found, creating {component_args['name']}")
+                    codebuild().create_project(**component_args)
+                    print(f"Creating webhook for {component_args['name']}")
+                    codebuild().create_webhook(**webhook_args)

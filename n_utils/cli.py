@@ -52,7 +52,7 @@ from n_utils.mfa_utils import mfa_add_token, mfa_delete_token, mfa_generate_code
     mfa_to_qrcode, mfa_read_token
 from n_utils.ndt import find_include, find_all_includes, include_dirs
 from n_utils.ndt_project import Project
-from n_utils.ndt_project import list_jobs, list_components
+from n_utils.ndt_project import list_jobs, list_components, upsert_codebuild_projects
 from n_utils.profile_util import update_profile
 from n_utils.tf_utils import pull_state, jmespath_var, flat_state
 from n_utils.utils import session_token, get_images, promote_image, \
@@ -829,3 +829,12 @@ def cli_list_components():
         print(json.dumps(ret, indent=2))
     else:
         print("\n".join(ret))
+
+def cli_upsert_codebuild_projects():
+    """ Creates or updetes codebuild projects to deploy or bake ndt subcomponents """
+    parser = get_parser()
+    parser.add_argument("-d", "--dry-run", action="store_true",
+                        help="Do not actually create or update projects, just print configuration")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    upsert_codebuild_projects(dry_run=args.dry_run)
