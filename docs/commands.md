@@ -1140,6 +1140,19 @@ optional arguments:
   -w, --wait            Wait for request to sync
 ```
 
+## `ndt upsert-codebuild-projects`
+
+```bash
+usage: ndt upsert-codebuild-projects [-h] [-d]
+
+Creates or updetes codebuild projects to deploy or bake ndt subcomponents
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -d, --dry-run  Do not actually create or update projects, just print
+                 configuration
+```
+
 ## `ndt volume-from-snapshot`
 
 ```bash
