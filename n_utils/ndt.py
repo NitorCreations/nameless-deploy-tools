@@ -7,7 +7,7 @@ from subprocess import PIPE, Popen
 
 from argcomplete import USING_PYTHON2, ensure_str, split_line
 
-from n_utils import COMMAND_MAPPINGS
+from n_utils import COMMAND_MAPPINGS, VERSION
 
 SYS_ENCODING = locale.getpreferredencoding()
 include_dirs = []
@@ -101,9 +101,13 @@ def ndt():
     if "_ARGCOMPLETE" in os.environ:
         do_command_completion()
     else:
+        if len(sys.argv) >= 2 and sys.argv[1] == "--version":
+            sys.stdout.writelines([f"{VERSION}\n"])
+            sys.exit(0)
         if len(sys.argv) < 2 or sys.argv[1] not in COMMAND_MAPPINGS:
             sys.stderr.writelines([u'usage: ndt <command> [args...]\n'])
             sys.stderr.writelines([u'\tcommand shoud be one of:\n'])
+            sys.stderr.writelines([u'\t\t--version\n'])
             for command in sorted(COMMAND_MAPPINGS):
                 sys.stderr.writelines([u'\t\t' + command + '\n'])
             sys.exit(1)
