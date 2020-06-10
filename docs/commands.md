@@ -1169,6 +1169,8 @@ usage: ndt upsert-codebuild-projects [-h] [-d]
         - Other possible values: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED and PULL_REQUEST_REOPENED
     * NEEDS_DOCKER - if \'y\' (by default on for docker bakes and missing otheriwise), docker server is started inside the container
         - Needed for bakes and for example serverless python dockerized dependencies
+    * SKIP_BUILD_JOB - skip creating build jobs where this parameter is \'y\'
+    * SKIP_IMAGE_JOB, SKIP_DOCKER_JOB, SKIP_SERVERLESS_JOB, SKIP_CDK_JOB, SKIP_TERRAFORM_JOB - skip creating jobs where these parameters are \'y\' and match the subcomponent type
     
 
 optional arguments:
