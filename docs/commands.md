@@ -623,6 +623,8 @@ usage: ndt load-parameters [-h] [--branch BRANCH] [--resolve-images]
                            [component]
 
  Load parameters from infra*.properties files in the order:
+    branch.properties
+    [branch].properties
     infra.properties,
     infra-[branch].properties,
     [component]/infra.properties,
@@ -1145,11 +1147,17 @@ optional arguments:
 ```bash
 usage: ndt upsert-codebuild-projects [-h] [-d]
 
- Creates or updates codebuild projects to deploy or bake ndt subcomponents.
+ Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
 
-    The only mandatory parameter is CODEBUILD_SERVICE_ROLE, which defines the role that the codebuild project assumes for building
+    Parameters are read from properties files as described in \'ndt load-parameters -h\'. To check all job paramters you
+    can run \'ndt list-jobs -e -j -b [current-branch]\'
+    The only mandatory parameter is CODEBUILD_SERVICE_ROLE, which defines the role that the codebuild project assumes
+    for building.
     Other parameters that affect jobs are:
     * BUILD_JOB_NAME - name for the codebuild project
+    * NDT_VERSION - version to use to run bakes and deployments.
+        - Defaults to current version.
+        - You may also want to uses \'latest\' to always run the latest released ndt version (only recommended for dev/testing workloads).
     * BUILD_SPEC - file or yaml snippet to use as the build definition.
         - See https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
         - subcomponent variables and special variables ${command}, ${component} and ${subcomponent} are available and will be substituted accordingly
@@ -1159,7 +1167,8 @@ usage: ndt upsert-codebuild-projects [-h] [-d]
     * CODEBUILD_EVENT_FILTER - the type of event to trigger the build.
         - By default PULL_REQUEST_MERGED
         - Other possible values: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED and PULL_REQUEST_REOPENED
-    * NEEDS_DOCKER - if \'y\' (by default on for docker bakes and missing otheriwise), docker server is started inside the container for bakes and serverless python dockerized dependencies
+    * NEEDS_DOCKER - if \'y\' (by default on for docker bakes and missing otheriwise), docker server is started inside the container
+        - Needed for bakes and for example serverless python dockerized dependencies
     
 
 optional arguments:
