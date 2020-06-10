@@ -344,7 +344,6 @@ phases:
     for component in jobs["branches"][0]["components"]:
         component_name = component["name"]
         for subcomponent in component["subcomponents"]:
-
             # Init component details
             component_args = template_args.copy()
             subcomponent_type = subcomponent["type"]
@@ -356,6 +355,17 @@ phases:
             else:
                 subcomponent_name = subcomponent_type
 
+            # Check parameters used to skip creating build jobs
+            if "SKIP_BUILD_JOB" in subcomponent["properties"] and subcomponent["properties"]["SKIP_BUILD_JOB"] == "y":
+                print(f"SKIP_BUILD_JOB defined, skipping {component_name}/{subcomponent_name}")
+                continue
+
+            skip_type_parameter = f"SKIP_{subcomponent_type.upper()}_JOB"
+            if  skip_type_parameter in subcomponent["properties"] and subcomponent["properties"][skip_type_parameter] == "y":
+                print(f"{skip_type_parameter} defined, skipping {component_name}/{subcomponent_name}")
+                continue
+
+            # Check service role
             if "CODEBUILD_SERVICE_ROLE" in subcomponent["properties"]:
                 component_args["serviceRole"] = subcomponent["properties"]["CODEBUILD_SERVICE_ROLE"]
             else:
@@ -363,7 +373,7 @@ phases:
                 continue
 
             # Resolve subcomponent directory
-            orig_name_param = "ORIG_" + subcomponent_type.upper() + "_NAME"
+            orig_name_param = f"ORIG_{subcomponent_type.upper()}_NAME"
             if orig_name_param in subcomponent["properties"]:
                 subcomponent_dir = component_name + "/" + subcomponent_type + "-" + subcomponent["properties"][orig_name_param]
             else:
