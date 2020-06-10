@@ -8,6 +8,7 @@ from operator import attrgetter
 from os import sep, path, mkdir
 from threadlocal_aws.clients import codebuild
 from n_utils.aws_infra_util import yaml_to_dict, import_scripts, yaml_save
+from n_utils import VERSION
 from cloudformation_utils.tools import cloudformation_yaml_loads as yaml_loads
 try:
     from os import scandir
@@ -256,8 +257,10 @@ def _write_prop_files(param_files):
 def list_components(branch=None, json=None):
     return [c.name for c in Project(branch=branch).get_components()]
 
-DEFAULT_BUILD_SPEC = \
-"""version: 0.2
+
+def upsert_codebuild_projects(dry_run=False):
+    DEFAULT_BUILD_SPEC = \
+    """version: 0.2
 
 phases:
     build:
@@ -265,7 +268,7 @@ phases:
             - echo $CODEBUILD_SOURCE_VERSION
             - ndt ${command} ${component} ${subcomponent}
 """
-template = """{
+    template = """{
     "name": "",
     "source": {
         "type": "{clone_type}",
@@ -286,7 +289,7 @@ template = """{
     },
     "environment": {
         "type": "LINUX_CONTAINER",
-        "image": "nitor/ndt:1.138",
+        "image": "nitor/ndt:latest",
         "computeType": "BUILD_GENERAL1_SMALL",
         "environmentVariables": [],
         "privilegedMode": true,
@@ -305,7 +308,7 @@ template = """{
         }
     }
 }"""
-webhook_template = """{
+    webhook_template = """{
         "filterGroups": [
             [
                 {
@@ -327,7 +330,6 @@ webhook_template = """{
         ]
 }"""
 
-def upsert_codebuild_projects(dry_run=False):
     template_args = json.loads(template)
     webhook_args = json.loads(webhook_template)
     branch = branch = Git().get_current_branch()
@@ -342,46 +344,66 @@ def upsert_codebuild_projects(dry_run=False):
     for component in jobs["branches"][0]["components"]:
         component_name = component["name"]
         for subcomponent in component["subcomponents"]:
+
+            # Init component details
             component_args = template_args.copy()
             subcomponent_type = subcomponent["type"]
             command = "deploy-" + subcomponent_type
             if subcomponent_type in [ "docker", "image" ]:
                 command = "bake-" + subcomponent_type
-            subcomponent_name = subcomponent["name"]
-            orig_name_param = "ORIG_" + subcomponent_type.upper() + "_NAME"
-            if orig_name_param in subcomponent["properties"]:
-                subcomponent_dir = component_name + "/" + subcomponent_type + "-" + subcomponent["properties"][orig_name_param]
+            if "name" in subcomponent:
+                subcomponent_name = subcomponent["name"]
             else:
-                subcomponent_dir = component_name + "/" + subcomponent_type
-            if "BUILD_JOB_NAME" in subcomponent["properties"]:
-                component_args["name"] = subcomponent["properties"]["BUILD_JOB_NAME"]
-            else:
-                component_args["name"] = f"{subcomponent['properties']['BUILD_JOB_PREFIX']}-{component_name}-{command.split('-')[0]}-{subcomponent_name}"
+                subcomponent_name = subcomponent_type
+
             if "CODEBUILD_SERVICE_ROLE" in subcomponent["properties"]:
                 component_args["serviceRole"] = subcomponent["properties"]["CODEBUILD_SERVICE_ROLE"]
             else:
                 print(f"CODEBUILD_SERVICE_ROLE needs to be defined, skipping {component_name}/{subcomponent_name}")
                 continue
-            if "CODEBUILD_SOURCE_TYPE" in  subcomponent["properties"]:
+
+            # Resolve subcomponent directory
+            orig_name_param = "ORIG_" + subcomponent_type.upper() + "_NAME"
+            if orig_name_param in subcomponent["properties"]:
+                subcomponent_dir = component_name + "/" + subcomponent_type + "-" + subcomponent["properties"][orig_name_param]
+            else:
+                subcomponent_dir = component_name + "/" + subcomponent_type
+
+            #Resolve build job name
+            if "BUILD_JOB_NAME" in subcomponent["properties"]:
+                component_args["name"] = subcomponent["properties"]["BUILD_JOB_NAME"]
+            else:
+                component_args["name"] = f"{subcomponent['properties']['BUILD_JOB_PREFIX']}-{component_name}-{command.split('-')[0]}-{subcomponent_name}"
+
+            # Setup ndt version
+            ndt_version = VERSION
+            if "NDT_VERSION" in subcomponent["properties"]:
+                ndt_version = subcomponent["properties"]["NDT_VERSION"]
+            component_args["environment"]["image"] = f"nitor/ndt:{ndt_version}"
+
+            # Setup source
+            if "CODEBUILD_SOURCE_TYPE" in subcomponent["properties"]:
                 component_args["source"]["type"] = subcomponent["properties"]["CODEBUILD_SOURCE_TYPE"]
                 if "CODEBUILD_SOURCE_LOCATION" in subcomponent["properties"]:
                     component_args["source"]["location"] = subcomponent["properties"]["CODEBUILD_SOURCE_LOCATION"]
+                    extra_params = {"component": component_name, "command": command, "subcomponent": subcomponent_name}
+                    if "name" not in subcomponent:
+                        extra_params["subcomponent"] = ""
+                    if "BUILD_SPEC" in  subcomponent["properties"]:
+                        build_spec = subcomponent["properties"]["BUILD_SPEC"]
+                    else:
+                        build_spec = DEFAULT_BUILD_SPEC
+                    try:
+                        interpolated_build_spec = yaml_to_dict(build_spec, extra_parameters=extra_params)
+                    except:
+                        interpolated_build_spec = yaml_loads(build_spec)
+                        interpolated_build_spec = import_scripts(interpolated_build_spec, subcomponent_dir + os.sep + "infra.properties", extra_parameters=extra_params)
+                    component_args["source"]["buildspec"] = yaml_save(interpolated_build_spec)
                 else:
                     del component_args["source"]
             else:
                 del component_args["source"]
-            extra_params = {"component": component_name, "command": command, "subcomponent": subcomponent_name}
-            if "source" in component_args:
-                if "BUILD_SPEC" in  subcomponent["properties"]:
-                    build_spec = subcomponent["properties"]["BUILD_SPEC"]
-                else:
-                    build_spec = DEFAULT_BUILD_SPEC
-                try:
-                    interpolated_build_spec = yaml_to_dict(build_spec, extra_parameters=extra_params)
-                except:
-                    interpolated_build_spec = yaml_loads(build_spec)
-                    interpolated_build_spec = import_scripts(interpolated_build_spec, subcomponent_dir + os.sep + "infra.properties", extra_parameters=extra_params)
-                component_args["source"]["buildspec"] = yaml_save(interpolated_build_spec)
+
             # Make sure that builds that need docker, start docker
             if "NEEDS_DOCKER" in subcomponent["properties"] and subcomponent["properties"]["NEEDS_DOCKER"] == "y" and "phases" in interpolated_build_spec:
                 start_docker_found = False
@@ -400,6 +422,8 @@ def upsert_codebuild_projects(dry_run=False):
                     if "commands" not in phase:
                         phase["commands"] = []
                     phase["commands"].insert(0, "start-docker.sh")
+
+            # Set up webhook filter
             for flter in webhook_args["filterGroups"][0]:
                 if flter["type"] == "FILE_PATH":
                     flter["pattern"] = subcomponent_dir + "/.*"
@@ -408,6 +432,8 @@ def upsert_codebuild_projects(dry_run=False):
                 if flter["type"] == "EVENT" and "CODEBUILD_EVENT_FILTER" in subcomponent["properties"]:
                     flter["pattern"] = subcomponent["properties"]["CODEBUILD_EVENT_FILTER"]
             webhook_args["projectName"] = component_args['name']
+
+            # Run update
             print(f"Updating {component_args['name']}")
             if dry_run:
                 print(json.dumps(component_args, indent=2))

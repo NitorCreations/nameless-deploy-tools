@@ -35,7 +35,8 @@ fi
 sed -i "s/$VERSION/$NEW_VERSION/g" setup.py
 sed -i "s/## Released version.*/## Released version $NEW_VERSION/g" README.md
 sed -i "s/nameless-deploy-tools==.*/nameless-deploy-tools==$NEW_VERSION/g" docker/Dockerfile
-git commit -m "$1" setup.py README.md docker/Dockerfile docs/commands.md
+sed -i "s/^VERSION=.*/VERSION=\"$NEW_VERSION\"/" n_utils/__init__.py
+git commit -m "$1" setup.py README.md docker/Dockerfile docs/commands.md n_utils/__init__.py
 git tag "$NEW_VERSION" -m "$1"
 git push --tags origin master
 

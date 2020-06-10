@@ -16,6 +16,8 @@
 """
 import base64
 
+VERSION="1.140"
+
 PATH_COMMANDS = [
     'bin/create-shell-archive.sh',
     'bin/ensure-letsencrypt-certs.sh',
