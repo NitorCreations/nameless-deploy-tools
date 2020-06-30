@@ -333,7 +333,7 @@ phases:
     template_args = json.loads(template)
     webhook_args = json.loads(webhook_template)
     branch = branch = Git().get_current_branch()
-    print(f"Listing jobs in {branch}")
+    print("Listing jobs in " + branch)
     jobs = list_jobs(export_job_properties=True, branch=branch, json=True)
     template_args["environment"]["environmentVariables"].append({
         "name": "GIT_BRANCH",
@@ -357,23 +357,23 @@ phases:
 
             # Check parameters used to skip creating build jobs
             if "SKIP_BUILD_JOB" in subcomponent["properties"] and subcomponent["properties"]["SKIP_BUILD_JOB"] == "y":
-                print(f"SKIP_BUILD_JOB defined, skipping {component_name}/{subcomponent_name}")
+                print("SKIP_BUILD_JOB defined, skipping " + component_name + "/" + subcomponent_name)
                 continue
 
-            skip_type_parameter = f"SKIP_{subcomponent_type.upper()}_JOB"
+            skip_type_parameter = "SKIP_" + subcomponent_type.upper() + "_JOB"
             if  skip_type_parameter in subcomponent["properties"] and subcomponent["properties"][skip_type_parameter] == "y":
-                print(f"{skip_type_parameter} defined, skipping {component_name}/{subcomponent_name}")
+                print(skip_type_parameter + " defined, skipping " + component_name + "/" + subcomponent_name)
                 continue
 
             # Check service role
             if "CODEBUILD_SERVICE_ROLE" in subcomponent["properties"]:
                 component_args["serviceRole"] = subcomponent["properties"]["CODEBUILD_SERVICE_ROLE"]
             else:
-                print(f"CODEBUILD_SERVICE_ROLE needs to be defined, skipping {component_name}/{subcomponent_name}")
+                print("CODEBUILD_SERVICE_ROLE needs to be defined, skipping " + component_name + "/" + subcomponent_name)
                 continue
 
             # Resolve subcomponent directory
-            orig_name_param = f"ORIG_{subcomponent_type.upper()}_NAME"
+            orig_name_param = "ORIG_" + subcomponent_type.upper() + "_NAME"
             if orig_name_param in subcomponent["properties"]:
                 subcomponent_dir = component_name + "/" + subcomponent_type + "-" + subcomponent["properties"][orig_name_param]
             else:
@@ -383,13 +383,14 @@ phases:
             if "BUILD_JOB_NAME" in subcomponent["properties"]:
                 component_args["name"] = subcomponent["properties"]["BUILD_JOB_NAME"]
             else:
-                component_args["name"] = f"{subcomponent['properties']['BUILD_JOB_PREFIX']}-{component_name}-{command.split('-')[0]}-{subcomponent_name}"
+                component_args["name"] = subcomponent['properties']['BUILD_JOB_PREFIX'] + "-" + \
+                    component_name + "-" + command.split('-')[0] + "-" + subcomponent_name
 
             # Setup ndt version
             ndt_version = VERSION
             if "NDT_VERSION" in subcomponent["properties"]:
                 ndt_version = subcomponent["properties"]["NDT_VERSION"]
-            component_args["environment"]["image"] = f"nitor/ndt:{ndt_version}"
+            component_args["environment"]["image"] = "nitor/ndt:"  + ndt_version
 
             # Setup source
             if "CODEBUILD_SOURCE_TYPE" in subcomponent["properties"]:
@@ -438,13 +439,13 @@ phases:
                 if flter["type"] == "FILE_PATH":
                     flter["pattern"] = subcomponent_dir + "/.*"
                 if flter["type"] == "BASE_REF":
-                    flter["pattern"] = f"^refs/heads/{branch}$"
+                    flter["pattern"] = "^refs/heads/" + branch + "$"
                 if flter["type"] == "EVENT" and "CODEBUILD_EVENT_FILTER" in subcomponent["properties"]:
                     flter["pattern"] = subcomponent["properties"]["CODEBUILD_EVENT_FILTER"]
             webhook_args["projectName"] = component_args['name']
 
             # Run update
-            print(f"Updating {component_args['name']}")
+            print("Updating " + component_args['name'])
             if dry_run:
                 print(json.dumps(component_args, indent=2))
                 print(json.dumps(webhook_args, indent=2))
@@ -453,7 +454,7 @@ phases:
                     codebuild().update_project(**component_args)
                     codebuild().update_webhook(**webhook_args)
                 except:
-                    print(f"Project not found, creating {component_args['name']}")
+                    print("Project not found, creating " + component_args['name'])
                     codebuild().create_project(**component_args)
-                    print(f"Creating webhook for {component_args['name']}")
+                    print("Creating webhook for " + component_args['name'])
                     codebuild().create_webhook(**webhook_args)

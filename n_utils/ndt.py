@@ -102,7 +102,7 @@ def ndt():
         do_command_completion()
     else:
         if len(sys.argv) >= 2 and sys.argv[1] == "--version":
-            sys.stdout.writelines([f"{VERSION}\n"])
+            sys.stdout.writelines([VERSION, "\n"])
             sys.exit(0)
         if len(sys.argv) < 2 or sys.argv[1] not in COMMAND_MAPPINGS:
             sys.stderr.writelines([u'usage: ndt <command> [args...]\n'])
