@@ -21,6 +21,7 @@ import json
 import locale
 import os
 import re
+import six
 import sys
 import time
 from builtins import input
@@ -40,7 +41,7 @@ from threadlocal_aws import region, regions
 from n_utils import aws_infra_util, cf_bootstrap, cf_deploy, utils, \
     _to_bytes, _to_str
 from n_utils.account_utils import list_created_accounts, create_account
-from n_utils.aws_infra_util import load_parameters
+from n_utils.aws_infra_util import load_parameters, json_save_small
 from n_utils.cloudfront_utils import distributions, distribution_comments, \
     upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
@@ -765,8 +766,20 @@ def map_to_exports(map):
     ret = ""
     keys = []
     for key, val in list(map.items()):
+        if isinstance(val, six.string_types):
+            value = "'" + val.replace("'", "'\"'\"'") + "'"
+        elif isinstance(val, list):
+            value = "("
+            for elem in val:
+                if isinstance(elem, six.string_types):
+                    value += "'" + elem.replace("'", "'\"'\"'") + "' "
+                else:
+                    value += "'" + json_save_small(elem).replace("'", "'\"'\"'") + "' "
+            value = value[:-1] + ")"
+        else:
+            value = "'" + json_save_small(val) + "'"
         key = re.sub("[^a-zA-Z0-9_]", "", key)
-        ret += key + "='" + val.replace("'", "'\"'\"'") + "'" + os.linesep
+        ret += key + "=" + value + os.linesep
         keys.append(key)
     ret += "export " + " ".join(keys) + os.linesep
     return ret
@@ -778,7 +791,10 @@ def map_to_properties(map):
     ret = ""
     for key, val in list(map.items()):
         key = re.sub("[^a-zA-Z0-9_]", "", key)
-        ret += key + "=" + val + os.linesep
+        if isinstance(val, six.string_types):
+            ret += key + "=" + val + os.linesep
+        else:
+            ret += key + "=" + json_save_small(val) + os.linesep
     return ret
 
 

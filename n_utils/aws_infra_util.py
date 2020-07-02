@@ -267,7 +267,7 @@ def joined_file_lines(filename):
             yield prevline.strip()
 
 def import_parameter_file(filename, params):
-    used_params = copy(os.environ)
+    used_params = OrderedDict(copy(os.environ))
     used_params.update(params)
     for line in joined_file_lines(filename):
         _process_infra_prop_line(line, params, used_params)
