@@ -30,7 +30,7 @@ from glob import glob
 from yaml import ScalarNode, SequenceNode, MappingNode
 from operator import itemgetter
 from botocore.exceptions import ClientError
-from copy import deepcopy
+from copy import copy
 from jmespath import search
 from ec2_utils.instance_info import resolve_account, stack_params_and_outputs_and_stack, dthandler
 from n_utils import _to_str
@@ -177,87 +177,100 @@ def _process_infra_prop_line(line, params, used_params):
             value = key_val[1]
         value = _process_value(value, used_params)
         params[key] = value
-        used_params[key] = value
+        if isinstance(value, six.string_types):
+            used_params[key] = value
+        else:
+            used_params[key] = json_save_small(value)
 
 def _process_value(value, used_params):
-    value = value.strip()
-    if (value.startswith("\"") and value.endswith("\"")) or (value.startswith("'") and value.endswith("'")):
-        value = value[1:-1]
+    if isinstance(value, six.string_types):
+        try:
+            yaml_value = yaml_load(value)
+            value = yaml_value
+        except:
+            pass
     value = expand_vars(value, used_params, None, [])
-    # Don't go into external refs if:
-    #   a) resolving base variables like REGION and paramEnvId
-    #   b) resolving basic variables used in terraform backend configuration
-    if  "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
-        if value.strip().startswith("StackRef:"):
-            stackref_doc = yaml_load(_to_str(value))
-            stack_value = _resolve_stackref_from_dict(stackref_doc['StackRef'])
-            if stack_value:
-                value = stack_value
-        if value.strip().startswith("TFRef:"):
-            tfref_doc = yaml_load(_to_str(value))
-            tf_value = _resolve_tfref_from_dict(tfref_doc['TFRef'])
-            if tf_value:
-                value = tf_value
-        if value.strip().startswith("Encrypt:"):
-            enc_doc = yaml_load(_to_str(value))
-            enc_conf = enc_doc["Encrypt"]
-            if isinstance(enc_conf, OrderedDict):
-                to_encrypt = yaml_save(enc_conf["value"])
-            else:
-                to_encrypt = enc_conf["value"]
-            value = _process_value(to_encrypt, used_params)
-            del enc_conf["value"]
-            vault = Vault(**enc_conf)
-            value = b64encode(vault.direct_encrypt(value))
-        if value.strip().startswith("YamlRef:"):
-            yamlref_doc = yaml_load(_to_str(value))
-            if "file" in yamlref_doc["YamlRef"] and "jmespath" in yamlref_doc["YamlRef"]:
-                yaml_file = yamlref_doc["YamlRef"]["file"]
-                contents = yaml_load(open(yaml_file))
-                value = search(yamlref_doc["YamlRef"]["jmespath"], contents)
-                if value:
-                    value = expand_vars(value, used_params, None, [])
-        if value.strip().startswith("SsmRef:"):
-            ssmref_doc = yaml_load(_to_str(value))
-            if "SsmRef" in ssmref_doc:
-                ssm_key = ssmref_doc["SsmRef"]
+    if isinstance(value, six.string_types):
+        value = value.strip()
+    elif isinstance(value, OrderedDict):
+        # Don't go into external refs if:
+        #   a) resolving base variables like REGION and paramEnvId
+        #   b) resolving basic variables used in terraform backend configuration
+        if  "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
+            if "StackRef" in value:
+                stack_value = _resolve_stackref_from_dict(value['StackRef'])
+                if stack_value:
+                    value = stack_value
+            if "TFRef" in value:
+                tf_value = _resolve_tfref_from_dict(value['TFRef'])
+                if tf_value:
+                    value = tf_value
+            if "Encrypt" in value:
+                enc_conf = value["Encrypt"]
+                if isinstance(enc_conf, OrderedDict):
+                    to_encrypt = yaml_save(enc_conf["value"])
+                else:
+                    to_encrypt = enc_conf["value"]
+                value = _process_value(to_encrypt, used_params)
+                del enc_conf["value"]
+                vault = Vault(**enc_conf)
+                value = b64encode(vault.direct_encrypt(value))
+            if "YamlRef" in value:
+                if "file" in value["YamlRef"] and "jmespath" in value["YamlRef"]:
+                    yaml_file = value["YamlRef"]["file"]
+                    contents = yaml_load(open(yaml_file))
+                    value = search(value["YamlRef"]["jmespath"], contents)
+                    if value:
+                        return _process_value(value, used_params)
+            if "SsmRef" in value:
+                ssm_key = value["SsmRef"]
                 ssm_value = _resolve_ssm_parameter(ssm_key)
                 if ssm_value:
                     value = ssm_value
-        if value.strip().startswith("ProductAmi:"):
-            product_doc = yaml_load(_to_str(value))
-            if "ProductAmi" in product_doc:
-                product_code = product_doc["ProductAmi"]
+            if "ProductAmi" in value:
+                product_code = value["ProductAmi"]
                 product_ami = _resolve_product_ami(product_code)
                 if product_ami:
                     value = product_ami
-        if value.strip().startswith("OwnerNamedAmi:"):
-            product_doc = yaml_load(_to_str(value))
-            if "OwnerNamedAmi" in product_doc and "owner" in product_doc["OwnerNamedAmi"] and "name" in product_doc["OwnerNamedAmi"]:
-                owner = product_doc["OwnerNamedAmi"]["owner"]
-                name = product_doc["OwnerNamedAmi"]["name"]
-                owner_ami = _resolve_onwer_named_ami(owner, name)
-                if owner_ami:
-                    value = owner_ami
+            if "OwnerNamedAmi" in value:
+                if "owner" in value["OwnerNamedAmi"] and "name" in value["OwnerNamedAmi"]:
+                    owner = value["OwnerNamedAmi"]["owner"]
+                    name = value["OwnerNamedAmi"]["name"]
+                    owner_ami = _resolve_onwer_named_ami(owner, name)
+                    if owner_ami:
+                        value = owner_ami
     return value
 
-def import_parameter_file(filename, params):
-    used_params = deepcopy(os.environ)
-    used_params.update(params)
-    with open(filename, "r") as propfile:
+def joined_file_lines(filename):
+    with open(filename, 'r') as f:
         prevline = ""
-        for line in propfile.readlines():
-            if line.startswith("#"):
+        to_yeild = None
+        for line in f.readlines():
+            if prevline.strip().endswith("\\"):
+                to_yeild = None
+                prevline = prevline[:-2] + "\n" + line
+            elif line.startswith("  ") or line.startswith("\t"):
+                to_yeild = None
+                prevline = prevline + line
+            elif line.startswith("#"):
+                to_yeild = prevline.strip()
                 prevline = ""
-                continue
-            if line.endswith("\\"):
-                prevline = prevline + line[:-1]
+            elif prevline:
+                to_yeild = prevline.strip()
+                prevline = line
             else:
-                line = prevline + line
-                prevline = ""
-                _process_infra_prop_line(line, params, used_params)
+                to_yeild = None
+                prevline = line
+            if to_yeild:
+                yield to_yeild
         if prevline:
-            _process_infra_prop_line(prevline, params, used_params)
+            yield prevline.strip()
+
+def import_parameter_file(filename, params):
+    used_params = copy(os.environ)
+    used_params.update(params)
+    for line in joined_file_lines(filename):
+        _process_infra_prop_line(line, params, used_params)
 
 
 def _add_subcomponent_file(component, branch, type, name, files):

@@ -1,4 +1,5 @@
-from n_utils.aws_infra_util import yaml_to_dict
+from n_utils.aws_infra_util import yaml_to_dict, import_parameter_file
+from collections import OrderedDict
 
 STACK_PARAMS = {
   "paramEnvId": "dev",
@@ -49,3 +50,25 @@ def test_stackref_order(mocker, stack_params_and_outputs_and_stack):
     assert result["Resources"]["resBackendRole"]["Properties"]["Policies"][0]["PolicyDocument"]["Statement"][1]["Resource"] == \
            "arn:aws:s3:::dev-my-test-bucket/"
     assert result["Resources"]["resInboxPolicy"]["Properties"]["Bucket"]["Fn::Sub"] == "${myBucket.Arn}/*"
+
+def test_stackref_property(mocker, stack_params_and_outputs_and_stack):
+    stack_params_and_outputs_and_stack.return_value = (STACK_PARAMS, None)
+    result = OrderedDict()
+    import_parameter_file('n_utils/tests/properties/test-stackref.properties', result)
+    assert result['BucketArn'] == "arn:aws:s3:::dev-my-test-bucket"
+
+def test_compound_prorety_values(mocker):
+    result = OrderedDict()
+    import_parameter_file('n_utils/tests/properties/test-compound-values.properties', result)
+    assert result['test'] == ["val1", "val2", "val3"]
+    assert result['foo'] == {"bar": {"zop": "boo", "zip": "zap"}}
+
+def test_compound_and_stackref_property(mocker, stack_params_and_outputs_and_stack):
+    stack_params_and_outputs_and_stack.return_value = (STACK_PARAMS, None)
+    result = OrderedDict()
+    import_parameter_file('n_utils/tests/properties/test-stackref.properties', result)
+    import_parameter_file('n_utils/tests/properties/test-compound-values.properties', result)
+    assert result['BucketArn'] == "arn:aws:s3:::dev-my-test-bucket"
+    assert result['test'] == ["val1", "val2", "val3"]
+    assert result['foo'] == {"bar": {"zop": "boo", "zip": "zap"}}
+
