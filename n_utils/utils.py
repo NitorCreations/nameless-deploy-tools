@@ -285,7 +285,10 @@ def _process_line_re(line, params, vault, vault_keys, matcher):
         if isinstance(param_value, NoneType) or isinstance(param_value, ParamNotAvailable):
             next_start = match.end()
         else:
-            ret = ret[:match.start()] + _to_str(param_value) + ret[match.end():]
+            if not (ret[:match.start()] + ret[match.end():]).strip():
+                return param_value
+            else:
+                ret = ret[:match.start()] + _to_str(param_value) + ret[match.end():]
         match = matcher.search(ret, next_start)
     return ret
 

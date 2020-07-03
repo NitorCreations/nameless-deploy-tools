@@ -72,3 +72,10 @@ def test_compound_and_stackref_property(mocker, stack_params_and_outputs_and_sta
     assert result['test'] == ["val1", "val2", "val3"]
     assert result['foo'] == {"bar": {"zop": "boo", "zip": "zap"}}
 
+
+def test_compound_values_for_yaml(mocker):
+    result = OrderedDict()
+    import_parameter_file('n_utils/tests/properties/test-compound-values.properties', result)
+    yaml_result = yaml_to_dict('n_utils/tests/templates/test-compound-values.yaml', extra_parameters=result)
+    assert yaml_result['paramTest'] == ["val1", "val2", "val3"]
+    assert yaml_result['paramFoo'] == {"bar": {"zop": "boo", "zip": "zap"}}
