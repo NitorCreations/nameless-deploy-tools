@@ -1,0 +1,2 @@
+paramTest: ${test}
+paramFoo: ${foo}
