@@ -171,7 +171,7 @@ def update_profile(profile, creds):
     credentials = join(home, ".aws", "credentials")
     if exists(credentials):
         parser = ConfigParser()
-        with open(credentials, 'rb') as credfile:
+        with open(credentials, 'r') as credfile:
             parser.readfp(credfile)
             if profile not in parser.sections():
                 parser.add_section(profile)
@@ -180,7 +180,7 @@ def update_profile(profile, creds):
             parser.set(profile, "aws_session_token", creds['SessionToken'])
             parser.set(profile, "aws_session_expiration", creds['Expiration'].strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
             parser.set(profile, "aws_expiration", creds['Expiration'].strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
-    with open(credentials, 'wb') as credfile:
+    with open(credentials, 'w') as credfile:
         parser.write(credfile)
 
 def cli_enable_profile():
