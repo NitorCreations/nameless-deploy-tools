@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-VERSION=$(grep version setup.py | cut -d\' -f 2)
+VERSION=$(egrep '\sversion' setup.py | cut -d\' -f 2)
 MAJOR=${VERSION//.*}
 MINOR=${VERSION##*.}
 if [ "$1" = "-m" ]; then
