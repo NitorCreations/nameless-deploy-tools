@@ -44,4 +44,3 @@ rm -f /opt/nameless/instance-data.json
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null ; then
   echo "output: {all: '| tee -a /var/log/cloud-init-output.log'}" >> /etc/cloud/cloud.cfg.d/05_logging.cfg
 fi
-source $(n-include common_tools.sh)
