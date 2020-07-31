@@ -15,6 +15,16 @@ import sys
 from setuptools import setup
 from n_utils import PATH_COMMANDS, CONSOLESCRIPTS
 
+win_deps = []
+if sys.version_info[0] == 2:
+    python2_or_3_deps = ['pyotp==2.3']
+    python2_or_3_test_deps = ['pytest==4.6.11', 'pytest-mock==1.13.0', 'mock==3.0.5']
+elif sys.version_info[0] == 3:
+    python2_or_3_deps = ['pyotp']
+    python2_or_3_test_deps = ['pytest', 'pytest-mock', 'mock']
+if sys.platform.startswith('win'):
+    win_deps = ['win-unicode-console', 'wmi', 'pypiwin32' ]
+
 setup(name='nameless-deploy-tools',
       version='1.147',
       description='Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow',
@@ -42,7 +52,6 @@ setup(name='nameless-deploy-tools',
           'argcomplete',
           'nitor-vault>=0.40',
           'Pygments',
-          'pyotp',
           'pyqrcode',
           'six',
           'python-dateutil',
@@ -53,15 +62,8 @@ setup(name='nameless-deploy-tools',
           'ec2-utils==0.21',
           'cloudformation-utils==0.0.2',
           'PyYAML==5.2'
-      ] + ([
-          'win-unicode-console',
-          'wmi',
-          'pypiwin32'
-          ] if sys.platform.startswith('win') else []),
+      ] + python2_or_3_deps + win_deps,
       tests_require=[
-          'pytest',
-          'pytest-mock',
           'pytest-cov',
-          'coverage'
-      ],
+          'coverage'] + python2_or_3_test_deps,
       zip_safe=False)
