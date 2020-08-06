@@ -87,7 +87,7 @@ RUN set -ex \
   && chmod 755 /usr/bin/lein \
   && lein version
 RUN python -m pip install -U pip
-RUN pip install --no-cache-dir nameless-deploy-tools==1.150
+RUN pip install --no-cache-dir nameless-deploy-tools==1.151
 
 VOLUME /var/lib/docker
 
