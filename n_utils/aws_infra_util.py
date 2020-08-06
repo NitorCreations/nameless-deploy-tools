@@ -184,6 +184,7 @@ def _process_infra_prop_line(line, params, used_params):
 
 def _process_value(value, used_params):
     if isinstance(value, six.string_types):
+        value = expand_vars(value, used_params, None, [])
         try:
             yaml_value = yaml_load(value)
             value = yaml_value
