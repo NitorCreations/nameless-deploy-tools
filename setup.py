@@ -26,10 +26,10 @@ if sys.platform.startswith('win'):
     win_deps = ['win-unicode-console', 'wmi', 'pypiwin32' ]
 
 setup(name='nameless-deploy-tools',
-      version='1.149',
+      version='1.150',
       description='Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow',
       url='http://github.com/NitorCreations/nameless-deploy-tools',
-      download_url='https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.149',
+      download_url='https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.150',
       author='Pasi Niemi',
       author_email='pasi@nitor.com',
       license='Apache 2.0',
