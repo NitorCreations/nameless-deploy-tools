@@ -62,6 +62,7 @@ def test_compound_prorety_values(mocker):
     import_parameter_file('n_utils/tests/properties/test-compound-values.properties', result)
     assert result['test'] == ["val1", "val2", "val3"]
     assert result['foo'] == {"bar": {"zop": "boo", "zip": "zap"}}
+    assert result['version_number'] == "1.150"
 
 def test_compound_and_stackref_property(mocker, stack_params_and_outputs_and_stack):
     stack_params_and_outputs_and_stack.return_value = (STACK_PARAMS, None)
@@ -71,7 +72,6 @@ def test_compound_and_stackref_property(mocker, stack_params_and_outputs_and_sta
     assert result['BucketArn'] == "arn:aws:s3:::dev-my-test-bucket"
     assert result['test'] == ["val1", "val2", "val3"]
     assert result['foo'] == {"bar": {"zop": "boo", "zip": "zap"}}
-
 
 def test_compound_values_for_yaml(mocker):
     result = OrderedDict()

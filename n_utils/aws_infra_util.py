@@ -28,6 +28,7 @@ from base64 import b64encode
 from collections import OrderedDict
 from glob import glob
 from yaml import ScalarNode, SequenceNode, MappingNode
+from numbers import Number
 from operator import itemgetter
 from botocore.exceptions import ClientError
 from copy import copy
@@ -189,6 +190,8 @@ def _process_value(value, used_params):
         value = expand_vars(value, used_params, None, [])
         try:
             yaml_value = yaml_load(value)
+            if isinstance(yaml_value, Number):
+                return value
             value = yaml_value
         except:
             pass
