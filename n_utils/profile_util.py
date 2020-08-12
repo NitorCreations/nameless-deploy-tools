@@ -24,7 +24,7 @@ def read_expiring_profiles():
     if exists(credentials):
         parser = ConfigParser()
         with open(credentials) as credfile:
-            parser.readfp(credfile)
+            parser.read_file(credfile)
             for profile in parser.sections():
                 if parser.has_option(profile, "aws_session_expiration") or parser.has_option(profile, "aws_expiration"):
                     ret.append(profile)
@@ -37,14 +37,14 @@ def read_profiles():
     if isfile(credentials) and access(credentials, R_OK):
         parser = ConfigParser()
         with open(credentials) as credfile:
-            parser.readfp(credfile)
+            parser.read_file(credfile)
             for profile in parser.sections():
                 ret.append(profile)
     config = join(home, ".aws", "config")
     if isfile(config) and access(config, R_OK):
         parser = ConfigParser()
         with open(config) as configfile:
-            parser.readfp(configfile)
+            parser.read_file(configfile)
             for profile in parser.sections():
                 if profile.startswith("profile ") and profile[8:] not in ret:
                     ret.append(profile[8:])
@@ -60,7 +60,7 @@ def get_profile(profile):
     if isfile(config) and access(config, R_OK):
         parser = ConfigParser()
         with open(config) as configfile:
-            parser.readfp(configfile)
+            parser.read_file(configfile)
             if profile_section in parser.sections():
                 for option in parser.options(profile_section):
                     ret[option] = parser.get(profile_section, option)
@@ -68,7 +68,7 @@ def get_profile(profile):
     if isfile(credentials) and access(credentials, R_OK):
         parser = ConfigParser()
         with open(credentials) as credfile:
-            parser.readfp(credfile)
+            parser.read_file(credfile)
             if profile in parser.sections():
                 for option in parser.options(profile):
                     ret[option] = parser.get(profile, option)
@@ -80,7 +80,7 @@ def read_profile_expiry(profile):
     if exists(credentials):
         parser = ConfigParser()
         with open(credentials) as credfile:
-            parser.readfp(credfile)
+            parser.read_file(credfile)
             if parser.has_option(profile, "aws_expiration"):
                 return parser.get(profile, "aws_expiration")
             elif parser.has_option(profile, "aws_session_expiration"):
@@ -109,7 +109,7 @@ def profile_to_env():
         if exists(config):
             parser = ConfigParser()
             with open(config) as configfile:
-                parser.readfp(configfile)
+                parser.read_file(configfile)
                 if profile_entry in parser.sections() and parser.has_option(profile_entry, "azure_default_role_arn"):
                     params.append(role_param)
                     print(role_param + "=\"" + parser.get(profile_entry, "azure_default_role_arn") + "\"")
@@ -172,7 +172,7 @@ def update_profile(profile, creds):
     if exists(credentials):
         parser = ConfigParser()
         with open(credentials, 'r') as credfile:
-            parser.readfp(credfile)
+            parser.read_file(credfile)
             if profile not in parser.sections():
                 parser.add_section(profile)
             parser.set(profile, "aws_access_key_id", creds['AccessKeyId'])
