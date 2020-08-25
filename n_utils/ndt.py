@@ -7,7 +7,7 @@ from subprocess import PIPE, Popen
 
 from argcomplete import USING_PYTHON2, ensure_str, split_line
 
-from n_utils import COMMAND_MAPPINGS, VERSION
+from n_utils import COMMAND_MAPPINGS, VERSION, _to_str, _to_bytes
 
 SYS_ENCODING = locale.getpreferredencoding()
 include_dirs = []
@@ -78,9 +78,9 @@ def do_command_completion():
         if command_type == "shell" or command_type == "script" or \
            command_type == "ndtshell" or command_type == "ndtscript":
             proc = Popen([command], stderr=PIPE, stdout=PIPE)
-            output = proc.communicate()[0]
+            output = _to_str(proc.communicate()[0])
             if proc.returncode == 0:
-                output_stream.write(output.replace("\n", ifs).decode(SYS_ENCODING))
+                output_stream.write(_to_bytes(output.replace("\n", ifs)))
                 output_stream.flush()
             else:
                 sys.exit(1)
