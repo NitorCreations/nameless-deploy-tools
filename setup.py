@@ -59,7 +59,7 @@ setup(name='nameless-deploy-tools',
           'configparser',
           'scandir',
           'jmespath',
-          'ec2-utils==0.21',
+          'ec2-utils==0.22',
           'cloudformation-utils==0.0.2',
           'PyYAML==5.2'
       ] + python2_or_3_deps + win_deps,
