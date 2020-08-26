@@ -127,23 +127,23 @@ def _resolve_tfref_from_dict(tfref_var):
     else:
         return None
 
-def _resolve_ssm_parameter(ssm_key):
+def _resolve_ssm_parameter(ssm_key, region=None):
     value = None
     if ssm_key in ssm_params:
         value = ssm_params[ssm_key]
     else:
-        ssm_resp = ssm().get_parameter(Name=ssm_key, WithDecryption=True)
+        ssm_resp = ssm(region=region).get_parameter(Name=ssm_key, WithDecryption=True)
         if "Parameter" in ssm_resp and "Value" in ssm_resp["Parameter"]:
             value = ssm_resp["Parameter"]["Value"]
             ssm_params[ssm_key] = value
     return value
 
-def _resolve_product_ami(product_code):
+def _resolve_product_ami(product_code, region=None):
     value = None
     if product_code in product_amis:
         value = product_amis[product_code]
     else:
-        ami_resp = ec2().describe_images(Filters=[
+        ami_resp = ec2(region=region).describe_images(Filters=[
             {"Name": "product-code", "Values": [product_code]}],
             Owners=["aws-marketplace"])
         ami_ids =  [image["ImageId"] for image in sorted(ami_resp['Images'],
@@ -159,7 +159,7 @@ def _resolve_onwer_named_ami(owner, name):
     if (owner, name) in owner_amis:
         return owner_amis[(owner, name)]
     else:
-        ami_resp = ec2().describe_images(Owners=[owner], Filters=[{"Name": "name", "Values":[name]}])
+        ami_resp = ec2(region=region).describe_images(Owners=[owner], Filters=[{"Name": "name", "Values":[name]}])
         ami_ids =  [image["ImageId"] for image in sorted(ami_resp['Images'],
                                                          key=itemgetter('CreationDate'),
                                                          reverse=True)]
@@ -199,6 +199,9 @@ def _process_value(value, used_params):
     if isinstance(value, six.string_types):
         value = value.strip()
     elif isinstance(value, OrderedDict):
+        region = None
+        if "REGION" in used_params:
+            region = used_params["REGION"]
         # Don't go into external refs if:
         #   a) resolving base variables like REGION and paramEnvId
         #   b) resolving basic variables used in terraform backend configuration
@@ -230,19 +233,19 @@ def _process_value(value, used_params):
                         return _process_value(value, used_params)
             if "SsmRef" in value:
                 ssm_key = value["SsmRef"]
-                ssm_value = _resolve_ssm_parameter(ssm_key)
+                ssm_value = _resolve_ssm_parameter(ssm_key, region=region)
                 if ssm_value:
                     value = ssm_value
             if "ProductAmi" in value:
                 product_code = value["ProductAmi"]
-                product_ami = _resolve_product_ami(product_code)
+                product_ami = _resolve_product_ami(product_code, region=region)
                 if product_ami:
                     value = product_ami
             if "OwnerNamedAmi" in value:
                 if "owner" in value["OwnerNamedAmi"] and "name" in value["OwnerNamedAmi"]:
                     owner = value["OwnerNamedAmi"]["owner"]
                     name = value["OwnerNamedAmi"]["name"]
-                    owner_ami = _resolve_onwer_named_ami(owner, name)
+                    owner_ami = _resolve_onwer_named_ami(owner, name, region=region)
                     if owner_ami:
                         value = owner_ami
     return value

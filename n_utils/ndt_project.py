@@ -445,16 +445,19 @@ phases:
             webhook_args["projectName"] = component_args['name']
 
             # Run update
-            print("Updating " + component_args['name'])
+            subc_region = region=subcomponent["properties"]["REGION"]
+            print("Updating " + component_args['name'] + " in " + subc_region)
             if dry_run:
                 print(json.dumps(component_args, indent=2))
                 print(json.dumps(webhook_args, indent=2))
             else:
                 try:
-                    codebuild().update_project(**component_args)
-                    codebuild().update_webhook(**webhook_args)
+                    codebuild(region=subc_region).update_project(**component_args)
                 except:
                     print("Project not found, creating " + component_args['name'])
-                    codebuild().create_project(**component_args)
+                    codebuild(region=subc_region).create_project(**component_args)
+                try:
+                    codebuild(region=subc_region).update_webhook(**webhook_args)
+                except:
                     print("Creating webhook for " + component_args['name'])
-                    codebuild().create_webhook(**webhook_args)
+                    codebuild(region=subc_region).create_webhook(**webhook_args)
