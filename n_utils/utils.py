@@ -56,6 +56,8 @@ dthandler = lambda obj: obj.isoformat() if hasattr(obj, 'isoformat') else json.J
 class ParamNotAvailable(object):
     def __init__(self):
         return
+    def isoformat(self):
+        return "PARAM_NOT_AVAILABLE"
 
 def id_generator(size=10, chars=string.ascii_uppercase + string.digits +
                  string.ascii_lowercase):

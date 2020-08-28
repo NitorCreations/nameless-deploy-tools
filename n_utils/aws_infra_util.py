@@ -532,7 +532,6 @@ def existing(filename):
 
 PARAM_NOT_AVAILABLE = ParamNotAvailable()
 
-
 def _add_params(target, source, source_prop, use_value):
     if source_prop in source:
         if isinstance(source[source_prop], OrderedDict) or isinstance(source[source_prop], dict):
@@ -810,7 +809,8 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
                 del data['__source_line']
             else:
                 file_line = 0
-            if var_name not in templateParams:
+            # Ignore serverless framework default rest api resource that is secretly created by the framework
+            if var_name not in templateParams and var_name != "ApiGatewayRestApi":
                 if '__optional' in data:
                     data = data['__default']
                 else:
