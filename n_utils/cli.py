@@ -727,6 +727,7 @@ def cli_load_parameters():
     format_group.add_argument("--json", "-j", action="store_true", help="JSON format output (default)")
     format_group.add_argument("--yaml", "-y", action="store_true", help="YAML format output")
     format_group.add_argument("--properties", "-p", action="store_true", help="properties file format output")
+    format_group.add_argument("--terraform-variables", "-v", action="store_true", help="terraform syntax variables")
     format_group.add_argument("--export-statements", "-e", action="store_true",
                               help="Output as eval-able export statements")
 
@@ -740,10 +741,13 @@ def cli_load_parameters():
         transform = map_to_properties
     if args.yaml:
         transform = yaml.dump
+    if args.terraform_variables:
+        transform = map_to_tfvars
     del args.export_statements
     del args.yaml
     del args.json
     del args.properties
+    del args.terraform_variables
     if (args.stack or args.serverless or args.docker or not isinstance(args.image, NoneType)) \
        and not args.component:
         parser.error("image, stack, doker or serverless do not make sense without component")
@@ -797,6 +801,13 @@ def map_to_properties(map):
             ret += key + "=" + json_save_small(val) + os.linesep
     return ret
 
+def map_to_tfvars(map):
+    """ Prints the map in terraform syntax variables
+    """
+    ret = ""
+    for key, val in list(map.items()):
+        ret += key + "=" + json.dumps(val) + "\n"
+    return ret
 
 def cli_assumed_role_name():
     """ Read the name of the assumed role if currently defined """

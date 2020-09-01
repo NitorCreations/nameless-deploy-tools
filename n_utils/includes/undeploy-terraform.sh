@@ -87,7 +87,7 @@ if [ -r "$TF_BACKEND_CONF" ]; then
   ndt interpolate-file -n -k "$TF_BACKEND_CONF" -o "$COMPONENT_DIR/backend.tf"
 fi
 
-ndt load-parameters "$component" -t "$terraform" -j > "$component/terraform-$ORIG_TERRAFORM_NAME/terraform.tfvars"
+ndt load-parameters "$component" -t "$terraform" -v > "$component/terraform-$ORIG_TERRAFORM_NAME/terraform.tfvars"
 
 cd "$component/terraform-$ORIG_TERRAFORM_NAME"
 
