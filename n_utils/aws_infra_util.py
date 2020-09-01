@@ -154,7 +154,7 @@ def _resolve_product_ami(product_code, region=None):
             product_amis[product_code] = value
     return value
 
-def _resolve_onwer_named_ami(owner, name):
+def _resolve_onwer_named_ami(owner, name, region=None):
     value = None
     if (owner, name) in owner_amis:
         return owner_amis[(owner, name)]
