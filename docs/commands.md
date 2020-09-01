@@ -619,7 +619,7 @@ optional arguments:
 usage: ndt load-parameters [-h] [--branch BRANCH] [--resolve-images]
                            [--stack STACK | --serverless SERVERLESS | --docker DOCKER | --image [IMAGE]
                            | --cdk CDK | --terraform TERRAFORM]
-                           [--json | --yaml | --properties | --export-statements]
+                           [--json | --yaml | --properties | --terraform-variables | --export-statements]
                            [component]
 
  Load parameters from infra*.properties files in the order:
@@ -676,6 +676,8 @@ optional arguments:
   --json, -j            JSON format output (default)
   --yaml, -y            YAML format output
   --properties, -p      properties file format output
+  --terraform-variables, -v
+                        terraform syntax variables
   --export-statements, -e
                         Output as eval-able export statements
 ```
