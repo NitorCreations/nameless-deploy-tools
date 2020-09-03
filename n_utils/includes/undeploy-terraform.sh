@@ -83,7 +83,7 @@ fi
 eval "$(ndt load-parameters "$component" -t "$terraform" -e)"
 
 COMPONENT_DIR="$component/terraform-$ORIG_TERRAFORM_NAME"
-if [ -r "$TF_BACKEND_CONF" ]; then
+if [ "$SKIP_TF_BACKEND" != "y" ] && [ -r "$TF_BACKEND_CONF" ]; then
   ndt interpolate-file -n -k "$TF_BACKEND_CONF" -o "$COMPONENT_DIR/backend.tf"
 fi
 
