@@ -7,7 +7,9 @@ ENV NODE_VERSION=12.18.0 \
  MAVEN_VERSION=3.6.3 \
  PHANTOMJS_VERSION=2.1.1 \
  LERNA_VERSION=3.22.0 \
- SERVERLESS_VERSION=1.72.0
+ SERVERLESS_VERSION=1.72.0 \
+ TERRAFORM_VERSION=0.13.2 \
+ TERRAFORM_SHA="6c1c6440c5cb199e85926aea65773450564f501fddcd7876f453ba95b45ba746"
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git openssh-client unzip chromium-bsu jq gpg parallel dirmngr
 RUN set -ex \
@@ -85,7 +87,12 @@ RUN set -ex \
   && rm -rf phantomjs-* \
   && wget -O /usr/bin/lein "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein" \
   && chmod 755 /usr/bin/lein \
-  && lein version
+  && lein version \
+  && curl -fSL "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" -o terraform.zip \
+  && echo "${TERRAFORM_SHA} *terraform.zip" | sha256sum -c - \
+  && unzip -d /usr/bin terraform.zip \
+  && rm -f terraform.zip
+
 RUN python -m pip install -U pip
 RUN pip install --no-cache-dir nameless-deploy-tools==1.156
 
