@@ -106,7 +106,10 @@ if [ -x "./pre_deploy.sh" ]; then
 fi
 
 if [ -z "$SKIP_NPM" -o "$SKIP_NPM" = "n" ]; then
-  npm i
+  if [ -n "$UNSAFE_NPM" -a "$UNSAFE_NPM" != "n" ]; then
+    UNSAFE="--unsafe-perm"
+  fi
+  npm i $UNSAFE
 fi
 
 if [ -n "$DRYRUN" ]; then
