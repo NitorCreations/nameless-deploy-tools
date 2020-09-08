@@ -50,7 +50,11 @@ install_yarn() {
   wget -O - https://yarnpkg.com/latest.tar.gz | tar --strip-components=1 -C /opt/yarn -xzv
 }
 install_cftools() {
-  curl -s https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar -xzvf -
+  if python --version | grep "Python 3" > /dev/null; then
+    curl -s https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-py3-latest.tar.gz | tar -xzvf -
+  else
+    curl -s https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar -xzvf -
+  fi
   cd aws-cfn-bootstrap-*
   pip install .
   cd ..
