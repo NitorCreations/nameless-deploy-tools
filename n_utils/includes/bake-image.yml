@@ -144,16 +144,16 @@
         name: ["python-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python-crypto", "python-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
     - dnf:
-        name: ["python3.8", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python38-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+        name: ["python36", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python38-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
     - alternatives:
         name: python
-        path: /usr/bin/python3.8
+        path: /usr/bin/python3
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
     - alternatives:
         name: pip
         link: /usr/bin/pip
-        path: /usr/bin/pip3.8
+        path: /usr/bin/pip3
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
     - script: install_tools.sh {{ tools_version }}
     - script: "{{ imagedir }}/pre_install.sh"
