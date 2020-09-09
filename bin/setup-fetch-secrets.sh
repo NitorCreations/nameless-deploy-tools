@@ -52,9 +52,5 @@ if ! [[ "$1" =~ ^lpass$|^s3$|^vault$ ]]; then
   exit 1
 fi
 
-if [ "$1" = "lpass" ]; then
-  source $(n-include common_tools.sh)
-  ln -snf $(n-include lpass_$(system_type_and_version)) /usr/bin/lpass
-fi
 ln -snf $(n-include fetch-secrets-$1.sh) /usr/bin/fetch-secrets.sh
 ln -snf $(n-include store-secret-$1.sh) /usr/bin/store-secret.sh
