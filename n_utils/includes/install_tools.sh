@@ -31,7 +31,7 @@ if [ "$OS_TYPE" = "ubuntu" ]; then
   echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 fi
 python -m pip install -U pip --ignore-installed
-pip install -U setuptools awscli boto3
+pip install -U awscli boto3
 # If alpha, get first all non-alpha dependencies
 pip install -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" --ignore-installed
 if [ "$1" = "alpha" ]; then
