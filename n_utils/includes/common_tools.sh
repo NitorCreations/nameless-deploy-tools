@@ -31,6 +31,11 @@ system_type() {
   (source /etc/os-release; echo $ID)
 }
 
+system_like() {
+  source /etc/os-release
+  [[ "$ID_LIKE"  =~ $1 ]]
+}
+
 system_type_and_version() {
   (source /etc/os-release; echo ${ID}_$VERSION_ID)
 }
@@ -58,6 +63,20 @@ set_hostname() {
 }
 allow_cloud_init_firewall_cmd() {
   local SOURCE=$(n-include cloud-init-firewall-cmd.te)
+  local BASE=${SOURCE%.te}
+  local MODULE=$BASE.mod
+  local PACKAGE=$BASE.pp
+  checkmodule -M -m -o $MODULE $SOURCE
+  semodule_package -o $PACKAGE -m $MODULE
+  semodule -i $PACKAGE
+}
+allow_authorizedkeyscommand() {
+  if system_like rhel; then
+    yum update -y selinux-policy*
+  elif system_like debian; then
+    apt install -y selinux-policy-default
+  fi
+  local SOURCE=$(n-include ssh-authorized-keys-command.te)
   local BASE=${SOURCE%.te}
   local MODULE=$BASE.mod
   local PACKAGE=$BASE.pp

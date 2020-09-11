@@ -127,16 +127,6 @@ MARKER
   systemctl enable fail2ban
   systemctl start fail2ban
 }
-allow_authorizedkeyscommand() {
-  yum update -y selinux-policy*
-  local SOURCE=$(n-include ssh-authorized-keys-command.te)
-  local BASE=${SOURCE%.te}
-  local MODULE=$BASE.mod
-  local PACKAGE=$BASE.pp
-  checkmodule -M -m -o $MODULE $SOURCE
-  semodule_package -o $PACKAGE -m $MODULE
-  semodule -i $PACKAGE
-}
 update_deploytools() {
   if [ ! "$DEPLOYTOOLS_VERSION" ]; then
     echo "Specific version not defined - updating to latest"
