@@ -142,14 +142,3 @@ update_aws_utils () {
   echo "Updating ndt as part of a bootup is no longer recommended"
   update_deploytools "$@"
 }
-
-install_nexus3_aptrepository() {
-  INST_DIR=/opt/nexus/current/system/net/staticsnow/nexus-repository-apt/$NEXUS_REPOSITORY_APT_VERSION/
-  mkdir -p $INST_DIR
-  FILE=nexus-repository-apt-$NEXUS_REPOSITORY_APT_VERSION.jar
-  wget -O $INST_DIR/$FILE https://github.com/freelancer/nexus-repository-apt/releases/download/$NEXUS_REPOSITORY_APT_VERSION/$FILE
-  chown -R nexus:nexus /opt/nexus/current/system/net/
-  FEATURES_FILE=/opt/nexus/current/system/org/sonatype/nexus/assemblies/nexus-core-feature/$NEXUS3_VERSION/nexus-core-feature-$NEXUS3_VERSION-features.xml
-  sed -i '/>nexus-repository-maven/a \ \ \ \ \ \ \ \ <feature prerequisite="false" dependency="false">nexus-repository-apt</feature>' "$FEATURES_FILE"
-  sed -i "/feature name=\"nexus-repository-maven\"/i  <feature name=\"nexus-repository-apt\" description=\"net.staticsnow:nexus-repository-apt\" version=\"$NEXUS_REPOSITORY_APT_VERSION\">\n  <details>net.staticsnow:nexus-repository-apt</details>\n  <bundle>mvn:net.staticsnow/nexus-repository-apt/$NEXUS_REPOSITORY_APT_VERSION</bundle>\n  <bundle>mvn:org.tukaani/xz/1.8</bundle>\n</feature>\n" "$FEATURES_FILE"
-}
