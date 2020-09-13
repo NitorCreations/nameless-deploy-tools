@@ -87,7 +87,7 @@ MARKER
   sed -i 's/nexus-webapp-context-path=.*/nexus-webapp-context-path=\//' /opt/nexus/current/conf/nexus.properties
 }
 install_nexus3() {
-  wget -O - https://sonatype-download.global.ssl.fastly.net/repository/repositoryManager/3/nexus-$NEXUS3_VERSION-unix.tar.gz | tar -xzf - -C /opt/nexus
+  wget -O - https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/3/nexus-$NEXUS3_VERSION-unix.tar.gz | tar -xzf - -C /opt/nexus
   chown -R nexus:nexus /opt/nexus
   ln -snf /opt/nexus/nexus-* /opt/nexus/current
   mv /opt/nexus/sonatype-work /opt/nexus/sonatype-work-initial
