@@ -17,10 +17,10 @@ from n_utils import PATH_COMMANDS, CONSOLESCRIPTS
 
 win_deps = []
 if sys.version_info[0] == 2:
-    python2_or_3_deps = ['pyotp==2.3']
+    python2_or_3_deps = ['pyotp==2.3', 'Pygments==2.5.2']
     python2_or_3_test_deps = ['pytest==4.6.11', 'pytest-mock==1.13.0', 'mock==3.0.5']
 elif sys.version_info[0] == 3:
-    python2_or_3_deps = ['pyotp']
+    python2_or_3_deps = ['pyotp', 'Pygments']
     python2_or_3_test_deps = ['pytest', 'pytest-mock', 'mock']
 if sys.platform.startswith('win'):
     win_deps = ['win-unicode-console', 'wmi', 'pypiwin32' ]
@@ -51,7 +51,6 @@ setup(name='nameless-deploy-tools',
           'ipaddr',
           'argcomplete',
           'nitor-vault>=0.41',
-          'Pygments',
           'pyqrcode',
           'six',
           'python-dateutil',
