@@ -1,6 +1,8 @@
 language: python
 cache: pip
 dist: xenial
+env:
+  - GIT_BRANCH=master
 python:
   - "2.7"
   - "3.5"
