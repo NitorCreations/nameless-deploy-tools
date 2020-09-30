@@ -9,6 +9,17 @@ outputted by `nameless-dt-register-complete` need to be in your environment. So 
 eval "$(nameless-dt-register-complete)"
 ```
 
+## Command completion on Macs
+
+The default shell on Macs is `zsh` nowadays and that can be made to work via a compatibility trick described here:
+https://stackoverflow.com/questions/3249432/can-a-bash-tab-completion-script-be-used-in-zsh
+
+In short you need to append the following to `~/.zshrc`
+```shell
+autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+eval "$(nitor-care-register-complete)"
+
 ## Project session switcher
 
 Optionally you can add the argument `--project-env` to add a `PROMPT_COMMAND` hook for bash to check git
