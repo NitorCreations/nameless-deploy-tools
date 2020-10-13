@@ -24,6 +24,7 @@ fi
 rm -f /opt/nameless/instance-data.json
 
 OS_TYPE=$(source /etc/os-release; echo ${ID})
+OS_VERSION=$(source /etc/os-release; echo ${VERSION_ID})
 if [ "$OS_TYPE" = "ubuntu" ]; then
   export LC_ALL="en_US.UTF-8"
   export LC_CTYPE="en_US.UTF-8"
@@ -31,7 +32,12 @@ if [ "$OS_TYPE" = "ubuntu" ]; then
   echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 fi
 python -m pip install -U pip --ignore-installed
-pip install -U awscli boto3
+# Setuptools installed with pip breaks the platform python setup on CentOS 8
+if [ "$OS_TYPE" = "centos" -a "$OS_VERSION" = "8" ]; then
+  pip install -U awscli boto3
+else
+  pip install -U awscli boto3 setuptools
+fi
 # If alpha, get first all non-alpha dependencies
 pip install -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" --ignore-installed
 if [ "$1" = "alpha" ]; then
