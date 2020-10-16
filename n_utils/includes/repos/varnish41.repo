@@ -1,5 +1,5 @@
 [varnish41]
 name=Varnish Cache 4.1 for Enterprise Linux
-baseurl=https://packagecloud.io/varnishcache/varnish41/el/7/$basearch
+baseurl=https://packagecloud.io/varnishcache/varnish41/el/$releasever/$basearch
 enabled=1
 gpgcheck=0
