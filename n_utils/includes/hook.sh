@@ -20,7 +20,7 @@ exit_hook() {
   return 0
 }
 list_zones() {
-  aws route53 list-hosted-zones | python -c 'import sys, json; print "\n".join([zone["Name"] for zone in json.load(sys.stdin)["HostedZones"]])'
+  aws route53 list-hosted-zones | python -c 'import sys, json; print("\n".join([zone["Name"] for zone in json.load(sys.stdin)["HostedZones"]]))'
 }
 find_longest_hosted_zone() {
   local DOMAIN="$1"
@@ -31,7 +31,7 @@ find_longest_hosted_zone() {
   done | sort -n | tail -1 | cut -d" " -f2-
 }
 get_zone_id() {
-  aws route53 list-hosted-zones | python -c "import sys, json; print '\n'.join([zone['Id'] for zone in json.load(sys.stdin)['HostedZones'] if zone['Name'] == '$1'])"
+  aws route53 list-hosted-zones | python -c "import sys, json; print('\n'.join([zone['Id'] for zone in json.load(sys.stdin)['HostedZones'] if zone['Name'] == '$1']))"
 }
 find_longest_hosted_zone_id() {
   ZONE=$(find_longest_hosted_zone "$1")
