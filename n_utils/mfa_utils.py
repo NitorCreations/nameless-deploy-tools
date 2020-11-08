@@ -26,6 +26,7 @@ from Cryptodome.Cipher import AES
 from Cryptodome.Hash import SHA256
 from Cryptodome.Util import Counter
 
+from ec2_utils.instance_info import dthandler
 from n_utils import _to_bytes, _to_str
 from n_utils.yuuuu3332111i1l1i import IiII1IiiIiI1, I11iIi1I
 
@@ -117,11 +118,11 @@ def mfa_backup_tokens(backup_secret):
     for token in list_mfa_tokens():
         token_data = mfa_read_token(token)
         if token_data['token_secret'].startswith("enc--"):
-            token_data['token_secret'] = I11iIi1I(token_data['token_secret'][5:])
+            token_data['token_secret'] = _to_str(I11iIi1I(token_data['token_secret'][5:]))
         tokens.append(token_data)
     counter = Counter.new(128, initial_value=1337)
     cipher = AES.new(get_backup_key_digest(backup_secret), AES.MODE_CTR, counter=counter)
-    return base64.b64encode(cipher.encrypt(json.dumps(tokens)))
+    return _to_str(base64.b64encode(cipher.encrypt(_to_bytes(json.dumps(tokens, default=dthandler)))))
 
 
 def mfa_decrypt_backup_tokens(backup_secret, file):
