@@ -11,7 +11,7 @@ from dateutil.parser import parse
 from dateutil.tz import tzutc
 
 from n_utils import _to_str
-
+from n_utils.bw_util import get_bwentry
 
 def ConfigParser():
     import configparser
@@ -87,6 +87,9 @@ def read_profile_expiry(profile):
                 return parser.get(profile, "aws_session_expiration")
     return "1970-01-01T00:00:00.000Z"
 
+def read_profile_expiry_epoc(profile):
+    return _epoc_secs(parse(read_profile_expiry(profile)).replace(tzinfo=tzutc()))
+
 def profile_to_env():
     """ Prints profile parameters from credentials file (~/.aws/credentials) as eval-able environment variables """
     parser = argparse.ArgumentParser(description=profile_to_env.__doc__)
@@ -158,7 +161,7 @@ def print_profile_expiry(profile):
 
 def cli_read_profile_expiry():
     """ Read expiry field from credentials file, which is there if the login happened
-    with aws-azure-login or another tool that implements the same logic (none currently known)."""
+    with aws-azure-login or another tool that implements the same logic (e.g. https://github.com/NitorCreations/adfs-aws-login)."""
     parser = argparse.ArgumentParser(description=cli_read_profile_expiry.__doc__)
     parser.add_argument("profile", help="The profile to read expiry info from").completer = \
         ChoicesCompleter(read_expiring_profiles())
@@ -221,33 +224,43 @@ def cli_enable_profile():
 def enable_profile(profile_type, profile):
     profile = re.sub("[^a-zA-Z0-9_-]", "_", profile)
     safe_profile = re.sub("[^A-Z0-9]", "_", profile.upper())
+    now = _epoc_secs(datetime.now(tzutc()))
+    expiry = now - 1000
     if profile_type == "iam":
         _print_profile_switch(profile)
     elif profile_type == "azure" or profile_type == "adfs":
         _print_profile_switch(profile)
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
-        else:
-            expiry = _epoc_secs(parse(read_profile_expiry(profile)).replace(tzinfo=tzutc()))
-        if expiry < _epoc_secs(datetime.now(tzutc())):
+        if expiry < now:
+            expiry = read_profile_expiry_epoc(profile)
+        if expiry < now:
+            bw_prefix = ""
+            bw_entry = ModuleNotFoundError
+            profile_data = get_profile(profile)
+            if "bitwarden_entry" in profile_data and profile_data["bitwarden_entry"]:
+                bw_entry = get_bwentry(profile_data["bitwarden_entry"])
             if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
                 print("unset AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
             if profile_type == "azure":
-                profile_data = get_profile(profile)
                 gui_mode = ""
                 if "azure_login_mode" in profile_data and profile_data["azure_login_mode"] == "gui":
                     gui_mode =  " --mode=gui"
-                print("aws-azure-login --profile " + profile + gui_mode + " --no-prompt")
+                if bw_entry:
+                    bw_prefix = "AZURE_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
+                print(bw_prefix + "aws-azure-login --profile " + profile + gui_mode + " --no-prompt")
             else:
-                print("adfs-aws-login --profile " + profile + " --no-prompt")
+                if bw_entry:
+                    bw_prefix = "ADFS_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
+                print(bw_prefix + "adfs-aws-login --profile " + profile + " --no-prompt")
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             print_profile_expiry(profile)
     elif profile_type == "ndt":
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
-        else:
-            expiry = _epoc_secs(parse(read_profile_expiry(profile)).replace(tzinfo=tzutc()))
-        if expiry < _epoc_secs(datetime.now(tzutc())):
+        if expiry < now:
+            expiry = read_profile_expiry_epoc(profile)
+        if expiry < now:
             if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
                 print("unset AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
             profile_data = get_profile(profile)
