@@ -875,8 +875,8 @@ optional arguments:
 usage: ndt read-profile-expiry [-h] profile
 
 Read expiry field from credentials file, which is there if the login happened
-with aws-azure-login or another tool that implements the same logic (none
-currently known).
+with aws-azure-login or another tool that implements the same logic (e.g.
+https://github.com/NitorCreations/adfs-aws-login).
 
 positional arguments:
   profile     The profile to read expiry info from
