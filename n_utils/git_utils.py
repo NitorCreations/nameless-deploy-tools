@@ -88,7 +88,7 @@ class Git(object):
             proc = Popen(["git", "branch", "-a"], stdout=PIPE, stderr=open(devnull, 'w'))
             output, _ = proc.communicate()
             for line in output.decode(SYS_ENCODING).split(linesep):
-                if "detached" in line:
+                if "detached" in line or "(no branch)" in line:
                     continue
                 line = sub(r"^[\*\s]*", "", line).strip()
                 if not line:
