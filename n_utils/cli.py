@@ -563,8 +563,10 @@ def cli_mfa_add_token():
     parser.add_argument("token_name",
                         help="Name for the token. Use this to refer to the token later with " +
                         "the assume-role command.")
-    parser.add_argument("-i", "--interactive", help="Ask for token details interactively.",
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-i", "--interactive", help="Ask for token details interactively.",
                         action="store_true")
+    group.add_argument("-b", "--bitwarden-entry", help="Use a bitwarden entry as the source of the totp secret")
     parser.add_argument("-a", "--token_arn", help="ARN identifier for the token.")
     parser.add_argument("-s", "--token_secret", help="Token secret.")
     parser.add_argument("-f", "--force", help="Force an overwrite if the token already exists.",
@@ -582,7 +584,7 @@ def cli_mfa_add_token():
             code_2 = mfa_generate_code_with_secret(args.token_secret)
         print("Second sync code: " + code_2)
         args.token_arn = _to_str(input("Enter token ARN: "))
-    elif not args.token_secret:
+    elif not (args.token_secret or args.bitwarden_entry):
         parser.error("Token secret is required.")
     try:
         mfa_add_token(args)

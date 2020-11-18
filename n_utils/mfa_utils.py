@@ -29,7 +29,7 @@ from Cryptodome.Util import Counter
 from ec2_utils.instance_info import dthandler
 from n_utils import _to_bytes, _to_str
 from n_utils.yuuuu3332111i1l1i import IiII1IiiIiI1, I11iIi1I
-
+from n_utils.bw_util import get_bwentry
 
 def mfa_add_token(args):
     """ Adds or overwrites an MFA token to be used with role assumption.
@@ -39,10 +39,13 @@ def mfa_add_token(args):
         os.makedirs(ndt_dir)
     data = {
         'token_name': args.token_name,
-        'token_secret': "enc--" + _to_str(IiII1IiiIiI1(_to_bytes(args.token_secret)))
     }
     if args.token_arn:
         data['token_arn'] = args.token_arn
+    if args.bitwarden_entry:
+        data['bitwarden_entry'] = args.bitwarden_entry
+    else:
+        data['token_secret'] = "enc--" + _to_str(IiII1IiiIiI1(_to_bytes(args.token_secret)))
     token_file = ndt_dir + '/mfa_' + args.token_name
     if os.path.isfile(token_file) and not args.force:
         raise ValueError('A token with the name ' + args.token_name + ' already exists!')
@@ -60,7 +63,13 @@ def mfa_read_token(token_name):
         except yaml.YAMLError as exc:
             print(exc)
     if data:
-        if not data['token_secret'].startswith("enc--"):
+        if 'bitwarden_entry' in data and data['bitwarden_entry']:
+            bw_entry = get_bwentry(data['bitwarden_entry'])
+            if bw_entry.totp:
+                data['token_secret'] = "enc--" + _to_str(IiII1IiiIiI1(_to_bytes(bw_entry.totp)))
+            else:
+                raise ValueError("No totp secret found for bitwarden entry '" + data['bitwarden_entry'] + "'")
+        if 'token_secret' in data and not data['token_secret'].startswith("enc--"):
             data['force'] = True
             mfa_add_token(Struct(**data))
             return mfa_read_token(token_name)

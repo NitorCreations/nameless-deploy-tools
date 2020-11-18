@@ -35,6 +35,7 @@ class BwEntry:
                 self.fields[field["name"]] = field["value"]
         self.username = item_data["login"]["username"]
         self.password = item_data["login"]["password"]
+        self.totp = item_data["login"]["totp"]
         if "uris" in item_data["login"]:
             for uri in item_data["login"]["uris"]:
                 self.uris.append(uri["uri"])
