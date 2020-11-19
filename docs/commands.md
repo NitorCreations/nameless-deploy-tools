@@ -707,7 +707,8 @@ optional arguments:
 ## `ndt mfa-add-token`
 
 ```bash
-usage: ndt mfa-add-token [-h] [-i] [-a TOKEN_ARN] [-s TOKEN_SECRET] [-f]
+usage: ndt mfa-add-token [-h] [-i | -b BITWARDEN_ENTRY] [-a TOKEN_ARN]
+                         [-s TOKEN_SECRET] [-f]
                          token_name
 
 Adds an MFA token to be used with role assumption. Tokens will be saved in a
@@ -721,6 +722,8 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -i, --interactive     Ask for token details interactively.
+  -b BITWARDEN_ENTRY, --bitwarden-entry BITWARDEN_ENTRY
+                        Use a bitwarden entry as the source of the totp secret
   -a TOKEN_ARN, --token_arn TOKEN_ARN
                         ARN identifier for the token.
   -s TOKEN_SECRET, --token_secret TOKEN_SECRET
