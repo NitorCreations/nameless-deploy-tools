@@ -11,6 +11,7 @@ class MyArgs:
         self.token_secret = "I65VU7K5ZQL7WB4E"
         self.token_arn = "arn:aws:token:adfd0987654321"
         self.force = True
+        self.bitwarden_entry = None
 
 MY_ARGS = MyArgs()
 
