@@ -236,7 +236,7 @@ def enable_profile(profile_type, profile):
             expiry = read_profile_expiry_epoc(profile)
         if expiry < now:
             bw_prefix = ""
-            bw_entry = ModuleNotFoundError
+            bw_entry = None
             profile_data = get_profile(profile)
             if "bitwarden_entry" in profile_data and profile_data["bitwarden_entry"]:
                 bw_entry = get_bwentry(profile_data["bitwarden_entry"])
