@@ -71,7 +71,8 @@ The checked git local configurations are:
 * `ndt.aws.region` - export a default region name on every prompt
 * `ndt.profile.azure` - enable a profile that includes `aws-azure-login` settings
 * `ndt.profile.iam` - enable a profile that has simple iam keys settings
-* `ndt.profile.ndt` - enable a prpfile that has settings to do a `ndt assume-role` including a potential mfa token.
+* `ndt.profile.ndt` - enable a profile that has settings to do a `ndt assume-role` including a potential mfa token.
+* `ndt.profile.adfs` - enable a profile that includes `adfs-aws-login` settings
 
 You can set these variables by calling `git config [variable] [value]` and you can check the commands
 that would be executed by calling `nameless-dt-load-project-env`
