@@ -62,7 +62,8 @@ setup(name='nameless-deploy-tools',
           'jmespath',
           'ec2-utils==0.22',
           'cloudformation-utils==0.0.2',
-          'PyYAML==5.2'
+          'PyYAML==5.2',
+          'pyOpenSSL>=19.1.0'
       ] + python2_or_3_deps + win_deps,
       tests_require=[
           'pytest-cov',
