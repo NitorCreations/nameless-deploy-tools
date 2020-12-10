@@ -6,6 +6,18 @@ from subprocess import Popen, PIPE
 
 SYS_ENCODING = getpreferredencoding()
 
+def _var_name(suffix):
+    return "ndt.profile." + suffix
+
+def _branch_var_name(current_branch, suffix):
+    return "ndt.profile." + current_branch + "." + suffix
+
+def _check_enable_profile(vars, current_branch, profile_type):
+    if _branch_var_name(current_branch, profile_type) in vars:
+        enable_profile(profile_type, vars[_branch_var_name(current_branch, profile_type)])
+    elif _var_name(profile_type) in vars:
+        enable_profile(profile_type, vars[_var_name(profile_type)])
+
 def load_project_env():
     """ Print parameters set by git config variables to setup project environment with region and aws credentials
     """
@@ -25,28 +37,20 @@ def load_project_env():
             vars[next[0]] = next[1]
     do_print = False
     ret = ""
-    if "ndt.profile." + current_branch + ".azure" in vars:
-        enable_profile("azure", vars["ndt.profile." + current_branch + ".azure"])
-    elif "ndt.profile.azure" in vars:
-        enable_profile("azure", vars["ndt.profile.azure"])
-    if "ndt.profile." + current_branch + ".adfs" in vars:
-        enable_profile("adfs", vars["ndt.profile." + current_branch + ".adfs"])
-    elif "ndt.profile.adfs" in vars:
-        enable_profile("adfs", vars["ndt.profile.adfs"])
-    if "ndt.profile." + current_branch + ".iam" in vars:
-        enable_profile("iam", vars["ndt.profile." + current_branch + ".iam"])
-    elif "ndt.profile.iam" in vars:
-        enable_profile("iam", vars["ndt.profile.iam"])
-    if "ndt.profile.{current_branch}.ndt" in vars:
-        enable_profile("ndt", vars["ndt.profile." + current_branch + ".ndt"])
-    elif "ndt.profile.ndt" in vars:
-        enable_profile("ndt", vars["ndt.profile.ndt"])
+
+    _check_enable_profile(vars, current_branch, "azure")
+    _check_enable_profile(vars, current_branch, "adfs")
+    _check_enable_profile(vars, current_branch, "iam")
+    _check_enable_profile(vars, current_branch, "ndt")
+    _check_enable_profile(vars, current_branch, "azure-subscription")
+
     if "ndt.source." + current_branch + ".env" in vars:
         do_print = True
         ret = ret + ". " + vars["ndt.source." + current_branch + ".env"] + linesep
     elif "ndt.source.env" in vars:
         do_print = True
         ret = ret + ". " + vars["ndt.source.env"] + linesep
+
     if "ndt.aws." + current_branch + ".profile" in vars:
         do_print = True
         ret = ret + "export AWS_PROFILE=" + vars["ndt.aws." + current_branch + ".profile"] + \
@@ -55,7 +59,8 @@ def load_project_env():
         do_print = True
         ret = ret + "export AWS_PROFILE=" + vars["ndt.aws.profile"] + \
             " AWS_DEFAULT_PROFILE=" + vars["ndt.aws.profile"] + linesep
-    if "ndt.aws.{current_branch}.region" in vars:
+
+    if "ndt.aws." + current_branch + ".region" in vars:
         do_print = True
         ret = ret + "export AWS_REGION=" + vars["ndt.aws." + current_branch + ".region"] + \
             " AWS_DEFAULT_REGION=" + vars["ndt.aws. " + current_branch + ".region"] + linesep
@@ -63,6 +68,7 @@ def load_project_env():
         do_print = True
         ret = ret + "export AWS_REGION=" + vars["ndt.aws.region"] + \
             " AWS_DEFAULT_REGION=" + vars["ndt.aws.region"] + linesep
+
     if do_print:
         print(ret.strip())
 

@@ -12,6 +12,7 @@ from dateutil.tz import tzutc
 
 from n_utils import _to_str
 from n_utils.bw_util import get_bwentry
+from n_utils.az_util import az_select_subscription
 
 def ConfigParser():
     import configparser
@@ -194,6 +195,7 @@ def cli_enable_profile():
     type_select.add_argument("-a", "--azure", action="store_true", help="Azure login type profile")
     type_select.add_argument("-f", "--adfs", action="store_true", help="ADFS login type profile")
     type_select.add_argument("-n", "--ndt", action="store_true", help="NDT assume role type profile")
+    type_select.add_argument("-s", "--azure-subscription", action="store_true", help="Microsoft Azure subscription")
     if "_ARGCOMPLETE" in os.environ:
         parser.add_argument("profile", help="The profile to enable").completer = \
             ChoicesCompleter(read_profiles())
@@ -209,6 +211,8 @@ def cli_enable_profile():
         profile_type = "adfs"
     elif args.ndt:
         profile_type = "ndt"
+    elif args.azure_subscription:
+        profile_type = "azure-subscription"
     else:
         profile = get_profile(args.profile)
         if "azure_tenant_id" in profile:
@@ -222,6 +226,7 @@ def cli_enable_profile():
     enable_profile(profile_type, args.profile)
 
 def enable_profile(profile_type, profile):
+    orig_profile = profile
     profile = re.sub("[^a-zA-Z0-9_-]", "_", profile)
     safe_profile = re.sub("[^A-Z0-9]", "_", profile.upper())
     now = _epoc_secs(datetime.now(tzutc()))
@@ -291,6 +296,13 @@ def enable_profile(profile_type, profile):
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             print_profile_expiry(profile)
         _print_profile_switch(profile)
+    elif profile_type == "azure-subscription":
+        if not ("AZURE_SUBSCRIPTION" in os.environ and os.environ["AZURE_SUBSCRIPTION"] == orig_profile):
+            subscription_id = az_select_subscription(orig_profile)
+            if subscription_id:
+                print("AZURE_SUBSCRIPTION=\"" + orig_profile + "\"")
+                print("AZURE_SUBSCRIPTION_ID=\"" + subscription_id + "\"")
+                print("export AZURE_SUBSCRIPTION AZURE_SUBSCRIPTION_ID")
 
 def _print_profile_switch(profile):
     unset = []
