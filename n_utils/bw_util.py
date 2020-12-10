@@ -3,9 +3,11 @@ from os import devnull
 from subprocess import Popen, PIPE
 
 _BW_CACHE = {}
-
+NO_ENTRY = "NO ENTRY"
 def get_bwentry(search_term):
     if search_term in _BW_CACHE:
+        if _BW_CACHE[search_term] == NO_ENTRY:
+            return None
         return _BW_CACHE[search_term]
     proc = Popen(
         ["bw", "list", "items", "--search", search_term],
@@ -22,7 +24,7 @@ def get_bwentry(search_term):
         _BW_CACHE[search_term] = ret
         return ret
     else:
-        _BW_CACHE[search_term] = None
+        _BW_CACHE[search_term] = NO_ENTRY
         return None
 
 class BwEntry:
