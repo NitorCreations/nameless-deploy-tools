@@ -17,6 +17,7 @@ import time
 from builtins import str
 
 from threadlocal_aws.clients import cloudfront, route53
+from n_utils.route53_util import hosted_zones, longest_matching_zone
 
 
 def distributions():
@@ -58,13 +59,6 @@ def get_distribution_by_comment(comment):
         return ret
 
 
-def hosted_zones():
-    pages = route53().get_paginator('list_hosted_zones')
-    for page in pages.paginate():
-        for hosted_zone in page.get('HostedZones', []):
-            yield hosted_zone
-
-
 def upsert_cloudfront_records(args):
     distributions = None
     if args.distribution_id:
@@ -82,7 +76,7 @@ def upsert_cloudfront_records(args):
                     changes[change['HostedZoneId']] = []
                 changes[change['HostedZoneId']].append(change['Change'])
     requests = []
-    for req in changes:
+    for req in list(changes.keys()):
         requests.append(route53().change_resource_record_sets(HostedZoneId=req,
                                                               ChangeBatch={
                                                                  'Changes': changes[req]
@@ -101,12 +95,6 @@ def upsert_cloudfront_records(args):
                 print(str(len(requests)) + " requests INSYNC")
 
 
-def longest_matching_zone(alias, hosted_zones):
-    ret = {'Name': ''}
-    for zone in hosted_zones:
-        if (alias + ".").endswith(zone['Name']) and len(zone['Name']) > len(ret['Name']):
-            ret = zone
-    return ret
 
 
 def get_record_change(alias, dns_name, distribution_id, hosted_zones):
