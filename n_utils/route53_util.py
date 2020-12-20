@@ -11,7 +11,7 @@ def upsert_record(dns_name, record_type, value, ttl=300, wait=True):
     if wait:
         status = route53().get_change(Id=request['Id'])['ChangeInfo']['Status']
         while not status == 'INSYNC':
-            print("Waiting for request to sync - " + str(request['Id']) + " status: " + status)
+            print("Waiting for request to sync - " + str(request['Id']) + "(" + dns_name + ") status: " + status)
             time.sleep(2)
             status = route53().get_change(Id=request['Id'])['ChangeInfo']['Status']
 
