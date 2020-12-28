@@ -67,6 +67,65 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
+## `ndt azure-ensure-group`
+
+```bash
+usage: ndt azure-ensure-group [-h] [-l LOCATION] name
+
+Ensures that an azure resource group exists
+
+positional arguments:
+  name                  The name of the resource group to make sure exists
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l LOCATION, --location LOCATION
+                        The location for the resource group. If not defined
+                        looked from the environment variable AZURE_LOCATION
+                        and after that seen if location is defined for the
+                        project.
+```
+
+## `ndt azure-ensure-management-group`
+
+```bash
+usage: ndt azure-ensure-management-group [-h] name
+
+Ensures that an azure resource group exists
+
+positional arguments:
+  name        The name of the resource group to make sure exists
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+## `ndt azure-location`
+
+```bash
+usage: ndt azure-location [-h]
+
+Resolve an azure location based on \'AZURE_LOCATION\' enviroment variable, local
+project or az cli configuration. Defaults to \'northeurope\'
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+## `ndt azure-template-parameters`
+
+```bash
+usage: ndt azure-template-parameters [-h] template
+
+Lists the parameters in an Azure Resource Manager template
+
+positional arguments:
+  template    The json template to scan for parameters
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
 ## `ndt bake-docker`
 
 ```bash
@@ -251,6 +310,26 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
   -y, --yes   Answer yes or use default to all questions
+```
+
+## `ndt deploy-azure`
+
+```bash
+usage: ndt deploy-azure [-d] [-h] component azure-name
+
+Exports ndt parameters into component/azure-name/variables.json
+and deploys template.yaml with the azure cli referencing the parameter file
+
+positional arguments:
+  component   the component directory where the azure directory is
+  azure-name  the name of the azure directory that has the template
+                  For example for lambda/azure-blobstore/template.yaml
+                  you would give blobstore
+
+optional arguments:
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and azure cli what-if operation
+  -v, --verbose verbose - verbose output from azure cli
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt deploy-cdk`
@@ -620,8 +699,10 @@ optional arguments:
 ```bash
 usage: ndt load-parameters [-h] [--branch BRANCH] [--resolve-images]
                            [--stack STACK | --serverless SERVERLESS | --docker DOCKER | --image [IMAGE]
-                           | --cdk CDK | --terraform TERRAFORM]
-                           [--json | --yaml | --properties | --terraform-variables | --export-statements]
+                           | --cdk CDK | --terraform TERRAFORM | --azure
+                           AZURE]
+                           [--json | --yaml | --properties | --terraform-variables | --export-statements | --azure-parameters]
+                           [-f FILTER]
                            [component]
 
  Load parameters from infra*.properties files in the order:
@@ -675,6 +756,8 @@ optional arguments:
   --cdk CDK, -c CDK     CDK subcomponent to descent into
   --terraform TERRAFORM, -t TERRAFORM
                         Terraform subcomponent to descent into
+  --azure AZURE, -a AZURE
+                        Terraform subcomponent to descent into
   --json, -j            JSON format output (default)
   --yaml, -y            YAML format output
   --properties, -p      properties file format output
@@ -682,6 +765,10 @@ optional arguments:
                         terraform syntax variables
   --export-statements, -e
                         Output as eval-able export statements
+  --azure-parameters, -z
+                        Azure parameter file syntax variables
+  -f FILTER, --filter FILTER
+                        Comma separated list of parameter names to output
 ```
 
 ## `ndt logs`
@@ -1059,6 +1146,26 @@ optional arguments:
   -h, --help    show this help message and exit
 ```
 
+## `ndt undeploy-azure`
+
+```bash
+usage: ndt deploy-azure [-d] [-h] component azure-name
+
+Exports ndt parameters into component/azure-name/variables.json
+and deletes the deployment
+
+positional arguments:
+  component   the component directory where the azure directory is
+  azure-name  the name of the azure directory that has the template
+                  For example for lambda/azure-blobstore/template.yaml
+                  you would give blobstore
+
+optional arguments:
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and azure cli what-if operation
+  -v, --verbose verbose - verbose output from azure cli
+  -h, --help    show this help message and exit
+```
+
 ## `ndt undeploy-cdk`
 
 ```bash
@@ -1184,6 +1291,24 @@ optional arguments:
   -h, --help     show this help message and exit
   -d, --dry-run  Do not actually create or update projects, just print
                  configuration
+```
+
+## `ndt upsert-dns-record`
+
+```bash
+usage: ndt upsert-dns-record [-h] [-t TYPE] [-l TTL] [-n] name value
+
+Update a dns record in Route53
+
+positional arguments:
+  name                  The name of the record to create
+  value                 The value to put into the record
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TYPE, --type TYPE  The type of record to create. Defaults to \'A\'
+  -l TTL, --ttl TTL     Time To Live for the record. Defaults to 300
+  -n, --no-wait         Do not wait for the record to be synced within Route53
 ```
 
 ## `ndt volume-from-snapshot`
