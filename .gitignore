@@ -97,3 +97,5 @@ ENV/
 .pytest_cache
 .idea
 .vscode
+azuredeploy.json
+variables.json
