@@ -49,6 +49,11 @@ get_terraform() {
     echo $(find $1 -mindepth 1 -maxdepth 1 -name 'terraform-*' | sed 's/.*terraform-\(.*\)/\1/g')
   fi
 }
+get_azure() {
+  if [ -r infra.properties -o -r infra-master.properties ]; then
+    echo $(find $1 -mindepth 1 -maxdepth 1 -name 'azure-*' | sed 's/.*azure-\(.*\)/\1/g')
+  fi
+}
 checkout_branch() {
   local BRANCH=$1
   mkdir -p "$BRANCH-checkout" > /dev/null 2>&1

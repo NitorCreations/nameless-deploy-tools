@@ -362,21 +362,31 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
             return None
 
 def load_parameters(component=None, stack=None, serverless=None, docker=None, image=None, 
-                    cdk=None, terraform=None, branch=None, resolve_images=False,
+                    cdk=None, terraform=None, azure=None, branch=None, resolve_images=False,
                     git=None):
+    subc_type = ""
     subc_name = ""
     if stack:
+        subc_type = "stack"
         subc_name = "stack=" + stack
     if serverless:
+        subc_type = "serverless"
         subc_name = "serverless=" + serverless
     if docker:
+        subc_type = "docker"
         subc_name = "docker=" + docker
     if isinstance(image, six.string_types):
+        subc_type = "image"
         subc_name = "image=" + image
     if cdk:
+        subc_type = "cdk"
         subc_name = "cdk=" + cdk
     if terraform:
+        subc_type = "terraform"
         subc_name = "terraform=" + terraform
+    if azure:
+        subc_type = "azure"
+        subc_name = "azure=" + azure
     if not git:
         git = Git()
     with git:
@@ -406,6 +416,7 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
             _add_subcomponent_file(prefix + component, branch, "serverless", serverless, files)
             _add_subcomponent_file(prefix + component, branch, "cdk", cdk, files)
             _add_subcomponent_file(prefix + component, branch, "terraform", terraform, files)
+            _add_subcomponent_file(prefix + component, branch, "azure", azure, files)
             _add_subcomponent_file(prefix + component, branch, "docker", docker, files)
             _add_subcomponent_file(prefix + component, branch, "image", image, files)
             if isinstance(image, six.string_types):
@@ -478,6 +489,19 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
                 ret["BUILD_JOB_PREFIX"] = "ndt" + ret["paramEnvId"]
         if "JENKINS_JOB_PREFIX" not in ret:
             ret["JENKINS_JOB_PREFIX"] = ret["BUILD_JOB_PREFIX"]
+        if  subc_type and subc_type.upper() + "_NAME" not in ret and "ORIG_" + subc_type.upper() + "_NAME" in ret:
+            ret[subc_type.upper() + "_NAME"] = ret["ORIG_" + subc_type.upper() + "_NAME"]
+        if subc_type == "azure":
+            if "AZURE_SCOPE" not in ret:
+                if "AZURE_SCOPE" in os.environ and os.environ["AZURE_SCOPE"]:
+                    ret["AZURE_SCOPE"] = os.environ["AZURE_SCOPE"]
+                else:
+                    ret["AZURE_SCOPE"] = "group"
+            if ret["AZURE_SCOPE"] == "group" and ("AZURE_GROUP" not in ret or not ret["AZURE_GROUP"]):
+                ret["AZURE_GROUP"] = ret["BUILD_JOB_PREFIX"] + "-" + component + "-" + azure
+            if ret["AZURE_SCOPE"] == "management-group" and ("AZURE_MANAGEMENT_GROUP" not in ret or not ret["AZURE_MANAGEMENT_GROUP"]):
+                ret["AZURE_MANAGEMENT_GROUP"] = ret["BUILD_JOB_PREFIX"] + "-" + component
+
         parameters[params_key] = ret
         return ret
 

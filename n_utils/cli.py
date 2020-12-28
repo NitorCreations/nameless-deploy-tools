@@ -41,7 +41,7 @@ from threadlocal_aws import region, regions
 from n_utils import aws_infra_util, cf_bootstrap, cf_deploy, utils, \
     _to_bytes, _to_str
 from n_utils.account_utils import list_created_accounts, create_account
-from n_utils.aws_infra_util import load_parameters, json_save_small
+from n_utils.aws_infra_util import load_parameters, json_save_small, json_load
 from n_utils.cloudfront_utils import distributions, distribution_comments, \
     upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
@@ -58,7 +58,8 @@ from n_utils.profile_util import update_profile
 from n_utils.tf_utils import pull_state, jmespath_var, flat_state
 from n_utils.utils import session_token, get_images, promote_image, \
     share_to_another_region, interpolate_file, assumed_role_name
-
+from n_utils.az_util import resolve_location, ensure_group, ensure_management_group, resolve_location
+from n_utils.route53_util import upsert_record
 SYS_ENCODING = locale.getpreferredencoding()
 
 NoneType = type(None)
@@ -725,6 +726,8 @@ def cli_load_parameters():
         lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("cdk", prefix, parsed_args, **kwargs)
     subcomponent_group.add_argument("--terraform", "-t", help="Terraform subcomponent to descent into").completer = \
         lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("terraform", prefix, parsed_args, **kwargs)
+    subcomponent_group.add_argument("--azure", "-a", help="Terraform subcomponent to descent into").completer = \
+        lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("terraform", prefix, parsed_args, **kwargs)
     format_group = parser.add_mutually_exclusive_group()
     format_group.add_argument("--json", "-j", action="store_true", help="JSON format output (default)")
     format_group.add_argument("--yaml", "-y", action="store_true", help="YAML format output")
@@ -732,7 +735,8 @@ def cli_load_parameters():
     format_group.add_argument("--terraform-variables", "-v", action="store_true", help="terraform syntax variables")
     format_group.add_argument("--export-statements", "-e", action="store_true",
                               help="Output as eval-able export statements")
-
+    format_group.add_argument("--azure-parameters", "-z", action="store_true", help="Azure parameter file syntax variables")
+    parser.add_argument("-f", "--filter", help="Comma separated list of parameter names to output")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
@@ -745,15 +749,27 @@ def cli_load_parameters():
         transform = yaml.dump
     if args.terraform_variables:
         transform = map_to_tfvars
+    if args.azure_parameters:
+        transform = map_to_azure_params
     del args.export_statements
     del args.yaml
     del args.json
     del args.properties
     del args.terraform_variables
-    if (args.stack or args.serverless or args.docker or not isinstance(args.image, NoneType)) \
+    del args.azure_parameters
+    if (args.stack or args.serverless or args.docker or args.azure or not isinstance(args.image, NoneType)) \
        and not args.component:
-        parser.error("image, stack, doker or serverless do not make sense without component")
-    print(transform(load_parameters(**vars(args))))
+        parser.error("image, stack, doker or serverless, azure do not make sense without component")
+    filter_arr = []
+    if args.filter:
+        filter_arr = args.filter.split(",")
+    del args.filter
+    parameters = load_parameters(**vars(args))
+    if filter_arr:
+        for param_key in set(parameters.keys()):
+            if param_key not in filter_arr:
+                del parameters[param_key]
+    print(transform(parameters))
 
 def component_typed_subcomponents(sc_type, prefix, parsed_args, **kwargs):
     p_args = {}
@@ -810,6 +826,20 @@ def map_to_tfvars(map):
     for key, val in list(map.items()):
         ret += key + "=" + json.dumps(val) + "\n"
     return ret
+
+def map_to_azure_params(map):
+    """ Prints the map in azure parameter file syntax
+    """
+    ret_map = {
+        "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {}
+    }
+    for key, val in list(map.items()):
+        ret_map["parameters"][key] = {
+            "value": val
+        }
+    return json.dumps(ret_map)
 
 def cli_assumed_role_name():
     """ Read the name of the assumed role if currently defined """
@@ -893,3 +923,52 @@ def cli_upsert_codebuild_projects():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     upsert_codebuild_projects(dry_run=args.dry_run)
+
+def upsert_dns_record():
+    """ Update a dns record in Route53 """
+    parser = get_parser()
+    parser.add_argument("name", help="The name of the record to create")
+    parser.add_argument("-t", "--type", help="The type of record to create. Defaults to 'A'", default="A")
+    parser.add_argument("value", help="The value to put into the record")
+    parser.add_argument("-l", "--ttl", help="Time To Live for the record. Defaults to 300", default=300, type=int)
+    parser.add_argument("-n", "--no-wait", help="Do not wait for the record to be synced within Route53", action="store_false")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    upsert_record(args.name, args.type, args.value, ttl=args.ttl, wait=args.no_wait)
+
+def azure_ensure_group():
+    """ Ensures that an azure resource group exists """
+    parser = get_parser()
+    parser.add_argument("-l", "--location", help="The location for the resource group. If not defined looked from the environment " + \
+                                                 "variable AZURE_LOCATION and after that seen if location is defined for the project.")
+    parser.add_argument("name", help="The name of the resource group to make sure exists")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    if not args.location:
+        args.location = resolve_location()
+    ensure_group(args.location, args.name)
+
+def azure_ensure_management_group():
+    """ Ensures that an azure resource group exists """
+    parser = get_parser()
+    parser.add_argument("name", help="The name of the resource group to make sure exists")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    ensure_management_group(args.name)
+
+def azure_template_parameters():
+    """ Lists the parameters in an Azure Resource Manager template """
+    parser = get_parser()
+    parser.add_argument("template", help="The json template to scan for parameters").competer = FilesCompleter()
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    template = json_load(open(args.template).read())
+    if "parameters" in template and template["parameters"]:
+        print(",".join(template["parameters"].keys()))
+
+def azure_location():
+    """ Resolve an azure location based on 'AZURE_LOCATION' enviroment variable, local project or az cli configuration. Defaults to 'northeurope' """
+    parser = get_parser()
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    print(resolve_location())

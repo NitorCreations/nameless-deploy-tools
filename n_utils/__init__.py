@@ -42,6 +42,10 @@ NDT_ONLY = [
     'add-deployer-server=n_utils.cli:add_deployer_server',
     'assume-role=n_utils.cli:assume_role',
     'assumed-role-name=n_utils.cli:cli_assumed_role_name',
+    'azure-ensure-group=n_utils.cli:azure_ensure_group',
+    'azure-ensure-management-group=n_utils.cli:azure_ensure_management_group',
+    'azure-location=n_utils.cli:azure_location',
+    'azure-template-parameters=n_utils.cli:azure_template_parameters',
     'cf-delete-stack=n_utils.cli:delete_stack',
     'cf-follow-logs=n_utils.cli:tail_stack_logs',
     'cf-get-parameter=ec2_utils.cli:cf_get_parameter',
@@ -107,6 +111,8 @@ NDT_ONLY_SCRIPT = [
     'undeploy-cdk.sh',
     'deploy-terraform.sh',
     'undeploy-terraform.sh',
+    'deploy-azure.sh',
+    'undeploy-azure.sh',
     'print-create-instructions.sh',
     'terraform-pull-state.sh'
 ]
