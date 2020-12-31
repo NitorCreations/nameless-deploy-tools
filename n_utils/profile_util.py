@@ -116,13 +116,13 @@ def profile_to_env():
                 parser.read_file(configfile)
                 if profile_entry in parser.sections() and parser.has_option(profile_entry, "azure_default_role_arn"):
                     params.append(role_param)
-                    print(role_param + "=\"" + parser.get(profile_entry, "azure_default_role_arn") + "\"")
+                    print(role_param + "=\"" + parser.get(profile_entry, "azure_default_role_arn") + "\";")
                 if profile_entry in parser.sections() and parser.has_option(profile_entry, "adfs_role_arn"):
                     params.append(role_param)
-                    print(role_param + "=\"" + parser.get(profile_entry, "adfs_role_arn") + "\"")
+                    print(role_param + "=\"" + parser.get(profile_entry, "adfs_role_arn") + "\";")
     if args.role_arn:
         params.append(role_param)
-        print(role_param + "=\"" + args.role_arn + "\"")
+        print(role_param + "=\"" + args.role_arn + "\";")
     print_profile(args.profile, params)
 
 def print_profile(profile_name, params):
@@ -132,12 +132,12 @@ def print_profile(profile_name, params):
         upper_param = key.upper()
         if key == "aws_session_expiration" or key == "aws_expiration":
             d = parse(value)
-            print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=\"" + _to_str(_epoc_secs(d)) + "\"")
+            print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=\"" + _to_str(_epoc_secs(d)) + "\";")
             params.append("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile)
         params.append(upper_param)
         if value.startswith("\""):
             value = value[1:-1]
-        print(upper_param + "=\"" + value + "\"")
+        print(upper_param + "=\"" + value + "\";")
     print("export " + " ".join(params) + ";")
 
 def profile_expiry_to_env():
@@ -252,11 +252,11 @@ def enable_profile(profile_type, profile):
                 if "azure_login_mode" in profile_data and profile_data["azure_login_mode"] == "gui":
                     gui_mode =  " --mode=gui"
                 if bw_entry:
-                    bw_prefix = "AZURE_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
+                    bw_prefix = "AZURE_DEFAULT_PASSWORD=\"" + bw_entry.password + "\"; "
                 print(bw_prefix + "aws-azure-login --profile " + profile + gui_mode + " --no-prompt")
             else:
                 if bw_entry:
-                    bw_prefix = "ADFS_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
+                    bw_prefix = "ADFS_DEFAULT_PASSWORD=\"" + bw_entry.password + "\"; "
                 print(bw_prefix + "adfs-aws-login --profile " + profile + " --no-prompt")
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             print_profile_expiry(profile)
@@ -300,8 +300,8 @@ def enable_profile(profile_type, profile):
         if not ("AZURE_SUBSCRIPTION" in os.environ and os.environ["AZURE_SUBSCRIPTION"] == orig_profile):
             subscription_id = az_select_subscription(orig_profile)
             if subscription_id:
-                print("AZURE_SUBSCRIPTION=\"" + orig_profile + "\"")
-                print("AZURE_SUBSCRIPTION_ID=\"" + subscription_id + "\"")
+                print("AZURE_SUBSCRIPTION=\"" + orig_profile + "\";")
+                print("AZURE_SUBSCRIPTION_ID=\"" + subscription_id + "\";")
                 print("export AZURE_SUBSCRIPTION AZURE_SUBSCRIPTION_ID")
 
 def _print_profile_switch(profile):
@@ -318,7 +318,7 @@ def _print_profile_switch(profile):
         set_env.append("AWS_PROFILE")
     if set_env:
         for param in set_env:
-            print(param + "=\"" + profile + "\"")
+            print(param + "=\"" + profile + "\";")
         print("export " + " ".join(set_env) + ";")
 
 def _epoc_secs(d):
