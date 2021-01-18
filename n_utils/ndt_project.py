@@ -290,7 +290,7 @@ phases:
     "environment": {
         "type": "LINUX_CONTAINER",
         "image": "nitor/ndt:latest",
-        "computeType": "BUILD_GENERAL1_SMALL",
+        "computeType": "{compute_type}",
         "environmentVariables": [],
         "privilegedMode": true,
         "imagePullCredentialsType": "SERVICE_ROLE"
@@ -391,6 +391,12 @@ phases:
             if "NDT_VERSION" in subcomponent["properties"]:
                 ndt_version = subcomponent["properties"]["NDT_VERSION"]
             component_args["environment"]["image"] = "nitor/ndt:"  + ndt_version
+
+            #Setup build environment
+            if "BUILD_ENVIRONMENT_COMPUTE" in subcomponent["properties"]:
+                component_args["environment"]["computeType"] = subcomponent["properties"]["BUILD_ENVIRONMENT_COMPUTE"]
+            else:
+                component_args["environment"]["computeType"] = "BUILD_GENERAL1_SMALL"
 
             # Setup source
             if "CODEBUILD_SOURCE_TYPE" in subcomponent["properties"]:
