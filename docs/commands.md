@@ -5,2625 +5,1393 @@
 ## `ndt account-id`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt account-id [-h]
 
-During handling of the above exception, another exception occurred:
+Get current account id. Either from instance metadata or current cli
+configuration.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt add-deployer-server`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt assume-role`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt assumed-role-name`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt azure-ensure-group`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt azure-ensure-management-group`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt azure-location`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt azure-template-parameters`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt bake-docker`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt bake-docker [-h] [-i] component docker-name
 
-During handling of the above exception, another exception occurred:
+Runs a docker build, ensures that an ecr repository with the docker name
+(by default <component>/<branch>-<docker-name>) exists and pushes the built
+image to that repository with the tags "latest" and "$BUILD_NUMBER"
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the docker directory is
+  docker-name the name of the docker directory that has the Dockerfile
+              For example for ecs-cluster/docker-cluster/Dockerfile
+              you would give cluster
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -i, --imagedefinitions  create imagedefinitions.json for AWS CodePipeline
 ```
 
 ## `ndt bake-image`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt bake-image [-h] component [image-name]
 
-During handling of the above exception, another exception occurred:
+Runs an ansible playbook that  builds an Amazon Machine Image (AMI) and
+tags the image with the job name and build number.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments
+  component     the component directory where the ami bake configurations are
+  [image-name]  Optional name for a named image in component/image-[image-name]
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt cf-delete-stack`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt cf-follow-logs`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt cf-get-parameter`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt cf-get-parameter [-h] parameter
 
-During handling of the above exception, another exception occurred:
+Get a parameter value from the stack
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  parameter   The name of the parameter to print
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt cf-logical-id`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt cf-logical-id [-h]
 
-During handling of the above exception, another exception occurred:
+Get the logical id that is expecting a signal from this instance
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt cf-region`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt cf-region [-h]
 
-During handling of the above exception, another exception occurred:
+Get region of the stack that created this instance
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt cf-signal-status`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt cf-signal-status [-h] [-r RESOURCE] status
 
-During handling of the above exception, another exception occurred:
+Signal CloudFormation status to a logical resource in CloudFormation that is
+either given on the command line or resolved from CloudFormation tags
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  status                Status to indicate: SUCCESS | FAILURE
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r RESOURCE, --resource RESOURCE
+                        Logical resource name to signal. Looked up from
+                        cloudformation tags by default
 ```
 
 ## `ndt cf-stack-id`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt cf-stack-id [-h]
 
-During handling of the above exception, another exception occurred:
+Get id of the stack the creted this instance
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt cf-stack-name`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt cf-stack-name [-h]
 
-During handling of the above exception, another exception occurred:
+Get name of the stack that created this instance
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt create-account`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt create-stack`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt create-stack [-h] [-y] [template]
 
-During handling of the above exception, another exception occurred:
+Create a stack from a template
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  template
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -y, --yes   Answer yes or use default to all questions
 ```
 
 ## `ndt deploy-azure`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt deploy-azure [-d] [-h] component azure-name
 
-During handling of the above exception, another exception occurred:
+Exports ndt parameters into component/azure-name/variables.json
+and deploys template.yaml with the azure cli referencing the parameter file
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the azure directory is
+  azure-name  the name of the azure directory that has the template
+                  For example for lambda/azure-blobstore/template.yaml
+                  you would give blobstore
+
+optional arguments:
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and azure cli what-if operation
+  -v, --verbose verbose - verbose output from azure cli
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt deploy-cdk`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt deploy-cdk [-d] [-h] component cdk-name
 
-During handling of the above exception, another exception occurred:
+Exports ndt parameters into component/cdk-name/variables.json, runs pre_deploy.sh in the
+cdk project and runs cdk diff; cdk deploy for the same
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the cdk directory is
+  cdk-name the name of the cdk directory that has the template
+                  For example for lambda/cdk-sender/bin/MyProject.ts
+                  you would give sender
+
+optional arguments:
+  -d, --dryrun  dry-run - do only parameter expansion and pre_deploy.sh and cdk diff
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt deploy-serverless`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt deploy-serverless [-d] [-h] component serverless-name
 
-During handling of the above exception, another exception occurred:
+Exports ndt parameters into component/serverless-name/variables.yml, runs npm i in the
+serverless project and runs sls deploy -s $paramEnvId for the same
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the serverless directory is
+  serverless-name the name of the serverless directory that has the template
+                  For example for lambda/serverless-sender/template.yaml
+                  you would give sender
+
+optional arguments:
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i
+  -v, --verbose verbose - verbose output from serverless framework
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt deploy-stack`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+ami that is tagged with the bake-job name
+usage: ndt deploy-stack [-d] [-h] component stack-name ami-id bake-job
 
-During handling of the above exception, another exception occurred:
+Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it.
+positional arguments:
+  component   the component directory where the stack template is
+  stack-name  the name of the stack directory inside the component directory
+              For example for ecs-cluster/stack-cluster/template.yaml
+              you would give cluster
+  ami-id      If you want to specify a value for the paramAmi variable in the stack,
+              you can do so. Otherwise give an empty string with two quotation marks
+  bake-job    If an ami-id is not given, the ami id is resolved by getting the latest
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -d, --dryrun  dry-run - show only the change set without actually deploying it
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt deploy-terraform`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt deploy-terraform [-d] [-h] component terraform-name
 
-During handling of the above exception, another exception occurred:
+Exports ndt parameters into component/terraform-name/terraform.tfvars as json, runs pre_deploy.sh in the
+terraform project and runs terraform plan; terraform apply for the same
+If TF_BACKEND_CONF is defined and points to a readable file relative to the ndt root,
+that file will get interpolated to $component/terraform-$terraform_name/backend.tf
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the terraform directory is
+  terraform-name the name of the terraform directory that has the template
+                  For example for lambda/terraform-sender/template.yaml
+                  you would give sender
+
+optional arguments:
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt detach-volume`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt detach-volume [-h] (-m MOUNT_PATH | -i VOLUME_ID | -d DEVICE) [-x]
 
-During handling of the above exception, another exception occurred:
+Create a snapshot of a volume identified by it\'s mount path
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help            show this help message and exit
+  -m MOUNT_PATH, --mount-path MOUNT_PATH
+                        Mount point of the volume to be detached
+  -i VOLUME_ID, --volume-id VOLUME_ID
+                        Volume id to detach
+  -d DEVICE, --device DEVICE
+                        Device to detach
+  -x, --delete          Delete volume after detaching
 ```
 
 ## `ndt ec2-clean-snapshots`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt ec2-get-tag`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt ec2-get-tag [-h] name
 
-During handling of the above exception, another exception occurred:
+Get the value of a tag for an ec2 instance
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  name        The name of the tag to get
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt ec2-get-userdata`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt ec2-get-userdata [-h] file
 
-During handling of the above exception, another exception occurred:
+Get userdata defined for an instance into a file
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  file        File to write userdata into. \'-\' for stdout
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt ec2-instance-id`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt ec2-instance-id [-h]
 
-During handling of the above exception, another exception occurred:
+Get id for instance
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt ec2-region`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt ec2-region [-h]
 
-During handling of the above exception, another exception occurred:
+Get current default region. Defaults to the region of the instance on ec2 if
+not otherwise defined.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt ec2-wait-for-metadata`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt ec2-wait-for-metadata [-h] [--timeout TIMEOUT]
 
-During handling of the above exception, another exception occurred:
+Waits for metadata service to be available. All errors are ignored until time
+expires or a socket can be established to the metadata service
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help            show this help message and exit
+  --timeout TIMEOUT, -t TIMEOUT
+                        Maximum time to wait in seconds for the metadata
+                        service to be available
 ```
 
 ## `ndt ecr-ensure-repo`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt ecr-repo-uri`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt enable-profile`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt enable-profile [-h] [-i | -a | -f | -n | -s] profile
 
-During handling of the above exception, another exception occurred:
+Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-
+role profiles are supported
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  profile               The profile to enable
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i, --iam             IAM user type profile
+  -a, --azure           Azure login type profile
+  -f, --adfs            ADFS login type profile
+  -n, --ndt             NDT assume role type profile
+  -s, --azure-subscription
+                        Microsoft Azure subscription
 ```
 
 ## `ndt get-images`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt interpolate-file`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt json-to-yaml`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt latest-snapshot`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt latest-snapshot [-h] tag
 
-During handling of the above exception, another exception occurred:
+Get the latest snapshot with a given tag
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  tag         The tag to find snapshots with
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt list-components`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt list-file-to-json`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt list-jobs`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt load-parameters`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt logs`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt logs log_group_pattern [-h] [-f FILTER] [-s START [START ...]] [-e END [END ...]] [-o]
 
-During handling of the above exception, another exception occurred:
+Get logs from multiple CloudWatch log groups and possibly filter them.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  log_group_pattern     Regular expression to filter log groups with
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FILTER, --filter FILTER
+                        CloudWatch filter pattern
+  -s START [START ...], --start START [START ...]
+                        Start time (x m|h|d|w ago | now | <seconds since
+                        epoc>)
+  -e END [END ...], --end END [END ...]
+                        End time (x m|h|d|w ago | now | <seconds since epoc>)
+  -o, --order           Best effort ordering of log entries
 ```
 
 ## `ndt mfa-add-token`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt mfa-backup`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt mfa-code`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt mfa-delete-token`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt mfa-qrcode`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt print-create-instructions`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+Prints out the instructions to create and deploy the resources in a stack
+usage: ndt print-create-instructions [-h] component stack-name
 
-During handling of the above exception, another exception occurred:
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the stack template is
+  stack-name  the name of the stack directory inside the component directory
+              For example for ecs-cluster/stack-cluster/template.yaml
+              you would give cluster
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt profile-expiry-to-env`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt profile-expiry-to-env [-h] profile
 
-During handling of the above exception, another exception occurred:
+Prints profile expiry from credentials file (~/.aws/credentials) as eval-able
+environment variables
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  profile     The profile to read expiry info from
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt profile-to-env`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt profile-to-env [-h] [-t] [-r ROLE_ARN] profile
 
-During handling of the above exception, another exception occurred:
+Prints profile parameters from credentials file (~/.aws/credentials) as eval-
+able environment variables
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  profile               The profile to read profile info from
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t, --target-role     Output also azure_default_role_arn
+  -r ROLE_ARN, --role-arn ROLE_ARN
+                        Output also the role given here as the target role for
+                        the profile
 ```
 
 ## `ndt promote-image`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt pytail`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt pytail [-h] file
 
-During handling of the above exception, another exception occurred:
+Read and print a file and keep following the end for new data
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  file        File to follow
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt read-profile-expiry`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt read-profile-expiry [-h] profile
 
-During handling of the above exception, another exception occurred:
+Read expiry field from credentials file, which is there if the login happened
+with aws-azure-login or another tool that implements the same logic (e.g.
+https://github.com/NitorCreations/adfs-aws-login).
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  profile     The profile to read expiry info from
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt region`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt region [-h]
 
-During handling of the above exception, another exception occurred:
+Get current default region. Defaults to the region of the instance on ec2 if
+not otherwise defined.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt register-private-dns`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt register-private-dns [-h] [-t TTL] [-p PRIVATE_IP]
+                                dns_name hosted_zone
 
-During handling of the above exception, another exception occurred:
+Register local private IP in route53 hosted zone usually for internal use.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  dns_name              The name to update in route 53
+  hosted_zone           The name of the hosted zone to update
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TTL, --ttl TTL     Time to live for the record. 60 by default
+  -p PRIVATE_IP, --private-ip PRIVATE_IP
+                        Private IP address to register
 ```
 
 ## `ndt session-to-env`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt setup-cli`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt share-to-another-region`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt show-stack-params-and-outputs`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt show-terraform-params`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt snapshot-from-volume`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS [COPYTAGS ...]]]
+                                [-t [TAGS [TAGS ...]]] [-i]
+                                tag_key tag_value mount_path
 
-During handling of the above exception, another exception occurred:
+Create a snapshot of a volume identified by it\'s mount path
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  tag_key               Key of the tag to find volume with
+  tag_value             Value of the tag to find volume with
+  mount_path            Where to mount the volume
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -w, --wait            Wait for the snapshot to finish before returning
+  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
+                        Tag to copy to the snapshot from instance. Multiple
+                        values allowed.
+  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
+                        Tag to add to the snapshot in the format name=value.
+                        Multiple values allowed.
+  -i, --ignore-missing-copytags
+                        If set, missing copytags are ignored.
 ```
 
 ## `ndt terraform-pull-state`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt terraform-init-state [-h] component terraform-name
 
-During handling of the above exception, another exception occurred:
+Make sure terraform state is initialized either for backend or locally
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the terraform directory is
+  terraform-name the name of the terraform directory that has the template
+                  For example for lambda/terraform-sender/template.yaml
+                  you would give sender
+
+optional arguments:
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt undeploy-azure`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt deploy-azure [-d] [-h] component azure-name
 
-During handling of the above exception, another exception occurred:
+Exports ndt parameters into component/azure-name/variables.json
+and deletes the deployment
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the azure directory is
+  azure-name  the name of the azure directory that has the template
+                  For example for lambda/azure-blobstore/template.yaml
+                  you would give blobstore
+
+optional arguments:
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and azure cli what-if operation
+  -v, --verbose verbose - verbose output from azure cli
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt undeploy-cdk`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt undeploy-cdk [-h] component cdk-name
 
-During handling of the above exception, another exception occurred:
+Exports ndt parameters into component/cdk-name/variables.yml
+and runs cdk destroy for the same
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the cdk directory is
+  cdk-name the name of the cdk directory that has the template
+                  For example for lambda/cdk-sender/template.yaml
+                  you would give sender
+
+optional arguments:
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt undeploy-serverless`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt undeploy-serverless [-h] component serverless-name
 
-During handling of the above exception, another exception occurred:
+Exports ndt parameters into component/serverless-name/variables.yml
+and runs sls remove -s $paramEnvId for the same
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the serverless directory is
+  serverless-name the name of the serverless directory that has the template
+                  For example for lambda/serverless-sender/template.yaml
+                  you would give sender
+
+optional arguments:
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt undeploy-stack`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt undeploy-stack [-h] [-f] <component> <stack-name>
 
-During handling of the above exception, another exception occurred:
+Undeploys (deletes) the given stack.
+Found s3 buckets are emptied and deleted only in case the -f argument is given.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the stack template is
+  stack-name  the name of the stack directory inside the component directory
+              For example for ecs-cluster/stack-cluster/template.yaml
+              you would give cluster
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt undeploy-terraform`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt undeploy-terraform [-h] component terraform-name
 
-During handling of the above exception, another exception occurred:
+Exports ndt parameters into component/terraform-name/terraform.tfvars as json
+and runs terraform destroy for the same
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  component   the component directory where the terraform directory is
+  terraform-name the name of the terraform directory that has the template
+                  For example for lambda/terraform-sender/template.yaml
+                  you would give sender
+
+optional arguments:
+  -h, --help    show this help message and exit
 ```
 
 ## `ndt upsert-cloudfront-records`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt upsert-codebuild-projects`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt upsert-dns-record`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt volume-from-snapshot`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS [COPYTAGS ...]]]
+                                [-t [TAGS [TAGS ...]]] [-i]
+                                tag_key tag_value mount_path [size_gb]
 
-During handling of the above exception, another exception occurred:
+Create a volume from an existing snapshot and mount it on the given path. The
+snapshot is identified by a tag key and value. If no tag is found, an empty
+volume is created, attached, formatted and mounted.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  tag_key               Key of the tag to find volume with
+  tag_value             Value of the tag to find volume with
+  mount_path            Where to mount the volume
+  size_gb               Size in GB for the volume. If different from snapshot
+                        size, volume and filesystem are resized
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n, --no_delete_on_termination
+                        Whether to skip deleting the volume on termination,
+                        defaults to false
+  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
+                        Tag to copy to the volume from instance. Multiple
+                        values allowed.
+  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
+                        Tag to add to the volume in the format name=value.
+                        Multiple values allowed.
+  -i, --ignore-missing-copytags
+                        If set, missing copytags are ignored.
 ```
 
 ## `ndt yaml-to-json`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `ndt yaml-to-yaml`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ndt", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ndt", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 127, in ndt
+    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `[ndt ]associate-eip`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/associate-eip", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/associate-eip", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'associate-eip\')()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 490, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2854, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2445, in load
+    return self.resolve()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2451, in resolve
+    module = __import__(self.module_name, fromlist=[\'__name__\'], level=0)
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `[ndt ]cf-logs-to-cloudwatch`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: cf-logs-to-cloudwatch [-h] [-g GROUP] [-s STREAM] file
 
-During handling of the above exception, another exception occurred:
+Read a file and send rows to cloudwatch and keep following the end for new
+data. The log group will be the stack name that created instance if not given
+as an argument. The logstream will be the instance id and filename if not
+given as an argument. Group and stream aare created if they do not exist.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/cf-logs-to-cloudwatch", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  file                  File to follow
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -g GROUP, --group GROUP
+                        Log group to log to. Defaults to the stack name that
+                        created the instance if not given and instance is
+                        created with a CloudFormation stack
+  -s STREAM, --stream STREAM
+                        The log stream name to log to. The instance id and
+                        filename if not given
 ```
 
 ## `[ndt ]ec2-associate-eip`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/ec2-associate-eip", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/ec2-associate-eip", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ec2-associate-eip\')()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 490, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2854, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2445, in load
+    return self.resolve()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2451, in resolve
+    module = __import__(self.module_name, fromlist=[\'__name__\'], level=0)
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `[ndt ]logs-to-cloudwatch`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: logs-to-cloudwatch [-h] [-g GROUP] [-s STREAM] file
 
-During handling of the above exception, another exception occurred:
+Read a file and send rows to cloudwatch and keep following the end for new
+data. The log group will be the stack name that created instance if not given
+as an argument. The logstream will be the instance id and filename if not
+given as an argument. Group and stream aare created if they do not exist.
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/logs-to-cloudwatch", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  file                  File to follow
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -g GROUP, --group GROUP
+                        Log group to log to. Defaults to the stack name that
+                        created the instance if not given and instance is
+                        created with a CloudFormation stack
+  -s STREAM, --stream STREAM
+                        The log stream name to log to. The instance id and
+                        filename if not given
 ```
 
 ## `[ndt ]n-include`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/n-include", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/n-include", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'n-include\')()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 490, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2854, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2445, in load
+    return self.resolve()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2451, in resolve
+    module = __import__(self.module_name, fromlist=[\'__name__\'], level=0)
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `[ndt ]n-include-all`
 
 ```bash
 Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/pasi/bin/n-include-all", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+  File "/home/pasi/bin/n-include-all", line 11, in <module>
+    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'n-include-all\')()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 490, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2854, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2445, in load
+    return self.resolve()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2451, in resolve
+    module = __import__(self.module_name, fromlist=[\'__name__\'], level=0)
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 55, in <module>
+    from n_utils.ndt_project import Project
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt_project.py", line 450
+    if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                                                                                                                       ^
+SyntaxError: invalid syntax
 ```
 
 ## `[ndt ]signal-cf-status`
 
 ```bash
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 584, in _build_master
-    ws.require(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 901, in require
-    needed = self.resolve(parse_requirements(requirements))
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
-    raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.23 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.22\'), {\'nameless-deploy-tools\'})
+usage: signal-cf-status [-h] [-r RESOURCE] status
 
-During handling of the above exception, another exception occurred:
+Signal CloudFormation status to a logical resource in CloudFormation that is
+either given on the command line or resolved from CloudFormation tags
 
-Traceback (most recent call last):
-  File "/home/pasi/bin/signal-cf-status", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3254, in <module>
-    def _initialize_master_working_set():
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3237, in _call_aside
-    f(*args, **kwargs)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3266, in _initialize_master_working_set
-    working_set = WorkingSet._build_master()
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 586, in _build_master
-    return cls._build_from_requirements(__requires__)
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 599, in _build_from_requirements
-    dists = ws.resolve(reqs, Environment())
-  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
-    raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.22\' distribution was not found and is required by nameless-deploy-tools
+positional arguments:
+  status                Status to indicate: SUCCESS | FAILURE
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r RESOURCE, --resource RESOURCE
+                        Logical resource name to signal. Looked up from
+                        cloudformation tags by default
 ```
 
 ## `create-shell-archive.sh`
