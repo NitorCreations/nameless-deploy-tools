@@ -447,7 +447,7 @@ phases:
             for flter in webhook_args["filterGroups"][0]:
                 if flter["type"] == "FILE_PATH":
                     flter["pattern"] = subcomponent_dir + "/.*"
-                if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] == "PUSH":
                     if flter["type"] == "BASE_REF":
                         flter["type"] = "HEAD_REF"
                         flter["pattern"] = "^refs/heads/" + branch + "$"
