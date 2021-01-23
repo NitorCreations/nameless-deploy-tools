@@ -421,6 +421,9 @@ phases:
             else:
                 del component_args["source"]
 
+            if "CODEBUILD_TIMEOUT" in subcomponent["properties"]:
+                component_args["timeoutInMinutes"] = int(subcomponent["properties"]["CODEBUILD_TIMEOUT"])
+
             # Make sure that builds that need docker, start docker
             if "NEEDS_DOCKER" in subcomponent["properties"] and subcomponent["properties"]["NEEDS_DOCKER"] == "y" and "phases" in interpolated_build_spec:
                 start_docker_found = False
@@ -439,15 +442,22 @@ phases:
                     if "commands" not in phase:
                         phase["commands"] = []
                     phase["commands"].insert(0, "start-docker.sh")
-
+                    component_args["source"]["buildspec"] = yaml_save(interpolated_build_spec)
             # Set up webhook filter
             for flter in webhook_args["filterGroups"][0]:
                 if flter["type"] == "FILE_PATH":
                     flter["pattern"] = subcomponent_dir + "/.*"
-                if flter["type"] == "BASE_REF":
-                    flter["pattern"] = "^refs/heads/" + branch + "$"
-                if flter["type"] == "EVENT" and "CODEBUILD_EVENT_FILTER" in subcomponent["properties"]:
-                    flter["pattern"] = subcomponent["properties"]["CODEBUILD_EVENT_FILTER"]
+                if "CODEBUILD_EVENT_FILTER" in subcomponent["properties"] and subcomponent["properties"]["CODEBUILD_EVENT_FILTER"] = "PUSH":
+                    if flter["type"] == "BASE_REF":
+                        flter["type"] = "HEAD_REF"
+                        flter["pattern"] = "^refs/heads/" + branch + "$"
+                    if flter["type"] == "EVENT":
+                        flter["pattern"] = "PUSH"
+                else:
+                    if flter["type"] == "BASE_REF":
+                        flter["pattern"] = "^refs/heads/" + branch + "$"
+                    if flter["type"] == "EVENT" and "CODEBUILD_EVENT_FILTER" in subcomponent["properties"]:
+                        flter["pattern"] = subcomponent["properties"]["CODEBUILD_EVENT_FILTER"]
             webhook_args["projectName"] = component_args['name']
 
             # Run update
