@@ -912,6 +912,10 @@ def cli_upsert_codebuild_projects():
     * CODEBUILD_EVENT_FILTER - the type of event to trigger the build.
         - By default PULL_REQUEST_MERGED
         - Other possible values: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED and PULL_REQUEST_REOPENED
+    * CODEBUILD_TIMEOUT - timeout in minutes for the codebuild execution. 60 by default
+    * BUILD_ENVIRONMENT_COMPUTE - the compute environment for the build.
+        - BUILD_GENERAL1_SMALL by default
+        - Other possible values BUILD_GENERAL1_MEDIUM, BUILD_GENERAL1_LARGE, BUILD_GENERAL1_2XLARGE
     * NEEDS_DOCKER - if 'y' (by default on for docker bakes and missing otheriwise), docker server is started inside the container
         - Needed for bakes and for example serverless python dockerized dependencies
     * SKIP_BUILD_JOB - skip creating build jobs where this parameter is 'y'
