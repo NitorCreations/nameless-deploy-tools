@@ -1,15 +1,15 @@
 FROM nitor/docker-base:latest
 
-ENV NODE_VERSION=12.18.0 \
- YARN_VERSION=1.22.4 \
+ENV NODE_VERSION=14.16.0 \
+ YARN_VERSION=1.22.10 \
  JAVA_HOME=/docker-java-home \
- GRADLE_VERSION=6.0.1 \
+ GRADLE_VERSION=6.8.3 \
  MAVEN_VERSION=3.6.3 \
  PHANTOMJS_VERSION=2.1.1 \
- LERNA_VERSION=3.22.0 \
- SERVERLESS_VERSION=1.72.0 \
- TERRAFORM_VERSION=0.13.2 \
- TERRAFORM_SHA="6c1c6440c5cb199e85926aea65773450564f501fddcd7876f453ba95b45ba746"
+ LERNA_VERSION=3.22.1 \
+ SERVERLESS_VERSION=2.27.1 \
+ TERRAFORM_VERSION=0.14.7 \
+ TERRAFORM_SHA="6b66e1faf0ad4ece28c42a1877e95bbb1355396231d161d78b8ca8a99accc2d7"
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git openssh-client unzip chromium-bsu jq gpg parallel dirmngr
 RUN set -ex \
@@ -32,9 +32,9 @@ RUN set -ex \
     A48C2BEE680E841632CD4E44F07496B3EB3C1762 \
     6A010C5166006599AA17F08146C2130DFD2497F5 \
   ; do \
-    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-    gpg --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
+    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
+    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
   done \
   && { \
 		echo '#!/bin/sh'; \
@@ -74,7 +74,8 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
   && pip install -U --no-cache-dir ansible boto awscli boto3 nitor-vault \
-  && npm i -g npm serverless@${SERVERLESS_VERSION} lerna@$LERNA_VERSION \
+  && npm i -g npm \
+  && npm i -g serverless@${SERVERLESS_VERSION} lerna@$LERNA_VERSION \
   && wget -nv -O - "http://www.nic.funet.fi/pub/mirrors/apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" | tar -xzf - -C /opt \
   && ln -snf /opt/apache-maven-${MAVEN_VERSION} /opt/maven \
   && ln -snf /opt/maven/bin/mvn /usr/bin/mvn \
