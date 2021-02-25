@@ -272,29 +272,46 @@ optional arguments:
 ## `ndt create-account`
 
 ```bash
-usage: ndt create-account [-h] [-d] [-o ORGANIZATION_ROLE_NAME]
-                          [-r TRUST_ROLE_NAME]
-                          [-a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]]
-                          [-t TOKEN_NAME]
-                          email account_name
-
-Creates a subaccount.
-
-positional arguments:
-  email                 Email for account root
-  account_name          Organization unique account name
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -d, --deny-billing-access
-  -o ORGANIZATION_ROLE_NAME, --organization-role-name ORGANIZATION_ROLE_NAME
-                        Role name for admin access from parent account
-  -r TRUST_ROLE_NAME, --trust-role-name TRUST_ROLE_NAME
-                        Role name for admin access from parent account
-  -a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]], --trusted-accounts [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]
-                        Account to trust with user management
-  -t TOKEN_NAME, --mfa-token TOKEN_NAME
-                        Name of MFA token to use
+Traceback (most recent call last):
+  File "/home/pasi/.local/bin/ndt", line 33, in <module>
+    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 131, in ndt
+    my_func()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 668, in cli_create_account
+    ChoicesCompleter(list_created_accounts())
+  File "/usr/lib/python3/dist-packages/argcomplete/completers.py", line 19, in __init__
+    for choice in choices:
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/account_utils.py", line 90, in list_created_accounts
+    for page in cf_stacks.paginate():
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/paginate.py", line 255, in __iter__
+    response = self._make_request(current_kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/paginate.py", line 332, in _make_request
+    return self._method(**current_kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 662, in _make_api_call
+    http, parsed_response = self._make_request(
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 682, in _make_request
+    return self._endpoint.make_request(operation_model, request_dict)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 102, in make_request
+    return self._send_request(request_dict, operation_model)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 132, in _send_request
+    request = self.create_request(request_dict, operation_model)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 115, in create_request
+    self._event_emitter.emit(event_name, request=request,
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 356, in emit
+    return self._emitter.emit(aliased_event_name, **kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 228, in emit
+    return self._emit(event_name, kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 211, in _emit
+    response = handler(**kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/signers.py", line 90, in handler
+    return self.sign(operation_name, request)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/signers.py", line 162, in sign
+    auth.add_auth(request)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/auth.py", line 357, in add_auth
+    raise NoCredentialsError
+botocore.exceptions.NoCredentialsError: Unable to locate credentials
 ```
 
 ## `ndt create-stack`
@@ -416,19 +433,16 @@ optional arguments:
 ## `ndt detach-volume`
 
 ```bash
-usage: ndt detach-volume [-h] (-m MOUNT_PATH | -i VOLUME_ID | -d DEVICE) [-x]
-
-Create a snapshot of a volume identified by it\'s mount path
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -m MOUNT_PATH, --mount-path MOUNT_PATH
-                        Mount point of the volume to be detached
-  -i VOLUME_ID, --volume-id VOLUME_ID
-                        Volume id to detach
-  -d DEVICE, --device DEVICE
-                        Device to detach
-  -x, --delete          Delete volume after detaching
+Traceback (most recent call last):
+  File "/home/pasi/.local/bin/ndt", line 33, in <module>
+    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 131, in ndt
+    my_func()
+  File "/home/pasi/.local/lib/python3.8/site-packages/ec2_utils/cli.py", line 219, in detach_volume
+    group.add_argument("-i", "--volume-id", help="Volume id to detach").completer = ChoicesCompleter(info().volume_ids())
+  File "/usr/lib/python3/dist-packages/argcomplete/completers.py", line 19, in __init__
+    for choice in choices:
+TypeError: \'NoneType\' object is not iterable
 ```
 
 ## `ndt ec2-clean-snapshots`
@@ -1242,19 +1256,47 @@ optional arguments:
 ## `ndt upsert-cloudfront-records`
 
 ```bash
-usage: ndt upsert-cloudfront-records [-h]
-                                     (-i DISTRIBUTION_ID | -c DISTRIBUTION_COMMENT)
-                                     [-w]
-
-Upsert Route53 records for all aliases of a CloudFront distribution
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -i DISTRIBUTION_ID, --distribution_id DISTRIBUTION_ID
-                        Id for the distribution to upsert
-  -c DISTRIBUTION_COMMENT, --distribution_comment DISTRIBUTION_COMMENT
-                        Comment for the distribution to upsert
-  -w, --wait            Wait for request to sync
+<botocore.paginate.PageIterator object at 0x7f3c6fe2cb80>
+Traceback (most recent call last):
+  File "/home/pasi/.local/bin/ndt", line 33, in <module>
+    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 131, in ndt
+    my_func()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 548, in cli_upsert_cloudfront_records
+    ChoicesCompleter(distributions())
+  File "/usr/lib/python3/dist-packages/argcomplete/completers.py", line 19, in __init__
+    for choice in choices:
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cloudfront_utils.py", line 26, in distributions
+    for page in pages.paginate():
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/paginate.py", line 255, in __iter__
+    response = self._make_request(current_kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/paginate.py", line 332, in _make_request
+    return self._method(**current_kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 662, in _make_api_call
+    http, parsed_response = self._make_request(
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 682, in _make_request
+    return self._endpoint.make_request(operation_model, request_dict)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 102, in make_request
+    return self._send_request(request_dict, operation_model)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 132, in _send_request
+    request = self.create_request(request_dict, operation_model)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 115, in create_request
+    self._event_emitter.emit(event_name, request=request,
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 356, in emit
+    return self._emitter.emit(aliased_event_name, **kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 228, in emit
+    return self._emit(event_name, kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 211, in _emit
+    response = handler(**kwargs)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/signers.py", line 90, in handler
+    return self.sign(operation_name, request)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/signers.py", line 162, in sign
+    auth.add_auth(request)
+  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/auth.py", line 357, in add_auth
+    raise NoCredentialsError
+botocore.exceptions.NoCredentialsError: Unable to locate credentials
 ```
 
 ## `ndt upsert-codebuild-projects`
