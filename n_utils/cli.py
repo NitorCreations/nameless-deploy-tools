@@ -824,7 +824,8 @@ def map_to_tfvars(map):
     """
     ret = ""
     for key, val in list(map.items()):
-        ret += key + "=" + json.dumps(val) + "\n"
+        if "${" not in val:
+            ret += key + "=" + json.dumps(val) + "\n"
     return ret
 
 def map_to_azure_params(map):
