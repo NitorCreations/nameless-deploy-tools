@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import json
+import six
 from builtins import object
 from operator import attrgetter
 from os import sep, path, mkdir
@@ -253,7 +254,7 @@ def _write_prop_files(param_files):
         with open(filename, 'w+') as prop_file:
             for key, val in list(parameters.items()):
                 if isinstance(val, six.string_types):
-                    prop_file.write(key + "=" + value + "\n")
+                    prop_file.write(key + "=" + val + "\n")
                 else:
                     prop_file.write(key + "=" + json_save_small(val) + "\n")
 
