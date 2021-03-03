@@ -1256,7 +1256,7 @@ optional arguments:
 ## `ndt upsert-cloudfront-records`
 
 ```bash
-<botocore.paginate.PageIterator object at 0x7feeb2629b80>
+<botocore.paginate.PageIterator object at 0x7f3817c63b80>
 Traceback (most recent call last):
   File "/home/pasi/.local/bin/ndt", line 33, in <module>
     sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
