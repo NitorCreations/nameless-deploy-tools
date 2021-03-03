@@ -7,7 +7,7 @@ from builtins import object
 from operator import attrgetter
 from os import sep, path, mkdir
 from threadlocal_aws.clients import codebuild
-from n_utils.aws_infra_util import yaml_to_dict, import_scripts, yaml_save
+from n_utils.aws_infra_util import yaml_to_dict, import_scripts, yaml_save, json_save_small
 from n_utils import VERSION
 from cloudformation_utils.tools import cloudformation_yaml_loads as yaml_loads
 try:
@@ -251,8 +251,11 @@ def _collect_prop_files(components, export_job_properties, root, git):
 def _write_prop_files(param_files):
     for filename, parameters in list(param_files.items()):
         with open(filename, 'w+') as prop_file:
-            for key, value in list(parameters.items()):
-                prop_file.write(key + "=" + value + "\n")
+            for key, val in list(parameters.items()):
+                if isinstance(val, six.string_types):
+                    prop_file.write(key + "=" + value + "\n")
+                else:
+                    prop_file.write(key + "=" + json_save_small(val) + "\n")
 
 def list_components(branch=None, json=None):
     return [c.name for c in Project(branch=branch).get_components()]
