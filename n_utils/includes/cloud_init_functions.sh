@@ -51,7 +51,7 @@ EOF
 onexit () {
   echo -----------------------------------------------------------------
   set +e
-  if which fetch-secrets.sh > /dev/null 2>&1; then
+  if which fetch-secrets.sh &> /dev/null 2>&1; then
     fetch-secrets.sh logout
   fi
   signal-cf-status $status
