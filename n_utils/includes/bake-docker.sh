@@ -95,7 +95,7 @@ if [ -n "$DOCKER_BAKE_ROLE_ARN" ] && [ -z "$AWS_SESSION_TOKEN" ]; then
   eval "$(ndt assume-role "DOCKER_BAKE_ROLE_ARN")"
 elif [ -n "$DEPLOY_ROLE_ARN" ] && [ -z "$AWS_SESSION_TOKEN" ]; then
   eval "$(ndt assume-role "$DEPLOY_ROLE_ARN")"
-elif which assume-deploy-role.sh > /dev/null && [ -z "$AWS_SESSION_TOKEN" ]; then
+elif which assume-deploy-role.sh &> /dev/null && [ -z "$AWS_SESSION_TOKEN" ]; then
   eval "$(assume-deploy-role.sh)"
 fi
 

@@ -93,7 +93,7 @@ fi
 #If assume-azure-deploy-role.sh is on the path, run it to assume the appropriate role for deployment
 if [ -n "$DEPLOY_AZURE_SUBSCRIPTION" ] && [ -z "$AZURE_SUBSCRIPTION" ]; then
   eval $(ndt assume-role -s $DEPLOY_AZURE_SUBSCRIPTION)
-elif which assume-azure-deploy-role.sh > /dev/null && [ -z "$AZURE_SUBSCRIPTION" -o "$AZURE_SUBSCRIPTION" != "$DEPLOY_AZURE_SUBSCRIPTION" ]; then
+elif which assume-azure-deploy-role.sh &> /dev/null && [ -z "$AZURE_SUBSCRIPTION" -o "$AZURE_SUBSCRIPTION" != "$DEPLOY_AZURE_SUBSCRIPTION" ]; then
   eval $(assume-azure-deploy-role.sh)
 fi
 
