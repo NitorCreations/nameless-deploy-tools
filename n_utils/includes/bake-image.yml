@@ -225,7 +225,7 @@
           instance-state-name: [running, pending]
       register: running_instances
 
-    - ec2_lc_facts:
+    - ec2_lc_info:
         region: "{{ aws_region }}"
         sort: created_time
         sort_order: descending
