@@ -19,6 +19,7 @@ In short you need to append the following to `~/.zshrc`
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 eval "$(nitor-care-register-complete)"
+```
 
 ## Project session switcher
 
@@ -63,17 +64,20 @@ So taking project environment variables into use with your command completion wo
 eval "$(nameless-dt-register-complete --project-env)"
 ```
 
-Somewehere in your bash profile files - I have mine in `~/.bashrc`
+Somewehere in your bash profile files - typically `~/.bashrc`
+
+For every variable below the curren branch specific version is checked first and that overrides
+the repository wide setting if found.
 
 The checked git local configurations are:
-* `ndt.source.env` - source a file on every prompt
-* `ndt.aws.profile` - export the name of an aws credentials profile on every prompt
-* `ndt.aws.region` - export a default region name on every prompt
-* `ndt.profile.azure` - enable a profile that includes `aws-azure-login` settings
-* `ndt.profile.iam` - enable a profile that has simple iam keys settings
-* `ndt.profile.ndt` - enable a profile that has settings to do a `ndt assume-role` including a potential mfa token.
-* `ndt.profile.adfs` - enable a profile that includes `adfs-aws-login` settings
-* `ndt.profile.azure-subscription` - enable a subscription for Azure cli
+* `ndt.source.[branch].env` or `ndt.source.env` - source a file on every prompt
+* `ndt.aws.[branch].profile` or `ndt.aws.profile` - export the name of an aws credentials profile on every prompt
+* `ndt.aws.[branch].region` or `ndt.aws.region` - export a default region name on every prompt
+* `ndt.profile.[branch].azure` or `ndt.profile.azure` - enable a profile that includes `aws-azure-login` settings
+* `ndt.profile.[branch].iam` or `ndt.profile.iam` - enable a profile that has simple iam keys settings
+* `ndt.profile.[branch].ndt` or `ndt.profile.ndt` - enable a profile that has settings to do a `ndt assume-role` including a potential mfa token.
+* `ndt.profile.[branch].adfs` or `ndt.profile.adfs` - enable a profile that includes `adfs-aws-login` settings
+* `ndt.profile.[branch].azure-subscription`  or `ndt.profile.azure-subscription` - enable a subscription for Azure cli
 
 You can set these variables by calling `git config [variable] [value]` and you can check the commands
 that would be executed by calling `nameless-dt-load-project-env`
