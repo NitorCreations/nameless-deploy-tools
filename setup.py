@@ -17,7 +17,7 @@ from n_utils import PATH_COMMANDS, CONSOLESCRIPTS
 
 win_deps = []
 if sys.version_info[0] == 2:
-    python2_or_3_deps = ['pyotp==2.3', 'Pygments==2.5.2', 'importlib-metadata==2.1.1']
+    python2_or_3_deps = ['pyotp==2.3', 'Pygments==2.5.2', 'importlib-metadata==2.1.1', 'decorator==4.4.2']
     python2_or_3_test_deps = ['pytest==4.6.11', 'pytest-mock==1.13.0', 'mock==3.0.5']
 elif sys.version_info[0] == 3:
     python2_or_3_deps = ['pyotp', 'Pygments']
