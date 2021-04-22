@@ -120,6 +120,9 @@ def profile_to_env():
                 if profile_entry in parser.sections() and parser.has_option(profile_entry, "adfs_role_arn"):
                     params.append(role_param)
                     print(role_param + "=\"" + parser.get(profile_entry, "adfs_role_arn") + "\";")
+                if profile_entry in parser.sections() and parser.has_option(profile_entry, "lastpass_role_arn"):
+                    params.append(role_param)
+                    print(role_param + "=\"" + parser.get(profile_entry, "lastpass_role_arn") + "\";")
     if args.role_arn:
         params.append(role_param)
         print(role_param + "=\"" + args.role_arn + "\";")
@@ -194,6 +197,7 @@ def cli_enable_profile():
     type_select.add_argument("-i", "--iam", action="store_true", help="IAM user type profile")
     type_select.add_argument("-a", "--azure", action="store_true", help="Azure login type profile")
     type_select.add_argument("-f", "--adfs", action="store_true", help="ADFS login type profile")
+    type_select.add_argument("-l", "--lastpass", action="store_true", help="Lastpass login type profile")
     type_select.add_argument("-n", "--ndt", action="store_true", help="NDT assume role type profile")
     type_select.add_argument("-s", "--azure-subscription", action="store_true", help="Microsoft Azure subscription")
     if "_ARGCOMPLETE" in os.environ:
@@ -209,6 +213,8 @@ def cli_enable_profile():
         profile_type = "azure"
     elif args.adfs:
         profile_type = "adfs"
+    elif args.lastpass:
+        profile_type = "lastpass"
     elif args.ndt:
         profile_type = "ndt"
     elif args.azure_subscription:
@@ -221,6 +227,8 @@ def cli_enable_profile():
             profile_type = "ndt"
         elif "adfs_login_url" in profile:
             profile_type = "adfs"
+        elif "lastpass_saml_id" in profile:
+            profile_type = "lastpass"
         else:
             profile_type = "iam"
     enable_profile(profile_type, args.profile)
@@ -233,7 +241,7 @@ def enable_profile(profile_type, profile):
     expiry = now - 1000
     if profile_type == "iam":
         _print_profile_switch(profile)
-    elif profile_type == "azure" or profile_type == "adfs":
+    elif profile_type == "azure" or profile_type == "adfs" or profile_type == "lastpass":
         _print_profile_switch(profile)
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
@@ -254,10 +262,14 @@ def enable_profile(profile_type, profile):
                 if bw_entry:
                     bw_prefix = "AZURE_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
                 print(bw_prefix + "aws-azure-login --profile " + profile + gui_mode + " --no-prompt")
-            else:
+            elif profile_type == "adfs":
                 if bw_entry:
                     bw_prefix = "ADFS_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
                 print(bw_prefix + "adfs-aws-login --profile " + profile + " --no-prompt")
+            elif profile_type == "lastpass":
+                if bw_entry:
+                    bw_prefix = "LASTPASS_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
+                print(bw_prefix + "lastpass-aws-login --profile " + profile + " --no-prompt")
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             print_profile_expiry(profile)
     elif profile_type == "ndt":
@@ -277,6 +289,8 @@ def enable_profile(profile_type, profile):
                 origin_type = "azure"
             elif "adfs_login_url" in origin_profile_data:
                 origin_type = "adfs"
+            elif "lastpass_saml_id" in origin_profile_data:
+                origin_type = "lastpass"
             else:
                 origin_type = "iam"
             enable_profile(origin_type, origin_profile)

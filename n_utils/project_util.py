@@ -40,6 +40,7 @@ def load_project_env():
 
     _check_enable_profile(vars, current_branch, "azure")
     _check_enable_profile(vars, current_branch, "adfs")
+    _check_enable_profile(vars, current_branch, "lastpass")
     _check_enable_profile(vars, current_branch, "iam")
     _check_enable_profile(vars, current_branch, "ndt")
     _check_enable_profile(vars, current_branch, "azure-subscription")
