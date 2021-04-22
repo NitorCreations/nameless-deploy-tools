@@ -77,6 +77,7 @@ The checked git local configurations are:
 * `ndt.profile.[branch].iam` or `ndt.profile.iam` - enable a profile that has simple iam keys settings
 * `ndt.profile.[branch].ndt` or `ndt.profile.ndt` - enable a profile that has settings to do a `ndt assume-role` including a potential mfa token.
 * `ndt.profile.[branch].adfs` or `ndt.profile.adfs` - enable a profile that includes `adfs-aws-login` settings
+* `ndt.profile.[branch].lastpass` or `ndt.profile.lastpass` - enable a profile that includes `lastpass-aws-login` settings
 * `ndt.profile.[branch].azure-subscription`  or `ndt.profile.azure-subscription` - enable a subscription for Azure cli
 
 You can set these variables by calling `git config [variable] [value]` and you can check the commands
