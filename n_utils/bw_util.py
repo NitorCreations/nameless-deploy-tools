@@ -1,6 +1,11 @@
 import json
 from os import devnull
+import pyotp
+import string
 from subprocess import Popen, PIPE
+
+def strip_whitespace(s):
+    return s.translate({ord(c): None for c in string.whitespace})
 
 _BW_CACHE = {}
 NO_ENTRY = "NO ENTRY"
@@ -38,6 +43,10 @@ class BwEntry:
         self.username = item_data["login"]["username"]
         self.password = item_data["login"]["password"]
         self.totp = item_data["login"]["totp"]
+        if self.totp:
+            self.totp_now = pyotp.TOTP(strip_whitespace(self.totp)).now()
+        else:
+            self.totp_now = None
         if "uris" in item_data["login"]:
             for uri in item_data["login"]["uris"]:
                 self.uris.append(uri["uri"])

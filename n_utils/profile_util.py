@@ -269,6 +269,8 @@ def enable_profile(profile_type, profile):
             elif profile_type == "lastpass":
                 if bw_entry:
                     bw_prefix = "LASTPASS_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
+                    if bw_entry.totp_now:
+                        bw_prefix += "LASTPASS_DEFAULT_OTP=\"" + bw_entry.totp_now + "\" "
                 print(bw_prefix + "lastpass-aws-login --profile " + profile + " --no-prompt")
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             print_profile_expiry(profile)
