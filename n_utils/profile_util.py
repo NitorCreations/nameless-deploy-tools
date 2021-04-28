@@ -260,17 +260,17 @@ def enable_profile(profile_type, profile):
                 if "azure_login_mode" in profile_data and profile_data["azure_login_mode"] == "gui":
                     gui_mode =  " --mode=gui"
                 if bw_entry:
-                    bw_prefix = "AZURE_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
-                print(bw_prefix + "aws-azure-login --profile " + profile + gui_mode + " --no-prompt")
+                    bw_prefix = "AZURE_DEFAULT_PASSWORD=\'" + bw_entry.password + "\' "
+                print(bw_prefix + "aws-azure-login --profile " + profile + gui_mode + " --no-prompt --no-sandbox")
             elif profile_type == "adfs":
                 if bw_entry:
-                    bw_prefix = "ADFS_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
+                    bw_prefix = "ADFS_DEFAULT_PASSWORD=\'" + bw_entry.password + "\' "
                 print(bw_prefix + "adfs-aws-login --profile " + profile + " --no-prompt")
             elif profile_type == "lastpass":
                 if bw_entry:
-                    bw_prefix = "LASTPASS_DEFAULT_PASSWORD=\"" + bw_entry.password + "\" "
+                    bw_prefix = "LASTPASS_DEFAULT_PASSWORD=\'" + bw_entry.password + "\' "
                     if bw_entry.totp_now:
-                        bw_prefix += "LASTPASS_DEFAULT_OTP=\"" + bw_entry.totp_now + "\" "
+                        bw_prefix += "LASTPASS_DEFAULT_OTP=\'" + bw_entry.totp_now + "\' "
                 print(bw_prefix + "lastpass-aws-login --profile " + profile + " --no-prompt")
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             print_profile_expiry(profile)
