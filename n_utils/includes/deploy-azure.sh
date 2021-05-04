@@ -39,7 +39,7 @@ usage() {
   echo "usage: ndt deploy-azure [-d] [-h] component azure-name" >&2
   echo "" >&2
   echo "Exports ndt parameters into component/azure-name/variables.json" >&2
-  echo "and deploys template.yaml with the azure cli referencing the parameter file" >&2
+  echo "and deploys template.yaml or template.bicep with the azure cli referencing the parameter file" >&2
   echo "" >&2
   echo "positional arguments:" >&2
   echo "  component   the component directory where the azure directory is" >&2
@@ -106,7 +106,15 @@ fi
 
 DEPLOY_TEMPLATE="$component/azure-$ORIG_AZURE_NAME/azuredeploy.json"
 PARAMETERS="$component/azure-$ORIG_AZURE_NAME/variables.json"
-ndt yaml-to-json "$component/azure-$ORIG_AZURE_NAME/template.yaml" > "$DEPLOY_TEMPLATE"
+if [ -r "$component/azure-$ORIG_AZURE_NAME/template.yaml" ]; then
+  ndt yaml-to-json "$component/azure-$ORIG_AZURE_NAME/template.yaml" > "$DEPLOY_TEMPLATE"
+elif [ -r "$component/azure-$ORIG_AZURE_NAME/template.bicep" ]; then
+  ndt interpolate-file -n -o "$component/azure-$ORIG_AZURE_NAME/azuredeploy.bicep" "$component/azure-$ORIG_AZURE_NAME/template.bicep"
+  bicep build "$component/azure-$ORIG_AZURE_NAME/azuredeploy.bicep"
+else
+  echo "Template not found. Looked for $component/azure-$ORIG_AZURE_NAME/template.yaml and $component/azure-$ORIG_AZURE_NAME/template.bicep"
+  exit 1
+fi
 ndt load-parameters "$component" -a "$azure" -z -r -f "$(ndt azure-template-parameters "$DEPLOY_TEMPLATE")" > "$PARAMETERS"
 
 cd "$component/azure-$ORIG_AZURE_NAME"
