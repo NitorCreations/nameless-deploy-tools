@@ -46,6 +46,7 @@ NDT_ONLY = [
     'azure-ensure-management-group=n_utils.cli:azure_ensure_management_group',
     'azure-location=n_utils.cli:azure_location',
     'azure-template-parameters=n_utils.cli:azure_template_parameters',
+    'bw-store-aws-cli-creds=n_utils.profile_util:cli_store_bw_profile',
     'cf-delete-stack=n_utils.cli:delete_stack',
     'cf-follow-logs=n_utils.cli:tail_stack_logs',
     'cf-get-parameter=ec2_utils.cli:cf_get_parameter',

@@ -190,6 +190,41 @@ def update_profile(profile, creds):
     with open(credentials, 'w') as credfile:
         parser.write(credfile)
 
+def store_bw_profile(bw_entry_name):
+    bw_entry = get_bwentry(bw_entry_name)
+    if bw_entry and "aws_access_key_id" in bw_entry.fields and \
+        "aws_secret_access_key" in bw_entry.fields and \
+        "profile_name" in bw_entry.fields:
+        profile = bw_entry.fields["profile_name"]
+        home = expanduser("~")
+        credentials = join(home, ".aws", "credentials")
+        if exists(credentials):
+            parser = ConfigParser()
+            with open(credentials, 'r') as credfile:
+                parser.read_file(credfile)
+                if profile not in parser.sections():
+                    parser.add_section(profile)
+                parser.set(profile, "aws_access_key_id", bw_entry.fields["aws_access_key_id"])
+                parser.set(profile, "aws_secret_access_key", bw_entry.fields["aws_secret_access_key"])
+        with open(credentials, 'w') as credfile:
+            parser.write(credfile)
+        return profile
+    return None
+
+def cli_store_bw_profile():
+    """ Fetches a Bitwarde entry and if it contains a definition of a aws credentials, stores it in aws cli
+    configuration. Namely the entry needs to define the extra fields aws_access_key_id, aws_secret_access_key
+    and profile_name"""
+    parser = argparse.ArgumentParser(description=cli_store_bw_profile.__doc__)
+    parser.add_argument("entryname", help="The name of the bitwarden entry to get")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    profile = store_bw_profile(args.entryname)
+    if profile:
+        print("Saved profile " + profile)
+    else:
+        print("Entry " + args.entryname + " not found to contain an aws cli profile")
+
 def cli_enable_profile():
     """Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-role profiles are supported"""
     parser = argparse.ArgumentParser(description=cli_enable_profile.__doc__)
