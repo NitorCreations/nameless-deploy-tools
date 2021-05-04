@@ -162,6 +162,22 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
+## `ndt bw-store-aws-cli-creds`
+
+```bash
+usage: ndt bw-store-aws-cli-creds [-h] entryname
+
+Fetches a Bitwarde entry and if it contains a definition of a aws credentials,
+stores it in aws cli configuration. Namely the entry needs to define the extra
+fields aws_access_key_id, aws_secret_access_key and profile_name
+
+positional arguments:
+  entryname   The name of the bitwarden entry to get
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
 ## `ndt cf-delete-stack`
 
 ```bash
@@ -1321,7 +1337,7 @@ optional arguments:
 
 ```bash
 usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]] [-i] [-u]
+                                [-t [TAGS [TAGS ...]]] [-i]
                                 tag_key tag_value mount_path [size_gb]
 
 Create a volume from an existing snapshot and mount it on the given path. The
@@ -1348,7 +1364,6 @@ optional arguments:
                         Multiple values allowed.
   -i, --ignore-missing-copytags
                         If set, missing copytags are ignored.
-  -u, --unencrypted     If set, create unencrypted volume
 ```
 
 ## `ndt yaml-to-json`
