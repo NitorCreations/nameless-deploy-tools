@@ -99,3 +99,4 @@ ENV/
 .vscode
 azuredeploy.json
 variables.json
+azuredeploy.bicep
