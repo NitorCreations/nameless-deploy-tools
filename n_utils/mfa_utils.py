@@ -65,6 +65,8 @@ def mfa_read_token(token_name):
     if data:
         if 'bitwarden_entry' in data and data['bitwarden_entry']:
             bw_entry = get_bwentry(data['bitwarden_entry'])
+            if "token_arn" in bw_entry.fields:
+                data["token_arn"] = bw_entry.fields["token_arn"]
             if bw_entry.totp:
                 data['token_secret'] = "enc--" + _to_str(IiII1IiiIiI1(_to_bytes(bw_entry.totp)))
             else:
