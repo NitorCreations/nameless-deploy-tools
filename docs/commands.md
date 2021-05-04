@@ -334,7 +334,7 @@ optional arguments:
 usage: ndt deploy-azure [-d] [-h] component azure-name
 
 Exports ndt parameters into component/azure-name/variables.json
-and deploys template.yaml with the azure cli referencing the parameter file
+and deploys template.yaml or template.bicep with the azure cli referencing the parameter file
 
 positional arguments:
   component   the component directory where the azure directory is
