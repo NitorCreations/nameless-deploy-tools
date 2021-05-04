@@ -1321,7 +1321,7 @@ optional arguments:
 
 ```bash
 usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]] [-i]
+                                [-t [TAGS [TAGS ...]]] [-i] [-u]
                                 tag_key tag_value mount_path [size_gb]
 
 Create a volume from an existing snapshot and mount it on the given path. The
@@ -1348,6 +1348,7 @@ optional arguments:
                         Multiple values allowed.
   -i, --ignore-missing-copytags
                         If set, missing copytags are ignored.
+  -u, --unencrypted     If set, create unencrypted volume
 ```
 
 ## `ndt yaml-to-json`
