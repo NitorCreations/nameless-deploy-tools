@@ -98,7 +98,7 @@ RUN set -ex \
   && rm -f terraform.zip
 
 RUN python -m pip install -U pip
-RUN pip install --no-cache-dir nameless-deploy-tools==1.196
+RUN pip install --no-cache-dir nameless-deploy-tools==1.197
 
 VOLUME /var/lib/docker
 
