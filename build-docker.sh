@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-NEW_VERSION=$1
+NEW_VERSION=$(grep nameless-deploy-tools docker/Dockerfile | cut -d "=" -f 3)
 
 docker build -t ndt docker
 set +x
