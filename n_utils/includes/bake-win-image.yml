@@ -211,14 +211,14 @@
     - set_fact: lc_image_ids="{{ launch_configurations.launch_configurations | map(attribute='image_id') | unique | list }}"
     - set_fact: images_in_use="{{ running_image_ids + lc_image_ids | unique | list }}"
 
-    - ec2_ami_facts:
+    - ec2_ami_info:
         region: "{{ aws_region }}"
         owners: self
         filters:
           name: "{{ job_name }}_??????????????"
       register: old_ami_result
 
-    - ec2_ami_facts:
+    - ec2_ami_info:
         region: "{{ aws_region }}"
         image_ids: "{{ old_ami_result.images | map(attribute='image_id') | difference(images_in_use) | list }}"
       register: non_running_images
