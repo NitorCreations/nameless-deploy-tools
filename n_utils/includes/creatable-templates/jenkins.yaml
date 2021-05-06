@@ -89,7 +89,7 @@ Resources:
         - {Ref: resourceSg}
         BlockDeviceMappings:
         - DeviceName: /dev/sda1
-          Ebs: {VolumeSize: 8, VolumeType: gp2}
+          Ebs: {VolumeSize: 8, VolumeType: gp3}
         UserData:
           Fn::Base64: {'Fn::ImportFile': userdata.sh }
       Metadata:

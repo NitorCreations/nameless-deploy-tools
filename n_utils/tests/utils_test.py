@@ -40,7 +40,7 @@ def describe_images(Filters=None):
                         "Ebs": {
                             "Encrypted": False,
                             "DeleteOnTermination": True,
-                            "VolumeType": "gp2",
+                            "VolumeType": "gp3",
                             "VolumeSize": 8,
                             "SnapshotId": "snap-0a112c2708d4a1d16"
                         }
@@ -90,7 +90,7 @@ def describe_images(Filters=None):
                         "Ebs": {
                             "Encrypted": False,
                             "DeleteOnTermination": True,
-                            "VolumeType": "gp2",
+                            "VolumeType": "gp3",
                             "VolumeSize": 8,
                             "SnapshotId": "snap-037ed955e6363bab7"
                         }
@@ -136,7 +136,7 @@ def describe_images(Filters=None):
                         "Ebs": {
                             "Encrypted": False,
                             "DeleteOnTermination": True,
-                            "VolumeType": "gp2",
+                            "VolumeType": "gp3",
                             "VolumeSize": 8,
                             "SnapshotId": "snap-06a4decdcb0904550"
                         }

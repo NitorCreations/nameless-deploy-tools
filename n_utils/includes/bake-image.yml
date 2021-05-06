@@ -56,7 +56,7 @@
         key_name: "{{ aws_key_name }}"
         volumes:
           - device_name: /dev/sda1
-            device_type: gp2
+            device_type: gp3
             volume_size: "{{ volume_size }}"
             delete_on_termination: true
         wait: yes
