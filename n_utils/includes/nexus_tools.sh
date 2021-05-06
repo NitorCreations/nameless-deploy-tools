@@ -18,7 +18,7 @@ source "$(n-include common_tools.sh)"
 
 configure_and_start_nexus () {
   check_parameters CF_paramDnsName CF_paramSonatypeWorkSize
-  ndt volume-from-snapshot nexus-data nexus-data /opt/nexus/sonatype-work ${CF_paramSonatypeWorkSize}
+  ndt volume-from-snapshot --gp3 nexus-data nexus-data /opt/nexus/sonatype-work ${CF_paramSonatypeWorkSize}
   chown -R nexus:nexus /opt/nexus/sonatype-work
 
   if ! [ -r /opt/nexus/sonatype-work/nexus/conf/security.xml ]; then
@@ -51,7 +51,7 @@ configure_and_start_nexus () {
   systemctl start nexus
 }
 configure_and_start_nexus3 () {
-  ndt volume-from-snapshot nexus-data nexus-data /opt/nexus/sonatype-work ${CF_paramSonatypeWorkSize}
+  ndt volume-from-snapshot --gp3 nexus-data nexus-data /opt/nexus/sonatype-work ${CF_paramSonatypeWorkSize}
   chown -R nexus:nexus /opt/nexus/sonatype-work
   if ! [ -d /opt/nexus/sonatype-work/nexus3 ]; then
     mv /opt/nexus/sonatype-work-initial/* /opt/nexus/sonatype-work/

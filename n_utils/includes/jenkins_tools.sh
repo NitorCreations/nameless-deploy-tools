@@ -86,7 +86,7 @@ jenkins_mount_ebs_home () {
     SIZE=32
   fi
   local MOUNT_PATH=/var/lib/jenkins/jenkins-home
-  ndt volume-from-snapshot ${CF_paramEBSTag} ${CF_paramEBSTag} $MOUNT_PATH  $SIZE
+  ndt volume-from-snapshot --gp3 ${CF_paramEBSTag} ${CF_paramEBSTag} $MOUNT_PATH  $SIZE
   usermod -d /var/lib/jenkins/jenkins-home jenkins
   mkdir -p /var/lib/jenkins/jenkins-home
   if ! [ -e /var/lib/jenkins/jenkins-home/config.xml ]; then
