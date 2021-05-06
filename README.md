@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/NitorCreations/nameless-deploy-tools.svg?branch=master)](https://travis-ci.org/NitorCreations/nameless-deploy-tools)
 [![Coverage Status](https://coveralls.io/repos/github/NitorCreations/nameless-deploy-tools/badge.svg?branch=master)](https://coveralls.io/github/NitorCreations/nameless-deploy-tools?branch=master)
 
-## Released version 1.197
+## Released version 1.198
 
 Nameless deploy tools are a set of tools to implement a true Infrastructure As Code workflow
 with various cloud infrastructure management tools. Currently supported tools are
