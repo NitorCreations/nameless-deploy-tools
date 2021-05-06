@@ -63,7 +63,7 @@ setup(name='nameless-deploy-tools',
           'configparser',
           'scandir',
           'jmespath',
-          'ec2-utils==0.25',
+          'ec2-utils==0.26',
           'cloudformation-utils==0.0.2',
           'PyYAML==5.2',
           'pyOpenSSL>=19.1.0'
