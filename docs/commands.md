@@ -809,6 +809,7 @@ optional arguments:
   -e END [END ...], --end END [END ...]
                         End time (x m|h|d|w ago | now | <seconds since epoc>)
   -o, --order           Best effort ordering of log entries
+  -t, --shortformat     Print timestamps and log groups in shorter format
 ```
 
 ## `ndt mfa-add-token`
