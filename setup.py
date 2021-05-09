@@ -44,9 +44,6 @@ setup(name='nameless-deploy-tools',
       entry_points={
           'console_scripts': CONSOLESCRIPTS,
       },
-      setup_requires=[
-          'pytest-runner'
-      ],
       install_requires=[
           'future',
           'pyaml',
@@ -63,7 +60,7 @@ setup(name='nameless-deploy-tools',
           'configparser',
           'scandir',
           'jmespath',
-          'ec2-utils==0.27',
+          'ec2-utils==0.28',
           'cloudformation-utils==0.0.2',
           'PyYAML==5.2',
           'pyOpenSSL>=19.1.0'
