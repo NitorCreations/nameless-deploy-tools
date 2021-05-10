@@ -12,7 +12,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -31,7 +31,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt add-deployer-server`
@@ -44,7 +44,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -63,7 +63,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt assume-role`
@@ -76,7 +76,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -95,7 +95,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt assumed-role-name`
@@ -108,7 +108,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -127,7 +127,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt azure-ensure-group`
@@ -140,7 +140,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -159,7 +159,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt azure-ensure-management-group`
@@ -172,7 +172,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -191,7 +191,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt azure-location`
@@ -204,7 +204,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -223,7 +223,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt azure-template-parameters`
@@ -236,7 +236,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -255,7 +255,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt bake-docker`
@@ -268,7 +268,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -287,7 +287,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt bake-image`
@@ -300,7 +300,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -319,7 +319,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt bw-store-aws-cli-creds`
@@ -332,7 +332,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -351,7 +351,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt cf-delete-stack`
@@ -364,7 +364,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -383,7 +383,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt cf-follow-logs`
@@ -396,7 +396,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -415,7 +415,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt cf-get-parameter`
@@ -428,7 +428,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -447,7 +447,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt cf-logical-id`
@@ -460,7 +460,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -479,7 +479,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt cf-region`
@@ -492,7 +492,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -511,7 +511,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt cf-signal-status`
@@ -524,7 +524,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -543,7 +543,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt cf-stack-id`
@@ -556,7 +556,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -575,7 +575,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt cf-stack-name`
@@ -588,7 +588,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -607,7 +607,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt create-account`
@@ -620,7 +620,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -639,7 +639,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt create-stack`
@@ -652,7 +652,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -671,7 +671,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt deploy-azure`
@@ -684,7 +684,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -703,7 +703,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt deploy-cdk`
@@ -716,7 +716,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -735,7 +735,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt deploy-serverless`
@@ -748,7 +748,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -767,7 +767,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt deploy-stack`
@@ -780,7 +780,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -799,7 +799,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt deploy-terraform`
@@ -812,7 +812,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -831,7 +831,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt detach-volume`
@@ -844,7 +844,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -863,7 +863,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt ec2-clean-snapshots`
@@ -876,7 +876,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -895,7 +895,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt ec2-get-tag`
@@ -908,7 +908,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -927,7 +927,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt ec2-get-userdata`
@@ -940,7 +940,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -959,7 +959,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt ec2-instance-id`
@@ -972,7 +972,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -991,7 +991,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt ec2-region`
@@ -1004,7 +1004,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1023,7 +1023,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt ec2-wait-for-metadata`
@@ -1036,7 +1036,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1055,7 +1055,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt ecr-ensure-repo`
@@ -1068,7 +1068,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1087,7 +1087,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt ecr-repo-uri`
@@ -1100,7 +1100,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1119,7 +1119,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt enable-profile`
@@ -1132,7 +1132,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1151,7 +1151,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt get-images`
@@ -1164,7 +1164,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1183,7 +1183,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt interpolate-file`
@@ -1196,7 +1196,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1215,7 +1215,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt json-to-yaml`
@@ -1228,7 +1228,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1247,7 +1247,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt latest-snapshot`
@@ -1260,7 +1260,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1279,7 +1279,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt list-components`
@@ -1292,7 +1292,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1311,7 +1311,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt list-file-to-json`
@@ -1324,7 +1324,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1343,7 +1343,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt list-jobs`
@@ -1356,7 +1356,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1375,7 +1375,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt load-parameters`
@@ -1388,7 +1388,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1407,7 +1407,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt logs`
@@ -1420,7 +1420,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1439,7 +1439,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt mfa-add-token`
@@ -1452,7 +1452,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1471,7 +1471,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt mfa-backup`
@@ -1484,7 +1484,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1503,7 +1503,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt mfa-code`
@@ -1516,7 +1516,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1535,7 +1535,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt mfa-delete-token`
@@ -1548,7 +1548,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1567,7 +1567,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt mfa-qrcode`
@@ -1580,7 +1580,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1599,7 +1599,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt print-create-instructions`
@@ -1612,7 +1612,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1631,7 +1631,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt profile-expiry-to-env`
@@ -1644,7 +1644,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1663,7 +1663,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt profile-to-env`
@@ -1676,7 +1676,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1695,7 +1695,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt promote-image`
@@ -1708,7 +1708,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1727,7 +1727,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt pytail`
@@ -1740,7 +1740,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1759,7 +1759,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt read-profile-expiry`
@@ -1772,7 +1772,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1791,7 +1791,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt region`
@@ -1804,7 +1804,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1823,7 +1823,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt register-private-dns`
@@ -1836,7 +1836,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1855,7 +1855,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt session-to-env`
@@ -1868,7 +1868,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1887,7 +1887,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt setup-cli`
@@ -1900,7 +1900,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1919,7 +1919,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt share-to-another-region`
@@ -1932,7 +1932,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1951,7 +1951,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt show-stack-params-and-outputs`
@@ -1964,7 +1964,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -1983,7 +1983,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt show-terraform-params`
@@ -1996,7 +1996,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2015,7 +2015,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt snapshot-from-volume`
@@ -2028,7 +2028,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2047,7 +2047,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt terraform-pull-state`
@@ -2060,7 +2060,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2079,7 +2079,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt undeploy-azure`
@@ -2092,7 +2092,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2111,7 +2111,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt undeploy-cdk`
@@ -2124,7 +2124,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2143,7 +2143,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt undeploy-serverless`
@@ -2156,7 +2156,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2175,7 +2175,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt undeploy-stack`
@@ -2188,7 +2188,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2207,7 +2207,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt undeploy-terraform`
@@ -2220,7 +2220,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2239,7 +2239,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt upsert-cloudfront-records`
@@ -2252,7 +2252,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2271,7 +2271,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt upsert-codebuild-projects`
@@ -2284,7 +2284,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2303,7 +2303,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt upsert-dns-record`
@@ -2316,7 +2316,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2335,7 +2335,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt volume-from-snapshot`
@@ -2348,7 +2348,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2367,7 +2367,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt yaml-to-json`
@@ -2380,7 +2380,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2399,7 +2399,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `ndt yaml-to-yaml`
@@ -2412,7 +2412,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2431,7 +2431,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]associate-eip`
@@ -2444,7 +2444,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2463,7 +2463,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]cf-logs-to-cloudwatch`
@@ -2476,7 +2476,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2495,7 +2495,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]ec2-associate-eip`
@@ -2508,7 +2508,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2527,7 +2527,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]logs-to-cloudwatch`
@@ -2540,7 +2540,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2559,7 +2559,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]n-include`
@@ -2572,7 +2572,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2591,7 +2591,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]n-include-all`
@@ -2604,7 +2604,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2623,7 +2623,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `[ndt ]signal-cf-status`
@@ -2636,7 +2636,7 @@ Traceback (most recent call last):
     needed = self.resolve(parse_requirements(requirements))
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 792, in resolve
     raise VersionConflict(dist, req).with_context(dependent_req)
-pkg_resources.ContextualVersionConflict: (ec2-utils 0.31 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.25\'), {\'nameless-deploy-tools\'})
+pkg_resources.ContextualVersionConflict: (ec2-utils 0.32 (/home/pasi/src/ec2-utils), Requirement.parse(\'ec2-utils==0.31\'), {\'nameless-deploy-tools\'})
 
 During handling of the above exception, another exception occurred:
 
@@ -2655,7 +2655,7 @@ Traceback (most recent call last):
     dists = ws.resolve(reqs, Environment())
   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 787, in resolve
     raise DistributionNotFound(req, requirers)
-pkg_resources.DistributionNotFound: The \'ec2-utils==0.25\' distribution was not found and is required by nameless-deploy-tools
+pkg_resources.DistributionNotFound: The \'ec2-utils==0.31\' distribution was not found and is required by nameless-deploy-tools
 ```
 
 ## `create-shell-archive.sh`
