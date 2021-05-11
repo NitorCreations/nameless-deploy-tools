@@ -17,10 +17,10 @@ from n_utils import PATH_COMMANDS, CONSOLESCRIPTS
 
 win_deps = []
 if sys.version_info[0] == 2:
-    python2_or_3_deps = ['pyotp==2.3', 'Pygments==2.5.2', 'importlib-metadata==2.1.1', 'decorator==4.4.2']
+    python2_or_3_deps = ['pyotp==2.3', 'Pygments==2.5.2', 'importlib-metadata==2.1.1', 'decorator==4.4.2', 'PyYAML==5.2']
     python2_or_3_test_deps = ['pytest==4.6.11', 'pytest-mock==1.13.0', 'mock==3.0.5']
 elif sys.version_info[0] == 3:
-    python2_or_3_deps = ['pyotp', 'Pygments']
+    python2_or_3_deps = ['pyotp', 'Pygments', 'PyYAML>=5.2']
     python2_or_3_test_deps = ['pytest-mock', 'mock']
     if sys.version_info[1] == 5:
         python2_or_3_test_deps.insert(0, "pytest==6.1.2")
@@ -31,7 +31,7 @@ if sys.platform.startswith('win'):
     win_deps = ['win-unicode-console', 'wmi', 'pypiwin32' ]
 
 setup(name='nameless-deploy-tools',
-      version='1.205',
+      version='1.206',
       description='Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow',
       url='http://github.com/NitorCreations/nameless-deploy-tools',
       download_url='https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.157',
@@ -62,7 +62,6 @@ setup(name='nameless-deploy-tools',
           'jmespath',
           'ec2-utils==0.32',
           'cloudformation-utils==0.0.2',
-          'PyYAML==5.2',
           'pyOpenSSL>=19.1.0'
       ] + python2_or_3_deps + win_deps,
       tests_require=[
