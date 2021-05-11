@@ -22,11 +22,7 @@ if sys.version_info[0] == 2:
 elif sys.version_info[0] == 3:
     python2_or_3_deps = ['pyotp', 'Pygments', 'PyYAML>=5.2']
     python2_or_3_test_deps = ['pytest-mock', 'mock']
-    if sys.version_info[1] == 5:
-        python2_or_3_test_deps.insert(0, "pytest==6.1.2")
-        python2_or_3_test_deps.append('importlib-metadata==2.1.1')
-    else:
-        python2_or_3_test_deps.insert(0, "pytest")
+    python2_or_3_test_deps.insert(0, "pytest")
 if sys.platform.startswith('win'):
     win_deps = ['win-unicode-console', 'wmi', 'pypiwin32' ]
 
