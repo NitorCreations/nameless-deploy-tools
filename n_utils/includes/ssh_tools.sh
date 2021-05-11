@@ -23,6 +23,7 @@ ssh_install_hostkeys () {
     sleep 2
     source /etc/ssh/${CF_paramDnsName}-ssh-hostkeys.sh
     # ssh is restarted later in the userdata script when elastic ip has been associated
+    chmod 600 /etc/ssh/ssh_host_*_key
   fi
 }
 
