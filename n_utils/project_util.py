@@ -26,8 +26,15 @@ def _check_enable_virtualenv(vars, current_branch):
         pyenv = vars["ndt.virtualenv"]
     if pyenv:
         if not ("PYENV_VERSION" in environ and environ["PYENV_VERSION"] == pyenv):
-            print("export PYENV_VIRTUALENV_DISABLE_PROMPT=1")
+            print("export PYENV_VIRTUALENV_DISABLE_PROMPT=1;")
             print("pyenv activate \'" + pyenv + "\'")
+    else:
+        _check_disable_virtualenv()
+
+def _check_disable_virtualenv():
+    if "PYENV_VERSION" in environ and environ["PYENV_VERSION"].startswith("ndt-"):
+        print("pyenv deactivate;")
+        print("unset PYENV_VIRTUALENV_DISABLE_PROMPT")
 
 def load_project_env():
     """ Print parameters set by git config variables to setup project environment with region and aws credentials
@@ -40,6 +47,7 @@ def load_project_env():
         current_branch = stdout.decode(SYS_ENCODING).strip()
     out, _ = proc.communicate()
     if proc.returncode:
+        _check_disable_virtualenv()
         return
     vars = {}
     for line in out.decode(SYS_ENCODING).split("\n"):
