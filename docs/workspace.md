@@ -79,6 +79,7 @@ The checked git local configurations are:
 * `ndt.profile.[branch].adfs` or `ndt.profile.adfs` - enable a profile that includes `adfs-aws-login` settings
 * `ndt.profile.[branch].lastpass` or `ndt.profile.lastpass` - enable a profile that includes `lastpass-aws-login` settings
 * `ndt.profile.[branch].azure-subscription`  or `ndt.profile.azure-subscription` - enable a subscription for Azure cli
+* `ndt.virtualenv.[branch]` or `ndt.virtualenv` - enable pyenv virtualenv
 
 You can set these variables by calling `git config [variable] [value]` and you can check the commands
 that would be executed by calling `nameless-dt-load-project-env`

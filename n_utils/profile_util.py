@@ -255,18 +255,22 @@ def cli_enable_profile():
     elif args.azure_subscription:
         profile_type = "azure-subscription"
     else:
-        profile = get_profile(args.profile)
-        if "azure_tenant_id" in profile:
-            profile_type = "azure"
-        elif "ndt_role_arn" in profile:
-            profile_type = "ndt"
-        elif "adfs_login_url" in profile:
-            profile_type = "adfs"
-        elif "lastpass_saml_id" in profile:
-            profile_type = "lastpass"
-        else:
-            profile_type = "iam"
+        profile_type = resolve_profile_type(args.profile)
     enable_profile(profile_type, args.profile)
+
+def resolve_profile_type(profile_name):
+    profile = get_profile(profile_name)
+    if "azure_tenant_id" in profile:
+        profile_type = "azure"
+    elif "ndt_role_arn" in profile:
+        profile_type = "ndt"
+    elif "adfs_login_url" in profile:
+        profile_type = "adfs"
+    elif "lastpass_saml_id" in profile:
+        profile_type = "lastpass"
+    else:
+        profile_type = "iam"
+    return profile_type
 
 def enable_profile(profile_type, profile):
     orig_profile = profile
