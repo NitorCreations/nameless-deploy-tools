@@ -1,7 +1,6 @@
 import json
 from os import devnull, environ
 from subprocess import Popen, PIPE
-from n_utils.aws_infra_util import load_parameters
 
 ARR_START = "[".encode()
 OBJ_START = "{".encode()
@@ -130,28 +129,3 @@ def delete_group(group_name):
     output, err = proc.communicate()
     return proc.returncode == 0
 
-def resolve_location():
-    if "AZURE_LOCATION" in environ and environ["AZURE_LOCATION"] and environ["AZURE_LOCATION"] != "default":
-        return environ["AZURE_LOCATION"]
-    else:
-        parameters = load_parameters()
-        if "AZURE_LOCATION" in parameters and parameters["AZURE_LOCATION"] and parameters["AZURE_LOCATION"] != "default":
-            return parameters["AZURE_LOCATION"]
-        else:
-            proc = Popen(
-                ["az", "configure", "--list-defaults"],
-                stdout=PIPE,
-                stderr=PIPE,
-            )
-            default_location = None
-            output, err = proc.communicate()
-            if proc.returncode == 0 and output:
-                confs = json.loads(output)
-                for conf in confs:
-                    if "name" in conf and conf["name"] == "location" and \
-                       "value" in conf and conf["value"]:
-                        default_location = conf["value"]
-            if default_location:
-                return default_location
-            else:
-                return "northeurope"

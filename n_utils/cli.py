@@ -58,7 +58,7 @@ from n_utils.profile_util import update_profile
 from n_utils.tf_utils import pull_state, jmespath_var, flat_state
 from n_utils.utils import session_token, get_images, promote_image, \
     share_to_another_region, interpolate_file, assumed_role_name
-from n_utils.az_util import resolve_location, ensure_group, ensure_management_group, resolve_location
+from n_utils.az_util import ensure_group, ensure_management_group
 from n_utils.route53_util import upsert_record
 SYS_ENCODING = locale.getpreferredencoding()
 
@@ -977,3 +977,29 @@ def azure_location():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     print(resolve_location())
+
+def resolve_location():
+    if "AZURE_LOCATION" in environ and environ["AZURE_LOCATION"] and environ["AZURE_LOCATION"] != "default":
+        return environ["AZURE_LOCATION"]
+    else:
+        parameters = load_parameters()
+        if "AZURE_LOCATION" in parameters and parameters["AZURE_LOCATION"] and parameters["AZURE_LOCATION"] != "default":
+            return parameters["AZURE_LOCATION"]
+        else:
+            proc = Popen(
+                ["az", "configure", "--list-defaults"],
+                stdout=PIPE,
+                stderr=PIPE,
+            )
+            default_location = None
+            output, err = proc.communicate()
+            if proc.returncode == 0 and output:
+                confs = json.loads(output)
+                for conf in confs:
+                    if "name" in conf and conf["name"] == "location" and \
+                       "value" in conf and conf["value"]:
+                        default_location = conf["value"]
+            if default_location:
+                return default_location
+            else:
+                return "northeurope"
