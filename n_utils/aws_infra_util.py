@@ -50,6 +50,7 @@ stacks = dict()
 terraforms = dict()
 parameters = dict()
 ssm_params = dict()
+vault_params = dict()
 product_amis = dict()
 owner_amis = dict()
 CFG_PREFIX = "AWS::CloudFormation::Init_config_files_"
@@ -136,6 +137,15 @@ def _resolve_ssm_parameter(ssm_key, region=None):
         if "Parameter" in ssm_resp and "Value" in ssm_resp["Parameter"]:
             value = ssm_resp["Parameter"]["Value"]
             ssm_params[ssm_key] = value
+    return value
+
+def _resolve_vault_parameter(vault_key):
+    value = None
+    if vault_key in vault_params:
+        value = vault_params[vault_key]
+    else:
+        value = Vault().lookup(vault_key)
+        vault_params[vault_key] = value
     return value
 
 def _resolve_product_ami(product_code, region=None):
@@ -792,6 +802,9 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             return b64encode(vault.direct_encrypt(resolved_value))
         elif 'Ref' in data:
             data['__source'] = basefile
+        elif 'VaultRef' in data:
+            vault_key = expand_vars(data['VaultRef'], templateParams, None, [])
+            return _resolve_vault_parameter(vault_key)
         elif 'SsmRef' in data:
             ssm_key = expand_vars(data['SsmRef'], templateParams, None, [])
             return _resolve_ssm_parameter(ssm_key)
