@@ -29,6 +29,12 @@ fi
 if [ -z "$NEXUS_VERSION" ]; then
   NEXUS_VERSION=2.12.0-01
 fi
+if [ -z "$ONEAGENT_VERSION" ]; then
+  ONEAGENT_VERSION=1.215.163
+fi
+if [ -z "$ACTIVEGATE_VERSION" ]; then
+  ACTIVEGATE_VERSION=1.215.163
+fi
 
 # Make sure we get logging
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null ; then
@@ -141,4 +147,42 @@ update_aws_utils () {
   echo "###########################"
   echo "Updating ndt as part of a bootup is no longer recommended"
   update_deploytools "$@"
+}
+
+install_dynatrace_oneagent() {
+  # Requires secrets dynatrace.apikey and dt-root.cert.pem (from dynatrace web installation instructions) to be stored in secrets storage
+  wget -O Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh \
+  "https://bmq38893.live.dynatrace.com/api/v1/deployment/installer/agent/unix/default/latest?arch=x86&flavor=default" \
+  --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
+
+  fetch-secrets.sh get 400 dt-root.cert.pem
+  ( echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
+    echo
+    echo
+    echo '----SIGNED-INSTALLER'
+    cat Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh ) | \
+  openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
+  rm -f dt-root.cert.pem
+
+  /bin/sh Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
+  rm -f Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
+}
+
+install_dynatrace_activegate() {
+  # Requires secrets dynatrace.apikey and dt-root.cert.pem (from dynatrace web installation instructions) to be stored in secrets storage
+  wget  -O Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh \
+    "https://bmq38893.live.dynatrace.com/api/v1/deployment/installer/gateway/unix/latest?arch=x86&flavor=default" \
+    --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
+
+  fetch-secrets.sh get 400 dt-root.cert.pem
+  ( echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
+    echo
+    echo
+    echo '----SIGNED-INSTALLER'
+    cat  Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh ) | \
+  openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
+  rm -f dt-root.cert.pem
+
+  /bin/sh Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
+  rm -f Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
 }
