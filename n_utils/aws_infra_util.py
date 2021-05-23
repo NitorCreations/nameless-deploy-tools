@@ -175,7 +175,7 @@ def _resolve_onwer_named_ami(owner, name, region=None):
                                                          reverse=True)]
         if ami_ids:
             value = ami_ids[0]
-            product_amis[(owner, name)] = value
+            owner_amis[(owner, name)] = value
     return value
 
 def _process_infra_prop_line(line, params, used_params):
