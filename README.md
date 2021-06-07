@@ -6,7 +6,8 @@
 
 Nameless deploy tools are a set of tools to implement a true Infrastructure As Code workflow
 with various cloud infrastructure management tools. Currently supported tools are
-CloudFormation, AWS CDK, Serverless Framework and Terraform.
+CloudFormation, AWS CDK, Serverless Framework, Terraform, Azure Resource Manager (with
+a YAML syntax) and Bicep.
 
 ## Why Nameless?
 
