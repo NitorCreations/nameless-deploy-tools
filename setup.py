@@ -26,6 +26,9 @@ elif sys.version_info[0] == 3:
 if sys.platform.startswith('win'):
     win_deps = ['win-unicode-console', 'wmi', 'pypiwin32' ]
 
+with open("README.md") as f:
+    long_description = f.read()
+
 setup(name='nameless-deploy-tools',
       version='1.210',
       description='Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow',
@@ -33,6 +36,8 @@ setup(name='nameless-deploy-tools',
       download_url='https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.157',
       author='Pasi Niemi',
       author_email='pasi@nitor.com',
+      long_description=long_description,
+      long_description_content_type="text/markdown",
       license='Apache 2.0',
       packages=['n_utils'],
       include_package_data=True,
