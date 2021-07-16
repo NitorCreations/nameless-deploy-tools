@@ -125,7 +125,7 @@ jenkins_setup_snapshot_on_shutdown () {
 }
 
 jenkins_setup_snapshot_job () {
-  if ! find /var/lib/jenkins/jenkins-home/jobs -name config.xml -print0 | xargs -0 fgrep -q snapshot_jenkins_home.sh ; then
+  if ! find /var/lib/jenkins/jenkins-home/jobs -mindepth 2 -maxdepth 4 -name config.xml -print0 | xargs -0 fgrep -q snapshot_jenkins_home.sh ; then
     sync_jenkins_conf_job_name="snapshot-jenkins-home"
     mkdir -p /var/lib/jenkins/jenkins-home/jobs/${sync_jenkins_conf_job_name}
     cat > /var/lib/jenkins/jenkins-home/jobs/${sync_jenkins_conf_job_name}/config.xml << 'EOF'
