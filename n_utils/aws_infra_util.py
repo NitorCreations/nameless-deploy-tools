@@ -42,7 +42,7 @@ from n_utils.ecr_utils import repo_uri
 from n_utils.tf_utils import pull_state, flat_state, jmespath_var
 from n_vault import Vault
 from threadlocal_aws import region
-from threadlocal_aws.clients import ssm, ec2
+from threadlocal_aws.clients import ssm, ec2, connect
 from cloudformation_utils.tools import process_script_decorated as import_script, \
     cloudformation_yaml_loads as yaml_load
 
@@ -54,6 +54,7 @@ vault_params = dict()
 product_amis = dict()
 owner_amis = dict()
 CFG_PREFIX = "AWS::CloudFormation::Init_config_files_"
+CONNECT_INSTANCE_ID = None
 
 ############################################################################
 # _THE_ yaml & json deserialize/serialize functions
@@ -178,6 +179,15 @@ def _resolve_onwer_named_ami(owner, name, region=None):
             owner_amis[(owner, name)] = value
     return value
 
+def _resolve_flowref(flowname):
+    if CONNECT_INSTANCE_ID:
+        paginator = connect().get_paginator("list_contact_flows")
+        for page in paginator.paginate(InstanceId=CONNECT_INSTANCE_ID):
+            for flow in page["ContactFlowSummaryList"]:
+                if flow["Name"] == flowname:
+                    return flow["Arn"]
+    return None
+
 def _process_infra_prop_line(line, params, used_params):
     key_val = line.split("=", 1)
     if len(key_val) == 2:
@@ -258,6 +268,10 @@ def _process_value(value, used_params):
                     owner_ami = _resolve_onwer_named_ami(owner, name, region=region)
                     if owner_ami:
                         value = owner_ami
+            if "FlowRef" in value:
+                flow_value = _resolve_flowref(value["FlowRef"])
+                if flow_value:
+                    value = flow_value
     return value
 
 def joined_file_lines(filename):
@@ -372,7 +386,7 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
             return None
 
 def load_parameters(component=None, stack=None, serverless=None, docker=None, image=None, 
-                    cdk=None, terraform=None, azure=None, branch=None, resolve_images=False,
+                    cdk=None, terraform=None, azure=None, connect=None, branch=None, resolve_images=False,
                     git=None):
     subc_type = ""
     subc_name = ""
@@ -397,6 +411,9 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
     if azure:
         subc_type = "azure"
         subc_name = "azure=" + azure
+    if connect:
+        subc_type = "connect"
+        subc_name = "connect=" + connect
     if not git:
         git = Git()
     with git:
@@ -980,6 +997,9 @@ def yaml_to_dict(yaml_file_to_convert, merge=[], extra_parameters={}):
     data = OrderedDict()
     with open(yaml_file_to_convert) as yaml_file:
         data = yaml_load(yaml_file)
+    if "connectInstanceId" in data:
+        global CONNECT_INSTANCE_ID
+        CONNECT_INSTANCE_ID = data["connectInstanceId"]
     if merge:
         for i in range(0, len(merge)):
             with open(merge[i]) as yaml_file:

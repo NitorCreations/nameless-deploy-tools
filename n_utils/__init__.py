@@ -99,7 +99,8 @@ NDT_ONLY = [
     'yaml-to-json=n_utils.cli:yaml_to_json',
     'yaml-to-yaml=n_utils.cli:yaml_to_yaml',
     'upsert-codebuild-projects=n_utils.cli:cli_upsert_codebuild_projects',
-    'upsert-dns-record=n_utils.cli:upsert_dns_record'
+    'upsert-dns-record=n_utils.cli:upsert_dns_record',
+    'deploy-connect-contact-flows=n_utils.cli:deploy_connect_contact_flows'
 ]
 NDT_ONLY_SCRIPT = [
     'bake-docker.sh',

@@ -108,7 +108,11 @@ class SCCDK(SubComponent):
 class SCTerraform(SubComponent):
     pass
 
+class SCAzure(SubComponent):
+    pass
 
+class SCConnect(SubComponent):
+    pass
 
 class Project(object):
     def __init__(self, root=".", branch=None):
@@ -116,14 +120,14 @@ class Project(object):
             self.branch = Git().get_current_branch()
         else:
             self.branch = branch
-        self.componets = []
+        self.components = []
         self.root = root if root else guess_project_root()
         self.all_subcomponents = []
 
     def get_components(self):
-        if not self.componets:
-            self.componets = sorted(self._find_components(), key=attrgetter("name"))
-        return self.componets
+        if not self.components:
+            self.components = sorted(self._find_components(), key=attrgetter("name"))
+        return self.components
 
     def get_component(self, component):
         filtered = [c for c in self.get_components() if c.name == component]

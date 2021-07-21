@@ -715,19 +715,21 @@ def cli_load_parameters():
     parser.add_argument("--resolve-images", "-r", action="store_true", help="Also resolve subcomponent AMI IDs and docker repo urls")
     subcomponent_group = parser.add_mutually_exclusive_group()
     subcomponent_group.add_argument("--stack", "-s", help="CloudFormation subcomponent to descent into").completer = \
-        lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("stack", prefix, parsed_args, **kwargs)
+        SubCCompleter("stack")
     subcomponent_group.add_argument("--serverless", "-l", help="Serverless subcomponent to descent into").completer = \
-        lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("serverless", prefix, parsed_args, **kwargs)
+        SubCCompleter("serverless")
     subcomponent_group.add_argument("--docker", "-d", help="Docker image subcomponent to descent into").completer = \
-        lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("docker", prefix, parsed_args, **kwargs)
+        SubCCompleter("docker")
     subcomponent_group.add_argument("--image", "-i", const="", nargs="?", help="AMI image subcomponent to descent into").completer = \
-        lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("image", prefix, parsed_args, **kwargs)
+        SubCCompleter("image")
     subcomponent_group.add_argument("--cdk", "-c", help="CDK subcomponent to descent into").completer = \
-        lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("cdk", prefix, parsed_args, **kwargs)
+        SubCCompleter("cdk")
     subcomponent_group.add_argument("--terraform", "-t", help="Terraform subcomponent to descent into").completer = \
-        lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("terraform", prefix, parsed_args, **kwargs)
-    subcomponent_group.add_argument("--azure", "-a", help="Terraform subcomponent to descent into").completer = \
-        lambda prefix, parsed_args, **kwargs: component_typed_subcomponents("terraform", prefix, parsed_args, **kwargs)
+        SubCCompleter("terraform")
+    subcomponent_group.add_argument("--azure", "-a", help="Azure subcomponent to descent into").completer = \
+        SubCCompleter("azure")
+    subcomponent_group.add_argument("--connect", "-n", help="Connect subcomponent to descent into").completer = \
+        SubCCompleter("connect")
     format_group = parser.add_mutually_exclusive_group()
     format_group.add_argument("--json", "-j", action="store_true", help="JSON format output (default)")
     format_group.add_argument("--yaml", "-y", action="store_true", help="YAML format output")
@@ -757,9 +759,10 @@ def cli_load_parameters():
     del args.properties
     del args.terraform_variables
     del args.azure_parameters
-    if (args.stack or args.serverless or args.docker or args.azure or not isinstance(args.image, NoneType)) \
+
+    if (args.stack or args.serverless or args.docker or args.azure or args.connect or not isinstance(args.image, NoneType)) \
        and not args.component:
-        parser.error("image, stack, doker or serverless, azure do not make sense without component")
+        parser.error("image, stack, doker, serverless, azure or connect do not make sense without component")
     filter_arr = []
     if args.filter:
         filter_arr = args.filter.split(",")
@@ -771,15 +774,19 @@ def cli_load_parameters():
                 del parameters[param_key]
     print(transform(parameters))
 
-def component_typed_subcomponents(sc_type, prefix, parsed_args, **kwargs):
-    p_args = {}
-    if parsed_args.branch:
-        p_args["branch"] = parsed_args.branch
-    if parsed_args.component:
-        return [sc.name for sc in Project(**p_args).get_component(parsed_args.component).get_subcomponents() if sc.type == sc_type and sc.name.startswith(prefix)]
-    else:
-        return [sc.name for sc in Project(**p_args).get_all_subcomponents() if sc.type == sc_type]
-    return None
+class SubCCompleter():
+    def __init__(self, sc_type):
+        self.sc_type = sc_type
+
+    def __call__(self, prefix="", action=None, parser=None, parsed_args=None):
+        p_args = {}
+        if hasattr(parsed_args, "branch") and parsed_args.branch:
+            p_args["branch"] = parsed_args.branch
+        if hasattr(parsed_args, "component") and parsed_args.component:
+            return [sc.name for sc in Project(**p_args).get_component(parsed_args.component).get_subcomponents() if sc.type == self.sc_type and sc.name.startswith(prefix)]
+        else:
+            return [sc.name for sc in Project(**p_args).get_all_subcomponents() if sc.type == self.sc_type]
+        return None
 
 def map_to_exports(map):
     """ Prints the map as eval-able set of environment variables. Keys
@@ -1003,3 +1010,22 @@ def resolve_location():
                 return default_location
             else:
                 return "northeurope"
+
+def deploy_connect_contact_flows():
+    """ Deploy AWS Connect contact flows from a subcomponent """
+    parser = get_parser()
+    parser.add_argument("component", help="the component directory where the connect contact flow directory is").completer = \
+        ChoicesCompleter(component_having_a_subcomponent_of_type("connect"))
+    parser.add_argument("contactflowname", help="the name of the connect directory that has the contact flow template").completer = \
+        SubCCompleter("connect")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    print(args)
+
+def component_having_a_subcomponent_of_type(subcomponent_type):
+    ret = []
+    for dir in [x for x in next(os.walk('.'))[1] if not x.startswith(".")]:
+        for subd in next(os.walk(dir))[1]:
+            if subd.startswith(subcomponent_type + "-") and dir not in ret:
+                ret.append(dir)
+    return ret
