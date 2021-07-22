@@ -148,9 +148,9 @@ def _to_str(data):
             ret = _to_str(base64.b64encode(data))
     return str(ret)
 
-def _to_bytes(data):
+def _to_bytes(data, encoding="utf-8"):
     ret = data
     encode_method = getattr(data, "encode", None)
     if callable(encode_method):
-        ret = data.encode("utf-8")
+        ret = data.encode(encoding)
     return bytes(ret)

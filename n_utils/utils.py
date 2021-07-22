@@ -40,7 +40,7 @@ from n_vault import Vault
 from threadlocal_aws import region
 from threadlocal_aws.clients import cloudformation, ec2, sts
 
-from n_utils import _to_str
+from n_utils import _to_str, _to_bytes
 from n_utils.mfa_utils import mfa_read_token, mfa_generate_code
 
 NoneType = type(None)
@@ -175,7 +175,7 @@ def interpolate_file(file_name, destination=None, stack_name=None,
         with dstfile as _outfile:
             for line in _infile:
                 line = _process_line(line, params, vault, vault_keys)
-                _outfile.write(line.encode(encoding))
+                _outfile.write(_to_bytes(line, encoding=encoding))
     shutil.copy(dstfile.name, destination)
     os.unlink(dstfile.name)
 
