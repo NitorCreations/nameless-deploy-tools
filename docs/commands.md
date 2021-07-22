@@ -367,6 +367,23 @@ optional arguments:
   -h, --help    show this help message and exit
 ```
 
+## `ndt deploy-connect-contact-flows`
+
+```bash
+usage: ndt deploy-connect-contact-flows [-h] component contactflowname
+
+Deploy AWS Connect contact flows from a subcomponent
+
+positional arguments:
+  component        the component directory where the connect contact flow
+                   directory is
+  contactflowname  the name of the connect directory that has the contact flow
+                   template
+
+optional arguments:
+  -h, --help       show this help message and exit
+```
+
 ## `ndt deploy-serverless`
 
 ```bash
@@ -717,8 +734,8 @@ optional arguments:
 ```bash
 usage: ndt load-parameters [-h] [--branch BRANCH] [--resolve-images]
                            [--stack STACK | --serverless SERVERLESS | --docker DOCKER | --image [IMAGE]
-                           | --cdk CDK | --terraform TERRAFORM | --azure
-                           AZURE]
+                           | --cdk CDK | --terraform TERRAFORM | --azure AZURE
+                           | --connect CONNECT]
                            [--json | --yaml | --properties | --terraform-variables | --export-statements | --azure-parameters]
                            [-f FILTER]
                            [component]
@@ -775,7 +792,9 @@ optional arguments:
   --terraform TERRAFORM, -t TERRAFORM
                         Terraform subcomponent to descent into
   --azure AZURE, -a AZURE
-                        Terraform subcomponent to descent into
+                        Azure subcomponent to descent into
+  --connect CONNECT, -n CONNECT
+                        Connect subcomponent to descent into
   --json, -j            JSON format output (default)
   --yaml, -y            YAML format output
   --properties, -p      properties file format output
