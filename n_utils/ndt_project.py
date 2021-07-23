@@ -33,6 +33,12 @@ class Component(object):
             self.subcomponents = sorted(self._find_subcomponents(), key=attrgetter("name"))
         return self.subcomponents
     
+    def get_subcomponent(self, type, name):
+        for subc in self.get_subcomponents():
+            if subc.type == type and subc.name == name:
+                return subc
+        return None
+
     def _find_subcomponents(self):
         ret = []
         for subdir in [de.name for de in scandir(self.project.root + sep + self.name) if self._is_subcomponent(de.name)]:

@@ -39,7 +39,7 @@ from pygments.styles import get_style_by_name
 from threadlocal_aws import region, regions
 
 from n_utils import aws_infra_util, cf_bootstrap, cf_deploy, utils, \
-    _to_bytes, _to_str
+    _to_bytes, _to_str, connect
 from n_utils.account_utils import list_created_accounts, create_account
 from n_utils.aws_infra_util import load_parameters, json_save_small, json_load
 from n_utils.cloudfront_utils import distributions, distribution_comments, \
@@ -118,14 +118,13 @@ def add_deployer_server():
     add_server(args.file, args.id, args.username)
     add_server(args.file, args.id + "-release", args.username)
 
-
 def colorprint(data, output_format="yaml"):
     """ Colorized print for either a yaml or a json document given as argument
     """
     lexer = lexers.get_lexer_by_name(output_format)
     formatter = formatters.get_formatter_by_name("256")
     formatter.__init__(style=get_style_by_name('emacs'))
-    colored = highlight(str(data, 'UTF-8'), lexer, formatter)
+    colored = highlight(_to_str(data), lexer, formatter)
     sys.stdout.write(colored)
 
 
@@ -1016,11 +1015,62 @@ def deploy_connect_contact_flows():
     parser = get_parser()
     parser.add_argument("component", help="the component directory where the connect contact flow directory is").completer = \
         ChoicesCompleter(component_having_a_subcomponent_of_type("connect"))
-    parser.add_argument("contactflowname", help="the name of the connect directory that has the contact flow template").completer = \
+    parser.add_argument("contactflowname", help="the name of the connect subcomponent directory that has the contact flow template").completer = \
         SubCCompleter("connect")
+    parser.add_argument("-d", "--dryrun", help="Dry run - don't do changes but show what would happen of deployed", action="store_true")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    print(args)
+    flow_template = Project().get_component(args.component).get_subcomponent("connect", args.contactflowname)
+    connect.deploy_connect_contact_flows(flow_template.get_dir() + os.sep + "template.yaml", dry_run=args.dryrun)
+
+def export_connect_contact_flow():
+    """ Export AWS Connect contact flow from an existing instance """
+    parser = get_parser()
+    parser.add_argument("-c", "--component", help="the component directory where the connect contact flow directory is").completer = \
+        ChoicesCompleter(component_having_a_subcomponent_of_type("connect"))
+    parser.add_argument("-f", "--contactflowname", help="the name of the connect subcomponent directory that has the contact flow template").completer = \
+        SubCCompleter("connect")
+    instance_sel = parser.add_mutually_exclusive_group()
+    instance_sel.add_argument("-i", "--instanceid", help="id of the connect instance to export from").completer = \
+        ChoicesCompleter(connect.get_instance_ids())
+    instance_sel.add_argument("-a", "--instancealias", help="alias of the connect instance to export from").completer = \
+        ChoicesCompleter(connect.get_instance_aliases())        
+    parser.add_argument("--colorize", "-o", help="Colorize output", action="store_true")
+    parser.add_argument("name", help="The name of the contact flow to export").competer = FlowNameCompleter()
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    instance_id = _resolve_connect_instance(args)
+    if not instance_id:
+        parser.error("Need to define an instance, either with an id or alias or by referring to a connect template.")
+    out = connect.export_connect_contact_flow(instance_id, args.name)
+    if args.colorize:
+        colorprint(out)
+    else:
+        print(out)
+
+def list_connect_contact_flows():
+    """ List existing AWS Connect contact flows in an instance """
+    parser = get_parser()
+    parser.add_argument("-c", "--component", help="the component directory where the connect contact flow directory is").completer = \
+        ChoicesCompleter(component_having_a_subcomponent_of_type("connect"))
+    parser.add_argument("-f", "--contactflowname", help="the name of the connect subcomponent directory that has the contact flow template").completer = \
+        SubCCompleter("connect")
+    instance_sel = parser.add_mutually_exclusive_group()
+    instance_sel.add_argument("-i", "--instanceid", help="id of the connect instance to export from").completer = \
+        ChoicesCompleter(connect.get_instance_ids())
+    instance_sel.add_argument("-a", "--instancealias", help="alias of the connect instance to export from").completer = \
+        ChoicesCompleter(connect.get_instance_aliases())
+    parser.add_argument("-t", "--trash", help="Include trashed flows", action="store_true")
+    parser.add_argument("-m", "--match", help="Pattern to match printed flows")
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    instance_id = _resolve_connect_instance(args)
+    if not instance_id:
+        parser.error("Need to define an instance, either with an id or alias or by referring to a connect template.")
+    for flow in connect.get_flows(instance_id).keys():
+        if not flow.startswith("zzTrash_") or args.trash:
+            if not args.match or re.match(args.match, flow):
+                print(flow)
 
 def component_having_a_subcomponent_of_type(subcomponent_type):
     ret = []
@@ -1029,3 +1079,23 @@ def component_having_a_subcomponent_of_type(subcomponent_type):
             if subd.startswith(subcomponent_type + "-") and dir not in ret:
                 ret.append(dir)
     return ret
+
+def _resolve_connect_instance(args):
+    if not args:
+        return None
+    if hasattr(args, "instanceid") and args.instanceid:
+        return args.instance_id
+    if hasattr(args, "instancealias") and args.instancealias:
+        return connect.alias_to_id(args.instancealias)
+    if hasattr(args, "component") and args.component and hasattr(args, "contactflowname") and args.contactflowname:
+        template_dir = Project().get_component(args.component).get_subcomponent("connect", args.contactflowname).get_dir()
+        flow_template = yaml_to_dict(template_dir + os.sep + "template.yaml")
+        if "connectInstanceId" in flow_template:
+            return flow_template["connectInstanceId"]
+    return None
+        
+class FlowNameCompleter():
+    def __call__(self, prefix="", action=None, parser=None, parsed_args=None):
+        instance_id = _resolve_connect_instance(parsed_args)
+        if instance_id:
+            return [flow for flow in connect.get_flows(instance_id).keys() if flow.startswith(prefix)]

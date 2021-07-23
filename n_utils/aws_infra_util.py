@@ -445,6 +445,7 @@ def load_parameters(component=None, stack=None, serverless=None, docker=None, im
             _add_subcomponent_file(prefix + component, branch, "terraform", terraform, files)
             _add_subcomponent_file(prefix + component, branch, "azure", azure, files)
             _add_subcomponent_file(prefix + component, branch, "docker", docker, files)
+            _add_subcomponent_file(prefix + component, branch, "connect", connect, files)
             _add_subcomponent_file(prefix + component, branch, "image", image, files)
             if isinstance(image, six.string_types):
                 files.append(prefix + component + os.sep + "image" + os.sep + "infra.properties")
@@ -832,6 +833,10 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             owner_named = expand_vars(data['OwnerNamedAmi'], templateParams, None, [])
             if "owner" in owner_named and "name" in owner_named:
                 return _resolve_onwer_named_ami(owner_named["owner"], owner_named["name"])
+        elif "FlowRef" in data:
+            flow_name = expand_vars(data["FlowRef"], templateParams, None, [])
+            if flow_name:
+                return _resolve_flowref(flow_name)
         else:
             if 'Parameters' in data:
                 data['Parameters'] = _preprocess_template(data['Parameters'], root, basefile, path + "Parameters_",
@@ -999,7 +1004,7 @@ def yaml_to_dict(yaml_file_to_convert, merge=[], extra_parameters={}):
         data = yaml_load(yaml_file)
     if "connectInstanceId" in data:
         global CONNECT_INSTANCE_ID
-        CONNECT_INSTANCE_ID = data["connectInstanceId"]
+        CONNECT_INSTANCE_ID = expand_vars(data["connectInstanceId"], {}, None, [])
     if merge:
         for i in range(0, len(merge)):
             with open(merge[i]) as yaml_file:
