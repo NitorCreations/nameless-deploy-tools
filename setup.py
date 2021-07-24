@@ -30,7 +30,7 @@ with open("README.md") as f:
     long_description = f.read()
 
 setup(name='nameless-deploy-tools',
-      version='1.213',
+      version='1.214',
       description='Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow',
       url='http://github.com/NitorCreations/nameless-deploy-tools',
       download_url='https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.157',

@@ -289,8 +289,7 @@ optional arguments:
 
 ```bash
 usage: ndt create-account [-h] [-d] [-o ORGANIZATION_ROLE_NAME]
-                          [-r TRUST_ROLE_NAME]
-                          [-a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]]
+                          [-r TRUST_ROLE_NAME] [-a [TRUSTED_ACCOUNTS ...]]
                           [-t TOKEN_NAME]
                           email account_name
 
@@ -307,7 +306,7 @@ optional arguments:
                         Role name for admin access from parent account
   -r TRUST_ROLE_NAME, --trust-role-name TRUST_ROLE_NAME
                         Role name for admin access from parent account
-  -a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]], --trusted-accounts [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]
+  -a [TRUSTED_ACCOUNTS ...], --trusted-accounts [TRUSTED_ACCOUNTS ...]
                         Account to trust with user management
   -t TOKEN_NAME, --mfa-token TOKEN_NAME
                         Name of MFA token to use
@@ -370,18 +369,20 @@ optional arguments:
 ## `ndt deploy-connect-contact-flows`
 
 ```bash
-usage: ndt deploy-connect-contact-flows [-h] component contactflowname
+usage: ndt deploy-connect-contact-flows [-h] [-d] component contactflowname
 
 Deploy AWS Connect contact flows from a subcomponent
 
 positional arguments:
   component        the component directory where the connect contact flow
                    directory is
-  contactflowname  the name of the connect directory that has the contact flow
-                   template
+  contactflowname  the name of the connect subcomponent directory that has the
+                   contact flow template
 
 optional arguments:
   -h, --help       show this help message and exit
+  -d, --dryrun     Dry run - don\'t do changes but show what would happen of
+                   deployed
 ```
 
 ## `ndt deploy-serverless`
@@ -603,6 +604,35 @@ optional arguments:
                         Microsoft Azure subscription
 ```
 
+## `ndt export-connect-contact-flow`
+
+```bash
+usage: ndt export-connect-contact-flow [-h] [-c COMPONENT]
+                                       [-f CONTACTFLOWNAME]
+                                       [-i INSTANCEID | -a INSTANCEALIAS]
+                                       [--colorize]
+                                       name
+
+Export AWS Connect contact flow from an existing instance
+
+positional arguments:
+  name                  The name of the contact flow to export
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c COMPONENT, --component COMPONENT
+                        the component directory where the connect contact flow
+                        directory is
+  -f CONTACTFLOWNAME, --contactflowname CONTACTFLOWNAME
+                        the name of the connect subcomponent directory that
+                        has the contact flow template
+  -i INSTANCEID, --instanceid INSTANCEID
+                        id of the connect instance to export from
+  -a INSTANCEALIAS, --instancealias INSTANCEALIAS
+                        alias of the connect instance to export from
+  --colorize, -o        Colorize output
+```
+
 ## `ndt get-images`
 
 ```bash
@@ -688,6 +718,32 @@ optional arguments:
   -b BRANCH, --branch BRANCH
                         The branch to get components from. Default is to
                         process current branch
+```
+
+## `ndt list-connect-contact-flows`
+
+```bash
+usage: ndt list-connect-contact-flows [-h] [-c COMPONENT] [-f CONTACTFLOWNAME]
+                                      [-i INSTANCEID | -a INSTANCEALIAS] [-t]
+                                      [-m MATCH]
+
+List existing AWS Connect contact flows in an instance
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c COMPONENT, --component COMPONENT
+                        the component directory where the connect contact flow
+                        directory is
+  -f CONTACTFLOWNAME, --contactflowname CONTACTFLOWNAME
+                        the name of the connect subcomponent directory that
+                        has the contact flow template
+  -i INSTANCEID, --instanceid INSTANCEID
+                        id of the connect instance to export from
+  -a INSTANCEALIAS, --instancealias INSTANCEALIAS
+                        alias of the connect instance to export from
+  -t, --trash           Include trashed flows
+  -m MATCH, --match MATCH
+                        Pattern to match printed flows
 ```
 
 ## `ndt list-file-to-json`
@@ -1143,8 +1199,8 @@ optional arguments:
 ## `ndt snapshot-from-volume`
 
 ```bash
-usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]] [-i]
+usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS ...]] [-t [TAGS ...]]
+                                [-i]
                                 tag_key tag_value mount_path
 
 Create a snapshot of a volume identified by it\'s mount path
@@ -1157,10 +1213,10 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -w, --wait            Wait for the snapshot to finish before returning
-  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
+  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
                         Tag to copy to the snapshot from instance. Multiple
                         values allowed.
-  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
+  -t [TAGS ...], --tags [TAGS ...]
                         Tag to add to the snapshot in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1356,9 +1412,8 @@ optional arguments:
 ## `ndt volume-from-snapshot`
 
 ```bash
-usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]] [-i] [-u]
-                                [--gp2 | --gp3]
+usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS ...]] [-t [TAGS ...]]
+                                [-i] [-u] [--gp2 | --gp3]
                                 tag_key tag_value mount_path [size_gb]
 
 Create a volume from an existing snapshot and mount it on the given path. The
@@ -1377,10 +1432,10 @@ optional arguments:
   -n, --no_delete_on_termination
                         Whether to skip deleting the volume on termination,
                         defaults to false
-  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
+  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
                         Tag to copy to the volume from instance. Multiple
                         values allowed.
-  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
+  -t [TAGS ...], --tags [TAGS ...]
                         Tag to add to the volume in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1393,9 +1448,7 @@ optional arguments:
 ## `ndt yaml-to-json`
 
 ```bash
-usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE [MERGE ...]]]
-                        [--small]
-                        file
+usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE ...]] [--small] file
 
 Convert nameless CloudFormation yaml to CloudFormation json with some
 preprosessing
@@ -1406,7 +1459,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --colorize, -c        Colorize output
-  --merge [MERGE [MERGE ...]], -m [MERGE [MERGE ...]]
+  --merge [MERGE ...], -m [MERGE ...]
                         Merge other yaml files to the main file
   --small, -s           Compact representration of json
 ```
