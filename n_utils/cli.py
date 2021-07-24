@@ -1020,8 +1020,7 @@ def deploy_connect_contact_flows():
     parser.add_argument("-d", "--dryrun", help="Dry run - don't do changes but show what would happen of deployed", action="store_true")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    flow_template = Project().get_component(args.component).get_subcomponent("connect", args.contactflowname)
-    connect.deploy_connect_contact_flows(flow_template.get_dir() + os.sep + "template.yaml", dry_run=args.dryrun)
+    connect.deploy_connect_contact_flows(args.component, args.contactflowname, dry_run=args.dryrun)
 
 def export_connect_contact_flow():
     """ Export AWS Connect contact flow from an existing instance """
