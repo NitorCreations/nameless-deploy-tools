@@ -32,8 +32,12 @@ def deploy_connect_contact_flows(component, contactflowname, dry_run=True):
                 flow_content = json_save_small(flow)
                 print("Updating flow " + flow_name)
                 if not dry_run:
-                    connect().update_contact_flow_content(InstanceId=instance_id, ContactFlowId=flow_id, Content=flow_content)
-                    connect().update_contact_flow_name(InstanceId=instance_id, ContactFlowId=flow_id, Description=flow_description, Name=flow_name)
+                    try:
+                        connect().update_contact_flow_content(InstanceId=instance_id, ContactFlowId=flow_id, Content=flow_content)
+                        connect().update_contact_flow_name(InstanceId=instance_id, ContactFlowId=flow_id, Description=flow_description, Name=flow_name)
+                    except:
+                        print("Failed to update flow " + flow_name)
+                        print(yaml_save(flow))
             else:
                 flow_type = flow["Type"]
                 flow_name = flow["Name"]
@@ -51,6 +55,7 @@ def deploy_connect_contact_flows(component, contactflowname, dry_run=True):
                     try:
                         connect().create_contact_flow(InstanceId=instance_id, Name=flow_name, Type=flow_type, Description=flow_description, Content=flow_content, Tags=flow_tags)
                     except:
+                        print("Failed to create flow " + flow_name)
                         print(yaml_save(flow))
 
 
