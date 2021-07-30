@@ -41,8 +41,6 @@ git tag "$NEW_VERSION" -m "$1"
 git push --tags origin master
 
 python setup.py sdist bdist_wheel
-gpg -o dist/adfs_aws_login-${NEW_VERSION}-py2.py3-none-any.whl.asc -a -b dist/adfs_aws_login-${NEW_VERSION}-py2.py3-none-any.whl
-gpg -o dist/adfs-aws-login-${NEW_VERSION}.tar.gz.asc -a -b dist/adfs-aws-login-${NEW_VERSION}.tar.gz
 twine upload dist/*
 sleep 30
 
