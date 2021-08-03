@@ -5,6 +5,7 @@ from subprocess import Popen, PIPE
 ARR_START = "[".encode()
 OBJ_START = "{".encode()
 
+
 def az_login():
     proc = Popen(
         ["az", "login"],
@@ -14,7 +15,8 @@ def az_login():
     output, err = proc.communicate()
     if proc.returncode != 0:
         return []
-    return json.loads(output[output.find(ARR_START):])
+    return json.loads(output[output.find(ARR_START) :])
+
 
 def az_logout():
     proc = Popen(
@@ -25,6 +27,7 @@ def az_logout():
     output, err = proc.communicate()
     return proc.returncode == 0
 
+
 def az_account_show():
     proc = Popen(
         ["az", "account", "show"],
@@ -34,7 +37,8 @@ def az_account_show():
     output, _err = proc.communicate()
     if proc.returncode != 0:
         return {}
-    return json.loads(output[output.find(OBJ_START):])
+    return json.loads(output[output.find(OBJ_START) :])
+
 
 def az_account_list():
     proc = Popen(
@@ -45,13 +49,15 @@ def az_account_list():
     output, err = proc.communicate()
     if proc.returncode != 0:
         return []
-    return json.loads(output[output.find(ARR_START):])
+    return json.loads(output[output.find(ARR_START) :])
+
 
 def az_find_subscription_id(name, account_list):
     for subscription in account_list:
         if subscription["name"] == name or subscription["id"] == name:
             return subscription["id"]
     return None
+
 
 def az_set_subscription(subscription_id):
     proc = Popen(
@@ -61,6 +67,7 @@ def az_set_subscription(subscription_id):
     )
     output, err = proc.communicate()
     return proc.returncode == 0
+
 
 def az_select_subscription(name):
     curr_account = az_account_show()
@@ -78,6 +85,7 @@ def az_select_subscription(name):
         az_set_subscription(subscription_id)
     return subscription_id
 
+
 def ensure_group(location, group_name):
     proc = Popen(
         ["az", "group", "list", "--query", "[?name=='" + group_name + "']"],
@@ -85,7 +93,7 @@ def ensure_group(location, group_name):
         stderr=PIPE,
     )
     output, err = proc.communicate()
-    groups = json.loads(output[output.find(ARR_START):])
+    groups = json.loads(output[output.find(ARR_START) :])
     if len(groups) == 0:
         proc = Popen(
             ["az", "group", "create", "--name", group_name, "--location", location],
@@ -94,19 +102,27 @@ def ensure_group(location, group_name):
         )
         output, err = proc.communicate()
         if proc.returncode == 0:
-            groups = [json.loads(output[output.find(OBJ_START):])]
+            groups = [json.loads(output[output.find(OBJ_START) :])]
         else:
             groups = [{}]
     return groups[0]
 
+
 def ensure_management_group(group_name):
     proc = Popen(
-        ["az", "account", "management-group", "list", "--query", "[?name=='" + group_name + "']"],
+        [
+            "az",
+            "account",
+            "management-group",
+            "list",
+            "--query",
+            "[?name=='" + group_name + "']",
+        ],
         stdout=PIPE,
         stderr=PIPE,
     )
     output, err = proc.communicate()
-    groups = json.loads(output[output.find(ARR_START):])
+    groups = json.loads(output[output.find(ARR_START) :])
     if len(groups) == 0:
         proc = Popen(
             ["az", "account", "management-group", "create", "--name", group_name],
@@ -115,10 +131,10 @@ def ensure_management_group(group_name):
         )
         output, err = proc.communicate()
         if proc.returncode == 0:
-            groups = [json.loads(output[output.find(OBJ_START):])]
+            groups = [json.loads(output[output.find(OBJ_START) :])]
         else:
             groups = [{}]
-    
+
 
 def delete_group(group_name):
     proc = Popen(
@@ -128,4 +144,3 @@ def delete_group(group_name):
     )
     output, err = proc.communicate()
     return proc.returncode == 0
-

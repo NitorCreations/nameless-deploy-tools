@@ -17,8 +17,8 @@ if "CF_TEMPLATE_INCLUDE" in os.environ:
             next_dir = next_dir + os.path.sep
         include_dirs.append(next_dir)
 
-include_dirs.append(os.path.join(os.path.dirname(__file__), "includes") +
-                    os.path.sep)
+include_dirs.append(os.path.join(os.path.dirname(__file__), "includes") + os.path.sep)
+
 
 def find_include(basefile):
     if os.path.isfile(basefile):
@@ -27,6 +27,7 @@ def find_include(basefile):
         if os.path.isfile(search_dir + basefile):
             return search_dir + basefile
     return None
+
 
 def find_all_includes(pattern):
     ret = []
@@ -37,9 +38,9 @@ def find_all_includes(pattern):
             ret.append(next_match)
     return ret
 
+
 def do_command_completion():
-    """ ndt command completion function
-    """
+    """ndt command completion function"""
     output_stream = os.fdopen(8, "wb")
     ifs = os.environ.get("_ARGCOMPLETE_IFS", "\v")
     if len(ifs) != 1:
@@ -53,7 +54,9 @@ def do_command_completion():
     if USING_PYTHON2:
         comp_point = len(comp_line[:comp_point].decode(SYS_ENCODING))
     else:
-        comp_point = len(comp_line.encode(SYS_ENCODING)[:comp_point].decode(SYS_ENCODING))
+        comp_point = len(
+            comp_line.encode(SYS_ENCODING)[:comp_point].decode(SYS_ENCODING)
+        )
 
     comp_line = ensure_str(comp_line)
     comp_words = split_line(comp_line, comp_point)[3]
@@ -75,8 +78,12 @@ def do_command_completion():
             command = command + ".sh"
         if command_type == "ndtshell" or command_type == "ndtscript":
             command = find_include(command)
-        if command_type == "shell" or command_type == "script" or \
-           command_type == "ndtshell" or command_type == "ndtscript":
+        if (
+            command_type == "shell"
+            or command_type == "script"
+            or command_type == "ndtshell"
+            or command_type == "ndtscript"
+        ):
             proc = Popen([command], stderr=PIPE, stdout=PIPE)
             output = _to_str(proc.communicate()[0])
             if proc.returncode == 0:
@@ -86,16 +93,15 @@ def do_command_completion():
                 sys.exit(1)
         else:
             line = comp_line[3:].lstrip()
-            os.environ['COMP_POINT'] = str(comp_point - (len(comp_line) -
-                                                         len(line)))
-            os.environ['COMP_LINE'] = line
+            os.environ["COMP_POINT"] = str(comp_point - (len(comp_line) - len(line)))
+            os.environ["COMP_LINE"] = line
             parts = command_type.split(":")
             getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])()
         sys.exit(0)
 
 
 def ndt():
-    """ The main nameless deploy tools command that provides bash command
+    """The main nameless deploy tools command that provides bash command
     completion and subcommand execution
     """
     if "_ARGCOMPLETE" in os.environ:
@@ -105,11 +111,11 @@ def ndt():
             sys.stdout.writelines([VERSION, "\n"])
             sys.exit(0)
         if len(sys.argv) < 2 or sys.argv[1] not in COMMAND_MAPPINGS:
-            sys.stderr.writelines([u'usage: ndt <command> [args...]\n'])
-            sys.stderr.writelines([u'\tcommand shoud be one of:\n'])
-            sys.stderr.writelines([u'\t\t--version\n'])
+            sys.stderr.writelines([u"usage: ndt <command> [args...]\n"])
+            sys.stderr.writelines([u"\tcommand shoud be one of:\n"])
+            sys.stderr.writelines([u"\t\t--version\n"])
             for command in sorted(COMMAND_MAPPINGS):
-                sys.stderr.writelines([u'\t\t' + command + '\n'])
+                sys.stderr.writelines([u"\t\t" + command + "\n"])
             sys.exit(1)
         command = sys.argv[1]
         command_type = COMMAND_MAPPINGS[command]
@@ -119,16 +125,20 @@ def ndt():
             command = command + ".sh"
         if command_type == "ndtshell" or command_type == "ndtscript":
             command = find_include(command)
-        if command_type == "shell" or command_type == "script" or \
-           command_type == "ndtshell" or command_type == "ndtscript":
+        if (
+            command_type == "shell"
+            or command_type == "script"
+            or command_type == "ndtshell"
+            or command_type == "ndtscript"
+        ):
             sys.exit(Popen([command] + sys.argv[2:]).wait())
         else:
             parts = command_type.split(":")
-            my_func = getattr(__import__(parts[0], fromlist=[parts[1]]),
-                              parts[1])
+            my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
             sys.argv = sys.argv[1:]
             sys.argv[0] = "ndt " + sys.argv[0]
             my_func()
+
 
 if __name__ == "__main__":
     ndt()

@@ -1,6 +1,7 @@
 from n_utils.ndt_project import list_jobs
 import json
 
+
 def test_list_jobs():
     jobs = list_jobs(json=True, export_job_properties=True)
     for branch in jobs["branches"]:

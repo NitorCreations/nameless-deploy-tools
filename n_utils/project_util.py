@@ -6,17 +6,23 @@ from subprocess import Popen, PIPE
 
 SYS_ENCODING = getpreferredencoding()
 
+
 def _var_name(suffix):
     return "ndt.profile." + suffix
+
 
 def _branch_var_name(current_branch, suffix):
     return "ndt.profile." + current_branch + "." + suffix
 
+
 def _check_enable_profile(vars, current_branch, profile_type):
     if _branch_var_name(current_branch, profile_type) in vars:
-        enable_profile(profile_type, vars[_branch_var_name(current_branch, profile_type)])
+        enable_profile(
+            profile_type, vars[_branch_var_name(current_branch, profile_type)]
+        )
     elif _var_name(profile_type) in vars:
         enable_profile(profile_type, vars[_var_name(profile_type)])
+
 
 def _check_enable_virtualenv(vars, current_branch):
     pyenv = None
@@ -27,20 +33,27 @@ def _check_enable_virtualenv(vars, current_branch):
     if pyenv:
         if not ("PYENV_VERSION" in environ and environ["PYENV_VERSION"] == pyenv):
             print("export PYENV_VIRTUALENV_DISABLE_PROMPT=1;")
-            print("pyenv activate \'" + pyenv + "\'")
+            print("pyenv activate '" + pyenv + "'")
     else:
         _check_disable_virtualenv()
+
 
 def _check_disable_virtualenv():
     if "PYENV_VERSION" in environ and environ["PYENV_VERSION"].startswith("ndt-"):
         print("pyenv deactivate;")
         print("unset PYENV_VIRTUALENV_DISABLE_PROMPT")
 
+
 def load_project_env():
-    """ Print parameters set by git config variables to setup project environment with region and aws credentials
-    """
-    proc = Popen(["git", "config", "--list", "--local"], stdout=PIPE, stderr=open(devnull, 'w'))
-    proc2 = Popen(["git", "rev-parse", "--abbrev-ref", "HEAD"], stdout=PIPE, stderr=open(devnull, 'w'))
+    """Print parameters set by git config variables to setup project environment with region and aws credentials"""
+    proc = Popen(
+        ["git", "config", "--list", "--local"], stdout=PIPE, stderr=open(devnull, "w")
+    )
+    proc2 = Popen(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        stdout=PIPE,
+        stderr=open(devnull, "w"),
+    )
     stdout, _ = proc2.communicate()
     current_branch = "master"
     if proc2.returncode == 0:
@@ -74,30 +87,54 @@ def load_project_env():
 
     if "ndt.aws." + current_branch + ".profile" in vars:
         do_print = True
-        ret = ret + "export AWS_PROFILE=" + vars["ndt.aws." + current_branch + ".profile"] + \
-            " AWS_DEFAULT_PROFILE=" + vars["ndt.aws." + current_branch + ".profile"] + linesep
+        ret = (
+            ret
+            + "export AWS_PROFILE="
+            + vars["ndt.aws." + current_branch + ".profile"]
+            + " AWS_DEFAULT_PROFILE="
+            + vars["ndt.aws." + current_branch + ".profile"]
+            + linesep
+        )
     elif "ndt.aws.profile" in vars:
         do_print = True
-        ret = ret + "export AWS_PROFILE=" + vars["ndt.aws.profile"] + \
-            " AWS_DEFAULT_PROFILE=" + vars["ndt.aws.profile"] + linesep
+        ret = (
+            ret
+            + "export AWS_PROFILE="
+            + vars["ndt.aws.profile"]
+            + " AWS_DEFAULT_PROFILE="
+            + vars["ndt.aws.profile"]
+            + linesep
+        )
 
     if "ndt.aws." + current_branch + ".region" in vars:
         do_print = True
-        ret = ret + "export AWS_REGION=" + vars["ndt.aws." + current_branch + ".region"] + \
-            " AWS_DEFAULT_REGION=" + vars["ndt.aws. " + current_branch + ".region"] + linesep
+        ret = (
+            ret
+            + "export AWS_REGION="
+            + vars["ndt.aws." + current_branch + ".region"]
+            + " AWS_DEFAULT_REGION="
+            + vars["ndt.aws. " + current_branch + ".region"]
+            + linesep
+        )
     elif "ndt.aws.region" in vars:
         do_print = True
-        ret = ret + "export AWS_REGION=" + vars["ndt.aws.region"] + \
-            " AWS_DEFAULT_REGION=" + vars["ndt.aws.region"] + linesep
+        ret = (
+            ret
+            + "export AWS_REGION="
+            + vars["ndt.aws.region"]
+            + " AWS_DEFAULT_REGION="
+            + vars["ndt.aws.region"]
+            + linesep
+        )
 
     if do_print:
         print(ret.strip())
 
 
 def ndt_register_complete():
-    """Print out shell function and command to register ndt command completion
-    """
-    print("""_ndt_complete() {
+    """Print out shell function and command to register ndt command completion"""
+    print(
+        """_ndt_complete() {
     local IFS=$'\\013'
     local COMP_CUR="${COMP_WORDS[COMP_CWORD]}"
     local COMP_PREV="${COMP_WORDS[COMP_CWORD-1]}"
@@ -122,13 +159,16 @@ def ndt_register_complete():
         compopt -o nospace
     fi
 }
-complete -o nospace -F _ndt_complete "ndt" """)
+complete -o nospace -F _ndt_complete "ndt" """
+    )
     if len(argv) > 1 and argv[1] == "--project-env":
-        print("""_projectenv_hook() {
+        print(
+            """_projectenv_hook() {
   local previous_exit_status=$?;
   eval "$(nameless-dt-load-project-env)";
   return $previous_exit_status;
 };
 if ! [[ "$PROMPT_COMMAND" =~ _projectenv_hook ]]; then
   PROMPT_COMMAND="_projectenv_hook;$PROMPT_COMMAND";
-fi""")
+fi"""
+        )

@@ -7,6 +7,7 @@ from jmespath import search
 
 from n_utils import _to_str
 
+
 def flat_state(state_doc):
     ret = OrderedDict()
     if "outputs" in state_doc:
@@ -25,6 +26,7 @@ def flat_state(state_doc):
                             ret[prefix + "." + str(i) + "." + key] = value
     return ret
 
+
 def jmespath_var(state_doc, jmespath_expr):
     ret = search(jmespath_expr, state_doc)
     if isinstance(ret[0], dict):
@@ -32,10 +34,11 @@ def jmespath_var(state_doc, jmespath_expr):
     else:
         return "\n".join(ret)
 
+
 def pull_state(component, terraform, root="."):
     cmd = ["ndt", "terraform-pull-state", component, terraform]
     process = Popen(cmd, cwd=root, stdout=PIPE, stderr=PIPE)
-    stdout, _  = process.communicate()
+    stdout, _ = process.communicate()
     if process.returncode != 0:
         return {}
     return json.loads(stdout)

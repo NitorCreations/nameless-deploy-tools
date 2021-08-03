@@ -4,11 +4,15 @@ import pyotp
 import string
 from subprocess import Popen, PIPE
 
+
 def strip_whitespace(s):
     return s.translate({ord(c): None for c in string.whitespace})
 
+
 _BW_CACHE = {}
 NO_ENTRY = "NO ENTRY"
+
+
 def get_bwentry(search_term):
     if search_term in _BW_CACHE:
         if _BW_CACHE[search_term] == NO_ENTRY:
@@ -35,6 +39,7 @@ def get_bwentry(search_term):
     else:
         _BW_CACHE[search_term] = NO_ENTRY
         return None
+
 
 class BwEntry:
     def __init__(self, item_data):

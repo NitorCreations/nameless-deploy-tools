@@ -3,7 +3,14 @@ import json
 from os import unlink
 from tempfile import NamedTemporaryFile
 from n_utils import _to_bytes
-from n_utils.mfa_utils import mfa_add_token, mfa_delete_token, mfa_generate_code, mfa_backup_tokens, mfa_decrypt_backup_tokens
+from n_utils.mfa_utils import (
+    mfa_add_token,
+    mfa_delete_token,
+    mfa_generate_code,
+    mfa_backup_tokens,
+    mfa_decrypt_backup_tokens,
+)
+
 
 class MyArgs:
     def __init__(self):
@@ -13,13 +20,17 @@ class MyArgs:
         self.force = True
         self.bitwarden_entry = None
 
+
 MY_ARGS = MyArgs()
+
 
 def test_add_token():
     mfa_add_token(MY_ARGS)
 
+
 def test_get_code():
     assert re.match(r"[0-9]{6}", mfa_generate_code(MY_ARGS.token_name))
+
 
 def test_backup():
     with NamedTemporaryFile(delete=False) as out:
@@ -33,6 +44,7 @@ def test_backup():
             assert token["token_secret"] == MY_ARGS.token_secret
             found = True
     assert found
+
 
 def test_delete_token():
     mfa_delete_token(MyArgs().token_name)

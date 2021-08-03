@@ -9,8 +9,8 @@ from tempfile import mkdtemp
 
 SYS_ENCODING = getpreferredencoding()
 
-class Git(object):
 
+class Git(object):
     def __init__(self):
         self.entered = 0
         self.export_directories = {}
@@ -21,7 +21,7 @@ class Git(object):
     def __enter__(self):
         self.entered += 1
         return self
-    
+
     def __exit__(self, exc_type, exc_value, traceback):
         self.entered -= 1
         if self.entered == 0:
@@ -35,7 +35,7 @@ class Git(object):
             co_dir = mkdtemp()
             self.export_directories[branch] = co_dir
             return co_dir, False
-    
+
     def _resolve_branch(self, branch):
         proc = Popen(["git", "branch", "-a"], stdout=PIPE)
         output, _ = proc.communicate()
@@ -65,8 +65,14 @@ class Git(object):
             if not exported:
                 export_branch = self._resolve_branch(branch)
                 if not export_branch:
-                    raise CheckoutException("Failed to resolve branch " + branch + " for export")
-                proc = Popen(["git", "archive", "--format", "tar", export_branch], stdout=PIPE, stderr=open(devnull, 'w'))
+                    raise CheckoutException(
+                        "Failed to resolve branch " + branch + " for export"
+                    )
+                proc = Popen(
+                    ["git", "archive", "--format", "tar", export_branch],
+                    stdout=PIPE,
+                    stderr=open(devnull, "w"),
+                )
                 tar = tar_open(mode="r|", fileobj=proc.stdout)
                 tar.extractall(path=checkout_dir)
         except TarReadError:
@@ -75,7 +81,11 @@ class Git(object):
 
     def get_git_root(self):
         if not self.root:
-            proc = Popen(["git", "rev-parse", "--show-toplevel"], stdout=PIPE, stderr=open(devnull, 'w'))
+            proc = Popen(
+                ["git", "rev-parse", "--show-toplevel"],
+                stdout=PIPE,
+                stderr=open(devnull, "w"),
+            )
             stdout, _ = proc.communicate()
             if proc.returncode == 0:
                 self.root = stdout.decode(SYS_ENCODING).strip()
@@ -85,7 +95,9 @@ class Git(object):
 
     def get_branches(self):
         if not self.branches:
-            proc = Popen(["git", "branch", "-a"], stdout=PIPE, stderr=open(devnull, 'w'))
+            proc = Popen(
+                ["git", "branch", "-a"], stdout=PIPE, stderr=open(devnull, "w")
+            )
             output, _ = proc.communicate()
             for line in output.decode(SYS_ENCODING).split(linesep):
                 if "detached" in line or "(no branch)" in line:
@@ -107,7 +119,11 @@ class Git(object):
             if "GIT_BRANCH" in environ:
                 self.current_branch = environ["GIT_BRANCH"]
             else:
-                proc = Popen(["git", "rev-parse", "--abbrev-ref", "HEAD"], stdout=PIPE, stderr=open(devnull, 'w'))
+                proc = Popen(
+                    ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                    stdout=PIPE,
+                    stderr=open(devnull, "w"),
+                )
                 stdout, _ = proc.communicate()
                 if proc.returncode == 0:
                     self.current_branch = stdout.decode(SYS_ENCODING).strip()

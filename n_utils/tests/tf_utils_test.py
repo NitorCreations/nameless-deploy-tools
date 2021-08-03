@@ -1,7 +1,8 @@
 from n_utils.tf_utils import flat_state, jmespath_var
 import json
 
-state = json.loads("""
+state = json.loads(
+    """
 {
   "version": 4,
   "terraform_version": "0.13.2",
@@ -70,12 +71,24 @@ state = json.loads("""
   ]
 }
 
-""")
+"""
+)
+
 
 def test_flat_state(mocker):
     state_doc = flat_state(state)
-    assert state_doc["sns_platform_app_arn"] == "arn:aws:sns:eu-central-1:00000000:app/GCM/EhMobileDev"
+    assert (
+        state_doc["sns_platform_app_arn"]
+        == "arn:aws:sns:eu-central-1:00000000:app/GCM/EhMobileDev"
+    )
     assert state_doc["sns_gcm_application.platform_credential"] == "FOOBAR"
 
+
 def test_jmespath_var(mocker):
-    assert jmespath_var(state, "resources[?name == 'sns_gcm_application'].instances[0].attributes.arn") == "arn:aws:sns:evu-central-1:00000000:app/GCM/EhMobileDev"
+    assert (
+        jmespath_var(
+            state,
+            "resources[?name == 'sns_gcm_application'].instances[0].attributes.arn",
+        )
+        == "arn:aws:sns:evu-central-1:00000000:app/GCM/EhMobileDev"
+    )

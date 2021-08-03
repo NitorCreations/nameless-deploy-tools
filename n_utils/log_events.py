@@ -55,8 +55,13 @@ from builtins import object
 from collections import deque
 
 from botocore.exceptions import ClientError
-from ec2_utils.logs import fmttime, timestamp, \
-    uprint, validatestarttime, LogWorkerThread
+from ec2_utils.logs import (
+    fmttime,
+    timestamp,
+    uprint,
+    validatestarttime,
+    LogWorkerThread,
+)
 from termcolor import colored
 from threadlocal_aws.clients import cloudformation
 
@@ -70,7 +75,7 @@ class CloudFormationEvents(LogWorkerThread):
     def list_logs(self):
         do_wait = object()
         dedup_queue = deque(maxlen=10000)
-        kwargs = {'StackName': self.log_group_name}
+        kwargs = {"StackName": self.log_group_name}
 
         def generator():
             start_seen = False
@@ -84,32 +89,29 @@ class CloudFormationEvents(LogWorkerThread):
                     response = cloudformation().describe_stack_events(**kwargs)
                 except ClientError:
                     pass
-                for event in response.get('StackEvents', []):
-                    event_timestamp = timestamp(event['Timestamp'])
-                    if event_timestamp < max(self.start_time,
-                                             seen_events_up_to):
+                for event in response.get("StackEvents", []):
+                    event_timestamp = timestamp(event["Timestamp"])
+                    if event_timestamp < max(self.start_time, seen_events_up_to):
                         break
-                    if not event['EventId'] in dedup_queue:
-                        dedup_queue.append(event['EventId'])
+                    if not event["EventId"] in dedup_queue:
+                        dedup_queue.append(event["EventId"])
                         unseen_events.append(event)
 
                 if len(unseen_events) > 0:
-                    seen_events_up_to = \
-                        int(timestamp(unseen_events[0]['Timestamp']))
+                    seen_events_up_to = int(timestamp(unseen_events[0]["Timestamp"]))
                     for event in reversed(unseen_events):
                         yield event
 
                 # If we've seen the start, we don't want to iterate with
                 # NextToken anymore
-                if event_timestamp < self.start_time or \
-                   'NextToken' not in response:
+                if event_timestamp < self.start_time or "NextToken" not in response:
                     start_seen = True
                 # If we've not seen the start we iterate further
-                if not start_seen and 'NextToken' in response:
-                    kwargs['NextToken'] = response['NextToken']
+                if not start_seen and "NextToken" in response:
+                    kwargs["NextToken"] = response["NextToken"]
                 # Otherwise make sure we don't send NextToken
-                elif 'NextToken' in kwargs:
-                    kwargs.pop('NextToken')
+                elif "NextToken" in kwargs:
+                    kwargs.pop("NextToken")
                 yield do_wait
 
         for event in generator():
@@ -119,16 +121,15 @@ class CloudFormationEvents(LogWorkerThread):
                 return
 
             output = []
-            output.append(colored(fmttime(event['Timestamp']),
-                                  'yellow'))
-            target = event['ResourceType'] + ":" + event['LogicalResourceId']
-            output.append(colored(target, 'cyan'))
-            message = event['ResourceStatus']
-            color = 'green'
+            output.append(colored(fmttime(event["Timestamp"]), "yellow"))
+            target = event["ResourceType"] + ":" + event["LogicalResourceId"]
+            output.append(colored(target, "cyan"))
+            message = event["ResourceStatus"]
+            color = "green"
             if "_FAILED" in message:
-                color = 'red'
+                color = "red"
             output.append(colored(message, color))
-            if 'ResourceStatusReason' in event:
-                output.append(event['ResourceStatusReason'])
-            uprint(' '.join(output))
+            if "ResourceStatusReason" in event:
+                output.append(event["ResourceStatusReason"])
+            uprint(" ".join(output))
             sys.stdout.flush()
