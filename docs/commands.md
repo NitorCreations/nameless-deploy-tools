@@ -607,30 +607,24 @@ optional arguments:
 ## `ndt export-connect-contact-flow`
 
 ```bash
-usage: ndt export-connect-contact-flow [-h] [-c COMPONENT]
-                                       [-f CONTACTFLOWNAME]
-                                       [-i INSTANCEID | -a INSTANCEALIAS]
-                                       [--colorize]
-                                       name
-
-Export AWS Connect contact flow from an existing instance
-
-positional arguments:
-  name                  The name of the contact flow to export
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -c COMPONENT, --component COMPONENT
-                        the component directory where the connect contact flow
-                        directory is
-  -f CONTACTFLOWNAME, --contactflowname CONTACTFLOWNAME
-                        the name of the connect subcomponent directory that
-                        has the contact flow template
-  -i INSTANCEID, --instanceid INSTANCEID
-                        id of the connect instance to export from
-  -a INSTANCEALIAS, --instancealias INSTANCEALIAS
-                        alias of the connect instance to export from
-  --colorize, -o        Colorize output
+Traceback (most recent call last):
+  File "/home/pasi/.local/bin/ndt", line 33, in <module>
+    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 140, in ndt
+    my_func()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 1346, in export_connect_contact_flow
+    ).completer = ChoicesCompleter(connect.get_instance_ids())
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/connect.py", line 112, in get_instance_ids
+    for page in paginator.paginate():
+  File "/usr/local/lib/python3.9/dist-packages/botocore/paginate.py", line 255, in __iter__
+    response = self._make_request(current_kwargs)
+  File "/usr/local/lib/python3.9/dist-packages/botocore/paginate.py", line 332, in _make_request
+    return self._method(**current_kwargs)
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 386, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 705, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (ExpiredTokenException) when calling the ListInstances operation: The security token included in the request is expired
 ```
 
 ## `ndt get-images`
@@ -723,27 +717,24 @@ optional arguments:
 ## `ndt list-connect-contact-flows`
 
 ```bash
-usage: ndt list-connect-contact-flows [-h] [-c COMPONENT] [-f CONTACTFLOWNAME]
-                                      [-i INSTANCEID | -a INSTANCEALIAS] [-t]
-                                      [-m MATCH]
-
-List existing AWS Connect contact flows in an instance
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -c COMPONENT, --component COMPONENT
-                        the component directory where the connect contact flow
-                        directory is
-  -f CONTACTFLOWNAME, --contactflowname CONTACTFLOWNAME
-                        the name of the connect subcomponent directory that
-                        has the contact flow template
-  -i INSTANCEID, --instanceid INSTANCEID
-                        id of the connect instance to export from
-  -a INSTANCEALIAS, --instancealias INSTANCEALIAS
-                        alias of the connect instance to export from
-  -t, --trash           Include trashed flows
-  -m MATCH, --match MATCH
-                        Pattern to match printed flows
+Traceback (most recent call last):
+  File "/home/pasi/.local/bin/ndt", line 33, in <module>
+    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 140, in ndt
+    my_func()
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 1384, in list_connect_contact_flows
+    ).completer = ChoicesCompleter(connect.get_instance_ids())
+  File "/home/pasi/src/nameless-deploy-tools/n_utils/connect.py", line 112, in get_instance_ids
+    for page in paginator.paginate():
+  File "/usr/local/lib/python3.9/dist-packages/botocore/paginate.py", line 255, in __iter__
+    response = self._make_request(current_kwargs)
+  File "/usr/local/lib/python3.9/dist-packages/botocore/paginate.py", line 332, in _make_request
+    return self._method(**current_kwargs)
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 386, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 705, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (ExpiredTokenException) when calling the ListInstances operation: The security token included in the request is expired
 ```
 
 ## `ndt list-file-to-json`
@@ -796,7 +787,7 @@ usage: ndt load-parameters [-h] [--branch BRANCH] [--resolve-images]
                            [-f FILTER]
                            [component]
 
- Load parameters from infra*.properties files in the order:
+Load parameters from infra*.properties files in the order:
     branch.properties
     [branch].properties
     infra.properties,
@@ -1355,7 +1346,7 @@ optional arguments:
 ```bash
 usage: ndt upsert-codebuild-projects [-h] [-d]
 
- Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
+Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
 
     Parameters are read from properties files as described in \'ndt load-parameters -h\'. To check all job paramters you
     can run \'ndt list-jobs -e -j -b [current-branch]\'
