@@ -100,7 +100,7 @@ NDT_ONLY = [
     "yaml-to-yaml=n_utils.cli:yaml_to_yaml",
     "upsert-codebuild-projects=n_utils.cli:cli_upsert_codebuild_projects",
     "upsert-dns-record=n_utils.cli:upsert_dns_record",
-    "deploy-connect-contact-flows=n_utils.cli:deploy_connect_contact_flows",
+    "deploy-connect=n_utils.cli:deploy_connect_contact_flows",
     "export-connect-contact-flow=n_utils.cli:export_connect_contact_flow",
     "list-connect-contact-flows=n_utils.cli:list_connect_contact_flows",
 ]

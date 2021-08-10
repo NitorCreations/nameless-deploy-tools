@@ -1415,7 +1415,7 @@ def _resolve_connect_instance(args):
     if not args:
         return None
     if hasattr(args, "instanceid") and args.instanceid:
-        return args.instance_id
+        return args.instanceid
     if hasattr(args, "instancealias") and args.instancealias:
         return connect.alias_to_id(args.instancealias)
     if (
