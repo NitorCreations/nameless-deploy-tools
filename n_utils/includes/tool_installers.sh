@@ -186,3 +186,12 @@ install_dynatrace_activegate() {
   /bin/sh Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
   rm -f Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
 }
+enable_systemd_portforward() {
+  local SOURCE=$(n-include systemd-portforward.te)
+  local BASE=${SOURCE%.te}
+  local MODULE=$BASE.mod
+  local PACKAGE=$BASE.pp
+  checkmodule -M -m -o $MODULE $SOURCE
+  semodule_package -o $PACKAGE -m $MODULE
+  semodule -i $PACKAGE
+}
