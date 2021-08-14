@@ -289,8 +289,7 @@ optional arguments:
 
 ```bash
 usage: ndt create-account [-h] [-d] [-o ORGANIZATION_ROLE_NAME]
-                          [-r TRUST_ROLE_NAME]
-                          [-a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]]
+                          [-r TRUST_ROLE_NAME] [-a [TRUSTED_ACCOUNTS ...]]
                           [-t TOKEN_NAME]
                           email account_name
 
@@ -307,7 +306,7 @@ optional arguments:
                         Role name for admin access from parent account
   -r TRUST_ROLE_NAME, --trust-role-name TRUST_ROLE_NAME
                         Role name for admin access from parent account
-  -a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]], --trusted-accounts [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]
+  -a [TRUSTED_ACCOUNTS ...], --trusted-accounts [TRUSTED_ACCOUNTS ...]
                         Account to trust with user management
   -t TOKEN_NAME, --mfa-token TOKEN_NAME
                         Name of MFA token to use
@@ -609,41 +608,41 @@ optional arguments:
 
 ```bash
 Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 11, in <module>
-    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/.local/bin/ndt", line 33, in <module>
+    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
   File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 140, in ndt
     my_func()
   File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 1346, in export_connect_contact_flow
     ).completer = ChoicesCompleter(connect.get_instance_ids())
   File "/home/pasi/src/nameless-deploy-tools/n_utils/connect.py", line 112, in get_instance_ids
     for page in paginator.paginate():
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/paginate.py", line 255, in __iter__
+  File "/usr/local/lib/python3.9/dist-packages/botocore/paginate.py", line 255, in __iter__
     response = self._make_request(current_kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/paginate.py", line 332, in _make_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/paginate.py", line 332, in _make_request
     return self._method(**current_kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 386, in _api_call
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 386, in _api_call
     return self._make_api_call(operation_name, kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 691, in _make_api_call
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 691, in _make_api_call
     http, parsed_response = self._make_request(
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 711, in _make_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 711, in _make_request
     return self._endpoint.make_request(operation_model, request_dict)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 102, in make_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/endpoint.py", line 102, in make_request
     return self._send_request(request_dict, operation_model)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 132, in _send_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/endpoint.py", line 132, in _send_request
     request = self.create_request(request_dict, operation_model)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 115, in create_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/endpoint.py", line 115, in create_request
     self._event_emitter.emit(event_name, request=request,
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 356, in emit
+  File "/usr/local/lib/python3.9/dist-packages/botocore/hooks.py", line 356, in emit
     return self._emitter.emit(aliased_event_name, **kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 228, in emit
+  File "/usr/local/lib/python3.9/dist-packages/botocore/hooks.py", line 228, in emit
     return self._emit(event_name, kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 211, in _emit
+  File "/usr/local/lib/python3.9/dist-packages/botocore/hooks.py", line 211, in _emit
     response = handler(**kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/signers.py", line 90, in handler
+  File "/usr/local/lib/python3.9/dist-packages/botocore/signers.py", line 90, in handler
     return self.sign(operation_name, request)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/signers.py", line 162, in sign
+  File "/usr/local/lib/python3.9/dist-packages/botocore/signers.py", line 162, in sign
     auth.add_auth(request)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/auth.py", line 373, in add_auth
+  File "/usr/local/lib/python3.9/dist-packages/botocore/auth.py", line 373, in add_auth
     raise NoCredentialsError()
 botocore.exceptions.NoCredentialsError: Unable to locate credentials
 ```
@@ -739,41 +738,41 @@ optional arguments:
 
 ```bash
 Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 11, in <module>
-    load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')()
+  File "/home/pasi/.local/bin/ndt", line 33, in <module>
+    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
   File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 140, in ndt
     my_func()
   File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 1384, in list_connect_contact_flows
     ).completer = ChoicesCompleter(connect.get_instance_ids())
   File "/home/pasi/src/nameless-deploy-tools/n_utils/connect.py", line 112, in get_instance_ids
     for page in paginator.paginate():
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/paginate.py", line 255, in __iter__
+  File "/usr/local/lib/python3.9/dist-packages/botocore/paginate.py", line 255, in __iter__
     response = self._make_request(current_kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/paginate.py", line 332, in _make_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/paginate.py", line 332, in _make_request
     return self._method(**current_kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 386, in _api_call
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 386, in _api_call
     return self._make_api_call(operation_name, kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 691, in _make_api_call
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 691, in _make_api_call
     http, parsed_response = self._make_request(
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/client.py", line 711, in _make_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/client.py", line 711, in _make_request
     return self._endpoint.make_request(operation_model, request_dict)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 102, in make_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/endpoint.py", line 102, in make_request
     return self._send_request(request_dict, operation_model)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 132, in _send_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/endpoint.py", line 132, in _send_request
     request = self.create_request(request_dict, operation_model)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/endpoint.py", line 115, in create_request
+  File "/usr/local/lib/python3.9/dist-packages/botocore/endpoint.py", line 115, in create_request
     self._event_emitter.emit(event_name, request=request,
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 356, in emit
+  File "/usr/local/lib/python3.9/dist-packages/botocore/hooks.py", line 356, in emit
     return self._emitter.emit(aliased_event_name, **kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 228, in emit
+  File "/usr/local/lib/python3.9/dist-packages/botocore/hooks.py", line 228, in emit
     return self._emit(event_name, kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/hooks.py", line 211, in _emit
+  File "/usr/local/lib/python3.9/dist-packages/botocore/hooks.py", line 211, in _emit
     response = handler(**kwargs)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/signers.py", line 90, in handler
+  File "/usr/local/lib/python3.9/dist-packages/botocore/signers.py", line 90, in handler
     return self.sign(operation_name, request)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/signers.py", line 162, in sign
+  File "/usr/local/lib/python3.9/dist-packages/botocore/signers.py", line 162, in sign
     auth.add_auth(request)
-  File "/home/pasi/.local/lib/python3.8/site-packages/botocore/auth.py", line 373, in add_auth
+  File "/usr/local/lib/python3.9/dist-packages/botocore/auth.py", line 373, in add_auth
     raise NoCredentialsError()
 botocore.exceptions.NoCredentialsError: Unable to locate credentials
 ```
@@ -1231,8 +1230,8 @@ optional arguments:
 ## `ndt snapshot-from-volume`
 
 ```bash
-usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]] [-i]
+usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS ...]] [-t [TAGS ...]]
+                                [-i]
                                 tag_key tag_value mount_path
 
 Create a snapshot of a volume identified by it\'s mount path
@@ -1245,10 +1244,10 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -w, --wait            Wait for the snapshot to finish before returning
-  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
+  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
                         Tag to copy to the snapshot from instance. Multiple
                         values allowed.
-  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
+  -t [TAGS ...], --tags [TAGS ...]
                         Tag to add to the snapshot in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1444,9 +1443,8 @@ optional arguments:
 ## `ndt volume-from-snapshot`
 
 ```bash
-usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]] [-i] [-u]
-                                [--gp2 | --gp3]
+usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS ...]] [-t [TAGS ...]]
+                                [-i] [-u] [--gp2 | --gp3]
                                 tag_key tag_value mount_path [size_gb]
 
 Create a volume from an existing snapshot and mount it on the given path. The
@@ -1465,10 +1463,10 @@ optional arguments:
   -n, --no_delete_on_termination
                         Whether to skip deleting the volume on termination,
                         defaults to false
-  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
+  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
                         Tag to copy to the volume from instance. Multiple
                         values allowed.
-  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
+  -t [TAGS ...], --tags [TAGS ...]
                         Tag to add to the volume in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1481,9 +1479,7 @@ optional arguments:
 ## `ndt yaml-to-json`
 
 ```bash
-usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE [MERGE ...]]]
-                        [--small]
-                        file
+usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE ...]] [--small] file
 
 Convert nameless CloudFormation yaml to CloudFormation json with some
 preprosessing
@@ -1494,7 +1490,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --colorize, -c        Colorize output
-  --merge [MERGE [MERGE ...]], -m [MERGE [MERGE ...]]
+  --merge [MERGE ...], -m [MERGE ...]
                         Merge other yaml files to the main file
   --small, -s           Compact representration of json
 ```
