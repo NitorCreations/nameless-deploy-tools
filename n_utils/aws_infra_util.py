@@ -254,7 +254,8 @@ def _process_value(value, used_params):
             yaml_value = yaml_load(value)
             if isinstance(yaml_value, Number):
                 return value
-            value = yaml_value
+            if not yaml_value is None:
+                value = yaml_value
         except:
             pass
     value = expand_vars(value, used_params, None, [])
