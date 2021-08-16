@@ -68,7 +68,7 @@ setup(
         "configparser",
         "scandir",
         "jmespath",
-        "ec2-utils==0.33",
+        "ec2-utils==0.34",
         "cloudformation-utils==0.0.2",
         "pyOpenSSL>=19.1.0",
     ]
