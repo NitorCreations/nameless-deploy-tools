@@ -1343,10 +1343,10 @@ def export_connect_contact_flow():
     instance_sel = parser.add_mutually_exclusive_group()
     instance_sel.add_argument(
         "-i", "--instanceid", help="id of the connect instance to export from"
-    ).completer = ChoicesCompleter(connect.get_instance_ids())
+    ).completer = lambda **kwargs: connect.get_instance_ids()
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
-    ).completer = ChoicesCompleter(connect.get_instance_aliases())
+    ).completer = lambda **kwargs: connect.get_instance_aliases()
     parser.add_argument("--colorize", "-o", help="Colorize output", action="store_true")
     parser.add_argument(
         "name", help="The name of the contact flow to export"
@@ -1381,10 +1381,10 @@ def list_connect_contact_flows():
     instance_sel = parser.add_mutually_exclusive_group()
     instance_sel.add_argument(
         "-i", "--instanceid", help="id of the connect instance to export from"
-    ).completer = ChoicesCompleter(connect.get_instance_ids())
+    ).completer = lambda **kwargs: connect.get_instance_ids()
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
-    ).completer = ChoicesCompleter(connect.get_instance_aliases())
+    ).completer = lambda **kwargs: connect.get_instance_aliases()
     parser.add_argument(
         "-t", "--trash", help="Include trashed flows", action="store_true"
     )
