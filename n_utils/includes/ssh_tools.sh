@@ -33,7 +33,7 @@ ssh_restart_service () {
     ubuntu)
       service ssh restart
       ;;
-    centos)
+    centos|rhel|rocky|fedora)
       systemctl restart sshd
       ;;
     *)

@@ -21,7 +21,7 @@ case  "$SYSTEM_TYPE" in
     APACHE_SSL_CONF=/etc/apache2/sites-enabled/default-ssl.conf
     APACHE_WELCOME_CONF=/etc/apache2/sites-enabled/welcome.conf
     ;;
-  centos|fedora)
+  centos|fedora|rocky|rhel)
     APACHE_SSL_CONF=/etc/httpd/conf.d/ssl.conf
     APACHE_WELCOME_CONF=/etc/httpd/conf.d/welcome.conf
     ;;
@@ -76,7 +76,7 @@ MARK
   fi
   sed -i -e '/^#.*$/d' -e '/^$/d' -e '/<\/VirtualHost>/d' -e '/SSLCertificate/d' -e '/SSLCACertificate/d' -e '/SSLProtocol/d' -e '/SSLCipherSuite/d' ${APACHE_SSL_CONF}
 
-  if [ "$SYSTEM_TYPE" = "centos" ]; then
+  if [ "$SYSTEM_TYPE" = "centos" -o "$SYSTEM_TYPE" = "rhel" -o "$SYSTEM_TYPE" = "rocky" ]; then
     # Allow reverse proxy connections
     setsebool -P httpd_can_network_connect 1
   fi
@@ -115,12 +115,12 @@ MARKER
 }
 
 apache_disable_and_shutdown_service () {
-  case  "$SYSTEM_TYPE" in
+  case "$SYSTEM_TYPE" in
     ubuntu)
       update-rc.d apache2 disable
       service apache2 stop
       ;;
-    centos|fedora)
+    centos|fedora|rocky|rhel)
       systemctl disable httpd
       systemctl stop httpd
       ;;
@@ -131,11 +131,11 @@ apache_disable_and_shutdown_service () {
   esac
 }
 apache_reload_service () {
-  case  "$SYSTEM_TYPE" in
+  case "$SYSTEM_TYPE" in
     ubuntu)
       service apache2 reload
       ;;
-    centos|fedora)
+    centos|fedora|rocky|rhel)
       systemctl reload httpd
       ;;
     *)
@@ -151,7 +151,7 @@ apache_enable_and_start_service () {
       update-rc.d apache2 enable
       service apache2 start
       ;;
-    centos|fedora)
+    centos|fedora|rocky|rhel)
       systemctl enable firewalld
       systemctl start firewalld
       firewall-cmd --permanent --zone=public --add-service=https

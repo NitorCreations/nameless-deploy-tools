@@ -300,7 +300,7 @@ do_install() {
 			esac
 		;;
 
-		centos|rhel)
+		centos|rhel|rocky)
 			if [ -z "$dist_version" ] && [ -r /etc/os-release ]; then
 				dist_version="$(. /etc/os-release && echo "$VERSION_ID")"
 			fi
@@ -379,7 +379,7 @@ do_install() {
 			)
 			exit 0
 			;;
-		centos|fedora|rhel)
+		centos|fedora|rhel|rocky)
 			yum_repo="$DOWNLOAD_URL/linux/$lsb_dist/$REPO_FILE"
 			if ! curl -Ifs "$yum_repo" > /dev/null; then
 				echo "Error: Unable to curl repository file $yum_repo, is it valid?"

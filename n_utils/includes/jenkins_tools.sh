@@ -115,13 +115,17 @@ EOF
 
 jenkins_setup_snapshot_on_shutdown () {
   # Amend service script to call snapshot_jenkins_home right after stopping the service - original script saved as jenkins.orig
-  if [ "$SYSTEM_TYPE" = "ubuntu" ]; then
-    perl -i.orig -e 'while(<>){print;if(m!^(\s+)do_stop!){print $1.'\''retval="$?"'\''."\n".$1."/usr/local/bin/ndt snapshot-from-volume '${CF_paramEBSTag}' '${CF_paramEBSTag}' /var/lib/jenkins/jenkins-home\n";last;}}$_=<>;s/\$\?/\$retval/;print;while(<>){print}' /etc/init.d/jenkins
-  elif [ "$SYSTEM_TYPE" = "centos" -o "$SYSTEM_TYPE" = "fedora" ]; then
-    perl -i.orig -e 'while(<>){print;if(m!^(\s+)killproc!){print $1.'\''retval="$?"'\''."\n".$1."/usr/local/bin/ndt snapshot-from-volume '${CF_paramEBSTag}' '${CF_paramEBSTag}' /var/lib/jenkins/jenkins-home\n";last;}}$_=<>;s/\$\?/\$retval/;print;while(<>){print}' /etc/init.d/jenkins
-  else
-    echo "Unkown system type $SYSTEM_TYPE"
-  fi
+  case "$SYSTEM_TYPE" in
+    ubuntu)
+      perl -i.orig -e 'while(<>){print;if(m!^(\s+)do_stop!){print $1.'\''retval="$?"'\''."\n".$1."/usr/local/bin/ndt snapshot-from-volume '${CF_paramEBSTag}' '${CF_paramEBSTag}' /var/lib/jenkins/jenkins-home\n";last;}}$_=<>;s/\$\?/\$retval/;print;while(<>){print}' /etc/init.d/jenkins
+      ;;
+    centos|fedora|rhel|rocky)
+      perl -i.orig -e 'while(<>){print;if(m!^(\s+)killproc!){print $1.'\''retval="$?"'\''."\n".$1."/usr/local/bin/ndt snapshot-from-volume '${CF_paramEBSTag}' '${CF_paramEBSTag}' /var/lib/jenkins/jenkins-home\n";last;}}$_=<>;s/\$\?/\$retval/;print;while(<>){print}' /etc/init.d/jenkins
+      ;;
+    *)
+      echo "Unkown system type $SYSTEM_TYPE"
+      ;;
+  esac
 }
 
 jenkins_setup_snapshot_job () {
@@ -194,7 +198,7 @@ jenkins_set_home () {
     ubuntu)
       local SYSCONFIG=/etc/default/jenkins
       ;;
-    centos|fedora)
+    centos|fedora|rocky|rhel)
       local SYSCONFIG=/etc/sysconfig/jenkins
       ;;
     *)
@@ -212,7 +216,7 @@ jenkins_disable_and_shutdown_service () {
       update-rc.d jenkins disable
       service jenkins stop
       ;;
-    centos|fedora)
+    centos|fedora|rocky|rhel)
       systemctl disable jenkins
       systemctl stop jenkins
       ;;
