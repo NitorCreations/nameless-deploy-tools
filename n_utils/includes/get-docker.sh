@@ -454,9 +454,9 @@ do_install() {
 			;;
 		centos|fedora|rhel|rocky)
 			if [ "$lsb_dist" = "rocky" ]; then
-				yum_repo="$DOWNLOAD_URL/linux/$lsb_dist/$REPO_FILE"
-			else
 				yum_repo="$DOWNLOAD_URL/linux/centos/$REPO_FILE"
+			else
+				yum_repo="$DOWNLOAD_URL/linux/$lsb_dist/$REPO_FILE"
 			fi
 			if ! curl -Ifs "$yum_repo" > /dev/null; then
 				echo "Error: Unable to curl repository file $yum_repo, is it valid?"
