@@ -31,7 +31,7 @@ if [ "$OS_TYPE" = "ubuntu" ]; then
   locale-gen --purge en_US.UTF-8
   echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 fi
-python -m pip install -U pip --ignore-installed
+python -m pip install -U pip wheel --ignore-installed
 # Setuptools installed with pip breaks the platform python setup on CentOS 8
 if [ "$OS_TYPE" = "centos" -a "$OS_VERSION" = "8" ]; then
   pip install -U awscli boto3

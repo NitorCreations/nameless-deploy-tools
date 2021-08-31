@@ -152,12 +152,21 @@
     - alternatives:
         name: python
         path: /usr/bin/python3
-      when: ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_distribution_major_version == "8"
+      when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    - alternatives:
+        name: python
+        path: /usr/bin/python3.9
+      when: ansible_os_family == "Rocky"
     - alternatives:
         name: pip
         link: /usr/bin/pip
         path: /usr/bin/pip3
-      when: ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_distribution_major_version == "8"
+      when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    - alternatives:
+        name: pip
+        link: /usr/bin/pip
+        path: /usr/bin/pip3.9
+      when: ansible_os_family == "Rocky"
     - script: install_tools.sh {{ tools_version }}
     - script: "{{ imagedir }}/pre_install.sh"
     - apt_key: url="{{ item }}" state=present
