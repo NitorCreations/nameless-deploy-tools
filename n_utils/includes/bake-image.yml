@@ -144,7 +144,7 @@
         name: ["python-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python-crypto", "python-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
     - dnf:
-        name: ["python39", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python39-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+        name: ["python39-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python39-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "8"
     - alternatives:
         name: python
@@ -161,7 +161,7 @@
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "8"
     - alternatives:
         name: pip3
-        link: /usr/bin/pip
+        link: /usr/bin/pip3
         path: /usr/bin/pip3.9
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "8"
     - script: install_tools.sh {{ tools_version }}
