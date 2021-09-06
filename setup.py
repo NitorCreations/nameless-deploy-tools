@@ -37,7 +37,7 @@ with open("README.md") as f:
 
 setup(
     name="nameless-deploy-tools",
-    version="1.225",
+    version="1.226",
     description="Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow",
     url="http://github.com/NitorCreations/nameless-deploy-tools",
     download_url="https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.157",
@@ -68,7 +68,7 @@ setup(
         "configparser",
         "scandir",
         "jmespath",
-        "ec2-utils==0.34",
+        "ec2-utils>=0.34",
         "cloudformation-utils==0.0.2",
         "pyOpenSSL>=19.1.0",
     ]
