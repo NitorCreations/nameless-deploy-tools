@@ -11,6 +11,18 @@ CentOS 8 doesn't (yet) have an AWS marketplace product so we need to get the lat
 
 Also the root volume needs to be 10G now instead of the old 8G
 
+# Rocky linux
+
+Support for CentOS 8 will end abruptly at the end of 2021, so a fully compatible version with a stable future is Rocky linux. You simply switch the image type to rocky and define a new base image:
+
+```diff
+-IMAGETYPE=centos
++IMAGETYPE=rocky
++AMIID_rocky=ProductAmi: cotnnspjrsi38lfn8qo4ibnnm
+```
+
+The only significant difference is that the default user will be `rocky` instead of `centos`.
+
 # Packages
 
 Places will have different package repos for CentOS 8. They are pretty well available already. Here's an example for node (also upgrade node to current version while you are at it)
