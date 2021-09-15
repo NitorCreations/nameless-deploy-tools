@@ -13,11 +13,11 @@ Also the root volume needs to be 10G now instead of the old 8G
 
 # Packages
 
-Places will have different package repos for CentOS 8. They are pretty well available already. Here's an example for node
+Places will have different package repos for CentOS 8. They are pretty well available already. Here's an example for node (also upgrade node to current version while you are at it)
 
 ```diff
 -safe_download https://rpm.nodesource.com/pub_12.x/el/7/x86_64/nodejs-12.14.1-1nodesource.x86_64.rpm 34ec81a11d752eb9f52db9dbc4349102e890f11d3a53239f596c5ec1277cd210 nodejs.rpm &
-+safe_download https://rpm.nodesource.com/pub_12.x/el/8/x86_64/nodejs-12.18.3-1nodesource.x86_64.rpm 3e6b56f07a13c6c894fb28f899829423f48de2dad723b48b6298db4df042e525 nodejs.rpm &
++safe_download https://rpm.nodesource.com/pub_16.x/el/8/x86_64/nodejs-16.8.0-1nodesource.x86_64.rpm e0cf02059f46b06c0f1ef919b37326b17f4222215631fc7427f5b128c2457979 nodejs.rpm & &
 
 ```
 
