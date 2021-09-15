@@ -4,7 +4,8 @@ CentOS 8 doesn't (yet) have an AWS marketplace product so we need to get the lat
 
 ```diff
 -AMIID_centos=ProductAmi: aw0evgkw8e5c1q413zgy5pjce
-+AMIID_centos=OwnerNamedAmi: { owner: "125523088429", name: "CentOS 8.*x86_64" }+VOLUME_SIZE=10
++AMIID_centos=OwnerNamedAmi: { owner: "125523088429", name: "CentOS 8.*x86_64" }
++VOLUME_SIZE=10
 
 ```
 
