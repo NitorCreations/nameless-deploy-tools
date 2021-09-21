@@ -67,6 +67,18 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
+## `ndt aws-config-to-json`
+
+```bash
+usage: ndt aws-config-to-json [-h]
+
+Prints aws config file contents as json for further parsing and use in other
+tookls
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
 ## `ndt azure-ensure-group`
 
 ```bash
