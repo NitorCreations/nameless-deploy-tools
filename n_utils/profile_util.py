@@ -1,6 +1,7 @@
 import argparse
 import os
 import re
+import json
 from datetime import datetime
 from os import R_OK, access
 from os.path import exists, expanduser, isfile, join
@@ -58,7 +59,7 @@ def read_profiles():
     return ret
 
 
-def get_profile(profile):
+def get_profile(profile, include_creds=True):
     home = expanduser("~")
     from collections import OrderedDict
 
@@ -72,14 +73,15 @@ def get_profile(profile):
             if profile_section in parser.sections():
                 for option in parser.options(profile_section):
                     ret[option] = parser.get(profile_section, option)
-    credentials = join(home, ".aws", "credentials")
-    if isfile(credentials) and access(credentials, R_OK):
-        parser = ConfigParser()
-        with open(credentials) as credfile:
-            parser.read_file(credfile)
-            if profile in parser.sections():
-                for option in parser.options(profile):
-                    ret[option] = parser.get(profile, option)
+    if include_creds:
+        credentials = join(home, ".aws", "credentials")
+        if isfile(credentials) and access(credentials, R_OK):
+            parser = ConfigParser()
+            with open(credentials) as credfile:
+                parser.read_file(credfile)
+                if profile in parser.sections():
+                    for option in parser.options(profile):
+                        ret[option] = parser.get(profile, option)
     return ret
 
 
@@ -258,6 +260,38 @@ def update_profile(profile, creds):
     with open(credentials, "w") as credfile:
         parser.write(credfile)
 
+def profiles_to_json():
+    from collections import OrderedDict
+    home = expanduser("~")
+    config = join(home, ".aws", "config")
+    ret = OrderedDict()
+    if exists(config):
+        parser = ConfigParser()
+        with open(config, "r") as conffile:
+            parser.read_file(conffile)
+            for section in parser.sections():
+                if section.startswith("profile "):
+                    section_data = OrderedDict()
+                    ret[section[8:]] = section_data
+                    for option in parser.options(section):
+                        section_data[option] = parser.get(section, option)
+        print(json.dumps(ret, indent=2))
+
+def update_profile_conf(profile, creds):
+    home = expanduser("~")
+    config = join(home, ".aws", "config")
+    profile_section = "profile " + profile
+    if exists(config):
+        parser = ConfigParser()
+        with open(config, "r") as conffile:
+            parser.read_file(conffile)
+            if profile_section not in parser.sections():
+                parser.add_section(profile_section)
+            for key in creds:
+                parser.set(profile_section, key, creds[key])
+    with open(config, "w") as conffile:
+        parser.write(conffile)
+    return
 
 def store_bw_profile(bw_entry_name):
     bw_entry = get_bwentry(bw_entry_name)
