@@ -69,6 +69,7 @@ MARKER
       set +x
       RESET_XTRACE="true"
     fi
+    chown -R jenkins:jenkins $MAVEN_HOME
     DEPLOYER_PWD=$(fetch-secrets.sh show "$CF_paramMvnDeployId")
     export DEPLOYER_PASSWORD=$(sudo -iu jenkins mvn -ep "$DEPLOYER_PWD")
     ndt add-deployer-server "$MAVEN_HOME/settings.xml" "$CF_paramMvnDeployId"
