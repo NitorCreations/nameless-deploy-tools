@@ -260,6 +260,13 @@ def update_profile(profile, creds):
     with open(credentials, "w") as credfile:
         parser.write(credfile)
 
+def cli_profiles_to_json():
+    """ Prints aws config file contents as json for further parsing and use in other tools """
+    parser = argparse.ArgumentParser(description=cli_profiles_to_json.__doc__)
+    argcomplete.autocomplete(parser)
+    _ = parser.parse_args()
+    profiles_to_json()
+
 def profiles_to_json():
     from collections import OrderedDict
     home = expanduser("~")

@@ -73,7 +73,7 @@ optional arguments:
 usage: ndt aws-config-to-json [-h]
 
 Prints aws config file contents as json for further parsing and use in other
-tookls
+tools
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -301,8 +301,7 @@ optional arguments:
 
 ```bash
 usage: ndt create-account [-h] [-d] [-o ORGANIZATION_ROLE_NAME]
-                          [-r TRUST_ROLE_NAME]
-                          [-a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]]
+                          [-r TRUST_ROLE_NAME] [-a [TRUSTED_ACCOUNTS ...]]
                           [-t TOKEN_NAME]
                           email account_name
 
@@ -319,7 +318,7 @@ optional arguments:
                         Role name for admin access from parent account
   -r TRUST_ROLE_NAME, --trust-role-name TRUST_ROLE_NAME
                         Role name for admin access from parent account
-  -a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]], --trusted-accounts [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]
+  -a [TRUSTED_ACCOUNTS ...], --trusted-accounts [TRUSTED_ACCOUNTS ...]
                         Account to trust with user management
   -t TOKEN_NAME, --mfa-token TOKEN_NAME
                         Name of MFA token to use
@@ -1212,8 +1211,8 @@ optional arguments:
 ## `ndt snapshot-from-volume`
 
 ```bash
-usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]] [-i]
+usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS ...]] [-t [TAGS ...]]
+                                [-i]
                                 tag_key tag_value mount_path
 
 Create a snapshot of a volume identified by it\'s mount path
@@ -1226,10 +1225,10 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -w, --wait            Wait for the snapshot to finish before returning
-  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
+  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
                         Tag to copy to the snapshot from instance. Multiple
                         values allowed.
-  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
+  -t [TAGS ...], --tags [TAGS ...]
                         Tag to add to the snapshot in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1425,9 +1424,8 @@ optional arguments:
 ## `ndt volume-from-snapshot`
 
 ```bash
-usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS [COPYTAGS ...]]]
-                                [-t [TAGS [TAGS ...]]] [-i] [-u]
-                                [--gp2 | --gp3]
+usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS ...]] [-t [TAGS ...]]
+                                [-i] [-u] [--gp2 | --gp3]
                                 tag_key tag_value mount_path [size_gb]
 
 Create a volume from an existing snapshot and mount it on the given path. The
@@ -1446,10 +1444,10 @@ optional arguments:
   -n, --no_delete_on_termination
                         Whether to skip deleting the volume on termination,
                         defaults to false
-  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
+  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
                         Tag to copy to the volume from instance. Multiple
                         values allowed.
-  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
+  -t [TAGS ...], --tags [TAGS ...]
                         Tag to add to the volume in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1462,9 +1460,7 @@ optional arguments:
 ## `ndt yaml-to-json`
 
 ```bash
-usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE [MERGE ...]]]
-                        [--small]
-                        file
+usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE ...]] [--small] file
 
 Convert nameless CloudFormation yaml to CloudFormation json with some
 preprosessing
@@ -1475,7 +1471,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --colorize, -c        Colorize output
-  --merge [MERGE [MERGE ...]], -m [MERGE [MERGE ...]]
+  --merge [MERGE ...], -m [MERGE ...]
                         Merge other yaml files to the main file
   --small, -s           Compact representration of json
 ```

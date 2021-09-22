@@ -16,7 +16,7 @@
 """
 import base64
 
-VERSION = "1.228"
+VERSION = "1.229"
 
 PATH_COMMANDS = [
     "bin/create-shell-archive.sh",
@@ -103,7 +103,7 @@ NDT_ONLY = [
     "deploy-connect=n_utils.cli:deploy_connect_contact_flows",
     "export-connect-contact-flow=n_utils.cli:export_connect_contact_flow",
     "list-connect-contact-flows=n_utils.cli:list_connect_contact_flows",
-    "aws-config-to-json=n_utils.profile_util:profiles_to_json",
+    "aws-config-to-json=n_utils.profile_util:cli_profiles_to_json",
 ]
 NDT_ONLY_SCRIPT = [
     "bake-docker.sh",
