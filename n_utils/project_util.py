@@ -174,13 +174,13 @@ if ! [[ "$PROMPT_COMMAND" =~ _projectenv_hook ]]; then
 fi
 """
         )
-    if len(argv) > 1 and "--eap-function" in argv:
+    if len(argv) > 1 and "--nep-function" in argv:
         print(
-            """_eap_complete() {
+            """_nep_complete() {
     COMPREPLY=( $(ndt print-aws-profiles "${COMP_WORDS[COMP_CWORD]}" ) )
 }
 
-eap() {
+nep() {
     if [ "$1" = "-h" -o "$1" = "--help" ]; then
         ndt enable-profile -h
         return
@@ -188,6 +188,6 @@ eap() {
     eval "$(ndt enable-profile $@)"
 }
 
-complete -F _eap_complete eap
+complete -F _nep_complete nep
 """
         )
