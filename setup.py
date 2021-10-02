@@ -37,7 +37,7 @@ with open("README.md") as f:
 
 setup(
     name="nameless-deploy-tools",
-    version="1.229",
+    version="1.230",
     description="Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow",
     url="http://github.com/NitorCreations/nameless-deploy-tools",
     download_url="https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.157",
