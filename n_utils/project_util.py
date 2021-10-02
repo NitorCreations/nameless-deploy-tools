@@ -159,9 +159,10 @@ def ndt_register_complete():
         compopt -o nospace
     fi
 }
-complete -o nospace -F _ndt_complete "ndt" """
+complete -o nospace -F _ndt_complete "ndt"
+"""
     )
-    if len(argv) > 1 and argv[1] == "--project-env":
+    if len(argv) > 1 and "--project-env" in argv:
         print(
             """_projectenv_hook() {
   local previous_exit_status=$?;
@@ -170,5 +171,23 @@ complete -o nospace -F _ndt_complete "ndt" """
 };
 if ! [[ "$PROMPT_COMMAND" =~ _projectenv_hook ]]; then
   PROMPT_COMMAND="_projectenv_hook;$PROMPT_COMMAND";
-fi"""
+fi
+"""
+        )
+    if len(argv) > 1 and "--eap-function" in argv:
+        print(
+            """_eap_complete() {
+    COMPREPLY=( $(ndt print-aws-profiles "${COMP_WORDS[COMP_CWORD]}" ) )
+}
+
+eap() {
+    if [ "$1" = "-h" -o "$1" = "--help" ]; then
+        ndt enable-profile -h
+        return
+    fi
+    eval "$(ndt enable-profile $@)"
+}
+
+complete -F _eap_complete eap
+"""
         )

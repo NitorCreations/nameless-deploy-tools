@@ -81,6 +81,7 @@ NDT_ONLY = [
     "mfa-code=n_utils.cli:cli_mfa_code",
     "mfa-delete-token=n_utils.cli:cli_mfa_delete_token",
     "mfa-qrcode=n_utils.cli:cli_mfa_to_qrcode",
+    "print-aws-profiles=n_utils.profile_util:print_aws_profiles",
     "profile-expiry-to-env=n_utils.profile_util:profile_expiry_to_env",
     "profile-to-env=n_utils.profile_util:profile_to_env",
     "promote-image=n_utils.cli:cli_promote_image",

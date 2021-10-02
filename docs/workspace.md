@@ -9,6 +9,18 @@ outputted by `nameless-dt-register-complete` need to be in your environment. So 
 eval "$(nameless-dt-register-complete)"
 ```
 
+## Quick profile switching
+
+You can enable a bash function to quickly switch between profiles by adding `--eap-function` -argument to the
+command completion command. This will enable a command like `eap my-aws-account-profile` that enables that
+profile for your current shell session. In practice it will call `eval "$(ndt enable-profile $@)"` - see the
+documentation for `ndt enable-profile` for details. So the command you would in this case add to your shell profile
+(e.g. your ~/.bashrc) would be:
+
+```bash
+eval "$(nameless-dt-register-complete --eap-function)"
+```
+
 ## Command completion on Macs
 
 The default shell on Macs is `zsh` nowadays and that can be made to work via a compatibility trick described here:

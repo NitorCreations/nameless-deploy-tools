@@ -38,7 +38,7 @@ def read_expiring_profiles():
     return ret
 
 
-def read_profiles():
+def read_profiles(prefix=None):
     ret = []
     home = expanduser("~")
     credentials = join(home, ".aws", "credentials")
@@ -47,14 +47,16 @@ def read_profiles():
         with open(credentials) as credfile:
             parser.read_file(credfile)
             for profile in parser.sections():
-                ret.append(profile)
+                if profile.startswith(prefix):
+                    ret.append(profile)
     config = join(home, ".aws", "config")
     if isfile(config) and access(config, R_OK):
         parser = ConfigParser()
         with open(config) as configfile:
             parser.read_file(configfile)
             for profile in parser.sections():
-                if profile.startswith("profile ") and profile[8:] not in ret:
+                if profile.startswith("profile ") and profile[8:] not in ret \
+                   and profile[8:].startswith(prefix):
                     ret.append(profile[8:])
     return ret
 
@@ -101,6 +103,20 @@ def read_profile_expiry(profile):
 
 def read_profile_expiry_epoc(profile):
     return _epoc_secs(parse(read_profile_expiry(profile)).replace(tzinfo=tzutc()))
+
+
+def print_aws_profiles():
+    """Prints profile names from credentials file (~/.aws/credentials) and the conf file (~/.aws/conf) for autocomplete tools"""
+    parser = argparse.ArgumentParser(description=print_aws_profiles.__doc__)
+    if "_ARGCOMPLETE" in os.environ:
+        parser.add_argument(
+            "prefix", help="Prefix of profiles to print", default="", nargs='?'
+        ).completer = ChoicesCompleter(read_profiles())
+        argcomplete.autocomplete(parser)
+    else:
+        parser.add_argument("prefix", help="Prefix of profiles to print", default="", nargs='?')
+    args = parser.parse_args()
+    print(" ".join(read_profiles(prefix=args.prefix)))
 
 
 def profile_to_env():
