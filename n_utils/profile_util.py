@@ -13,7 +13,9 @@ from dateutil.tz import tzutc
 
 from n_utils import _to_str
 from n_utils.bw_util import get_bwentry
+from n_utils.lp_util import get_lpentry
 from n_utils.az_util import az_select_subscription
+from n_utils.mfa_utils import mfa_generate_code
 
 
 def ConfigParser():
@@ -446,20 +448,22 @@ def enable_profile(profile_type, profile):
         if expiry < now:
             bw_prefix = ""
             bw_entry = None
+            lp_entry = None
             profile_data = get_profile(profile)
             if "bitwarden_entry" in profile_data and profile_data["bitwarden_entry"]:
                 bw_entry = get_bwentry(profile_data["bitwarden_entry"])
+            if "lastpass_entry" in profile_data and profile_data["lastpass_entry"]:
+                lp_entry = get_lpentry(profile_data["lastpass_entry"])
             if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
                 print("unset AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
             if profile_type == "azure":
                 gui_mode = ""
-                if (
-                    "azure_login_mode" in profile_data
-                    and profile_data["azure_login_mode"] == "gui"
-                ):
-                    gui_mode = " --mode=gui"
+                if "azure_login_mode" in profile_data:
+                    gui_mode = " --mode=" + profile_data["azure_login_mode"]
                 if bw_entry:
                     bw_prefix = "AZURE_DEFAULT_PASSWORD='" + bw_entry.password + "' "
+                elif lp_entry:
+                    bw_prefix = "AZURE_DEFAULT_PASSWORD='" + lp_entry.password + "' "
                 print(
                     bw_prefix
                     + "aws-azure-login --profile "
@@ -470,6 +474,8 @@ def enable_profile(profile_type, profile):
             elif profile_type == "adfs":
                 if bw_entry:
                     bw_prefix = "ADFS_DEFAULT_PASSWORD='" + bw_entry.password + "' "
+                elif lp_entry:
+                    bw_prefix = "ADFS_DEFAULT_PASSWORD='" + lp_entry.password + "' "
                 print(
                     bw_prefix + "adfs-aws-login --profile " + profile + " --no-prompt"
                 )
@@ -478,6 +484,10 @@ def enable_profile(profile_type, profile):
                     bw_prefix = "LASTPASS_DEFAULT_PASSWORD='" + bw_entry.password + "' "
                     if bw_entry.totp_now:
                         bw_prefix += "LASTPASS_DEFAULT_OTP='" + bw_entry.totp_now + "' "
+                elif lp_entry:
+                    bw_prefix = "LASTPASS_DEFAULT_PASSWORD='" + lp_entry.password + "' "
+                if "ndt_mfa_token" in profile_data:
+                    bw_prefix += "LASTPASS_DEFAULT_OTP='" + mfa_generate_code(profile_data["ndt_mfa_token"]) + "' "
                 print(
                     bw_prefix
                     + "lastpass-aws-login --profile "
