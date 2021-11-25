@@ -57,8 +57,11 @@ def read_profiles(prefix=None):
         with open(config) as configfile:
             parser.read_file(configfile)
             for profile in parser.sections():
-                if profile.startswith("profile ") and profile[8:] not in ret \
-                   and profile[8:].startswith(prefix):
+                if (
+                    profile.startswith("profile ")
+                    and profile[8:] not in ret
+                    and profile[8:].startswith(prefix)
+                ):
                     ret.append(profile[8:])
     return ret
 
@@ -112,11 +115,13 @@ def print_aws_profiles():
     parser = argparse.ArgumentParser(description=print_aws_profiles.__doc__)
     if "_ARGCOMPLETE" in os.environ:
         parser.add_argument(
-            "prefix", help="Prefix of profiles to print", default="", nargs='?'
+            "prefix", help="Prefix of profiles to print", default="", nargs="?"
         ).completer = ChoicesCompleter(read_profiles())
         argcomplete.autocomplete(parser)
     else:
-        parser.add_argument("prefix", help="Prefix of profiles to print", default="", nargs='?')
+        parser.add_argument(
+            "prefix", help="Prefix of profiles to print", default="", nargs="?"
+        )
     args = parser.parse_args()
     print(" ".join(read_profiles(prefix=args.prefix)))
 
@@ -278,15 +283,18 @@ def update_profile(profile, creds):
     with open(credentials, "w") as credfile:
         parser.write(credfile)
 
+
 def cli_profiles_to_json():
-    """ Prints aws config file contents as json for further parsing and use in other tools """
+    """Prints aws config file contents as json for further parsing and use in other tools"""
     parser = argparse.ArgumentParser(description=cli_profiles_to_json.__doc__)
     argcomplete.autocomplete(parser)
     _ = parser.parse_args()
     profiles_to_json()
 
+
 def profiles_to_json():
     from collections import OrderedDict
+
     home = expanduser("~")
     config = join(home, ".aws", "config")
     ret = OrderedDict()
@@ -301,6 +309,7 @@ def profiles_to_json():
                     for option in parser.options(section):
                         section_data[option] = parser.get(section, option)
         print(json.dumps(ret, indent=2))
+
 
 def update_profile_conf(profile, creds):
     home = expanduser("~")
@@ -317,6 +326,7 @@ def update_profile_conf(profile, creds):
     with open(config, "w") as conffile:
         parser.write(conffile)
     return
+
 
 def store_bw_profile(bw_entry_name):
     bw_entry = get_bwentry(bw_entry_name)
@@ -487,7 +497,11 @@ def enable_profile(profile_type, profile):
                 elif lp_entry:
                     bw_prefix = "LASTPASS_DEFAULT_PASSWORD='" + lp_entry.password + "' "
                 if "ndt_mfa_token" in profile_data:
-                    bw_prefix += "LASTPASS_DEFAULT_OTP='" + mfa_generate_code(profile_data["ndt_mfa_token"]) + "' "
+                    bw_prefix += (
+                        "LASTPASS_DEFAULT_OTP='"
+                        + mfa_generate_code(profile_data["ndt_mfa_token"])
+                        + "' "
+                    )
                 print(
                     bw_prefix
                     + "lastpass-aws-login --profile "
