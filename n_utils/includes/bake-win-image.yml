@@ -114,7 +114,11 @@
       name: [ "python" ]
       version: "{{ win_python_version }}"
   - win_chocolatey:
-      name: [ "awscli", "sync" ]
+      name: [ "sync" ]
+      ignore_checksums: yes
+    when: base_ami_id == "clean"
+  - win_chocolatey:
+      name: [ "awscli" ]
     when: base_ami_id == "clean"
   - win_shell: "C:\\nameless\\prepare.ps1"
     args:
