@@ -48,14 +48,8 @@ apache_enable_and_start_service
 
 jenkins_wait_service_up
 
-MOUNT_PATH=/var/lib/docker/devicemapper
+MOUNT_PATH=/var/lib/docker/overlay2
 ndt volume-from-snapshot --gp3 ${CF_paramDockerEBSTag} ${CF_paramDockerEBSTag} $MOUNT_PATH ${CF_paramDockerEBSSize}
-cat > /etc/cron.d/${CF_paramDockerEBSTag}-snapshot << MARKER
-SHELL=/bin/bash
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
-
-30 * * * * root ndt snapshot-from-volume -w ${CF_paramDockerEBSTag} ${CF_paramDockerEBSTag} $MOUNT_PATH >> /var/log/snapshots.log 2>&1
-MARKER
 
 systemctl enable docker
 systemctl start docker

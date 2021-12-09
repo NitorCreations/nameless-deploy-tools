@@ -15,6 +15,8 @@ install_maven
 install_fail2ban
 sed -i '/Defaults\s*requiretty/d' /etc/sudoers
 
+$(n-include get-docker.sh)
+
 # Disable apache & jenkins before certs & conf are there
 systemctl start jenkins
 

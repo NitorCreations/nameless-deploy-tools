@@ -23,7 +23,6 @@ fail2ban
 fail2ban-systemd
 firewalld
 libxml2
-docker-ce
 autoconf
 automake
 cmake
