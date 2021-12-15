@@ -55,7 +55,7 @@ setup(
     install_requires=[
         "future",
         "pyaml",
-        "awscli",
+        "boto3",
         "requests",
         "termcolor",
         "ipaddr",
