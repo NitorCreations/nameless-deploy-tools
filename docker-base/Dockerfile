@@ -10,17 +10,17 @@
 # See the License for the specific language governing permissions and limitations under the License.
 #
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV DOCKER_BUCKET="download.docker.com" \
-    DOCKER_VERSION="19.03.9" \
+    DOCKER_VERSION="20.10.11" \
     DOCKER_CHANNEL="stable" \
-    DOCKER_SHA256="1c03c78be198d9085e7dd6806fc5d93264baaf0c7ea17f584d00af48eae508ee" \
+    DOCKER_SHA256="dd6ff72df1edfd61ae55feaa4aadb88634161f0aa06dbaaf291d1be594099ff3" \
     DIND_COMMIT="52379fa76dee07ca038624d639d9e14f4fb719ff" \
-    DOCKER_COMPOSE_VERSION="1.25.5"
+    DOCKER_COMPOSE_VERSION="2.2.2"
 
-RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends \
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get upgrade -qy \
+    && apt-get install -qy --no-install-recommends \
     apt-transport-https gnupg-agent software-properties-common wget \
     python3 python3-dev fakeroot ca-certificates \
     tar gzip zip autoconf automake \
@@ -50,7 +50,8 @@ RUN set -x \
     && echo 'dockremap:165536:65536' >> /etc/subuid \
     && echo 'dockremap:165536:65536' >> /etc/subgid \
     && wget "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hack/dind" -O /usr/local/bin/dind \
-    && curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
+    && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
+    && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64.sha256 | sed 's/docker-compose-linux-x86_64/\/usr\/local\/bin\/docker-compose/' | sha256sum --check \
     && chmod +x /usr/local/bin/dind /usr/local/bin/docker-compose \
     # Ensure docker-compose works
     && docker-compose version

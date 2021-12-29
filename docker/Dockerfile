@@ -1,15 +1,15 @@
 FROM nitor/docker-base:latest
 
-ENV NODE_VERSION=14.16.0 \
-  YARN_VERSION=1.22.10 \
+ENV NODE_VERSION=16.13.1 \
+  YARN_VERSION=1.22.17 \
   JAVA_HOME=/docker-java-home \
-  GRADLE_VERSION=6.8.3 \
-  MAVEN_VERSION=3.6.3 \
+  GRADLE_VERSION=7.3.3 \
+  MAVEN_VERSION=3.8.4 \
   PHANTOMJS_VERSION=2.1.1 \
-  LERNA_VERSION=3.22.1 \
-  SERVERLESS_VERSION=2.27.1 \
-  TERRAFORM_VERSION=0.14.7 \
-  TERRAFORM_SHA="6b66e1faf0ad4ece28c42a1877e95bbb1355396231d161d78b8ca8a99accc2d7"
+  LERNA_VERSION=4.0.0 \
+  SERVERLESS_VERSION=2.70.0 \
+  TERRAFORM_VERSION=1.1.2 \
+  TERRAFORM_SHA="734efa82e2d0d3df8f239ce17f7370dabd38e535d21e64d35c73e45f35dfa95c"
 RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
   gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg && \
   echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ bionic main" > /etc/apt/sources.list.d/azure-cli.list && \
@@ -33,7 +33,9 @@ RUN set -ex \
   8FCCA13FEF1D0C2E91008E09770F7A9A5AE15600 \
   A48C2BEE680E841632CD4E44F07496B3EB3C1762 \
   6A010C5166006599AA17F08146C2130DFD2497F5 \
+  A6310ACC4672475C \
   ; do \
+  gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" || \
   gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
   gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
   gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
@@ -59,6 +61,12 @@ RUN set -ex \
   i386) ARCH='x86';; \
   *) echo "unsupported architecture"; exit 1 ;; \
   esac \
+  && curl -SLO https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip \
+  && curl -SLO https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig \
+  && gpg --verify awscli-exe-linux-x86_64.zip.sig awscli-exe-linux-x86_64.zip \
+  && TMP_DIR=$(mktemp -d) && unzip awscli-exe-linux-x86_64.zip -d $TMP_DIR \
+  && $TMP_DIR/aws/install -u \
+  && rm -rf $TMP_DIR awscli-exe-linux-x86_64.zip.sig awscli-exe-linux-x86_64.zip \
   && az bicep install && mv /root/.azure/bin/bicep /usr/local/bin/bicep \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
   && curl -SLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
