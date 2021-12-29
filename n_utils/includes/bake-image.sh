@@ -65,6 +65,7 @@ set -xe
 component="$1" ; shift
 [ "${component}" ] || die "You must give the component name as argument"
 
+export AWS_PAGER=""
 eval "$(ndt load-parameters "$component" -i "$1" -e)"
 
 #If assume-deploy-role.sh is on the path, run it to assume the appropriate role for deployment
