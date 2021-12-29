@@ -21,20 +21,20 @@ ENV DOCKER_BUCKET="download.docker.com" \
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
-       apt-transport-https gnupg-agent software-properties-common wget \
-       python3 python3-dev fakeroot ca-certificates \
-       tar gzip zip autoconf automake \
-       bzip2 file g++ gcc imagemagick \
-       libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev \
-       libevent-dev libffi-dev libgeoip-dev libglib2.0-dev \
-       libjpeg-dev libkrb5-dev liblzma-dev \
-       libmagickcore-dev libmagickwand-dev libmysqlclient-dev \
-       libncurses5-dev libpng-dev libpq-dev libreadline-dev \
-       libsqlite3-dev libssl-dev libtool libwebp-dev \
-       libxml2-dev libxslt1-dev libyaml-dev make \
-       patch xz-utils zlib1g-dev unzip curl \
-       e2fsprogs iptables xfsprogs xz-utils \
-      less groff git liberror-perl \
+    apt-transport-https gnupg-agent software-properties-common wget \
+    python3 python3-dev fakeroot ca-certificates \
+    tar gzip zip autoconf automake \
+    bzip2 file g++ gcc imagemagick \
+    libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev \
+    libevent-dev libffi-dev libgeoip-dev libglib2.0-dev \
+    libjpeg-dev libkrb5-dev liblzma-dev \
+    libmagickcore-dev libmagickwand-dev libmysqlclient-dev \
+    libncurses5-dev libpng-dev libpq-dev libreadline-dev \
+    libsqlite3-dev libssl-dev libtool libwebp-dev \
+    libxml2-dev libxslt1-dev libyaml-dev make \
+    patch xz-utils zlib1g-dev unzip curl \
+    e2fsprogs iptables xfsprogs xz-utils \
+    less groff git liberror-perl \
     && apt-get clean
 
 # Install Docker
@@ -44,7 +44,7 @@ RUN set -x \
     && tar --extract --file docker.tgz --strip-components 1  --directory /usr/local/bin/ \
     && rm docker.tgz \
     && docker -v \
-# set up subuid/subgid so that "--userns-remap=default" works out-of-the-box
+    # set up subuid/subgid so that "--userns-remap=default" works out-of-the-box
     && addgroup dockremap \
     && useradd -g dockremap dockremap \
     && echo 'dockremap:165536:65536' >> /etc/subuid \
@@ -52,7 +52,7 @@ RUN set -x \
     && wget "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hack/dind" -O /usr/local/bin/dind \
     && curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/dind /usr/local/bin/docker-compose \
-# Ensure docker-compose works
+    # Ensure docker-compose works
     && docker-compose version
 
 # Install dependencies by all python images equivalent to buildpack-deps:jessie
