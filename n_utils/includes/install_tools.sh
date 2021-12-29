@@ -31,12 +31,59 @@ if [ "$OS_TYPE" = "ubuntu" ]; then
   locale-gen --purge en_US.UTF-8
   echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 fi
+
+function gpg_safe_download() {
+  local URL=$1
+  local DST=$2
+  if python --version | grep "Python 3" > /dev/null; then
+    python -c "from urllib.request import urlretrieve; urlretrieve('$URL', '$DST')"
+    python -c "from urllib.request import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
+  else
+    python -c "from urllib import urlretrieve; urlretrieve('$URL', '$DST')"
+    python -c "from urllib import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
+  fi
+  gpg --verify $DST.sig $DST
+}
+
+function install_awscliv2() {
+  AWS_CLI_INSTALL_DIR=$(mktemp -d)
+  ZIP_DST="$AWS_CLI_INSTALL_DIR"/awscliv2.zip
+  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys A6310ACC4672475C
+  if uname -a | grep -e "x86_64" -e "amd64" > /dev/null; then
+    if ! gpg_safe_download "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" "$ZIP_DST"; then
+      rm -rf "$AWS_CLI_INSTALL_DIR"
+      echo "ERROR: failed to download of awscliv2.zip" && return 1
+    fi
+  elif uname -a | grep "aarch64" > /dev/null; then
+    if ! gpg_safe_download "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" "$ZIP_DST"; then
+      rm -rf "$AWS_CLI_INSTALL_DIR"
+      echo "ERROR: failed to download of awscliv2.zip" && return 1
+    fi
+  else
+    echo "ERROR: Processor type is unsupported." && return 1
+  fi
+
+  unzip -qo "$ZIP_DST" -d "$AWS_CLI_INSTALL_DIR"
+  if [ $? -ne 0 ]; then
+    rm -rf "$AWS_CLI_INSTALL_DIR"
+    echo "ERROR: failed to unzip of awscliv2.zip" && return 1
+  fi
+  "$AWS_CLI_INSTALL_DIR"/aws/install -u
+  if [ $? -ne 0 ]; then
+    rm -rf "$AWS_CLI_INSTALL_DIR"
+    echo "ERROR: aws cli install failure" && return 1
+  fi
+  rm -rf "$AWS_CLI_INSTALL_DIR"
+  return 0
+}
+
 python -m pip install -U pip wheel --ignore-installed
 # Setuptools installed with pip breaks the platform python setup on CentOS 8
+install_awscliv2
 if [ "$OS_TYPE" = "centos" -a "$OS_VERSION" = "8" ]; then
-  pip install -U awscli boto3
+  pip install -U boto3
 else
-  pip install -U awscli boto3 setuptools
+  pip install -U boto3 setuptools
 fi
 # If alpha, get first all non-alpha dependencies
 pip install -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" --ignore-installed

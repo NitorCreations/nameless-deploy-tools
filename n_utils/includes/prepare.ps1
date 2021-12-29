@@ -5,4 +5,4 @@ Start-Process msiexec -ArgumentList @("/i", "C:\nameless\VCForPython27.msi", "/p
 
 python.exe -m pip install -U pip
 python.exe -m pip install -U setuptools certifi
-pip install -U awscli boto3 nameless-deploy-tools
+pip install -U boto3 nameless-deploy-tools
