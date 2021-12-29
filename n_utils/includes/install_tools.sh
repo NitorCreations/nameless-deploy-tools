@@ -78,8 +78,8 @@ function install_awscliv2() {
 }
 
 python -m pip install -U pip wheel --ignore-installed
-# Setuptools installed with pip breaks the platform python setup on CentOS 8
 install_awscliv2
+# Setuptools installed with pip breaks the platform python setup on CentOS 8
 if [ "$OS_TYPE" = "centos" -a "$OS_VERSION" = "8" ]; then
   pip install -U boto3
 else
