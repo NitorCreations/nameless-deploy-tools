@@ -32,6 +32,14 @@ if [ "$OS_TYPE" = "ubuntu" ]; then
   echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 fi
 
+function add_gpg_key() {
+  local key=$1
+  gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" || \
+  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" || \
+  gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
+  gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
+}
+
 function gpg_safe_download() {
   local URL=$1
   local DST=$2
@@ -48,7 +56,7 @@ function gpg_safe_download() {
 function install_awscliv2() {
   AWS_CLI_INSTALL_DIR=$(mktemp -d)
   ZIP_DST="$AWS_CLI_INSTALL_DIR"/awscliv2.zip
-  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys A6310ACC4672475C
+  add_gpg_key A6310ACC4672475C
   if uname -a | grep -e "x86_64" -e "amd64" > /dev/null; then
     if ! gpg_safe_download "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" "$ZIP_DST"; then
       rm -rf "$AWS_CLI_INSTALL_DIR"
