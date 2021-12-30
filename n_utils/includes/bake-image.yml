@@ -171,9 +171,9 @@
   tasks:
     - debug: var=ec2_prototype_instance
 
-    - name: "Create AMI from deployed server {{ ec2_prototype_instance.instances[0].id }}"
+    - name: "Create AMI from deployed server {{ ec2_prototype_instance.instances[0].instance_id }}"
       amazon.aws.ec2_ami:
-        instance_id: "{{ ec2_prototype_instance.instances[0].id }}"
+        instance_id: "{{ ec2_prototype_instance.instances[0].instance_id }}"
         wait: yes
         name: "{{ job_name }}_{{ build_number }}"
         region: "{{ aws_region }}"
@@ -199,7 +199,7 @@
         instance.group-id: "{{ sg_id }}"
         instance-type: "{{ instance_type }}"
         image-id: "{{ root_ami }}"
-      register: ec2_prototype_instance
+    register: ec2_prototype_instance
 
 - name: Clean up old AMIs, keep the latest 5 excluding images with running instances or launch configurations
   hosts: localhost
