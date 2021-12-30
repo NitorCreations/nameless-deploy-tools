@@ -17,52 +17,54 @@ optional arguments:
 ## `ndt add-deployer-server`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt add-deployer-server [-h] [--id ID] file username
+
+Add a server into a maven configuration file. Password is taken from the
+environment variable \'DEPLOYER_PASSWORD\'
+
+positional arguments:
+  file        The file to modify
+  username    The username to access the server.
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --id ID     Optional id for the server. Default is deploy. One server with
+              this id is added and another with \'-release\' appended
 ```
 
 ## `ndt assume-role`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt assume-role [-h] [-t TOKEN_NAME] [-d DURATION] [-p PROFILE]
+                       role_arn
+
+Assume a defined role. Prints out environment variables to be eval\'d to
+current context for use: eval $(ndt assume-role
+\'arn:aws:iam::43243246645:role/DeployRole\')
+
+positional arguments:
+  role_arn              The ARN of the role to assume
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TOKEN_NAME, --mfa-token TOKEN_NAME
+                        Name of MFA token to use
+  -d DURATION, --duration DURATION
+                        Duration for the session in minutes
+  -p PROFILE, --profile PROFILE
+                        Profile to edit in ~/.aws/credentials to make role
+                        persist in that file for the duration of the session.
 ```
 
 ## `ndt assumed-role-name`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt assumed-role-name [-h]
+
+Read the name of the assumed role if currently defined
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt aws-config-to-json`
@@ -80,69 +82,60 @@ optional arguments:
 ## `ndt azure-ensure-group`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt azure-ensure-group [-h] [-l LOCATION] name
+
+Ensures that an azure resource group exists
+
+positional arguments:
+  name                  The name of the resource group to make sure exists
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l LOCATION, --location LOCATION
+                        The location for the resource group. If not defined
+                        looked from the environment variable AZURE_LOCATION
+                        and after that seen if location is defined for the
+                        project.
 ```
 
 ## `ndt azure-ensure-management-group`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt azure-ensure-management-group [-h] name
+
+Ensures that an azure resource group exists
+
+positional arguments:
+  name        The name of the resource group to make sure exists
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt azure-location`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt azure-location [-h]
+
+Resolve an azure location based on \'AZURE_LOCATION\' enviroment variable, local
+project or az cli configuration. Defaults to \'northeurope\'
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt azure-template-parameters`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt azure-template-parameters [-h] template
+
+Lists the parameters in an Azure Resource Manager template
+
+positional arguments:
+  template    The json template to scan for parameters
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt bake-docker`
@@ -200,35 +193,32 @@ optional arguments:
 ## `ndt cf-delete-stack`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt cf-delete-stack [-h] stack_name region
+
+Delete an existing CloudFormation stack
+
+positional arguments:
+  stack_name  Name of the stack to delete
+  region      The region to delete the stack from
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt cf-follow-logs`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt cf-follow-logs [-h] [-s START] stack_name
+
+Tail logs from the log group of a cloudformation stack
+
+positional arguments:
+  stack_name            Name of the stack to watch logs for
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s START, --start START
+                        Start time in seconds since epoc
 ```
 
 ## `ndt cf-get-parameter`
@@ -310,33 +300,43 @@ optional arguments:
 ## `ndt create-account`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt create-account [-h] [-d] [-o ORGANIZATION_ROLE_NAME]
+                          [-r TRUST_ROLE_NAME] [-a [TRUSTED_ACCOUNTS ...]]
+                          [-t TOKEN_NAME]
+                          email account_name
+
+Creates a subaccount.
+
+positional arguments:
+  email                 Email for account root
+  account_name          Organization unique account name
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --deny-billing-access
+  -o ORGANIZATION_ROLE_NAME, --organization-role-name ORGANIZATION_ROLE_NAME
+                        Role name for admin access from parent account
+  -r TRUST_ROLE_NAME, --trust-role-name TRUST_ROLE_NAME
+                        Role name for admin access from parent account
+  -a [TRUSTED_ACCOUNTS ...], --trusted-accounts [TRUSTED_ACCOUNTS ...]
+                        Account to trust with user management
+  -t TOKEN_NAME, --mfa-token TOKEN_NAME
+                        Name of MFA token to use
 ```
 
 ## `ndt create-stack`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt create-stack [-h] [-y] [template]
+
+Create a stack from a template
+
+positional arguments:
+  template
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -y, --yes   Answer yes or use default to all questions
 ```
 
 ## `ndt deploy-azure`
@@ -381,18 +381,20 @@ optional arguments:
 ## `ndt deploy-connect`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt deploy-connect [-h] [-d] component contactflowname
+
+Deploy AWS Connect contact flows from a subcomponent
+
+positional arguments:
+  component        the component directory where the connect contact flow
+                   directory is
+  contactflowname  the name of the connect subcomponent directory that has the
+                   contact flow template
+
+optional arguments:
+  -h, --help       show this help message and exit
+  -d, --dryrun     Dry run - don\'t do changes but show what would happen of
+                   deployed
 ```
 
 ## `ndt deploy-serverless`
@@ -478,18 +480,24 @@ optional arguments:
 ## `ndt ec2-clean-snapshots`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt ec2-clean-snapshots [-h] [-r REGION] [-d DAYS] [--dry-run]
+                               tags [tags ...]
+
+Clean snapshots that are older than a number of days (30 by default) and have
+one of specified tag values
+
+positional arguments:
+  tags                  The tag values to select deleted snapshots
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r REGION, --region REGION
+                        The region to delete snapshots from. Can also be set
+                        with env variable AWS_DEFAULT_REGION or is gotten from
+                        instance metadata as a last resort
+  -d DAYS, --days DAYS  The number of days that is theminimum age for
+                        snapshots to be deleted
+  --dry-run             Do not delete, but print what would be deleted
 ```
 
 ## `ndt ec2-get-tag`
@@ -561,35 +569,29 @@ optional arguments:
 ## `ndt ecr-ensure-repo`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt ecr-ensure-repo [-h] name
+
+Ensure that an ECR repository exists and get the uri and login token for it
+
+positional arguments:
+  name        The name of the ecr repository to verify
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt ecr-repo-uri`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt ecr-repo-uri [-h] name
+
+Get the repo uri for a named docker
+
+positional arguments:
+  name        The name of the ecr repository
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt enable-profile`
@@ -617,69 +619,88 @@ optional arguments:
 ## `ndt export-connect-contact-flow`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt export-connect-contact-flow [-h] [-c COMPONENT]
+                                       [-f CONTACTFLOWNAME]
+                                       [-i INSTANCEID | -a INSTANCEALIAS]
+                                       [--colorize]
+                                       name
+
+Export AWS Connect contact flow from an existing instance
+
+positional arguments:
+  name                  The name of the contact flow to export
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c COMPONENT, --component COMPONENT
+                        the component directory where the connect contact flow
+                        directory is
+  -f CONTACTFLOWNAME, --contactflowname CONTACTFLOWNAME
+                        the name of the connect subcomponent directory that
+                        has the contact flow template
+  -i INSTANCEID, --instanceid INSTANCEID
+                        id of the connect instance to export from
+  -a INSTANCEALIAS, --instancealias INSTANCEALIAS
+                        alias of the connect instance to export from
+  --colorize, -o        Colorize output
 ```
 
 ## `ndt get-images`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt get-images [-h] job_name
+
+Gets a list of images given a bake job name
+
+positional arguments:
+  job_name    The job name to look for
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt interpolate-file`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt interpolate-file [-h] [-s STACK] [-k] [-n] [-v] [-o OUTPUT]
+                            [-e ENCODING]
+                            file
+
+Replace placeholders in file with parameter values from stack and optionally
+from vault
+
+positional arguments:
+  file                  File to interpolate
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s STACK, --stack STACK
+                        Stack name for values. Automatically resolved on ec2
+                        instances
+  -k, --skip-stack      Skip stack parameters in all cases
+  -n, --use-environ     Use environment variables for interpolation
+  -v, --vault           Use vault values as well.Vault resovled from env
+                        variables or default is used
+  -o OUTPUT, --output OUTPUT
+                        Output file
+  -e ENCODING, --encoding ENCODING
+                        Encoding to use for the file. Defaults to utf-8
 ```
 
 ## `ndt json-to-yaml`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt json-to-yaml [-h] [--colorize] file
+
+Convert CloudFormation json to an approximation of a nameless CloudFormation
+yaml with for example scripts externalized
+
+positional arguments:
+  file            File to parse
+
+optional arguments:
+  -h, --help      show this help message and exit
+  --colorize, -c  Colorize output
 ```
 
 ## `ndt latest-snapshot`
@@ -699,86 +720,160 @@ optional arguments:
 ## `ndt list-components`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt list-components [-h] [-j] [-b BRANCH]
+
+Prints the components in a branch, by default the current branch
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -j, --json            Print in json format.
+  -b BRANCH, --branch BRANCH
+                        The branch to get components from. Default is to
+                        process current branch
 ```
 
 ## `ndt list-connect-contact-flows`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt list-connect-contact-flows [-h] [-c COMPONENT] [-f CONTACTFLOWNAME]
+                                      [-i INSTANCEID | -a INSTANCEALIAS] [-t]
+                                      [-m MATCH]
+
+List existing AWS Connect contact flows in an instance
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c COMPONENT, --component COMPONENT
+                        the component directory where the connect contact flow
+                        directory is
+  -f CONTACTFLOWNAME, --contactflowname CONTACTFLOWNAME
+                        the name of the connect subcomponent directory that
+                        has the contact flow template
+  -i INSTANCEID, --instanceid INSTANCEID
+                        id of the connect instance to export from
+  -a INSTANCEALIAS, --instancealias INSTANCEALIAS
+                        alias of the connect instance to export from
+  -t, --trash           Include trashed flows
+  -m MATCH, --match MATCH
+                        Pattern to match printed flows
 ```
 
 ## `ndt list-file-to-json`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt list-file-to-json [-h] arrayname file
+
+Convert a file with an entry on each line to a json document with a single
+element (name as argument) containg file rows as list.
+
+positional arguments:
+  arrayname   The name in the json object givento the array
+  file        The file to parse
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt list-jobs`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt list-jobs [-h] [-e] [-j] [-b BRANCH] [-c COMPONENT]
+
+Prints a line for every runnable job in this git repository, in all branches
+and optionally exports the properties for each under \'$root/job-properties/
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -e, --export-job-properties
+                        Set if you want the properties of all jobs into files
+                        under job-properties/
+  -j, --json            Print in json format. Optionally exported parameters
+                        will be in the json document
+  -b BRANCH, --branch BRANCH
+                        The branch to process. Default is to process all
+                        branches
+  -c COMPONENT, --component COMPONENT
+                        Component to process. Default is to process all
+                        components
 ```
 
 ## `ndt load-parameters`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt load-parameters [-h] [--branch BRANCH] [--resolve-images]
+                           [--stack STACK | --serverless SERVERLESS | --docker DOCKER | --image [IMAGE]
+                           | --cdk CDK | --terraform TERRAFORM | --azure AZURE
+                           | --connect CONNECT]
+                           [--json | --yaml | --properties | --terraform-variables | --export-statements | --azure-parameters]
+                           [-f FILTER]
+                           [component]
+
+Load parameters from infra*.properties files in the order:
+    branch.properties
+    [branch].properties
+    infra.properties,
+    infra-[branch].properties,
+    [component]/infra.properties,
+    [component]/infra-[branch].properties,
+    [component]/[subcomponent-type]-[subcomponent]/infra.properties,
+    [component]/[subcomponent-type]-[subcomponent]/infra-[branch].properties
+
+    Last parameter defined overwrites ones defined before in the files. Supports parameter expansion
+    and bash -like transformations. Namely:
+
+    ${PARAM##prefix} # strip prefix greedy
+    ${PARAM%%suffix} # strip suffix greedy
+    ${PARAM#prefix} # strip prefix not greedy
+    ${PARAM%suffix} # strip suffix not greedy
+    ${PARAM:-default} # default if empty
+    ${PARAM:4:2} # start:len
+    ${PARAM/substr/replace}
+    ${PARAM^} # upper initial
+    ${PARAM,} # lower initial
+    ${PARAM^^} # upper
+    ${PARAM,,} # lower
+
+    Comment lines start with \'#\'
+    Lines can be continued by adding \'\' at the end
+
+    See https://www.tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_03.html
+    (arrays not supported)
+    
+
+positional arguments:
+  component             Compenent to descend into
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --branch BRANCH, -b BRANCH
+                        Branch to get active parameters for
+  --resolve-images, -r  Also resolve subcomponent AMI IDs and docker repo urls
+  --stack STACK, -s STACK
+                        CloudFormation subcomponent to descent into
+  --serverless SERVERLESS, -l SERVERLESS
+                        Serverless subcomponent to descent into
+  --docker DOCKER, -d DOCKER
+                        Docker image subcomponent to descent into
+  --image [IMAGE], -i [IMAGE]
+                        AMI image subcomponent to descent into
+  --cdk CDK, -c CDK     CDK subcomponent to descent into
+  --terraform TERRAFORM, -t TERRAFORM
+                        Terraform subcomponent to descent into
+  --azure AZURE, -a AZURE
+                        Azure subcomponent to descent into
+  --connect CONNECT, -n CONNECT
+                        Connect subcomponent to descent into
+  --json, -j            JSON format output (default)
+  --yaml, -y            YAML format output
+  --properties, -p      properties file format output
+  --terraform-variables, -v
+                        terraform syntax variables
+  --export-statements, -e
+                        Output as eval-able export statements
+  --azure-parameters, -z
+                        Azure parameter file syntax variables
+  -f FILTER, --filter FILTER
+                        Comma separated list of parameter names to output
 ```
 
 ## `ndt logs`
@@ -807,86 +902,89 @@ optional arguments:
 ## `ndt mfa-add-token`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt mfa-add-token [-h] [-i | -b BITWARDEN_ENTRY] [-a TOKEN_ARN]
+                         [-s TOKEN_SECRET] [-f]
+                         token_name
+
+Adds an MFA token to be used with role assumption. Tokens will be saved in a
+.ndt subdirectory in the user\'s home directory. If a token with the same name
+already exists, it will not be overwritten.
+
+positional arguments:
+  token_name            Name for the token. Use this to refer to the token
+                        later with the assume-role command.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i, --interactive     Ask for token details interactively.
+  -b BITWARDEN_ENTRY, --bitwarden-entry BITWARDEN_ENTRY
+                        Use a bitwarden entry as the source of the totp secret
+  -a TOKEN_ARN, --token_arn TOKEN_ARN
+                        ARN identifier for the token.
+  -s TOKEN_SECRET, --token_secret TOKEN_SECRET
+                        Token secret.
+  -f, --force           Force an overwrite if the token already exists.
 ```
 
 ## `ndt mfa-backup`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt mfa-backup [-h] [-d FILE] backup_secret
+
+Encrypt or decrypt a backup JSON structure of tokens. To output an encrypted
+backup, provide an encryption secret. To decrypt an existing backup, use
+--decrypt <file>.
+
+positional arguments:
+  backup_secret         Secret to use for encrypting or decrypts the backup.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d FILE, --decrypt FILE
+                        Outputs a decrypted token backup read from given file.
 ```
 
 ## `ndt mfa-code`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt mfa-code [-h] token_name
+
+Generates a TOTP code using an MFA token.
+
+positional arguments:
+  token_name  Name of the token to use.
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt mfa-delete-token`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt mfa-delete-token [-h] token_name
+
+Deletes an MFA token file from the .ndt subdirectory in the user\'s home
+directory
+
+positional arguments:
+  token_name  Name of the token to delete.
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt mfa-qrcode`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt mfa-qrcode [-h] token_name
+
+Generates a QR code to import a token to other devices.
+
+positional arguments:
+  token_name  Name of the token to use.
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt print-aws-profiles`
@@ -958,18 +1056,16 @@ optional arguments:
 ## `ndt promote-image`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt promote-image [-h] image_id target_job
+
+Promotes an image for use in another branch
+
+positional arguments:
+  image_id    The image to promote
+  target_job  The job name to promote the image to
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt pytail`
@@ -1036,86 +1132,95 @@ optional arguments:
 ## `ndt session-to-env`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt session-to-env [-h] [-t TOKEN_NAME] [-d DURATION_MINUTES]
+
+Export current session as environment variables
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TOKEN_NAME, --token-name TOKEN_NAME
+                        Name of the mfs token to use.
+  -d DURATION_MINUTES, --duration-minutes DURATION_MINUTES
+                        Duration in minutes for the session token. Default to
+                        60
 ```
 
 ## `ndt setup-cli`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt setup-cli [-h] [-n NAME] [-k KEY_ID] [-s SECRET] [-r REGION]
+
+Setup the command line environment to define an aws cli profile with the given
+name and credentials. If an identically named profile exists, it will not be
+overwritten.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n NAME, --name NAME  Name for the profile to create
+  -k KEY_ID, --key-id KEY_ID
+                        Key id for the profile
+  -s SECRET, --secret SECRET
+                        Secret to set for the profile
+  -r REGION, --region REGION
+                        Default region for the profile
 ```
 
 ## `ndt share-to-another-region`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt share-to-another-region [-h]
+                                   ami_id to_region ami_name account_id
+                                   [account_id ...]
+
+Shares an image to another region for potentially another account
+
+positional arguments:
+  ami_id      The ami to share
+  to_region   The region to share to
+  ami_name    The name for the ami
+  account_id  The account ids to share ami to
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt show-stack-params-and-outputs`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt show-stack-params-and-outputs [-h] [-r REGION] [-p PARAMETER]
+                                         stack_name
+
+Show stack parameters and outputs as a single json documents
+
+positional arguments:
+  stack_name            The stack name to show
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r REGION, --region REGION
+                        Region for the stack to show
+  -p PARAMETER, --parameter PARAMETER
+                        Name of paremeter if only one parameter required
 ```
 
 ## `ndt show-terraform-params`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt show-terraform-params [-h] [-j JMESPATH | -p PARAMETER]
+                                 component terraform
+
+Show available parameters for a terraform subcomponent
+
+positional arguments:
+  component             The component containg the terraform subcomponet
+  terraform             The name of the terraform subcomponent
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -j JMESPATH, --jmespath JMESPATH
+                        Show just a matching jmespath value
+  -p PARAMETER, --parameter PARAMETER
+                        Name of paremeter if only one parameter required
 ```
 
 ## `ndt snapshot-from-volume`
@@ -1257,52 +1362,78 @@ optional arguments:
 ## `ndt upsert-cloudfront-records`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt upsert-cloudfront-records [-h]
+                                     (-i DISTRIBUTION_ID | -c DISTRIBUTION_COMMENT)
+                                     [-w]
+
+Upsert Route53 records for all aliases of a CloudFront distribution
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i DISTRIBUTION_ID, --distribution_id DISTRIBUTION_ID
+                        Id for the distribution to upsert
+  -c DISTRIBUTION_COMMENT, --distribution_comment DISTRIBUTION_COMMENT
+                        Comment for the distribution to upsert
+  -w, --wait            Wait for request to sync
 ```
 
 ## `ndt upsert-codebuild-projects`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt upsert-codebuild-projects [-h] [-d]
+
+Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
+
+    Parameters are read from properties files as described in \'ndt load-parameters -h\'. To check all job paramters you
+    can run \'ndt list-jobs -e -j -b [current-branch]\'
+    The only mandatory parameter is CODEBUILD_SERVICE_ROLE, which defines the role that the codebuild project assumes
+    for building.
+    Other parameters that affect jobs are:
+    * BUILD_JOB_NAME - name for the codebuild project
+    * NDT_VERSION - version to use to run bakes and deployments.
+        - Defaults to current version.
+        - You may also want to uses \'latest\' to always run the latest released ndt version (only recommended for dev/testing workloads).
+    * BUILD_SPEC - file or yaml snippet to use as the build definition.
+        - See https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
+        - subcomponent variables and special variables ${command}, ${component} and ${subcomponent} are available and will be substituted accordingly
+    * CODEBUILD_SOURCE_TYPE - one of BITBUCKET, CODECOMMIT, CODEPIPELINE, GITHUB, GITHUB_ENTERPRISE, NO_SOURCE, S3
+    * CODEBUILD_SOURCE_LOCATION - the location of the source code
+        - if either of the above is missing, then the source part of the build will be omitted
+    * CODEBUILD_EVENT_FILTER - the type of event to trigger the build.
+        - By default PULL_REQUEST_MERGED
+        - Other possible values: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED and PULL_REQUEST_REOPENED
+    * CODEBUILD_TIMEOUT - timeout in minutes for the codebuild execution. 60 by default
+    * BUILD_ENVIRONMENT_COMPUTE - the compute environment for the build.
+        - BUILD_GENERAL1_SMALL by default
+        - Other possible values BUILD_GENERAL1_MEDIUM, BUILD_GENERAL1_LARGE, BUILD_GENERAL1_2XLARGE
+    * NEEDS_DOCKER - if \'y\' (by default on for docker bakes and missing otheriwise), docker server is started inside the container
+        - Needed for bakes and for example serverless python dockerized dependencies
+    * SKIP_BUILD_JOB - skip creating build jobs where this parameter is \'y\'
+    * SKIP_IMAGE_JOB, SKIP_DOCKER_JOB, SKIP_SERVERLESS_JOB, SKIP_CDK_JOB, SKIP_TERRAFORM_JOB - skip creating jobs where these parameters are \'y\' and match the subcomponent type
+    
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -d, --dry-run  Do not actually create or update projects, just print
+                 configuration
 ```
 
 ## `ndt upsert-dns-record`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt upsert-dns-record [-h] [-t TYPE] [-l TTL] [-n] name value
+
+Update a dns record in Route53
+
+positional arguments:
+  name                  The name of the record to create
+  value                 The value to put into the record
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TYPE, --type TYPE  The type of record to create. Defaults to \'A\'
+  -l TTL, --ttl TTL     Time To Live for the record. Defaults to 300
+  -n, --no-wait         Do not wait for the record to be synced within Route53
 ```
 
 ## `ndt volume-from-snapshot`
@@ -1344,62 +1475,59 @@ optional arguments:
 ## `ndt yaml-to-json`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE ...]] [--small] file
+
+Convert nameless CloudFormation yaml to CloudFormation json with some
+preprosessing
+
+positional arguments:
+  file                  File to parse
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --colorize, -c        Colorize output
+  --merge [MERGE ...], -m [MERGE ...]
+                        Merge other yaml files to the main file
+  --small, -s           Compact representration of json
 ```
 
 ## `ndt yaml-to-yaml`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ndt", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ndt\')())
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/ndt.py", line 137, in ndt
-    my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ndt yaml-to-yaml [-h] [--colorize] file
+
+Do ndt preprocessing for a yaml file
+
+positional arguments:
+  file            File to parse
+
+optional arguments:
+  -h, --help      show this help message and exit
+  --colorize, -c  Colorize output
 ```
 
 ## `[ndt ]associate-eip`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/associate-eip", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'associate-eip\')())
-  File "/home/pasi/.local/bin/associate-eip", line 25, in importlib_load_entry_point
-    return next(matches).load()
-  File "/usr/lib/python3.9/importlib/metadata.py", line 77, in load
-    module = import_module(match.group(\'module\'))
-  File "/usr/lib/python3.9/importlib/__init__.py", line 127, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
-  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: associate-eip [-h] [-i IP] [-a ALLOCATIONID] [-e EIPPARAM]
+                     [-p ALLOCATIONIDPARAM]
+
+Associate an Elastic IP for the instance that this script runs on
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i IP, --ip IP        Elastic IP to allocate - default is to get paramEip
+                        from the stack that created this instance
+  -a ALLOCATIONID, --allocationid ALLOCATIONID
+                        Elastic IP allocation id to allocate - default is to
+                        get paramEipAllocationId from the stack that created
+                        this instance
+  -e EIPPARAM, --eipparam EIPPARAM
+                        Parameter to look up for Elastic IP in the stack -
+                        default is paramEip
+  -p ALLOCATIONIDPARAM, --allocationidparam ALLOCATIONIDPARAM
+                        Parameter to look up for Elastic IP Allocation ID in
+                        the stack - default is paramEipAllocationId
 ```
 
 ## `[ndt ]cf-logs-to-cloudwatch`
@@ -1429,28 +1557,25 @@ optional arguments:
 ## `[ndt ]ec2-associate-eip`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/ec2-associate-eip", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'ec2-associate-eip\')())
-  File "/home/pasi/.local/bin/ec2-associate-eip", line 25, in importlib_load_entry_point
-    return next(matches).load()
-  File "/usr/lib/python3.9/importlib/metadata.py", line 77, in load
-    module = import_module(match.group(\'module\'))
-  File "/usr/lib/python3.9/importlib/__init__.py", line 127, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
-  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: ec2-associate-eip [-h] [-i IP] [-a ALLOCATIONID] [-e EIPPARAM]
+                         [-p ALLOCATIONIDPARAM]
+
+Associate an Elastic IP for the instance that this script runs on
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i IP, --ip IP        Elastic IP to allocate - default is to get paramEip
+                        from the stack that created this instance
+  -a ALLOCATIONID, --allocationid ALLOCATIONID
+                        Elastic IP allocation id to allocate - default is to
+                        get paramEipAllocationId from the stack that created
+                        this instance
+  -e EIPPARAM, --eipparam EIPPARAM
+                        Parameter to look up for Elastic IP in the stack -
+                        default is paramEip
+  -p ALLOCATIONIDPARAM, --allocationidparam ALLOCATIONIDPARAM
+                        Parameter to look up for Elastic IP Allocation ID in
+                        the stack - default is paramEipAllocationId
 ```
 
 ## `[ndt ]logs-to-cloudwatch`
@@ -1480,55 +1605,29 @@ optional arguments:
 ## `[ndt ]n-include`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/n-include", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'n-include\')())
-  File "/home/pasi/.local/bin/n-include", line 25, in importlib_load_entry_point
-    return next(matches).load()
-  File "/usr/lib/python3.9/importlib/metadata.py", line 77, in load
-    module = import_module(match.group(\'module\'))
-  File "/usr/lib/python3.9/importlib/__init__.py", line 127, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
-  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: n-include [-h] file
+
+Find a file from the first of the defined include paths
+
+positional arguments:
+  file        The file to find
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `[ndt ]n-include-all`
 
 ```bash
-Traceback (most recent call last):
-  File "/home/pasi/.local/bin/n-include-all", line 33, in <module>
-    sys.exit(load_entry_point(\'nameless-deploy-tools\', \'console_scripts\', \'n-include-all\')())
-  File "/home/pasi/.local/bin/n-include-all", line 25, in importlib_load_entry_point
-    return next(matches).load()
-  File "/usr/lib/python3.9/importlib/metadata.py", line 77, in load
-    module = import_module(match.group(\'module\'))
-  File "/usr/lib/python3.9/importlib/__init__.py", line 127, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
-  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cli.py", line 41, in <module>
-    from n_utils import (
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/cf_bootstrap.py", line 43, in <module>
-    from n_utils.writer import ConfigFileWriter
-  File "/home/pasi/src/nameless-deploy-tools/n_utils/writer.py", line 16, in <module>
-    from . import SectionNotFoundError
-ImportError: cannot import name \'SectionNotFoundError\' from \'n_utils\' (/home/pasi/src/nameless-deploy-tools/n_utils/__init__.py)
+usage: n-include-all [-h] pattern
+
+Find a file from the first of the defined include paths
+
+positional arguments:
+  pattern     The file pattern to find
+
+optional arguments:
+  -h, --help  show this help message and exit
 ```
 
 ## `[ndt ]signal-cf-status`
