@@ -18,46 +18,40 @@
   connection: local
   gather_facts: no
   tasks:
-    - local_action:
-        module: ec2
-        region: "{{ aws_region }}"
-        instance_tags: "{{ bake_tags }}"
-        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
-        exact_count: 0
-        instance_type: "{{ instance_type }}"
-        image: "{{ root_ami }}"
-        vpc_subnet_id: "{{ subnet_id }}"
-        assign_public_ip: yes
-        group_id: "{{ sg_id }}"
-        monitoring: no
-        key_name: "{{ aws_key_name }}"
-        wait: yes
-      register: ec2_prototype_instance
+  - amazon.aws.ec2_instance:
+      state: terminated
+      filters:
+        "tag:environment": "nameless"
+        "tag:Name": "{{ job_name }} prototype"
+        subnet-id: "{{ subnet_id }}"
+        instance.group-id: "{{ sg_id }}"
+        instance-type: "{{ instance_type }}"
+        image-id: "{{ root_ami }}"
 
 - name: "create instance"
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
-    - local_action:
-        module: ec2
+    - amazon.aws.ec2_instance:
+        state: started
+        name: "{{ job_name }} prototype"
         region: "{{ aws_region }}"
-        instance_tags: { "environment": "nameless", "Name": "{{ job_name }} prototype" }
-        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
-        exact_count: 1
+        tags: "{{ bake_tags }}"
         instance_type: "{{ instance_type }}"
-        image: "{{ root_ami }}"
-        instance_profile_name: "{{ amibake_instanceprofile }}"
+        image_id: "{{ root_ami }}"
+        instance_role: "{{ amibake_instanceprofile }}"
+        security_group: "{{ sg_id }}"
         vpc_subnet_id: "{{ subnet_id }}"
-        assign_public_ip: yes
-        group_id: "{{ sg_id }}"
-        monitoring: no
-        user_data: "{{ lookup('template', bake_userdata ) }}"
+        network:
+          assign_public_ip: yes
+        detailed_monitoring: no
+        key_name: "{{ aws_key_name }}"
         volumes:
           - device_name: /dev/sda1
-            device_type: gp3
-            volume_size: "{{ volume_size }}"
-            delete_on_termination: true
+            ebs:
+              volume_size: "{{ volume_size }}"
+              delete_on_termination: true
         wait: yes
       register: ec2_prototype_instance
     - set_fact:
@@ -154,58 +148,49 @@
   tasks:
     - debug: var=ec2_prototype_instance
 
-    - name: "Create AMI from deployed server {{ ec2_prototype_instance.tagged_instances[0].id }}"
-      ec2_ami:
-        instance_id: "{{ ec2_prototype_instance.tagged_instances[0].id }}"
+    - name: "Create AMI from deployed server {{ ec2_prototype_instance.instances[0].instance_id }}"
+      amazon.aws.ec2_ami:
+        instance_id: "{{ ec2_prototype_instance.instances[0].instance_id }}"
         wait: yes
         name: "{{ job_name }}_{{ build_number }}"
         region: "{{ aws_region }}"
         wait_timeout: 1800
+        tags:
+          Name: "{{ job_name }}_{{ build_number }}"
+          Tstamp: "{{ tstamp }}"
       register: base_ami
 
     - set_fact:
         ami_id_to_deploy: "{{ base_ami.image_id }}"
-
-    - name: Tag AMI
-      ec2_tag: resource={{ base_ami.image_id }} region={{ aws_region }}
-      args:
-        tags:
-          Name: "{{ job_name }}_{{ build_number }}"
-          Tstamp: "{{ tstamp }}"
 
 - name: Terminate instance(s) used for creating AMI
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
-    - local_action:
-        module: ec2
-        region: "{{ aws_region }}"
-        instance_tags: { "environment": "nameless", "Name": "{{ job_name }} prototype" }
-        count_tag:     { "environment": "nameless", "Name": "{{ job_name }} prototype" }
-        exact_count: 0
-        instance_type: "{{ instance_type }}"
-        image: "{{ root_ami }}"
-        vpc_subnet_id: "{{ subnet_id }}"
-        assign_public_ip: yes
-        group_id: "{{ sg_id }}"
-        monitoring: no
-        key_name: "{{ aws_key_name }}"
-        wait: no
-      register: ec2_prototype_instance
+  - amazon.aws.ec2_instance:
+      state: terminated
+      filters:
+        "tag:environment": "nameless"
+        "tag:Name": "{{ job_name }} prototype"
+        subnet-id: "{{ subnet_id }}"
+        instance.group-id: "{{ sg_id }}"
+        instance-type: "{{ instance_type }}"
+        image-id: "{{ root_ami }}"
+    register: ec2_prototype_instance
 
 - name: Clean up old AMIs, keep the latest 5 excluding images with running instances or launch configurations
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
-    - ec2_instance_info:
+    - amazon.aws.ec2_instance_info:
         region: "{{ aws_region }}"
         filters:
           instance-state-name: [running, pending]
       register: running_instances
 
-    - ec2_lc_info:
+    - community.aws.ec2_lc_info:
         region: "{{ aws_region }}"
         sort: created_time
         sort_order: descending
@@ -215,14 +200,14 @@
     - set_fact: lc_image_ids="{{ launch_configurations.launch_configurations | map(attribute='image_id') | unique | list }}"
     - set_fact: images_in_use="{{ running_image_ids + lc_image_ids | unique | list }}"
 
-    - ec2_ami_info:
+    - amazon.aws.ec2_ami_info:
         region: "{{ aws_region }}"
         owners: self
         filters:
           name: "{{ job_name }}_??????????????"
       register: old_ami_result
 
-    - ec2_ami_info:
+    - amazon.aws.ec2_ami_info:
         region: "{{ aws_region }}"
         image_ids: "{{ old_ami_result.images | map(attribute='image_id') | difference(images_in_use) | list }}"
       register: non_running_images
@@ -237,7 +222,7 @@
     - debug:
         msg: "To delete: {{ after_fifth | map(attribute='name') | list | to_yaml }}"
 
-    - ec2_ami:
+    - amazon.aws.ec2_ami:
         region: "{{ aws_region }}"
         image_id: "{{ item.image_id }}"
         delete_snapshot: yes
