@@ -43,12 +43,12 @@ function add_gpg_key() {
 function gpg_safe_download() {
   local URL=$1
   local DST=$2
-  if python --version | grep "Python 3" > /dev/null; then
-    python -c "from urllib.request import urlretrieve; urlretrieve('$URL', '$DST')"
-    python -c "from urllib.request import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
-  else
+  if python --version | grep "Python 2" > /dev/null; then
     python -c "from urllib import urlretrieve; urlretrieve('$URL', '$DST')"
     python -c "from urllib import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
+  else
+    python -c "from urllib.request import urlretrieve; urlretrieve('$URL', '$DST')"
+    python -c "from urllib.request import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
   fi
   gpg --verify $DST.sig $DST
 }
