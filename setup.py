@@ -59,9 +59,15 @@ setup(
         "pyotp",
         "Pygments",
         "PyYAML>=5.2",
-        "tomli<2.0.0",
     ]
     + (win_deps if sys.platform.startswith("win") else []),
-    tests_require=["pytest", "pytest-cov", "coverage", "pytest-mock", "mock"],
+    tests_require=[
+        "pytest",
+        "pytest-cov",
+        "coverage",
+        "pytest-mock",
+        "mock",
+        "tomli<2.0.0",
+    ],
     zip_safe=False,
 )
