@@ -4,17 +4,16 @@ dist: xenial
 env:
   - GIT_BRANCH=master
 python:
-  - "2.7"
   - "3.6"
   - "3.7"
   - "3.8"
 # command to install dependencies
 install:
   - python -m pip install --upgrade pip
-  - pip install --upgrade coveralls urllib3==1.25.4 python-dateutil==2.8.0 zipp==1.0.0 cryptography==3.2 pytest-runner
+  - pip install --upgrade coveralls urllib3 python-dateutil zipp cryptography pytest-runner
   - python setup.py install
 # command to run tests
 script:
   - python setup.py test
 after_success:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then coveralls; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.8 ]]; then coveralls; fi

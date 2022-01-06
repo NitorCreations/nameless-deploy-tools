@@ -26,7 +26,6 @@ from builtins import str
 from datetime import datetime
 
 import six
-from argcomplete import USING_PYTHON2
 from botocore.exceptions import ClientError
 from ec2_utils.logs import CloudWatchLogsThread, fmttime
 from pygments import highlight, lexers, formatters
@@ -177,12 +176,8 @@ def get_template_arguments(stack_name, template, params, session=None):
     if "CF_BUCKET" in os.environ and os.environ["CF_BUCKET"]:
         bucket = os.environ["CF_BUCKET"]
         template_hash = hashlib.md5()
-        if USING_PYTHON2:
-            template_hash.update(template)
-            template_hash.update(aws_infra_util.json_save_small(params))
-        else:
-            template_hash.update(template.encode("utf-8"))
-            template_hash.update(aws_infra_util.json_save_small(params).encode("utf-8"))
+        template_hash.update(template.encode("utf-8"))
+        template_hash.update(aws_infra_util.json_save_small(params).encode("utf-8"))
         key = stack_name + "-" + template_hash.hexdigest()
         s3(session=session).put_object(Body=template, Bucket=bucket, Key=key)
         params["TemplateURL"] = "https://s3.amazonaws.com/" + bucket + "/" + key

@@ -15,22 +15,7 @@ import sys
 from setuptools import setup
 from n_utils import PATH_COMMANDS, CONSOLESCRIPTS
 
-win_deps = []
-if sys.version_info[0] == 2:
-    python2_or_3_deps = [
-        "pyotp==2.3",
-        "Pygments==2.5.2",
-        "importlib-metadata==2.1.1",
-        "decorator==4.4.2",
-        "PyYAML==5.2",
-    ]
-    python2_or_3_test_deps = ["pytest==4.6.11", "pytest-mock==1.13.0", "mock==3.0.5"]
-elif sys.version_info[0] == 3:
-    python2_or_3_deps = ["pyotp", "Pygments", "PyYAML>=5.2"]
-    python2_or_3_test_deps = ["pytest-mock", "mock"]
-    python2_or_3_test_deps.insert(0, "pytest")
-if sys.platform.startswith("win"):
-    win_deps = ["win-unicode-console", "wmi", "pypiwin32"]
+win_deps = ["win-unicode-console", "wmi", "pypiwin32"]
 
 with open("README.md") as f:
     long_description = f.read()
@@ -71,9 +56,11 @@ setup(
         "ec2-utils>=0.36",
         "cloudformation-utils==0.0.2",
         "pyOpenSSL>=19.1.0",
+        "pyotp",
+        "Pygments",
+        "PyYAML>=5.2",
     ]
-    + python2_or_3_deps
-    + win_deps,
-    tests_require=["pytest-cov", "coverage"] + python2_or_3_test_deps,
+    + (win_deps if sys.platform.startswith("win") else []),
+    tests_require=["pytest", "pytest-cov", "coverage", "pytest-mock", "mock"],
     zip_safe=False,
 )
