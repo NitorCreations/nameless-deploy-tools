@@ -1,5 +1,5 @@
 # Nameless Deploy Tools
-[![Build Status](https://travis-ci.org/NitorCreations/nameless-deploy-tools.svg?branch=master)](https://travis-ci.org/NitorCreations/nameless-deploy-tools)
+[![Build Status](https://api.travis-ci.com/NitorCreations/nameless-deploy-tools.svg?branch=master)](https://app.travis-ci.com/github/NitorCreations/nameless-deploy-tools/)
 [![Coverage Status](https://coveralls.io/repos/github/NitorCreations/nameless-deploy-tools/badge.svg?branch=master)](https://coveralls.io/github/NitorCreations/nameless-deploy-tools?branch=master)
 
 ## Released version 1.238
