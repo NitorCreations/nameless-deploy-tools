@@ -53,7 +53,7 @@ setup(
         "configparser",
         "scandir",
         "jmespath",
-        "ec2-utils>=0.36",
+        "ec2-utils>=0.38",
         "cloudformation-utils==0.0.2",
         "pyOpenSSL>=19.1.0",
         "pyotp",
