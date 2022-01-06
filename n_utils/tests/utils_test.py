@@ -1,4 +1,4 @@
-from n_utils.utils import get_images
+from n_utils.utils import get_images, read_if_readable
 
 
 def describe_images(Filters=None):
@@ -161,3 +161,11 @@ def test_get_images(mocker, ec2):
     images = get_images("awsdev_centos_jenkins_bake")
     assert images[0]["Name"] == "awsdev_centos_jenkins_bake_0032"
     assert images[2]["Name"] == "awsdev_centos_jenkins_bake_0001"
+
+
+def test_read_if_readble_not_exists():
+    assert read_if_readable("foo.txt") == ""
+
+
+def test_read_if_readble_exists():
+    assert "<ns0:project" in read_if_readable("n_utils/tests/pom.xml")
