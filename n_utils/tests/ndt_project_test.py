@@ -9,7 +9,7 @@ def test_list_jobs():
             assert len(branch["components"]) == 1
             assert branch["components"][0]["name"] == "test"
             nametype = {}
-            assert len(branch["components"][0]["subcomponents"]) == 3
+            assert len(branch["components"][0]["subcomponents"]) == 5
             for subcomponent in branch["components"][0]["subcomponents"]:
                 nametype[subcomponent["name"]] = subcomponent["type"]
             assert nametype["dockertest"] == "docker"

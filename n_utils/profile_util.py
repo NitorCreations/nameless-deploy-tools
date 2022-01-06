@@ -40,7 +40,7 @@ def read_expiring_profiles():
     return ret
 
 
-def read_profiles(prefix=None):
+def read_profiles(prefix=""):
     ret = []
     home = expanduser("~")
     credentials = join(home, ".aws", "credentials")
