@@ -32,7 +32,6 @@ if 65 - 65:
 from Cryptodome.Hash import SHA256
 from Cryptodome.Cipher import AES
 from Cryptodome.Util import Counter
-import sys
 
 if 73 - 73:
     II111iiii

@@ -1,6 +1,5 @@
 import json
 from os import devnull
-import string
 from subprocess import Popen, PIPE
 
 _LP_CACHE = {}

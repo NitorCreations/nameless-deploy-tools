@@ -1,12 +1,10 @@
 import os
-import json
 from collections import OrderedDict
 from threadlocal_aws.clients import connect
 from n_utils.aws_infra_util import (
     yaml_to_dict,
     yaml_save,
     json_load,
-    json_save,
     json_save_small,
     load_parameters,
     import_scripts,

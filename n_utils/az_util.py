@@ -1,5 +1,4 @@
 import json
-from os import devnull, environ
 from subprocess import Popen, PIPE
 
 ARR_START = "[".encode()

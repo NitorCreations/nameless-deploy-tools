@@ -1,11 +1,9 @@
 import json
-import six
 from collections import OrderedDict
 from subprocess import Popen, PIPE
 
 from jmespath import search
 
-from n_utils import _to_str
 
 
 def flat_state(state_doc):

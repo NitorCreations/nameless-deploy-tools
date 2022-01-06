@@ -1260,7 +1260,7 @@ def azure_location():
     """Resolve an azure location based on 'AZURE_LOCATION' enviroment variable, local project or az cli configuration. Defaults to 'northeurope'"""
     parser = get_parser()
     argcomplete.autocomplete(parser)
-    args = parser.parse_args()
+    _ = parser.parse_args()
     print(resolve_location())
 
 

@@ -27,7 +27,6 @@ import six
 from base64 import b64encode
 from collections import OrderedDict
 from glob import glob
-from yaml import ScalarNode, SequenceNode, MappingNode
 from numbers import Number
 from operator import itemgetter
 from botocore.exceptions import ClientError
