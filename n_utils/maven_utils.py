@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import os
-import sys
 
 import xml.etree.ElementTree as ET
 
@@ -52,4 +51,4 @@ def add_server(pomfile, server_id, username):
         password = ET.SubElement(deployer_server, "password")
     password.text = os.getenv("DEPLOYER_PASSWORD", "password")
     indent(settings)
-    tree.write(sys.argv[1], encoding="utf-8")
+    tree.write(pomfile, encoding="utf-8")

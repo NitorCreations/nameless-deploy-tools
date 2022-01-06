@@ -1,5 +1,4 @@
 from n_utils.ndt_project import list_jobs
-import json
 
 
 def test_list_jobs():
