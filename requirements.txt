@@ -52,7 +52,7 @@ jmespath==0.10.0
     #   nameless-deploy-tools (setup.py)
 netifaces==0.11.0
     # via ec2-utils
-nitor-vault==0.53
+nitor-vault==0.54
     # via nameless-deploy-tools (setup.py)
 py==1.11.0
     # via retry
