@@ -100,7 +100,7 @@ elif which assume-deploy-role.sh &> /dev/null && [ -z "$AWS_SESSION_TOKEN" ]; th
 fi
 
 eval "$(ndt session-to-env)"
-if [ -z "$NO_PULL"]; then
+if [ -z "$NO_PULL" ]; then
    PULL="--pull"
 fi
 
