@@ -20,6 +20,7 @@
   tasks:
   - amazon.aws.ec2_instance:
       state: terminated
+      region: "{{ aws_region }}"
       filters:
         "tag:environment": "nameless"
         "tag:Name": "{{ job_name }} prototype"
@@ -170,6 +171,7 @@
   tasks:
   - amazon.aws.ec2_instance:
       state: terminated
+      region: "{{ aws_region }}"
       filters:
         "tag:environment": "nameless"
         "tag:Name": "{{ job_name }} prototype"
