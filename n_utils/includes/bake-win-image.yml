@@ -44,6 +44,7 @@
         instance_role: "{{ amibake_instanceprofile }}"
         security_group: "{{ sg_id }}"
         vpc_subnet_id: "{{ subnet_id }}"
+        user_data: "{{ lookup('template', bake_userdata ) }}"
         network:
           assign_public_ip: yes
         detailed_monitoring: no
@@ -63,20 +64,17 @@
   connection: local
   gather_facts: no
   tasks:
-    - add_host: hostname={{ item.public_ip }} groupname={{ job_name }}_ami_instance
-      with_items: "{{ ec2_prototype_instance.tagged_instances }}"
+    - add_host: hostname={{ item.public_ip_address }} groupname={{ job_name }}_ami_instance
+      with_items: "{{ ec2_prototype_instance.instances }}"
       when: private_subnet == "no"
-
-    - wait_for: host={{ item.public_ip }} port=5986 delay=60 timeout=320 state=started
-      with_items: "{{ ec2_prototype_instance.tagged_instances }}"
+    - wait_for: host={{ item.public_ip_address }} port=5986 delay=60 timeout=320 state=started
+      with_items: "{{ ec2_prototype_instance.instances }}"
       when: private_subnet == "no"
-
-    - add_host: hostname={{ item.private_ip }} groupname={{ job_name }}_ami_instance
-      with_items: "{{ ec2_prototype_instance.tagged_instances }}"
+    - add_host: hostname={{ item.private_ip_address }} groupname={{ job_name }}_ami_instance
+      with_items: "{{ ec2_prototype_instance.instances }}"
       when: private_subnet == "yes"
-
-    - wait_for: host={{ item.private_ip }} port=5986 delay=60 timeout=320 state=started
-      with_items: "{{ ec2_prototype_instance.tagged_instances }}"
+    - wait_for: host={{ item.private_ip_address }} port=5986 delay=60 timeout=320 state=started
+      with_items: "{{ ec2_prototype_instance.instances }}"
       when: private_subnet == "yes"
 
     - name: Pause for a bit to work around startup related WinRM problem
