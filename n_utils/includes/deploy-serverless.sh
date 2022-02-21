@@ -40,6 +40,8 @@ usage() {
   echo "" >&2
   echo "Exports ndt parameters into component/serverless-name/variables.yml, runs npm i in the" >&2
   echo "serverless project and runs sls deploy -s \$paramEnvId for the same" >&2
+  echo "If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory," >&2
+  echo "they will be executed before and after the deployment, respectively." >&2
   echo "" >&2
   echo "positional arguments:" >&2
   echo "  component   the component directory where the serverless directory is" >&2

@@ -60,6 +60,9 @@ usage() {
   echo "usage: ndt deploy-stack [-d] [-h] component stack-name ami-id bake-job" >&2
   echo "" >&2
   echo "Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it." >&2
+  echo "If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory," >&2
+  echo "they will be executed before and after the deployment, respectively." >&2
+  echo "" >&2
   echo "positional arguments:" >&2
   echo "  component   the component directory where the stack template is" >&2
   echo "  stack-name  the name of the stack directory inside the component directory" >&2

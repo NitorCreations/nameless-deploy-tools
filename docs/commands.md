@@ -346,6 +346,8 @@ usage: ndt deploy-azure [-d] [-h] component azure-name
 
 Exports ndt parameters into component/azure-name/variables.json
 and deploys template.yaml or template.bicep with the azure cli referencing the parameter file
+If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
+they will be executed before and after the deployment, respectively.
 
 positional arguments:
   component   the component directory where the azure directory is
@@ -366,6 +368,8 @@ usage: ndt deploy-cdk [-d] [-h] component cdk-name
 
 Exports ndt parameters into component/cdk-name/variables.json, runs pre_deploy.sh in the
 cdk project and runs cdk diff; cdk deploy for the same
+If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
+they will be executed before and after the deployment, respectively.
 
 positional arguments:
   component   the component directory where the cdk directory is
@@ -404,6 +408,8 @@ usage: ndt deploy-serverless [-d] [-h] component serverless-name
 
 Exports ndt parameters into component/serverless-name/variables.yml, runs npm i in the
 serverless project and runs sls deploy -s $paramEnvId for the same
+If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
+they will be executed before and after the deployment, respectively.
 
 positional arguments:
   component   the component directory where the serverless directory is
@@ -424,6 +430,9 @@ ami that is tagged with the bake-job name
 usage: ndt deploy-stack [-d] [-h] component stack-name ami-id bake-job
 
 Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it.
+If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
+they will be executed before and after the deployment, respectively.
+
 positional arguments:
   component   the component directory where the stack template is
   stack-name  the name of the stack directory inside the component directory
@@ -447,6 +456,8 @@ Exports ndt parameters into component/terraform-name/terraform.tfvars as json, r
 terraform project and runs terraform plan; terraform apply for the same
 If TF_BACKEND_CONF is defined and points to a readable file relative to the ndt root,
 that file will get interpolated to $component/terraform-$terraform_name/backend.tf
+If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
+they will be executed before and after the deployment, respectively.
 
 positional arguments:
   component   the component directory where the terraform directory is

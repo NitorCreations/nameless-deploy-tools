@@ -42,6 +42,8 @@ usage() {
   echo "terraform project and runs terraform plan; terraform apply for the same" >&2
   echo "If TF_BACKEND_CONF is defined and points to a readable file relative to the ndt root," >&2
   echo "that file will get interpolated to \$component/terraform-\$terraform_name/backend.tf" >&2
+  echo "If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory," >&2
+  echo "they will be executed before and after the deployment, respectively." >&2
   echo "" >&2
   echo "positional arguments:" >&2
   echo "  component   the component directory where the terraform directory is" >&2
