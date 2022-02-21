@@ -48,7 +48,7 @@ usage() {
   echo "positional arguments:" >&2
   echo "  component   the component directory where the terraform directory is" >&2
   echo "  terraform-name the name of the terraform directory that has the template" >&2
-  echo "                  For example for lambda/terraform-sender/template.yaml" >&2
+  echo "                  For example for lambda/terraform-sender/main.tf" >&2
   echo "                  you would give sender" >&2
   echo "" >&2
   echo "optional arguments:" >&2

@@ -462,7 +462,7 @@ they will be executed before and after the deployment, respectively.
 positional arguments:
   component   the component directory where the terraform directory is
   terraform-name the name of the terraform directory that has the template
-                  For example for lambda/terraform-sender/template.yaml
+                  For example for lambda/terraform-sender/main.tf
                   you would give sender
 
 optional arguments:
