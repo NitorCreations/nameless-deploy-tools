@@ -98,16 +98,21 @@ def ndt():
     """The main nameless deploy tools command that provides bash command
     completion and subcommand execution
     """
+    do_profile = False
     if "_ARGCOMPLETE" in os.environ:
         do_command_completion()
     else:
         if len(sys.argv) >= 2 and sys.argv[1] == "--version":
             sys.stdout.writelines([VERSION, "\n"])
             sys.exit(0)
+        if  len(sys.argv) >= 2 and sys.argv[1] == "--profile":
+            do_profile = True
+            del sys.argv[1]
         if len(sys.argv) < 2 or sys.argv[1] not in COMMAND_MAPPINGS:
             sys.stderr.writelines([u"usage: ndt <command> [args...]\n"])
             sys.stderr.writelines([u"\tcommand shoud be one of:\n"])
             sys.stderr.writelines([u"\t\t--version\n"])
+            sys.stderr.writelines([u"\t\t--profile\n"])
             for command in sorted(COMMAND_MAPPINGS):
                 sys.stderr.writelines([u"\t\t" + command + "\n"])
             sys.exit(1)
@@ -127,11 +132,23 @@ def ndt():
         ):
             sys.exit(Popen([command] + sys.argv[2:]).wait())
         else:
+            if do_profile:
+                import cProfile, pstats, io
+                from pstats import SortKey
+                pr = cProfile.Profile()
+                pr.enable()
             parts = command_type.split(":")
             my_func = getattr(__import__(parts[0], fromlist=[parts[1]]), parts[1])
             sys.argv = sys.argv[1:]
             sys.argv[0] = "ndt " + sys.argv[0]
             my_func()
+            if do_profile:
+                pr.disable()
+                s = io.StringIO()
+                sortby = SortKey.CUMULATIVE
+                ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+                ps.print_stats()
+                print(s.getvalue(), file=sys.stderr)
 
 
 if __name__ == "__main__":
