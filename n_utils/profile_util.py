@@ -11,7 +11,6 @@ from argcomplete.completers import ChoicesCompleter
 from dateutil.parser import parse
 from dateutil.tz import tzutc
 
-from n_utils import _to_str
 from n_utils.bw_util import get_bwentry
 from n_utils.lp_util import get_lpentry
 from n_utils.az_util import az_select_subscription
@@ -206,7 +205,7 @@ def print_profile(profile_name, params):
                 "AWS_SESSION_EXPIRATION_EPOC_"
                 + safe_profile
                 + '="'
-                + _to_str(_epoc_secs(d))
+                + str(_epoc_secs(d))
                 + '";'
             )
             params.append("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile)
@@ -235,7 +234,7 @@ def print_profile_expiry(profile):
     safe_profile = re.sub("[^A-Z0-9]", "_", profile.upper())
     expiry = read_profile_expiry(profile)
     epoc = _epoc_secs(parse(expiry).replace(tzinfo=tzutc()))
-    print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=" + _to_str(epoc))
+    print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=" + str(epoc))
     print("AWS_SESSION_EXPIRATION_" + safe_profile + "=" + expiry)
     print(
         "export AWS_SESSION_EXPIRATION_"
@@ -539,7 +538,7 @@ def enable_profile(profile_type, profile):
                 command.append(profile_data["ndt_mfa_token"])
             if "ndt_default_duration_hours" in profile_data:
                 command.append("-d")
-                duration = _to_str(int(profile_data["ndt_default_duration_hours"]) * 60)
+                duration = str(int(profile_data["ndt_default_duration_hours"]) * 60)
                 command.append(duration)
             command.append("-p")
             command.append(profile)

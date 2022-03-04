@@ -27,11 +27,15 @@ from Cryptodome.Cipher import AES
 from Cryptodome.Hash import SHA256
 from Cryptodome.Util import Counter
 
-from ec2_utils.instance_info import dthandler
 from n_utils import _to_bytes, _to_str
 from n_utils.yuuuu3332111i1l1i import IiII1IiiIiI1, I11iIi1I
 from n_utils.bw_util import get_bwentry
 
+dthandler = (
+    lambda obj: obj.isoformat()
+    if hasattr(obj, "isoformat")
+    else json.JSONEncoder().default(obj)
+)
 
 def mfa_add_token(args):
     """Adds or overwrites an MFA token to be used with role assumption.
