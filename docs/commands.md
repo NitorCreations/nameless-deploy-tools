@@ -1195,6 +1195,23 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
+## `ndt show-azure-params`
+
+```bash
+usage: ndt show-azure-params [-h] [-p PARAMETER] component azure
+
+Show available parameters for a azure subcomponent
+
+positional arguments:
+  component             The component containg the azure subcomponet
+  azure                 The name of the azure subcomponent
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p PARAMETER, --parameter PARAMETER
+                        Name of paremeter if only one parameter required
+```
+
 ## `ndt show-stack-params-and-outputs`
 
 ```bash
