@@ -74,6 +74,7 @@ from n_utils.ndt_project import Project
 from n_utils.ndt_project import list_jobs, list_components, upsert_codebuild_projects
 from n_utils.profile_util import update_profile
 from n_utils.tf_utils import pull_state, jmespath_var, flat_state
+from n_utils.az_util import fetch_properties
 from n_utils.utils import (
     session_token,
     get_images,
@@ -526,8 +527,10 @@ def show_terraform_params():
     parser = get_parser()
     parser.add_argument(
         "component", help="The component containg the terraform subcomponet"
-    )
-    parser.add_argument("terraform", help="The name of the terraform subcomponent")
+    ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("terraform"))
+    parser.add_argument(
+        "terraform", help="The name of the terraform subcomponent"
+    ).completer = SubCCompleter("terraform")
     param = parser.add_mutually_exclusive_group(required=False)
     param.add_argument("-j", "--jmespath", help="Show just a matching jmespath value")
     param.add_argument(
@@ -547,6 +550,33 @@ def show_terraform_params():
                 print(params[args.parameter])
         else:
             print(json.dumps(params, indent=2))
+
+
+def show_azure_params():
+    """Show available parameters for a azure subcomponent"""
+    parser = get_parser()
+    parser.add_argument(
+        "component", help="The component containg the azure subcomponet"
+    ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("azure"))
+    parser.add_argument(
+        "azure", help="The name of the azure subcomponent"
+    ).completer = SubCCompleter("azure")
+    param = parser.add_mutually_exclusive_group(required=False)
+    param.add_argument(
+        "-p",
+        "--parameter",
+        help="Name of paremeter if only" + " one parameter required",
+    )
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    azure = fetch_properties(
+        load_parameters(component=args.component, azure=args.azure)
+    )
+    if args.parameter:
+        if args.parameter in azure:
+            print(azure[args.parameter])
+    else:
+        print(json.dumps(azure, indent=2))
 
 
 def cli_get_images():

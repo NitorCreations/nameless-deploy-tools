@@ -143,3 +143,62 @@ def delete_group(group_name):
     )
     output, err = proc.communicate()
     return proc.returncode == 0
+
+
+def fetch_properties(parameters):
+    cmd = get_az_command("show", parameters) + ["--query", "properties"]
+    process = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    stdout, _ = process.communicate()
+    if process.returncode != 0:
+        return {}
+    props = json.loads(stdout)
+    ret = {}
+    if "parameters" in props:
+        for parameter, value in props["parameters"].items():
+            if "value" in value:
+                ret[parameter] = str(value["value"])
+    if "outputs" in props:
+        for output, value in props["outputs"].items():
+            if "value" in value:
+                ret[output] = str(value["value"])
+    return ret
+
+
+def get_az_command(command, parameters):
+    scope = parameters.get("AZURE_SCOPE", "group")
+    if "DEPLOYMENT_NAME" in parameters:
+        name = parameters["DEPLOYMENT_NAME"]
+    else:
+        name = f"{parameters['BUILD_JOB_PREFIX']}_{parameters['COMPONENT']}_{parameters['ORIG_AZURE_NAME']}"
+    ret = ["az", "deployment", command, "--name", name]
+    if scope == "group":
+        if "AZURE_GROUP" not in parameters:
+            raise MissingAzureGroup
+        ret.insert(2, "group")
+        ret.append("--resource-group")
+        ret.append(parameters["AZURE_GROUP"])
+    elif scope == "management-group":
+        if "AZURE_MANAGEMENT_GROUP" not in parameters:
+            raise MissingAzureManagementGroup
+        ret.insert(2, "mg")
+        ret.append("--management-group-id")
+        ret.append(parameters["AZURE_MANAGEMENT_GROUP"])
+    elif scope == "subscription":
+        ret.insert(2, "sub")
+    elif scope == "tenant":
+        ret.insert(2, "tenant")
+    else:
+        raise UnknownAzureGroupException
+    return ret
+
+
+class UnknownAzureGroupException(Exception):
+    pass
+
+
+class MissingAzureGroup(Exception):
+    pass
+
+
+class MissingAzureManagementGroup(Exception):
+    pass

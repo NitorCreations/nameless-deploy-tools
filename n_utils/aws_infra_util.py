@@ -48,6 +48,7 @@ from n_utils.git_utils import Git
 from n_utils.ndt import find_include
 from n_utils.ecr_utils import repo_uri
 from n_utils.tf_utils import pull_state, flat_state, jmespath_var
+from n_utils.az_util import fetch_properties
 from n_vault import Vault
 from threadlocal_aws import region
 from threadlocal_aws.clients import ssm, ec2, connect
@@ -58,6 +59,7 @@ from cloudformation_utils.tools import (
 
 stacks = dict()
 terraforms = dict()
+az_components = dict()
 parameters = dict()
 ssm_params = dict()
 vault_params = dict()
@@ -151,6 +153,34 @@ def _resolve_tfref_from_dict(tfref_var):
                     return None
             if "jmespath" in tfref_var:
                 return jmespath_var(terraform, tfref_var["jmespath"])
+    else:
+        return None
+
+
+def _resolve_azref_from_dict(azref_var):
+    if "component" in azref_var and "azure" in azref_var and "paramName" in azref_var:
+        with Git() as git:
+            current_branch = git.get_current_branch()
+            if "branch" in azref_var:
+                branch = azref_var["branch"]
+            else:
+                branch = current_branch
+            az_key = (azref_var["component"], azref_var["azure"], branch)
+            if az_key in az_components:
+                az_component = az_components[az_key]
+            else:
+                az_parameters = load_parameters(
+                    component=azref_var["component"],
+                    azure=azref_var["azure"],
+                    branch=branch,
+                )
+                az_component = fetch_properties(az_parameters)
+                az_components[az_key] = az_component
+            if "paramName" in azref_var:
+                if azref_var["paramName"] in az_component:
+                    return az_component[azref_var["paramName"]]
+                else:
+                    return None
     else:
         return None
 
@@ -279,6 +309,10 @@ def _process_value(value, used_params):
                 tf_value = _resolve_tfref_from_dict(value["TFRef"])
                 if tf_value:
                     value = tf_value
+            if "AzRef" in value:
+                az_value = _resolve_azref_from_dict(value["AzRef"])
+                if az_value:
+                    value = az_value
             if "Encrypt" in value:
                 enc_conf = value["Encrypt"]
                 if isinstance(enc_conf, OrderedDict):
@@ -1070,6 +1104,24 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 )
             param_refresh_callback()
             return tf_value
+        elif "AzRef" in data:
+            az_var = expand_vars(data["AzRef"], templateParams, None, [])
+            az_var = _check_refs(
+                az_var, basefile, path + "AzRef_", templateParams, True
+            )
+            data.clear()
+            az_value = _resolve_azref_from_dict(az_var)
+            if not az_value:
+                raise AzRefUnresolved(
+                    "Did not find value for: "
+                    + stack_var["paramName"]
+                    + " in azure compnent "
+                    + stack_var["component"]
+                    + "."
+                    + stack_var["azure"]
+                )
+            param_refresh_callback()
+            return az_value
         elif "Encrypt" in data and "value" in data["Encrypt"]:
             to_encrypt = data["Encrypt"]["value"]
             enc_conf = data["Encrypt"]
@@ -1425,6 +1477,10 @@ class StackRefUnresolved(Exception):
 
 
 class TFRefUnresolved(Exception):
+    pass
+
+
+class AzRefUnresolved(Exception):
     pass
 
 

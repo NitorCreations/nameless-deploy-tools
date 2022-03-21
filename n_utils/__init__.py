@@ -94,6 +94,7 @@ NDT_ONLY = [
     "share-to-another-region=n_utils.cli:cli_share_to_another_region",
     "show-stack-params-and-outputs=n_utils.cli:show_stack_params_and_outputs",
     "show-terraform-params=n_utils.cli:show_terraform_params",
+    "show-azure-params=n_utils.cli:show_azure_params",
     "snapshot-from-volume=ec2_utils.cli:snapshot_from_volume",
     "upsert-cloudfront-records=n_utils.cli:cli_upsert_cloudfront_records",
     "volume-from-snapshot=ec2_utils.cli:volume_from_snapshot",
