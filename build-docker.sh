@@ -2,9 +2,9 @@
 
 NEW_VERSION=$(grep nameless-deploy-tools docker/Dockerfile | cut -d "=" -f 3)
 
-docker build -t ndt docker
+docker build --platform linux/amd64,linux/arm64 --manifest ndt docker
 set +x
-bw get item hub.docker.com | jq -r '.fields[]|select(.name == "Access Token").value' | docker login -u "$(bw get username hub.docker.com)" --password-stdin
+bw get item hub.docker.com | jq -e -r '.fields[]|select(.name == "Access Token").value' | docker login -u "$(bw get username hub.docker.com)" --password-stdin
 set -x
 docker tag ndt:latest nitor/ndt:$NEW_VERSION
 docker push nitor/ndt:$NEW_VERSION
