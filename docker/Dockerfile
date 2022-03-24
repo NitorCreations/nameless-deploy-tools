@@ -5,14 +5,13 @@ ENV NODE_VERSION=16.13.1 \
   JAVA_HOME=/docker-java-home \
   GRADLE_VERSION=7.3.3 \
   MAVEN_VERSION=3.8.4 \
-  PHANTOMJS_VERSION=2.1.1 \
   LERNA_VERSION=4.0.0 \
   SERVERLESS_VERSION=2.70.0 \
   TERRAFORM_VERSION=1.1.2 \
   TERRAFORM_SHA="734efa82e2d0d3df8f239ce17f7370dabd38e535d21e64d35c73e45f35dfa95c"
 RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
   gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg && \
-  echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ bionic main" > /etc/apt/sources.list.d/azure-cli.list && \
+  echo "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/azure-cli/ bionic main" > /etc/apt/sources.list.d/azure-cli.list && \
   apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git openssh-client unzip chromium-bsu jq gpg parallel dirmngr azure-cli
 RUN set -ex \
   && groupadd --gid 1010 node \
@@ -61,12 +60,12 @@ RUN set -ex \
   i386) ARCH='x86';; \
   *) echo "unsupported architecture"; exit 1 ;; \
   esac \
-  && curl -SLO https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip \
-  && curl -SLO https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig \
-  && gpg --verify awscli-exe-linux-x86_64.zip.sig awscli-exe-linux-x86_64.zip \
-  && TMP_DIR=$(mktemp -d) && unzip awscli-exe-linux-x86_64.zip -d $TMP_DIR \
+  && curl -SLO https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip \
+  && curl -SLO https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip.sig \
+  && gpg --verify awscli-exe-linux-$(uname -m).zip.sig awscli-exe-linux-$(uname -m).zip \
+  && TMP_DIR=$(mktemp -d) && unzip awscli-exe-linux-$(uname -m).zip -d $TMP_DIR \
   && $TMP_DIR/aws/install -u \
-  && rm -rf $TMP_DIR awscli-exe-linux-x86_64.zip.sig awscli-exe-linux-x86_64.zip \
+  && rm -rf $TMP_DIR awscli-exe-linux-x86_64.zip.sig awscli-exe-linux-$(uname -m).zip \
   && az bicep install && mv /root/.azure/bin/bicep /usr/local/bin/bicep \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
   && curl -SLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
@@ -94,13 +93,10 @@ RUN set -ex \
   && unzip tmp.zip -d /opt && rm tmp.zip \
   && ln -snf /opt/gradle-${GRADLE_VERSION} /opt/gradle \
   && ln -snf /opt/gradle/bin/gradle /usr/bin/gradle \
-  && wget -nv -O - "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${PHANTOMJS_VERSION}-linux-x86_64.tar.bz2" | tar -xjvf - \
-  && mv phantomjs-*/bin/phantomjs /usr/bin \
-  && rm -rf phantomjs-* \
   && wget -O /usr/bin/lein "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein" \
   && chmod 755 /usr/bin/lein \
   && lein version \
-  && curl -fSL "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" -o terraform.zip \
+  && curl -fSL "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${dpkgArch}.zip" -o terraform.zip \
   && echo "${TERRAFORM_SHA} *terraform.zip" | sha256sum -c - \
   && unzip -d /usr/bin terraform.zip \
   && rm -f terraform.zip
