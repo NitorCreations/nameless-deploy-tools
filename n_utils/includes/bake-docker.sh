@@ -63,15 +63,6 @@ die () {
 }
 set -xe
 
-push_docker() {
-  eval "$(ndt ecr-ensure-repo "$DOCKER_NAME")"
-  docker tag $DOCKER_NAME:latest $DOCKER_NAME:$BUILD_NUMBER
-  docker tag $DOCKER_NAME:latest $REPO:latest
-  docker tag $DOCKER_NAME:$BUILD_NUMBER $REPO:$BUILD_NUMBER
-  docker push $REPO:latest
-  docker push $REPO:$BUILD_NUMBER
-}
-
 if [ "$1" = "--imagedefinitions" -o "$1" = "-i" ]; then
   shift
   OUTPUT_DEFINITION=1
@@ -113,23 +104,45 @@ if [ -z "$NO_PULL" ]; then
    PULL="--pull"
 fi
 
+eval "$(ndt ecr-ensure-repo "$DOCKER_NAME")"
 if [ -z "$PLATFORM" ]; then
   PLATFORM="linux/amd64"
   docker build $PULL --tag "$DOCKER_NAME" --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"  --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
 
-  push_docker
+  docker tag $DOCKER_NAME:latest $DOCKER_NAME:$BUILD_NUMBER
+  docker tag $DOCKER_NAME:latest $REPO:latest
+  docker tag $DOCKER_NAME:$BUILD_NUMBER $REPO:$BUILD_NUMBER
+  docker push $REPO:latest
+  docker push $REPO:$BUILD_NUMBER
 else
   for N_PLATFORM in ${PLATFORM/,/ }; do
-    if [ -x "$component/docker-$ORIG_DOCKER_NAME/pre_build_${N_PLATFORM/\//_}.sh" ]; then
+    N_PLATFORM_SAFE=${N_PLATFORM/\//_}
+    if [ -x "$component/docker-$ORIG_DOCKER_NAME/pre_build_${N_PLATFORM_SAFE}.sh" ]; then
       cd "$component/docker-$ORIG_DOCKER_NAME"
       "./pre_build_${N_PLATFORM/\//_}.sh"
       cd ../..
     fi
-
-    docker buildx build $PULL --tag "$DOCKER_NAME" --platform $N_PLATFORM --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"  --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
-
-    push_docker
+    docker buildx build $PULL --tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" --platform $N_PLATFORM --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"  --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
+    docker tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
+    docker push $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
   done
+
+  MANIFEST_COMMAND_L="$REPO:latest"
+  MANIFEST_COMMAND_V="$REPO:$BUILD_NUMBER"
+  for N_PLATFORM in ${PLATFORM/,/ }; do
+    N_PLATFORM_SAFE=${N_PLATFORM/\//_}
+    MANIFEST_COMMAND_L="$MANIFEST_COMMAND_L $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}"
+    MANIFEST_COMMAND_V="$MANIFEST_COMMAND_V $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}"
+  done
+  docker manifest create $MANIFEST_COMMAND_L
+  docker manifest create $MANIFEST_COMMAND_V
+  for N_PLATFORM in ${PLATFORM/,/ }; do
+    N_PLATFORM_SAFE=${N_PLATFORM/\//_}
+    docker manifest annotate --arch ${N_PLATFORM#linux/} $REPO:latest $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
+    docker manifest annotate --arch ${N_PLATFORM#linux/} $REPO:$BUILD_NUMBER $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
+  done
+  docker manifest push $REPO:latest
+  docker manifest push $REPO:$BUILD_NUMBER
 fi
 
 if [ -n "$OUTPUT_DEFINITION" ]; then
