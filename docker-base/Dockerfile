@@ -24,6 +24,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get upgrade -
     apt-transport-https gnupg-agent software-properties-common wget \
     python3 python3-dev python3-pip python-is-python3 fakeroot ca-certificates \
     tar gzip zip autoconf automake \
+    openjdk-18-jdk git openssh-client unzip chromium-bsu jq gpg parallel dirmngr \
     bzip2 file g++ gcc imagemagick \
     libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev \
     libevent-dev libffi-dev libgeoip-dev libglib2.0-dev \
