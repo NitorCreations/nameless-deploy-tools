@@ -13,9 +13,10 @@
 FROM ubuntu:20.04
 
 ENV DOCKER_BUCKET="download.docker.com" \
-    DOCKER_VERSION="20.10.11" \
+    DOCKER_VERSION="20.10.14" \
     DOCKER_CHANNEL="stable" \
-    DOCKER_SHA256="dd6ff72df1edfd61ae55feaa4aadb88634161f0aa06dbaaf291d1be594099ff3" \
+    DOCKER_SHA256_AMD64="7ca4aeeed86619909ae584ce3405da3766d495f98904ffbd9d859add26b83af5" \
+    DOCKER_SHA256_ARM64="ea971edc1179088bfd25edd04a0c12848143d15cb8202ebb93a6a08973464fd0" \
     DIND_COMMIT="52379fa76dee07ca038624d639d9e14f4fb719ff" \
     DOCKER_COMPOSE_VERSION="2.2.2"
 
@@ -24,7 +25,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get upgrade -
     apt-transport-https gnupg-agent software-properties-common wget \
     python3 python3-dev python3-pip python-is-python3 fakeroot ca-certificates \
     tar gzip zip autoconf automake \
-    openjdk-18-jdk git openssh-client unzip chromium-bsu jq gpg parallel dirmngr \
+    openjdk-17-jdk git openssh-client unzip chromium-bsu jq gpg parallel dirmngr \
     bzip2 file g++ gcc imagemagick \
     libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev \
     libevent-dev libffi-dev libgeoip-dev libglib2.0-dev \
@@ -41,10 +42,10 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get upgrade -
 # Install Docker
 RUN set -x \
     && ARCH="$(uname -m)" \
-    && curl -fSL "https://${DOCKER_BUCKET}/linux/static/${DOCKER_CHANNEL}/$ARCH/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
-    && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
-    && tar --extract --file docker.tgz --strip-components 1  --directory /usr/local/bin/ \
-    && rm docker.tgz \
+    && curl -fSL "https://${DOCKER_BUCKET}/linux/static/${DOCKER_CHANNEL}/$ARCH/docker-${DOCKER_VERSION}.tgz" -o docker-$ARCH.tgz \
+    && (echo "${DOCKER_SHA256_AMD64} *docker-x86_64.tgz" | sha256sum -c - || echo "${DOCKER_SHA256_ARM64} *docker-aarch64.tgz" | sha256sum -c -) \
+    && tar --extract --file docker-$ARCH.tgz --strip-components 1  --directory /usr/local/bin/ \
+    && rm docker-$ARCH.tgz \
     && docker -v \
     # set up subuid/subgid so that "--userns-remap=default" works out-of-the-box
     && addgroup dockremap \
@@ -53,7 +54,7 @@ RUN set -x \
     && echo 'dockremap:165536:65536' >> /etc/subgid \
     && wget "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hack/dind" -O /usr/local/bin/dind \
     && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-$ARCH > /usr/local/bin/docker-compose \
-    && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-$ARCH.sha256 | sed "s/docker-compose-linux-$ARCH/\/usr\/local\/bin\/docker-compose/" | sha256sum --check \
+    && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-$ARCH.sha256 | sed "s/docker-compose-linux-$ARCH/\/usr\/local\/bin\/docker-compose/" | sha256sum -c -\
     && chmod +x /usr/local/bin/dind /usr/local/bin/docker-compose \
     # Ensure docker-compose works
     && docker-compose version
