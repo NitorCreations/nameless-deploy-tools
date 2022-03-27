@@ -14,7 +14,7 @@ ENV LANG=C.UTF-8 \
 RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
   gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg && \
   echo "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/azure-cli/ bionic main" > /etc/apt/sources.list.d/azure-cli.list && \
-  apt-get update && apt-get upgrade -y && apt-get install -y openjdk-11-jdk git openssh-client unzip chromium-bsu jq gpg parallel dirmngr azure-cli
+  apt-get update && apt-get upgrade -y && apt-get install -y azure-cli
 RUN set -ex \
   && groupadd --gid 1010 node \
   && useradd --uid 1010 --gid node --shell /bin/bash --create-home node \
