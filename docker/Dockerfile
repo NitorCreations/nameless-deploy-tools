@@ -185,7 +185,7 @@ RUN set -ex \
   && unzip -d /usr/bin terraform_${TERRAFORM_VERSION}_linux_${dpkgArch}.zip \
   && rm -f terraform_${TERRAFORM_VERSION}_linux_${dpkgArch}.zip terraform_${TERRAFORM_VERSION}_SHA256SUMS terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig
 
-RUN pip install --no-cache-dir nameless-deploy-tools==1.250
+RUN pip install --no-cache-dir nameless-deploy-tools==1.251
 
 VOLUME /var/lib/docker
 
