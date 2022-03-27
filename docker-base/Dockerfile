@@ -22,7 +22,7 @@ ENV DOCKER_BUCKET="download.docker.com" \
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get upgrade -qy \
     && apt-get install -qy --no-install-recommends \
     apt-transport-https gnupg-agent software-properties-common wget \
-    python3 python3-dev fakeroot ca-certificates \
+    python3 python3-dev python3-pip python-is-python3 fakeroot ca-certificates \
     tar gzip zip autoconf automake \
     bzip2 file g++ gcc imagemagick \
     libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev \
@@ -39,7 +39,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get upgrade -
 
 # Install Docker
 RUN set -x \
-    && curl -fSL "https://${DOCKER_BUCKET}/linux/static/${DOCKER_CHANNEL}/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
+    && ARCH="$(uname -m)" \
+    && curl -fSL "https://${DOCKER_BUCKET}/linux/static/${DOCKER_CHANNEL}/$ARCH/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
     && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
     && tar --extract --file docker.tgz --strip-components 1  --directory /usr/local/bin/ \
     && rm docker.tgz \
@@ -50,8 +51,8 @@ RUN set -x \
     && echo 'dockremap:165536:65536' >> /etc/subuid \
     && echo 'dockremap:165536:65536' >> /etc/subgid \
     && wget "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hack/dind" -O /usr/local/bin/dind \
-    && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
-    && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64.sha256 | sed 's/docker-compose-linux-x86_64/\/usr\/local\/bin\/docker-compose/' | sha256sum --check \
+    && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-$ARCH > /usr/local/bin/docker-compose \
+    && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-$ARCH.sha256 | sed "s/docker-compose-linux-$ARCH/\/usr\/local\/bin\/docker-compose/" | sha256sum --check \
     && chmod +x /usr/local/bin/dind /usr/local/bin/docker-compose \
     # Ensure docker-compose works
     && docker-compose version
@@ -59,13 +60,7 @@ RUN set -x \
 # Install dependencies by all python images equivalent to buildpack-deps:jessie
 # on the public repos.
 
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
-    && update-alternatives  --set python /usr/bin/python3 \
-    && wget "https://bootstrap.pypa.io/get-pip.py" -O /tmp/get-pip.py \
-    && python /tmp/get-pip.py \
-    && pip install awscli \
-    && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
+RUN python -m pip install -U pip
 VOLUME /var/lib/docker
 
 COPY dockerd-entrypoint.sh /usr/bin/dockerd-entrypoint.sh
