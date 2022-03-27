@@ -103,76 +103,13 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 MARKER
 }
 
-jenkins_setup_snapshot_script () {
-  if [ ! -e /var/lib/jenkins/jenkins-home/snapshot_jenkins_home.sh ]; then
-    cat > /var/lib/jenkins/jenkins-home/snapshot_jenkins_home.sh << EOF
-#!/bin/bash -xe
-
-ndt snapshot-from-volume -w ${CF_paramEBSTag} ${CF_paramEBSTag} /var/lib/jenkins/jenkins-home
-EOF
-  fi
-  chmod 755 /var/lib/jenkins/jenkins-home/snapshot_jenkins_home.sh
-}
 
 jenkins_setup_snapshot_on_shutdown () {
-  # Amend service script to call snapshot_jenkins_home right after stopping the service - original script saved as jenkins.orig
-  case "$SYSTEM_TYPE" in
-    ubuntu)
-      perl -i.orig -e 'while(<>){print;if(m!^(\s+)do_stop!){print $1.'\''retval="$?"'\''."\n".$1."/usr/local/bin/ndt snapshot-from-volume '${CF_paramEBSTag}' '${CF_paramEBSTag}' /var/lib/jenkins/jenkins-home\n";last;}}$_=<>;s/\$\?/\$retval/;print;while(<>){print}' /etc/init.d/jenkins
-      ;;
-    centos|fedora|rhel|rocky)
-      perl -i.orig -e 'while(<>){print;if(m!^(\s+)killproc!){print $1.'\''retval="$?"'\''."\n".$1."/usr/local/bin/ndt snapshot-from-volume '${CF_paramEBSTag}' '${CF_paramEBSTag}' /var/lib/jenkins/jenkins-home\n";last;}}$_=<>;s/\$\?/\$retval/;print;while(<>){print}' /etc/init.d/jenkins
-      ;;
-    *)
-      echo "Unkown system type $SYSTEM_TYPE"
-      ;;
-  esac
+  local SYSCONFIG=/usr/lib/systemd/system/jenkins.service
+#  check_parameters CF_paramEBSTag
+  sed -i -e "/ExecStart=.*/a ExecStopPost=/usr/local/bin/ndt snapshot-from-volume '${CF_paramEBSTag}' '${CF_paramEBSTag}' /var/lib/jenkins/jenkins-home" $SYSCONFIG
 }
 
-jenkins_setup_snapshot_job () {
-  if ! find /var/lib/jenkins/jenkins-home/jobs -mindepth 2 -maxdepth 4 -name config.xml -print0 | xargs -0 fgrep -q snapshot_jenkins_home.sh ; then
-    sync_jenkins_conf_job_name="snapshot-jenkins-home"
-    mkdir -p /var/lib/jenkins/jenkins-home/jobs/${sync_jenkins_conf_job_name}
-    cat > /var/lib/jenkins/jenkins-home/jobs/${sync_jenkins_conf_job_name}/config.xml << 'EOF'
-<?xml version='1.0' encoding='UTF-8'?>
-<project>
-  <actions/>
-  <description>Runs the &quot;snapshot_jenkins_home.sh&quot; script that pushes the latest jenkins config to the remote Jenkins repo.</description>
-  <keepDependencies>false</keepDependencies>
-  <properties>
-    <jenkins.model.BuildDiscarderProperty>
-      <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>60</daysToKeep>
-        <numToKeep>-1</numToKeep>
-        <artifactDaysToKeep>-1</artifactDaysToKeep>
-        <artifactNumToKeep>-1</artifactNumToKeep>
-      </strategy>
-    </jenkins.model.BuildDiscarderProperty>
-  </properties>
-  <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
-  <disabled>true</disabled>
-
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.TimerTrigger>
-      <spec>H H(18-19) * * *
-H H(4-5) * * *</spec>
-    </hudson.triggers.TimerTrigger>
-  </triggers>
-  <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <hudson.tasks.Shell>
-      <command>/var/lib/jenkins/jenkins-home/snapshot_jenkins_home.sh 2&gt;&amp;1 | tee -a /var/lib/jenkins/snapshot_jenkins_home.log</command>
-    </hudson.tasks.Shell>
-  </builders>
-  <publishers/>
-  <buildWrappers/>
-</project>
-EOF
-  fi
-}
 
 jenkins_discard_default_install () {
   rm -rf /var/lib/jenkins-default
@@ -195,36 +132,16 @@ jenkins_improve_config_security () {
 }
 
 jenkins_set_home () {
-  case "$SYSTEM_TYPE" in
-    ubuntu)
-      local SYSCONFIG=/etc/default/jenkins
-      ;;
-    centos|fedora|rocky|rhel)
-      local SYSCONFIG=/etc/sysconfig/jenkins
-      ;;
-    *)
-      echo "Unkown system type $SYSTEM_TYPE"
-      exit 1
-  esac
-  sed -i -e 's/JENKINS_HOME=.*/JENKINS_HOME=\/var\/lib\/jenkins\/jenkins-home/g' \
-  -e 's/\(JENKINS_JAVA_OPTIONS=\"[^\"]*\)\"/\1 -Dhudson.model.DirectoryBrowserSupport.CSP= -Djava.awt.headless=true -Dhudson.model.User.SECURITY_243_FULL_DEFENSE=false -Dhudson.model.ParametersAction.keepUndefinedParameters=true\"/g' \
-  -e 's/^JENKINS_AJP_PORT=.*$/JENKINS_AJP_PORT="-1"/g' $SYSCONFIG
+  local SYSCONFIG=/usr/lib/systemd/system/jenkins.service
+  sed -i -e 's/Environment=\"JENKINS_HOME=.*/Environment=\"JENKINS_HOME=\/var\/lib\/jenkins\/jenkins-home\"/g' \
+  -e 's/WorkingDirectory=.*/WorkingDirectory=\/var\/lib\/jenkins\/jenkins-home/g' \
+  -e 's/Environment=\"JAVA_OPTS=.*/Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Dhudson.model.DirectoryBrowserSupport.CSP= -Dhudson.model.User.SECURITY_243_FULL_DEFENSE=false -Dhudson.model.ParametersAction.keepUndefinedParameters=true\"/g' \
+  -e '/Environment=\"JENKINS_PORT=.*/a Environment=\"JENKINS_AJP_PORT=-1\"' $SYSCONFIG
 }
 
 jenkins_disable_and_shutdown_service () {
-  case "$SYSTEM_TYPE" in
-    ubuntu)
-      update-rc.d jenkins disable
-      service jenkins stop
-      ;;
-    centos|fedora|rocky|rhel)
-      systemctl disable jenkins
-      systemctl stop jenkins
-      ;;
-    *)
-      echo "Unkown system type $SYSTEM_TYPE"
-      exit 1
-  esac
+  systemctl disable jenkins
+  systemctl stop jenkins
 }
 
 jenkins_enable_and_start_service () {
@@ -237,9 +154,7 @@ jenkins_setup() {
   jenkins_mount_ebs_home ${CF_paramEBSSize}
   jenkins_discard_default_install
   jenkins_setup_dotssh
-  jenkins_setup_snapshot_script
   jenkins_setup_snapshot_on_shutdown
-  jenkins_setup_snapshot_job
   jenkins_improve_config_security
 
   jenkins_fetch_additional_files
