@@ -122,7 +122,7 @@ RUN set -ex \
   } > /usr/local/bin/docker-java-home \
   && chmod +x /usr/local/bin/docker-java-home \
   && ARCH= && export dpkgArch="$(dpkg --print-architecture)" \
-  && ln -svT "/usr/lib/jvm/java-11-openjdk-${dpkgArch}" /docker-java-home \
+  && ln -svT "/usr/lib/jvm/java-17-openjdk-${dpkgArch}" /docker-java-home \
   && if [ ! -d /usr/share/man/man1 ]; then \
   mkdir -p /usr/share/man/man1; \
   fi \
