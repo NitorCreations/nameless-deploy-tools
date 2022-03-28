@@ -110,9 +110,10 @@ DEPLOY_TEMPLATE="$component/azure-$ORIG_AZURE_NAME/azuredeploy.json"
 PARAMETERS="$component/azure-$ORIG_AZURE_NAME/variables.json"
 if [ -r "$component/azure-$ORIG_AZURE_NAME/template.yaml" ]; then
   ndt yaml-to-json "$component/azure-$ORIG_AZURE_NAME/template.yaml" > "$DEPLOY_TEMPLATE"
+  TEMPLATE_TYPE=json
 elif [ -r "$component/azure-$ORIG_AZURE_NAME/template.bicep" ]; then
   ndt interpolate-file -n -o "$component/azure-$ORIG_AZURE_NAME/azuredeploy.bicep" "$component/azure-$ORIG_AZURE_NAME/template.bicep"
-  bicep build "$component/azure-$ORIG_AZURE_NAME/azuredeploy.bicep"
+  TEMPLATE_TYPE=bicep
 else
   echo "Template not found. Looked for $component/azure-$ORIG_AZURE_NAME/template.yaml and $component/azure-$ORIG_AZURE_NAME/template.bicep"
   exit 1
@@ -156,7 +157,7 @@ az $VERBOSE deployment $SCOPE_COMMAND create \
   --name $DEPLOYMENT_NAME  \
   $GROUP_ARGS \
   $WHATIF_ARG \
-  --template-file azuredeploy.json \
+  --template-file azuredeploy.$TEMPLATE_TYPE \
   --parameters @variables.json
 
 if [ -x "./post_deploy.sh" ]; then
