@@ -14,7 +14,7 @@ ENV LANG=C.UTF-8 \
 RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
   gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg && \
   echo "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/azure-cli/ bionic main" > /etc/apt/sources.list.d/azure-cli.list && \
-  apt-get update && apt-get upgrade -y && apt-get install -y azure-cli dirmngr
+  apt update && apt upgrade -y && apt install -y azure-cli dirmngr
 RUN set -ex \
   && groupadd --gid 1010 node \
   && useradd --uid 1010 --gid node --shell /bin/bash --create-home node \
@@ -141,7 +141,6 @@ RUN set -ex \
   && TMP_DIR=$(mktemp -d) && unzip awscli-exe-linux-$(uname -m).zip -d $TMP_DIR \
   && $TMP_DIR/aws/install -u \
   && rm -rf $TMP_DIR awscli-exe-linux-x86_64.zip.sig awscli-exe-linux-$(uname -m).zip \
-  && az bicep install && mv /root/.azure/bin/bicep /usr/local/bin/bicep \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
   && curl -SLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
   && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
@@ -150,18 +149,10 @@ RUN set -ex \
   && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
   && set -ex \
-  && curl -fSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
-  && curl -fSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
-  && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  && mkdir -p /opt \
-  && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
-  && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
-  && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
-  && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
   && python -m pip install -U pip \
   && pip install -U --no-cache-dir ansible boto3 \
   && npm i -g npm \
-  && npm i -g serverless@${SERVERLESS_VERSION} lerna@$LERNA_VERSION \
+  && npm i -g serverless@${SERVERLESS_VERSION} lerna@$LERNA_VERSION yarn@$YARN_VERSION \
   && curl -SLO "https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" \
   && curl -SLO "https://downloads.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz.asc" \
   && gpg --batch --verify apache-maven-${MAVEN_VERSION}-bin.tar.gz.asc apache-maven-${MAVEN_VERSION}-bin.tar.gz \

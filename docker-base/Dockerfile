@@ -20,8 +20,8 @@ ENV DOCKER_BUCKET="download.docker.com" \
     DIND_COMMIT="52379fa76dee07ca038624d639d9e14f4fb719ff" \
     DOCKER_COMPOSE_VERSION="2.2.2"
 
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get upgrade -qy \
-    && apt-get install -qy --no-install-recommends \
+RUN set -x && export DEBIAN_FRONTEND=noninteractive && apt update && apt upgrade -qy \
+    && apt install -qy --no-install-recommends \
     apt-transport-https gnupg-agent software-properties-common wget \
     python3 python3-dev python3-pip python-is-python3 fakeroot ca-certificates \
     tar gzip zip autoconf automake \
@@ -36,18 +36,14 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get upgrade -
     libxml2-dev libxslt1-dev libyaml-dev make \
     patch xz-utils zlib1g-dev unzip curl \
     e2fsprogs iptables xfsprogs xz-utils \
-    less groff git liberror-perl \
-    && apt-get clean
-
-# Install Docker
-RUN set -x \
+    less groff liberror-perl \
+    && apt clean && apt autoclean \
     && ARCH="$(uname -m)" \
     && curl -fSL "https://${DOCKER_BUCKET}/linux/static/${DOCKER_CHANNEL}/$ARCH/docker-${DOCKER_VERSION}.tgz" -o docker-$ARCH.tgz \
     && (echo "${DOCKER_SHA256_AMD64} *docker-x86_64.tgz" | sha256sum -c - || echo "${DOCKER_SHA256_ARM64} *docker-aarch64.tgz" | sha256sum -c -) \
     && tar --extract --file docker-$ARCH.tgz --strip-components 1  --directory /usr/local/bin/ \
     && rm docker-$ARCH.tgz \
     && docker -v \
-    # set up subuid/subgid so that "--userns-remap=default" works out-of-the-box
     && addgroup dockremap \
     && useradd -g dockremap dockremap \
     && echo 'dockremap:165536:65536' >> /etc/subuid \
