@@ -136,7 +136,8 @@ jenkins_set_home () {
   sed -i -e 's/Environment=\"JENKINS_HOME=.*/Environment=\"JENKINS_HOME=\/var\/lib\/jenkins\/jenkins-home\"/g' \
   -e 's/WorkingDirectory=.*/WorkingDirectory=\/var\/lib\/jenkins\/jenkins-home/g' \
   -e 's/Environment=\"JAVA_OPTS=.*/Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Dhudson.model.DirectoryBrowserSupport.CSP= -Dhudson.model.User.SECURITY_243_FULL_DEFENSE=false -Dhudson.model.ParametersAction.keepUndefinedParameters=true\"/g' \
-  -e '/Environment=\"JENKINS_PORT=.*/a Environment=\"JENKINS_AJP_PORT=-1\"' $SYSCONFIG
+  -e '/Environment=\"JENKINS_PORT=.*/a Environment=\"JENKINS_AJP_PORT=-1\"' \
+  -e 's/^.*TimeoutStartSec=.*$/TimeoutStartSec=300/g' $SYSCONFIG
 }
 
 jenkins_disable_and_shutdown_service () {
