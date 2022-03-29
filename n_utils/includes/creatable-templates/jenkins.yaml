@@ -48,6 +48,10 @@ Parameters:
       Description: Stack name that is the source of baking Roles
       Type: String
       Default: "bakery-roles"
+    paramJenkinsStartTimeOut:
+      Description: Timeout for jenkins startup
+      Type: String
+      Default: 300
 Resources:
   'Fn::Merge':
   - resourceDns: {'Fn::ImportYaml': (( includes ))/template-snippets/route53.yaml, type: A, rec: {Ref: paramEip} }

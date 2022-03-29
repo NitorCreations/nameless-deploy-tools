@@ -15,6 +15,7 @@ CF_paramMvnDeployId=`#optional`
 CF_paramHostedZoneName=
 CF_paramDockerEBSTag=docker
 CF_paramDockerEBSSize=10
+CF_paramJenkinsStartTimeOut=300
 
 export HOME=/root
 cd $HOME
