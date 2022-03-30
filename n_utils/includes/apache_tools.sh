@@ -20,10 +20,12 @@ case  "$SYSTEM_TYPE" in
   ubuntu)
     APACHE_SSL_CONF=/etc/apache2/sites-enabled/default-ssl.conf
     APACHE_WELCOME_CONF=/etc/apache2/sites-enabled/welcome.conf
+    APACHE_SERVICE=apache2
     ;;
   centos|fedora|rocky|rhel)
     APACHE_SSL_CONF=/etc/httpd/conf.d/ssl.conf
     APACHE_WELCOME_CONF=/etc/httpd/conf.d/welcome.conf
+    APACHE_SERVICE=httpd
     ;;
   *)
     echo "Unknown system type $SYSTEM_TYPE"
@@ -115,54 +117,19 @@ MARKER
 }
 
 apache_disable_and_shutdown_service () {
-  case "$SYSTEM_TYPE" in
-    ubuntu)
-      update-rc.d apache2 disable
-      service apache2 stop
-      ;;
-    centos|fedora|rocky|rhel)
-      systemctl disable httpd
-      systemctl stop httpd
-      ;;
-    *)
-      echo "Unknown system type $SYSTEM_TYPE"
-      exit 1
-      ;;
-  esac
+  systemctl disable $APACHE_SERVICE
+  systemctl stop $APACHE_SERVICE
 }
 apache_reload_service () {
-  case "$SYSTEM_TYPE" in
-    ubuntu)
-      service apache2 reload
-      ;;
-    centos|fedora|rocky|rhel)
-      systemctl reload httpd
-      ;;
-    *)
-      echo "Unknown system type $SYSTEM_TYPE"
-      exit 1
-      ;;
-  esac
+  systemctl reload $APACHE_SERVICE
 }
 
 apache_enable_and_start_service () {
-  case  "$SYSTEM_TYPE" in
-    ubuntu)
-      update-rc.d apache2 enable
-      service apache2 start
-      ;;
-    centos|fedora|rocky|rhel)
-      systemctl enable firewalld
-      systemctl start firewalld
-      firewall-cmd --permanent --zone=public --add-service=https
-      firewall-cmd --permanent --zone=public --add-service=http
-      firewall-cmd --reload
-      systemctl enable httpd
-      systemctl start httpd
-      ;;
-    *)
-      echo "Unknown system type $SYSTEM_TYPE"
-      exit 1
-      ;;
-  esac
+  systemctl enable firewalld
+  systemctl start firewalld
+  firewall-cmd --permanent --zone=public --add-service=https
+  firewall-cmd --permanent --zone=public --add-service=http
+  firewall-cmd --reload
+  systemctl enable $APACHE_SERVICE
+  systemctl start $APACHE_SERVICE
 }
