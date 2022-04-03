@@ -260,7 +260,6 @@ Here is an example:
 TFRef:
   component: azure
   terraform: eventhub
-  paramName:
   branch: master
   paramName: demo_sa.primary_connection_string
 ```
@@ -269,7 +268,32 @@ TFRef:
 You need to specify either `paramName` for the flat map or `jmespath` to use an expression. You can see
 the extracted state json with `ndt terraform-pull-state [component] [terraform]`.
 
-You can also insert a TFRef as a value into `infra*.properties` file as yaml on a single line.
+You can also insert a TFRef as a value into `*.properties` file as yaml on a single line. An example of that
+would be:
+```properties
+paramAzureVNetCIDR={TFRef: { component: azure-vpn, terraform: azure, paramName: vnet.address_space }}
+```
+
+### `AzRef`
+
+Gets a value from an Azure deployment. Parameters can be addressed through a flattened map that you
+can view with the command `ndt show-azure-params [component] [azure]`.
+
+Here is an example:
+```yaml
+AzRef:
+  component: vision
+  azure: vision
+  branch: master
+  paramName: paramVisionAPIKey
+```
+
+`branch` is optional and defaults to the current branch.
+
+You can also insert a AzRef as a value into `*.properties` file as yaml on a single line. An example of that would be:
+```properties
+VISION_API_KEY={AzRef: {component: vision, azure: vision, paramName: visionApiKey}}
+```
 
 ### `Encrypt`
 

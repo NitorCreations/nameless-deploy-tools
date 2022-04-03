@@ -55,7 +55,7 @@ to `${BUILD_JOB_PREFIX}_[component]_bake`.
 If you are using `generate-jobs.groovy` and [Jenkins DSL plugin](https://github.com/jenkinsci/job-dsl-plugin/wiki)
 to create jobs for baking and deployments, this parameter is a part of the job
 names as above, but also each unique job prefix is given a view with mathching
-jobs in it. Defaults to `aws$paramEnvId`.
+jobs in it. Defaults to `ndt$paramEnvId`.
 
 ### `DEPLOY_ROLE_ARN`
 
@@ -96,9 +96,9 @@ set for the type of image you want to bake.
 
 Sets the type of image being baked. The parameter is inherited the way all other
 parameters are, so you can set a project-wide default and override that as needed.
-The supported types are `ubuntu`, `centos` and `windows`
+The supported types are `ubuntu`, `centos`, `rocky` and `windows`
 
-### `AMIID_ubuntu`, `AMIID_centos` and `AMIID_windows`
+### `AMIID_ubuntu`, `AMIID_centos`, `AMIID_rocky` and `AMIID_windows`
 
 These are the base AMI ID's that are used to start baking your images. Again
 you can have a project-wide default and override as necessary. So the
@@ -196,8 +196,8 @@ this stack.
 ### `SG_PARAM`
 
 The parameter in the bakery-roles stack that holds the id of the security
-group to use for baking. Defaults to `bakeInstanceSg` for `ubuntu` and
-`centos` and `bakeWinInstanceSg` for `windows`.
+group to use for baking. Defaults to `bakeInstanceSg` for `ubuntu`,
+`centos` and `rocky` and `bakeWinInstanceSg` for `windows`.
 
 ### `SECURITY_GROUP`
 
