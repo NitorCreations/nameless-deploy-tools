@@ -5,7 +5,14 @@ is a template pre-processing step that is fairly important. The pre-processing i
 client side functionality that greatly improves the usability and modularisation of stacks and
 serverless projects. The flow of the prosessing is roughly as follows:
 
-* Resolve ndt parameters from `infra*.properties` files along the path to the template
+* Resolve ndt parameters from `*.properties` files along the path to the template. The 
+  properties files are processed in the following order starting at the root of the workspace
+  and continuing to the component level and subcomponent:
+    - `branch.properties`
+    - `[current-branch].properties`
+    - `infra.properties`
+    - `infra-[current-branch].properties`
+* Properties resolved later in the process override ones resolved earlier
 * Expand and resolve the parameter section for the template to get all the parameters
   actually in use in the template
 * Expand the rest of the template verifying all parameter references
