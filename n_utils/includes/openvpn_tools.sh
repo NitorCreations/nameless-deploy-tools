@@ -158,7 +158,7 @@ EOF
   mkdir -p /etc/iptables
 
   # Script to add rules
-  cat > etc/iptables/add-openvpn-rules.sh << EOF
+  cat > /etc/iptables/add-openvpn-rules.sh << EOF
 #!/bin/sh
 iptables -t nat -I POSTROUTING 1 -s 10.8.0.0/24 -o $NIC -j MASQUERADE
 iptables -I INPUT 1 -i tun0 -j ACCEPT
