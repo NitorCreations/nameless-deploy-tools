@@ -38,20 +38,7 @@ openvpn_install_easyrsa() {
 
     # Generate tls-crypt key
     openvpn --genkey --secret /etc/openvpn/tls-crypt.key
-    openvpn_new_client "ingress"
-  
-    echo "To make this setup persistent, you should run:"
-    echo "create-shell-archive.sh /etc/openvpn/easy-rsa/pki/ca.crt \\"
-    echo "  /etc/openvpn/easy-rsa/pki/private/ca.key \\"
-    echo "  \"/etc/openvpn/easy-rsa/pki/issued/$SERVER_NAME.crt\" \\"
-    echo "  \"/etc/openvpn/easy-rsa/pki/private/$SERVER_NAME.key\" \\"
-    echo "  /etc/openvpn/easy-rsa/pki/crl.pem \\"
-    echo "  /etc/openvpn/easy-rsa/pki/issued/ingress.crt \\"
-    echo "  /etc/openvpn/easy-rsa/pki/private/ingress.key \\"
-    echo "  /etc/openvpn/easy-rsa/pki/index.txt \\"
-    echo "  /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED > ${CF_paramDnsName}-easyrsa-keys.sh"
-    echo "and store that where your secrets are kept. Potentially doable with (if you have the rights to store secrets from here):"
-    echo "store-secret.sh ${CF_paramDnsName}-easyrsa-keys.sh < ${CF_paramDnsName}-easyrsa-keys.sh"
+    openvpn_secrets_store_message
   fi
 
   # Move all the generated files
@@ -59,6 +46,22 @@ openvpn_install_easyrsa() {
 
   # Make cert revocation list readable for non-root
   chmod 644 /etc/openvpn/crl.pem
+}
+openvpn_secrets_store_message() {
+  check_parameters CF_paramDnsName
+  local SERVER_NAME=$(cat /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED)
+  echo "To make this setup persistent, you should run:"
+  echo "create-shell-archive.sh /etc/openvpn/easy-rsa/pki/ca.crt \\"
+  echo "  /etc/openvpn/easy-rsa/pki/private/ca.key \\"
+  echo "  /etc/openvpn/easy-rsa/pki/issued/$SERVER_NAME.crt \\"
+  echo "  /etc/openvpn/easy-rsa/pki/private/$SERVER_NAME.key \\"
+  echo "  /etc/openvpn/easy-rsa/pki/crl.pem \\"
+  echo "  /etc/openvpn/easy-rsa/pki/issued/ingress.crt \\"
+  echo "  /etc/openvpn/easy-rsa/pki/private/ingress.key \\"
+  echo "  /etc/openvpn/easy-rsa/pki/index.txt \\"
+  echo "  /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED > ${CF_paramDnsName}-easyrsa-keys.sh"
+  echo "and store that where your secrets are kept. Potentially doable with (if you have the rights to store secrets from here):"
+  echo "store-secret.sh ${CF_paramDnsName}-easyrsa-keys.sh < ${CF_paramDnsName}-easyrsa-keys.sh"
 }
 openvpn_configure() {
   local SERVER_NAME=$(cat /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED)
@@ -221,6 +224,7 @@ setenv opt block-outside-dns # Prevent Windows 10 DNS leak
 pull-filter ignore "route-gateway"
 verb 3
 EOF
+    openvpn_new_client "ingress"
 }
 function openvpn_add_route() {
   local NET=$1
