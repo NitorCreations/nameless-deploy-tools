@@ -97,4 +97,24 @@ wait_background_jobs() {
     wait $i
   done
 }
+function add_gpg_key() {
+  local key=$1
+  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" || \
+  gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" || \
+  gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
+  gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
+}
+
+function gpg_safe_download() {
+  local URL=$1
+  local DST=$2
+  if python --version | grep "Python 2" > /dev/null; then
+    python -c "from urllib import urlretrieve; urlretrieve('$URL', '$DST')"
+    python -c "from urllib import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
+  else
+    python -c "from urllib.request import urlretrieve; urlretrieve('$URL', '$DST')"
+    python -c "from urllib.request import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
+  fi
+  gpg --verify $DST.sig $DST
+}
 SYSTEM_TYPE=$(system_type)
