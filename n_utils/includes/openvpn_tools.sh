@@ -15,7 +15,7 @@ openvpn_install_easyrsa() {
   rm -f easy-rsa.tgz.sig easy-rsa.tgz
   cd /etc/openvpn/easy-rsa/ || return
   echo "set_var EASYRSA_ALGO ec" >vars
-  echo "set_var EASYRSA_CURVE $CERT_CURVE" >>vars
+  echo "set_var EASYRSA_CURVE prime256v1" >>vars
   fetch-secrets.sh get 500 --optional /etc/openvpn/easy-rsa/${CF_paramDnsName}-easyrsa-keys.sh
   if [ -x /etc/openvpn/easy-rsa/${CF_paramDnsName}-easyrsa-keys.sh ]; then
     /etc/openvpn/easy-rsa/${CF_paramDnsName}-easyrsa-keys.sh
