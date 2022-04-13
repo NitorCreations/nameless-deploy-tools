@@ -6,7 +6,7 @@ if [ -z "$EASYRSA_VERSION" ]; then
   EASYRSA_VERSION=3.0.8
 fi
 
-install_easyrsa() {
+openvpn_install_easyrsa() {
   check_parameters CF_paramDnsName
   add_gpg_key C8FCA3E7F787072CDEB91D2F72964219390D0D0E
   gpg_safe_download "https://github.com/OpenVPN/easy-rsa/releases/download/v$EASYRSA_VERSION/EasyRSA-$EASYRSA_VERSION.tgz" easy-rsa.tgz
@@ -38,7 +38,7 @@ install_easyrsa() {
 
     # Generate tls-crypt key
     openvpn --genkey --secret /etc/openvpn/tls-crypt.key
-    new_ovpn_client "ingress"
+    openvpn_new_client "ingress"
   
     echo "To make this setup persistent, you should run:"
     echo "create-shell-archive.sh /etc/openvpn/easy-rsa/pki/ca.crt \\"
@@ -60,7 +60,7 @@ install_easyrsa() {
   # Make cert revocation list readable for non-root
   chmod 644 /etc/openvpn/crl.pem
 }
-configure_openvpn() {
+openvpn_configure() {
   local SERVER_NAME=$(cat /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED)
   local NIC=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)
   local PROTOCOL=tcp
@@ -222,16 +222,16 @@ pull-filter ignore "route-gateway"
 verb 3
 EOF
 }
-function add_route() {
+function openvpn_add_route() {
   local NET=$1
   local ADDR=$(python -c "from ipaddress import ip_network; print(f\"{ip_network('$NET').network_address}\")")
   local NETMASK=$(python -c "from ipaddress import ip_network; print(f\"{ip_network('$NET').netmask}\")")
   echo "push \"route $ADDR $NETMASK\"" >> /etc/openvpn/server.conf
 }
-function add_domain() {
+function openvpn_add_domain() {
   echo "push \"dhcp-option DOMAIN $1\""  >> /etc/openvpn/server.conf
 }
-function new_ovpn_client() {
+function openvpn_new_client() {
   local CLIENT=$1
   cd /etc/openvpn/easy-rsa/ || return
     ./easyrsa build-client-full "$CLIENT" nopass
