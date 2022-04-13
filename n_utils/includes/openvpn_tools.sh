@@ -38,9 +38,18 @@ install_easyrsa() {
 
     # Generate tls-crypt key
     openvpn --genkey --secret /etc/openvpn/tls-crypt.key
+    new_ovpn_client "ingress"
   
     echo "To make this setup persistent, you should run:"
-    echo "create-shell-archive.sh /etc/openvpn/easy-rsa/pki/ca.crt /etc/openvpn/easy-rsa/pki/private/ca.key \"/etc/openvpn/easy-rsa/pki/issued/$SERVER_NAME.crt\" \"/etc/openvpn/easy-rsa/pki/private/$SERVER_NAME.key\" /etc/openvpn/easy-rsa/pki/crl.pem /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED > ${CF_paramDnsName}-easyrsa-keys.sh"
+    echo "create-shell-archive.sh /etc/openvpn/easy-rsa/pki/ca.crt \\"
+    echo "  /etc/openvpn/easy-rsa/pki/private/ca.key \\"
+    echo "  \"/etc/openvpn/easy-rsa/pki/issued/$SERVER_NAME.crt\" \\"
+    echo "  \"/etc/openvpn/easy-rsa/pki/private/$SERVER_NAME.key\" \\"
+    echo "  /etc/openvpn/easy-rsa/pki/crl.pem \\"
+    echo "  /etc/openvpn/easy-rsa/pki/issued/ingress.crt \\"
+    echo "  /etc/openvpn/easy-rsa/pki/private/ingress.key \\"
+    echo "  /etc/openvpn/easy-rsa/pki/index.txt \\"
+    echo "  /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED > ${CF_paramDnsName}-easyrsa-keys.sh"
     echo "and store that where your secrets are kept. Potentially doable with (if you have the rights to store secrets from here):"
     echo "store-secret.sh ${CF_paramDnsName}-easyrsa-keys.sh < ${CF_paramDnsName}-easyrsa-keys.sh"
   fi
@@ -95,8 +104,8 @@ EOF
   fi
   # Obtain the resolvers from resolv.conf and use them for OpenVPN
   sed -ne 's/^nameserver[[:space:]]\+\([^[:space:]]\+\).*$/\1/p' $RESOLVCONF | while read -r line; do
-    # Copy, if it's a IPv4 |or| if IPv6 is enabled, IPv4/IPv6 does not matter
-    if [[ $line =~ ^[0-9.]*$ ]] || [[ $IPV6_SUPPORT == 'y' ]]; then
+    # Copy, if it's a IPv4
+    if [[ $line =~ ^[0-9.]*$ ]]; then
       echo "push \"dhcp-option DNS $line\"" >>/etc/openvpn/server.conf
     fi
   done
@@ -144,27 +153,33 @@ EOF
 
   # Add iptables rules in two scripts
   mkdir -p /etc/iptables
+
   # Script to add rules
-  echo "#!/bin/sh
+  cat > etc/iptables/add-openvpn-rules.sh << EOF
+#!/bin/sh
 iptables -t nat -I POSTROUTING 1 -s 10.8.0.0/24 -o $NIC -j MASQUERADE
 iptables -I INPUT 1 -i tun0 -j ACCEPT
 iptables -I FORWARD 1 -i $NIC -o tun0 -j ACCEPT
 iptables -I FORWARD 1 -i tun0 -o $NIC -j ACCEPT
-iptables -I INPUT 1 -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/add-openvpn-rules.sh
+iptables -I INPUT 1 -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT
+EOF
 
   # Script to remove rules
-  echo "#!/bin/sh
+  cat > /etc/iptables/rm-openvpn-rules.sh << EOF
+#!/bin/sh
 iptables -t nat -D POSTROUTING -s 10.8.0.0/24 -o $NIC -j MASQUERADE
 iptables -D INPUT -i tun0 -j ACCEPT
 iptables -D FORWARD -i $NIC -o tun0 -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -j ACCEPT
-iptables -D INPUT -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/rm-openvpn-rules.sh
+iptables -D INPUT -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT
+EOF
 
   chmod +x /etc/iptables/add-openvpn-rules.sh
   chmod +x /etc/iptables/rm-openvpn-rules.sh
 
   # Handle the rules via a systemd script
-  echo "[Unit]
+  cat > /etc/systemd/system/iptables-openvpn.service << EOF
+[Unit]
 Description=iptables rules for OpenVPN
 Before=network-online.target
 Wants=network-online.target
@@ -176,7 +191,8 @@ ExecStop=/etc/iptables/rm-openvpn-rules.sh
 RemainAfterExit=yes
 
 [Install]
-WantedBy=multi-user.target" >/etc/systemd/system/iptables-openvpn.service
+WantedBy=multi-user.target
+EOF
 
   # Enable service and apply rules
   systemctl daemon-reload
@@ -202,8 +218,18 @@ tls-version-min 1.2
 tls-cipher TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256
 ignore-unknown-option block-outside-dns
 setenv opt block-outside-dns # Prevent Windows 10 DNS leak
+pull-filter ignore "route-gateway"
 verb 3
 EOF
+}
+function add_route() {
+  local NET=$1
+  local ADDR=$(python -c "from ipaddress import ip_network; print(f\"{ip_network('$NET').network_address}\")")
+  local NETMASK=$(python -c "from ipaddress import ip_network; print(f\"{ip_network('$NET').netmask}\")")
+  echo "push \"route $ADDR $NETMASK\"" >> /etc/openvpn/server.conf
+}
+function add_domain() {
+  echo "push \"dhcp-option DOMAIN $1\""  >> /etc/openvpn/server.conf
 }
 function new_ovpn_client() {
   local CLIENT=$1
