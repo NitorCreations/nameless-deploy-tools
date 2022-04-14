@@ -52,6 +52,7 @@ openvpn_secrets_store_message() {
   local SERVER_NAME=$(cat /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED)
   echo "To make this setup persistent, you should run:"
   echo 'create-shell-archive.sh $(find /etc/openvpn/easy-rsa/pki -type f) \'
+  echo "  /etc/openvpn/tls-crypt.key \\"
   echo "  /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED > ${CF_paramDnsName}-easyrsa-keys.sh"
   echo "and store that where your secrets are kept. Potentially doable with (if you have the rights to store secrets from here):"
   echo "store-secret.sh ${CF_paramDnsName}-easyrsa-keys.sh < ${CF_paramDnsName}-easyrsa-keys.sh"
@@ -217,7 +218,9 @@ setenv opt block-outside-dns # Prevent Windows 10 DNS leak
 pull-filter ignore "route-gateway"
 verb 3
 EOF
+  if [[ ! -f /etc/openvpn/easy-rsa/pki/issued/ingress.crt ]]; then
     openvpn_new_client "ingress"
+  fi
 }
 function openvpn_add_route() {
   local NET=$1
