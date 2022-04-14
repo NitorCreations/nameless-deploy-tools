@@ -51,14 +51,7 @@ openvpn_secrets_store_message() {
   check_parameters CF_paramDnsName
   local SERVER_NAME=$(cat /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED)
   echo "To make this setup persistent, you should run:"
-  echo "create-shell-archive.sh /etc/openvpn/easy-rsa/pki/ca.crt \\"
-  echo "  /etc/openvpn/easy-rsa/pki/private/ca.key \\"
-  echo "  /etc/openvpn/easy-rsa/pki/issued/$SERVER_NAME.crt \\"
-  echo "  /etc/openvpn/easy-rsa/pki/private/$SERVER_NAME.key \\"
-  echo "  /etc/openvpn/easy-rsa/pki/crl.pem \\"
-  echo "  /etc/openvpn/easy-rsa/pki/issued/ingress.crt \\"
-  echo "  /etc/openvpn/easy-rsa/pki/private/ingress.key \\"
-  echo "  /etc/openvpn/easy-rsa/pki/index.txt \\"
+  echo 'create-shell-archive.sh $(find /etc/openvpn/easy-rsa/pki -type f) \'
   echo "  /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED > ${CF_paramDnsName}-easyrsa-keys.sh"
   echo "and store that where your secrets are kept. Potentially doable with (if you have the rights to store secrets from here):"
   echo "store-secret.sh ${CF_paramDnsName}-easyrsa-keys.sh < ${CF_paramDnsName}-easyrsa-keys.sh"
