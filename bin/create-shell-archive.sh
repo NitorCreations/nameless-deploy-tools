@@ -41,6 +41,7 @@ echo '#!/bin/bash -e'
 echo 'umask 077'
 for file ; do
     echo 'echo "Extracting '"$file"'"'
+    echo 'mkdir -p "$(dirname '"'""$file""'"')"'
     [ -e "$file" ]
     echo 'cat > "'"$file"'" << '\'$eof_marker\'' || { echo "ERROR extracting file" ; exit 1 ; }'
     cat "$file"
