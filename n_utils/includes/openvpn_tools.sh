@@ -20,6 +20,8 @@ openvpn_install_easyrsa() {
   if [ -x /etc/openvpn/easy-rsa/${CF_paramDnsName}-easyrsa-keys.sh ]; then
     /etc/openvpn/easy-rsa/${CF_paramDnsName}-easyrsa-keys.sh
     SERVER_NAME=$(cat SERVER_NAME_GENERATED)
+    SERVER_CN=$(cat SERVER_CN_GENERATED)
+    echo "set_var EASYRSA_REQ_CN $SERVER_CN" >>vars
   else
     # Generate a random, alphanumeric identifier of 16 characters for CN and one for server name
     SERVER_CN="cn_$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)"
@@ -53,7 +55,8 @@ openvpn_secrets_store_message() {
   echo "To make this setup persistent, you should run:"
   echo 'create-shell-archive.sh $(find /etc/openvpn/easy-rsa/pki -type f) \'
   echo "  /etc/openvpn/tls-crypt.key \\"
-  echo "  /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED > ${CF_paramDnsName}-easyrsa-keys.sh"
+  echo "  /etc/openvpn/easy-rsa/SERVER_NAME_GENERATED \\"
+  echo "  /etc/openvpn/easy-rsa/SERVER_CN_GENERATED > ${CF_paramDnsName}-easyrsa-keys.sh"
   echo "and store that where your secrets are kept. Potentially doable with (if you have the rights to store secrets from here):"
   echo "store-secret.sh ${CF_paramDnsName}-easyrsa-keys.sh < ${CF_paramDnsName}-easyrsa-keys.sh"
 }
@@ -205,6 +208,7 @@ resolv-retry infinite
 nobind
 persist-key
 persist-tun
+duplicate-cn
 remote-cert-tls server
 verify-x509-name $SERVER_NAME name
 auth SHA256
