@@ -98,8 +98,10 @@ fi
 [ "$BAKERY_ROLES_STACK" ] || BAKERY_ROLES_STACK=bakery-roles
 if ! [ "$SECURITY_GROUP" ]; then
   if [ "$IMAGETYPE" != "windows" ]; then
+    [ "$IMAGE_WAIT" ] || IMAGE_WAIT=1200
     [ "$SG_PARAM" ] || SG_PARAM="bakeInstanceSg"
   else
+    [ "$IMAGE_WAIT" ] || IMAGE_WAIT=1800
     [ "$SG_PARAM" ] || SG_PARAM="bakeWinInstanceSg"
   fi
   SECURITY_GROUP="$(ndt show-stack-params-and-outputs -r $REGION $BAKERY_ROLES_STACK -p $SG_PARAM)"
@@ -315,6 +317,7 @@ if $(which ansible-playbook) \
   -e amibake_instanceprofile=$AMIBAKE_INSTANCEPROFILE \
   -e pause_seconds=$PAUSE_SECONDS \
   -e volume_size=$VOLUME_SIZE \
+  -e image_wait=$IMAGE_WAIT
   -e "$PASSWD_ARG"; then
 
   echo "AMI_ID=$(cat ami-id.txt)" > ami.properties
