@@ -320,7 +320,7 @@ if $(which ansible-playbook) \
   -e amibake_instanceprofile=$AMIBAKE_INSTANCEPROFILE \
   -e pause_seconds=$PAUSE_SECONDS \
   -e volume_size=$VOLUME_SIZE \
-  -e image_wait=$IMAGE_WAIT
+  -e image_wait=$IMAGE_WAIT \
   -e "$PASSWD_ARG"; then
 
   echo "AMI_ID=$(cat ami-id.txt)" > ami.properties
