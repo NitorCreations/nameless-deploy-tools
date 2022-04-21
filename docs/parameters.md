@@ -233,6 +233,10 @@ The name of the ECR repository to push the image to. Defaults to
 `[component]/[paramEnvId]-[orig_docker_name]` where orig_docker_name
 is the name of the subcomponent directory following the `docker-` -prefix.
 
+### `NO_PULL`
+
+If defined, docker will not pull the latest image from the repository.
+Necessary for local container build chains.
 
 ## Automatically resolved parameters
 
