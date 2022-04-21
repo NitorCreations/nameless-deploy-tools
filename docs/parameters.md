@@ -215,6 +215,11 @@ same `bakery-roles` stack defined above.
 The id of the instance profile to set on the baking instance. If set, no
 CloudFormation lookup for this is needed.
 
+### `IMAGE_WAIT`
+
+Timeout for waiting for AMI to be available. Defaults to 1200 seconds for
+linux and 1800 seconds for Windows.
+
 ## Docker baking parameters
 
 Docker baking doesn't have any mandatory parameters. The role assuming
