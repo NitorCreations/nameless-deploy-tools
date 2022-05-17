@@ -76,6 +76,7 @@ def load_project_env():
     _check_enable_profile(vars, current_branch, "iam")
     _check_enable_profile(vars, current_branch, "ndt")
     _check_enable_profile(vars, current_branch, "azure-subscription")
+    _check_enable_profile(vars, current_branch, "sso")
     _check_enable_virtualenv(vars, current_branch)
 
     if "ndt.source." + current_branch + ".env" in vars:
