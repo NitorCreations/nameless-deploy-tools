@@ -104,9 +104,26 @@ def read_profile_expiry(profile):
                 return parser.get(profile, "aws_session_expiration")
     return "1970-01-01T00:00:00.000Z"
 
+def read_sso_profile_expiry(profile):
+    profile_data = get_profile(profile, include_creds=False)
+    if "sso_start_url" in profile_data:
+        home = expanduser("~")
+        sso_cache = join(home, ".aws", "sso", "cache")
+        for filename in os.listdir(sso_cache):
+            full_file = os.path.join(sso_cache, filename)
+            if isfile(full_file) and access(full_file, R_OK):
+                with open(full_file, "r") as cache_file:
+                    cache_json = json.load(cache_file)
+                    if cache_json and "startUrl" in cache_json and cache_json["startUrl"] == profile_data["sso_start_url"] and "expiresAt" in cache_json and cache_json["expiresAt"]:
+                        return cache_json["expiresAt"]
+    return "1970-01-01T00:00:00.000Z"
+
 
 def read_profile_expiry_epoc(profile):
     return _epoc_secs(parse(read_profile_expiry(profile)).replace(tzinfo=tzutc()))
+
+def read_sso_profile_expiry_epoc(profile):
+    return _epoc_secs(parse(read_sso_profile_expiry(profile)).replace(tzinfo=tzutc()))
 
 
 def print_aws_profiles():
@@ -398,6 +415,9 @@ def cli_enable_profile():
         action="store_true",
         help="Microsoft Azure subscription",
     )
+    type_select.add_argument(
+        "-o", "--sso", action="store_true", help="AWS SSO type profile"
+    )
     if "_ARGCOMPLETE" in os.environ:
         parser.add_argument(
             "profile", help="The profile to enable"
@@ -418,6 +438,8 @@ def cli_enable_profile():
         profile_type = "ndt"
     elif args.azure_subscription:
         profile_type = "azure-subscription"
+    elif args.sso:
+        profile_type = "sso"
     else:
         profile_type = resolve_profile_type(args.profile)
     enable_profile(profile_type, args.profile)
@@ -433,6 +455,8 @@ def resolve_profile_type(profile_name):
         profile_type = "adfs"
     elif "lastpass_saml_id" in profile:
         profile_type = "lastpass"
+    elif "sso_start_url" in profile:
+        profile_type = "sso"
     else:
         profile_type = "iam"
     return profile_type
@@ -447,13 +471,15 @@ def enable_profile(profile_type, profile):
     if profile_type == "iam":
         _print_profile_switch(profile)
     elif (
-        profile_type == "azure" or profile_type == "adfs" or profile_type == "lastpass"
+        profile_type == "azure" or profile_type == "adfs" or profile_type == "lastpass" or profile_type == "sso"
     ):
         _print_profile_switch(profile)
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
-        if expiry < now:
+        if expiry < now and profile_type != "sso":
             expiry = read_profile_expiry_epoc(profile)
+        elif expiry < now:
+            expiry = read_sso_profile_expiry_epoc(profile)
         if expiry < now:
             bw_prefix = ""
             bw_entry = None
@@ -507,6 +533,8 @@ def enable_profile(profile_type, profile):
                     + profile
                     + " --no-prompt"
                 )
+            elif profile_type == "sso":
+                print("aws sso login --profile " + profile)
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             print_profile_expiry(profile)
     elif profile_type == "ndt":
