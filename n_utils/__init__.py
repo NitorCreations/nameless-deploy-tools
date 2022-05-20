@@ -16,7 +16,7 @@
 """
 import base64
 
-VERSION = "1.266"
+VERSION = "1.267"
 
 PATH_COMMANDS = [
     "bin/create-shell-archive.sh",
