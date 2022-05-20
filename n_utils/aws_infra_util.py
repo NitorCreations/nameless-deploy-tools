@@ -1240,7 +1240,7 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
         else:
             for k, val in list(data.items()):
                 data[k] = _check_refs(
-                    val, templateFile, path + k + "_", templateParams, resolveRefs
+                    val, templateFile, f"{path}{k}_", templateParams, resolveRefs
                 )
     elif isinstance(data, list):
         for i in range(0, len(data)):
