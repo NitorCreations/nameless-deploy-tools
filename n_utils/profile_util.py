@@ -4,7 +4,7 @@ import re
 import json
 from datetime import datetime
 from os import R_OK, access
-from os.path import exists, expanduser, isfile, join
+from os.path import exists, expanduser, isfile, join, isdir
 
 import argcomplete
 from argcomplete.completers import ChoicesCompleter
@@ -109,13 +109,14 @@ def read_sso_profile_expiry(profile):
     if "sso_start_url" in profile_data:
         home = expanduser("~")
         sso_cache = join(home, ".aws", "sso", "cache")
-        for filename in os.listdir(sso_cache):
-            full_file = os.path.join(sso_cache, filename)
-            if isfile(full_file) and access(full_file, R_OK):
-                with open(full_file, "r") as cache_file:
-                    cache_json = json.load(cache_file)
-                    if cache_json and "startUrl" in cache_json and cache_json["startUrl"] == profile_data["sso_start_url"]:
-                        return cache_json.get("expiresAt", "1970-01-01T00:00:00Z")[:-1] + ".000Z"
+        if isdir(sso_cache):
+            for filename in os.listdir(sso_cache):
+                full_file = os.path.join(sso_cache, filename)
+                if isfile(full_file) and access(full_file, R_OK):
+                    with open(full_file, "r") as cache_file:
+                        cache_json = json.load(cache_file)
+                        if cache_json and "startUrl" in cache_json and cache_json["startUrl"] == profile_data["sso_start_url"]:
+                            return cache_json.get("expiresAt", "1970-01-01T00:00:00Z")[:-1] + ".000Z"
     return "1970-01-01T00:00:00.000Z"
 
 
