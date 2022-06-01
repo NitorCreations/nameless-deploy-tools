@@ -102,7 +102,7 @@ def read_profile_expiry(profile):
                 return parser.get(profile, "aws_expiration")
             elif parser.has_option(profile, "aws_session_expiration"):
                 return parser.get(profile, "aws_session_expiration")
-    return "1970-01-01T00:00:00.000Z"
+    return read_sso_profile_expiry(profile)
 
 def read_sso_profile_expiry(profile):
     profile_data = get_profile(profile, include_creds=False)
@@ -114,17 +114,13 @@ def read_sso_profile_expiry(profile):
             if isfile(full_file) and access(full_file, R_OK):
                 with open(full_file, "r") as cache_file:
                     cache_json = json.load(cache_file)
-                    if cache_json and "startUrl" in cache_json and cache_json["startUrl"] == profile_data["sso_start_url"] and "expiresAt" in cache_json and cache_json["expiresAt"]:
-                        return cache_json["expiresAt"]
+                    if cache_json and "startUrl" in cache_json and cache_json["startUrl"] == profile_data["sso_start_url"]:
+                        return cache_json.get("expiresAt", "1970-01-01T00:00:00Z")[:-1] + ".000Z"
     return "1970-01-01T00:00:00.000Z"
 
 
 def read_profile_expiry_epoc(profile):
     return _epoc_secs(parse(read_profile_expiry(profile)).replace(tzinfo=tzutc()))
-
-def read_sso_profile_expiry_epoc(profile):
-    return _epoc_secs(parse(read_sso_profile_expiry(profile)).replace(tzinfo=tzutc()))
-
 
 def print_aws_profiles():
     """Prints profile names from credentials file (~/.aws/credentials) and the conf file (~/.aws/conf) for autocomplete tools"""
@@ -247,10 +243,14 @@ def profile_expiry_to_env():
     print_profile_expiry(args.profile)
 
 
-def print_profile_expiry(profile):
+def print_profile_expiry(profile, expiry_epoc=None):
     safe_profile = re.sub("[^A-Z0-9]", "_", profile.upper())
-    expiry = read_profile_expiry(profile)
-    epoc = _epoc_secs(parse(expiry).replace(tzinfo=tzutc()))
+    if expiry_epoc:
+        epoc = expiry_epoc
+        expiry = _epoc_to_str(epoc)
+    else:
+        expiry = read_profile_expiry(profile)
+        epoc = _epoc_secs(parse(expiry).replace(tzinfo=tzutc()))
     print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=" + str(epoc))
     print("AWS_SESSION_EXPIRATION_" + safe_profile + "=" + expiry)
     print(
@@ -476,10 +476,8 @@ def enable_profile(profile_type, profile):
         _print_profile_switch(profile)
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
-        if expiry < now and profile_type != "sso":
+        if expiry < now:
             expiry = read_profile_expiry_epoc(profile)
-        elif expiry < now:
-            expiry = read_sso_profile_expiry_epoc(profile)
         if expiry < now:
             bw_prefix = ""
             bw_entry = None
@@ -536,7 +534,7 @@ def enable_profile(profile_type, profile):
             elif profile_type == "sso":
                 print("aws sso login --profile " + profile)
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
-            print_profile_expiry(profile)
+            print_profile_expiry(profile, expiry_epoc=expiry)
     elif profile_type == "ndt":
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
@@ -573,7 +571,7 @@ def enable_profile(profile_type, profile):
             command.append(profile_data["ndt_role_arn"])
             print(" ".join(command))
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
-            print_profile_expiry(profile)
+            print_profile_expiry(profile, expiry_epoc=expiry)
         _print_profile_switch(profile)
     elif profile_type == "azure-subscription":
         if not (
@@ -607,6 +605,9 @@ def _print_profile_switch(profile):
             print(param + '="' + profile + '";')
         print("export " + " ".join(set_env) + ";")
 
+
+def _epoc_to_str(epoc):
+    return datetime.utcfromtimestamp(epoc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 def _epoc_secs(d):
     return int(
