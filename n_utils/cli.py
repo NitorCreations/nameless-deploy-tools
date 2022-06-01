@@ -999,10 +999,12 @@ def cli_load_parameters():
         or args.docker
         or args.azure
         or args.connect
+        or args.cdk
+        or args.terraform
         or not isinstance(args.image, NoneType)
     ) and not args.component:
         parser.error(
-            "image, stack, doker, serverless, azure or connect do not make sense without component"
+            "image, stack, doker, serverless, azure, connect, cdk or terraform do not make sense without component"
         )
     filter_arr = []
     if args.filter:
