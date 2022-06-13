@@ -479,6 +479,8 @@ def enable_profile(profile_type, profile):
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
         if expiry < now:
             expiry = read_profile_expiry_epoc(profile)
+            if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
+                del os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile]
         if expiry < now:
             bw_prefix = ""
             bw_entry = None
