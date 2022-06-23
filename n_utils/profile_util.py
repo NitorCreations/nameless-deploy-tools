@@ -91,17 +91,18 @@ def get_profile(profile, include_creds=True):
     return ret
 
 
-def read_profile_expiry(profile):
-    home = expanduser("~")
-    credentials = join(home, ".aws", "credentials")
-    if exists(credentials):
-        parser = ConfigParser()
-        with open(credentials) as credfile:
-            parser.read_file(credfile)
-            if parser.has_option(profile, "aws_expiration"):
-                return parser.get(profile, "aws_expiration")
-            elif parser.has_option(profile, "aws_session_expiration"):
-                return parser.get(profile, "aws_session_expiration")
+def read_profile_expiry(profile, profile_type=None):
+    if profile_type != "sso":
+        home = expanduser("~")
+        credentials = join(home, ".aws", "credentials")
+        if exists(credentials):
+            parser = ConfigParser()
+            with open(credentials) as credfile:
+                parser.read_file(credfile)
+                if parser.has_option(profile, "aws_expiration"):
+                    return parser.get(profile, "aws_expiration")
+                elif parser.has_option(profile, "aws_session_expiration"):
+                    return parser.get(profile, "aws_session_expiration")
     return read_sso_profile_expiry(profile)
 
 def read_sso_profile_expiry(profile):
@@ -120,8 +121,8 @@ def read_sso_profile_expiry(profile):
     return "1970-01-01T00:00:00.000Z"
 
 
-def read_profile_expiry_epoc(profile):
-    return _epoc_secs(parse(read_profile_expiry(profile)).replace(tzinfo=tzutc()))
+def read_profile_expiry_epoc(profile, profile_type=None):
+    return _epoc_secs(parse(read_profile_expiry(profile, profile_type=profile_type)).replace(tzinfo=tzutc()))
 
 def print_aws_profiles():
     """Prints profile names from credentials file (~/.aws/credentials) and the conf file (~/.aws/conf) for autocomplete tools"""
@@ -478,7 +479,7 @@ def enable_profile(profile_type, profile):
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
         if expiry < now:
-            expiry = read_profile_expiry_epoc(profile)
+            expiry = read_profile_expiry_epoc(profile, profile_type=profile_type)
             if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
                 del os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile]
         if expiry < now:
