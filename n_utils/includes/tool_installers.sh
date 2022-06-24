@@ -210,7 +210,7 @@ install_androidsdk() {
   unzip -d /opt/android platform-tools-linux.zip
   rm -f commandlinetools-linux_latest.zip platform-tools-linux.zip
   mkdir /opt/android/cmdline-tools/latest
-  mv /opt/android/cmdline-tools/* /opt/android/cmdline-tools/latest
+  mv /opt/android/cmdline-tools/* /opt/android/cmdline-tools/latest ||:
   cat > /etc/profile.d/android.sh << MARKER
 export PATH="\$PATH:/opt/android/platform-tools:/opt/android/cmdline-tools/latest/bin"
 MARKER
