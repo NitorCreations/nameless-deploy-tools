@@ -35,6 +35,12 @@ fi
 if [ -z "$ACTIVEGATE_VERSION" ]; then
   ACTIVEGATE_VERSION=1.215.163
 fi
+if [ -z "$FLUTTER_VERSION" ]; then
+  FLUTTER_VERSION=3.0.3
+fi
+if [ -z "$FLUTTER_CSUM" ]; then
+  FLUTTER_CSUM=f3806787f3afc379769024f4f9b20c243811881a72bc9c6e62bfc2fd50676c48
+fi
 
 # Make sure we get logging
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null ; then
@@ -194,4 +200,35 @@ enable_systemd_portforward() {
   checkmodule -M -m -o $MODULE $SOURCE
   semodule_package -o $PACKAGE -m $MODULE
   semodule -i $PACKAGE
+}
+install_androidsdk() {
+  source $(n-include common_tools.sh)
+  safe_download https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip 2ccbda4302db862a28ada25aa7425d99dce9462046003c1714b059b5c47970d8 commandlinetools-linux_latest.zip
+  safe_download https://dl.google.com/android/repository/platform-tools_r33.0.2-linux.zip defcee9da1f22fe5c2324ec0edf612122f1c6ffe01a7b124191e07fcc74f8fff platform-tools-linux.zip
+  mkdir /opt/android
+  unzip -d /opt/android commandlinetools-linux_latest.zip
+  unzip -d /opt/android platform-tools-linux.zip
+  rm -f commandlinetools-linux_latest.zip platform-tools-linux.zip
+  mkdir /opt/android/cmdline-tools/latest
+  mv /opt/android/cmdline-tools/* /opt/android/cmdline-tools/latest
+  cat > /etc/profile.d/android.sh << MARKER
+export PATH="\$PATH:/opt/android/platform-tools:/opt/android/cmdline-tools/latest/bin"
+MARKER
+  chmod 755 /etc/profile.d/android.sh
+  source /etc/profile.d/android.sh
+  yes | sdkmanager --sdk_root=/opt/android "platform-tools" "platforms;android-31" "platforms;android-30" "platforms;android-29" "emulator" "build-tools;33.0.0"
+  yes | sdkmanager --sdk_root=/opt/android --licenses
+}
+install_flutter() {
+  source $(n-include common_tools.sh)
+  safe_download https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$FLUTTER_VERSION-stable.tar.xz $FLUTTER_CSUM flutter_linux-stable.tar.xz
+  tar -xJvf flutter_linux-stable.tar.xz -C /opt/
+  rm -f flutter_linux-stable.tar.xz
+  cat > /etc/profile.d/flutter.sh << MARKER
+export PATH="\$PATH:/opt/flutter/bin"
+MARKER
+  chmod 755 /etc/profile.d/flutter.sh
+  source /etc/profile.d/flutter.sh
+  flutter precache
+  yes | flutter doctor --android-licenses
 }
