@@ -6,7 +6,7 @@ setup-fetch-secrets.sh vault
 
 pip install ansible pywinrm pylint wmi s3cmd
 
-npm i -g gulp browserify jshint
+npm i --no-update-notifier --no-fund --no-audit -g gulp browserify jshint
 
 install_cftools
 install_lein

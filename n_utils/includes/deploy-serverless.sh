@@ -38,7 +38,7 @@ fi
 usage() {
   echo "usage: ndt deploy-serverless [-d] [-h] component serverless-name" >&2
   echo "" >&2
-  echo "Exports ndt parameters into component/serverless-name/variables.yml, runs npm i in the" >&2
+  echo "Exports ndt parameters into component/serverless-name/variables.yml, runs npm ci in the" >&2
   echo "serverless project and runs sls deploy -s \$paramEnvId for the same" >&2
   echo "If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory," >&2
   echo "they will be executed before and after the deployment, respectively." >&2
@@ -50,7 +50,7 @@ usage() {
   echo "                  you would give sender" >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i"  >&2
+  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm ci"  >&2
   echo "  -v, --verbose verbose - verbose output from serverless framework"  >&2
   echo "  -h, --help    show this help message and exit"  >&2
   if "$@"; then
@@ -112,7 +112,7 @@ if [ -z "$SKIP_NPM" -o "$SKIP_NPM" = "n" ]; then
   if [ -n "$UNSAFE_NPM" -a "$UNSAFE_NPM" != "n" ]; then
     UNSAFE="--unsafe-perm"
   fi
-  npm i $UNSAFE
+  npm ci --no-update-notifier --no-fund --no-audit $UNSAFE
 fi
 
 if [ -n "$DRYRUN" ]; then

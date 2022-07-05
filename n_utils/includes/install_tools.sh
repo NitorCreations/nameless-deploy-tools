@@ -85,19 +85,19 @@ function install_awscliv2() {
   return 0
 }
 
-python -m pip install -U pip wheel --ignore-installed
+python -m pip install --disable-pip-version-check -U pip wheel --ignore-installed
 install_awscliv2
 # Setuptools installed with pip breaks the platform python setup on CentOS 8
 if [ "$OS_TYPE" = "centos" -a "$OS_VERSION" = "8" ]; then
-  pip install -U boto3
+  pip install --disable-pip-version-check -U boto3
 else
-  pip install -U boto3 setuptools
+  pip install --disable-pip-version-check -U boto3 setuptools
 fi
 # If alpha, get first all non-alpha dependencies
-pip install -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" --ignore-installed
+pip install --disable-pip-version-check -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" --ignore-installed
 if [ "$1" = "alpha" ]; then
   # Upgrade just ndt to alpha
-  pip install -U --pre --no-deps "nameless-deploy-tools" --ignore-installed
+  pip install --disable-pip-version-check -U --pre --no-deps "nameless-deploy-tools" --ignore-installed
 fi
 aws configure set default.s3.signature_version s3v4
 rm -f /opt/nameless/instance-data.json

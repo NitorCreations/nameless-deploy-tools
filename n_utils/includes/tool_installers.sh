@@ -68,7 +68,7 @@ install_cftools() {
     curl -s https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar -xzvf -
   fi
   cd aws-cfn-bootstrap-*
-  pip install .
+  pip install --disable-pip-version-check .
   cd ..
 }
 install_maven() {

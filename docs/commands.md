@@ -406,7 +406,7 @@ options:
 ```bash
 usage: ndt deploy-serverless [-d] [-h] component serverless-name
 
-Exports ndt parameters into component/serverless-name/variables.yml, runs npm i in the
+Exports ndt parameters into component/serverless-name/variables.yml, runs npm ci in the
 serverless project and runs sls deploy -s $paramEnvId for the same
 If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
 they will be executed before and after the deployment, respectively.
@@ -418,7 +418,7 @@ positional arguments:
                   you would give sender
 
 optional arguments:
-  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm ci
   -v, --verbose verbose - verbose output from serverless framework
   -h, --help    show this help message and exit
 ```
