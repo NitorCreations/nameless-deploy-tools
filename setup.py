@@ -38,7 +38,6 @@ setup(
         "console_scripts": CONSOLESCRIPTS,
     },
     install_requires=[
-        "future",
         "pyaml",
         "boto3",
         "requests",
