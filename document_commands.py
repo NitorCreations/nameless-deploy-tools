@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
 from n_utils import COMMAND_MAPPINGS, PATH_COMMANDS, NDT_AND_CONSOLE
 from subprocess import Popen, PIPE
 import locale

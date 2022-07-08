@@ -21,7 +21,8 @@ if [ -z "$DEPLOYTOOLS_VERSION" ]; then
   fi
 fi
 if [ -z "$MAVEN_VERSION" ]; then
-  MAVEN_VERSION=3.6.3
+  MAVEN_VERSION=3.8.6
+  MAVEN_CHECKSUM=c7047a48deb626abf26f71ab3643d296db9b1e67f1faa7d988637deac876b5a9
 fi
 if [ -z "$PHANTOMJS_VERSION" ]; then
   PHANTOMJS_VERSION=2.1.1
@@ -36,10 +37,11 @@ if [ -z "$ACTIVEGATE_VERSION" ]; then
   ACTIVEGATE_VERSION=1.215.163
 fi
 if [ -z "$FLUTTER_VERSION" ]; then
-  FLUTTER_VERSION=3.0.3
+  FLUTTER_VERSION=3.0.4
+  FLUTTER_CSUM=be1dd08cb18504ddf6d435044fd5e162a4a420b8c48fe66a0002eefe6c58fa0a
 fi
-if [ -z "$FLUTTER_CSUM" ]; then
-  FLUTTER_CSUM=f3806787f3afc379769024f4f9b20c243811881a72bc9c6e62bfc2fd50676c48
+if [ -z "$LEIN_COMMIT" ]; then
+  LEIN_COMMIT=ef5ab97f058e8cb01e9c6a5a1cb6aa45c3b01d27 # 2.9.8
 fi
 
 # Make sure we get logging
@@ -48,7 +50,7 @@ if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/nul
 fi
 
 install_lein() {
-  wget -O /usr/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+  wget -O /usr/bin/lein https://codeberg.org/leiningen/leiningen/raw/commit/ef5ab97f058e8cb01e9c6a5a1cb6aa45c3b01d27/bin/lein
   chmod 755 /usr/bin/lein
 }
 install_phantomjs() {
@@ -62,19 +64,22 @@ install_yarn() {
   wget -O - https://yarnpkg.com/latest.tar.gz | tar --strip-components=1 -C /opt/yarn -xzv
 }
 install_cftools() {
-  if python --version | grep "Python 3" > /dev/null; then
-    curl -s https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-py3-latest.tar.gz | tar -xzvf -
+  if python --version | grep -q "Python 3"; then
+    wget -O - https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-py3-latest.tar.gz | tar -xzvf -
   else
-    curl -s https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar -xzvf -
+    wget -O - https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar -xzvf -
   fi
   cd aws-cfn-bootstrap-*
   pip install --disable-pip-version-check .
   cd ..
 }
 install_maven() {
-  wget -O - https://www-eu.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzvf - -C /opt/
+  source $(n-include common_tools.sh)
+  safe_download https://www-eu.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz MAVEN_CHECKSUM maven.tar.gz
+  tar -xzvf maven.tar.gz -C /opt/
+  rm maven.tar.gz
   ln -snf /opt/apache-maven-$MAVEN_VERSION /opt/maven
-  ln -snf  /opt/maven/bin/mvn /usr/bin/mvn
+  ln -snf /opt/maven/bin/mvn /usr/bin/mvn
 }
 install_nexus() {
   wget -O - https://sonatype-download.global.ssl.fastly.net/nexus/oss/nexus-$NEXUS_VERSION-bundle.tar.gz | tar -xzf - -C /opt/nexus
@@ -176,7 +181,7 @@ install_dynatrace_oneagent() {
 
 install_dynatrace_activegate() {
   # Requires secrets dynatrace.apikey and dt-root.cert.pem (from dynatrace web installation instructions) to be stored in secrets storage
-  wget  -O Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh \
+  wget -O Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh \
     "https://bmq38893.live.dynatrace.com/api/v1/deployment/installer/gateway/unix/latest?arch=x86&flavor=default" \
     --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
 
