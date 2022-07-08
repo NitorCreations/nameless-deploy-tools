@@ -3,6 +3,6 @@ $output = "C:\nameless\VCForPython27.msi"
 (New-Object System.Net.WebClient).DownloadFile($url, $output)
 Start-Process msiexec -ArgumentList @("/i", "C:\nameless\VCForPython27.msi", "/passive", "/quiet") -NoNewWindow -Wait
 
-python.exe -m pip install -U pip
-python.exe -m pip install -U setuptools certifi
-pip install -U boto3 nameless-deploy-tools
+python.exe -m pip install --disable-pip-version-check -U pip
+python.exe -m pip install --disable-pip-version-check -U setuptools certifi
+pip install --disable-pip-version-check -U boto3 nameless-deploy-tools

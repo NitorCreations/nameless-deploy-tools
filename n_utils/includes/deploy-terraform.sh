@@ -52,7 +52,7 @@ usage() {
   echo "                  you would give sender" >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i"  >&2
+  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing"  >&2
   echo "  -h, --help    show this help message and exit"  >&2
   if "$@"; then
     echo "" >&2
