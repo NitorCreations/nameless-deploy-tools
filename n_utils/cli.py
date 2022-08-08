@@ -283,10 +283,22 @@ def update_stack():
         help="Do not actually deploy anything, but just "
         + "assemble the json and associated parameters",
     )
+    parser.add_argument(
+        "-r",
+        "--disable-rollback",
+        action="store_true",
+        help="Disable stack rollback on failure",
+    )
     args = parser.parse_args()
     if not os.path.isfile(args.yaml_template):
         parser.error(args.yaml_template + " not found")
-    cf_deploy.deploy(args.stack_name, args.yaml_template, args.region, args.dry_run)
+    cf_deploy.deploy(
+        args.stack_name,
+        args.yaml_template,
+        args.region,
+        args.dry_run,
+        disable_rollback=args.disable_rollback,
+    )
     return
 
 
