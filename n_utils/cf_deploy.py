@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import collections
+from dis import dis
 import hashlib
 import locale
 import os
@@ -112,7 +113,8 @@ def create_stack(stack_name, template, params, session=None, tags=None, disable_
     params = get_template_arguments(stack_name, template, params)
     if tags:
         params["Tags"] = tags
-    cloudformation(session=session).create_stack(**params, DisableRollback=disable_rollback)
+    params["DisableRollback"] = disable_rollback
+    cloudformation(session=session).create_stack(**params)
     return
 
 
