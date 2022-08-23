@@ -20,6 +20,7 @@ import inspect
 import json
 import locale
 import os
+import profile
 import re
 import six
 import sys
@@ -37,6 +38,7 @@ from ec2_utils.utils import best_effort_stacks
 from pygments import highlight, lexers, formatters
 from pygments.styles import get_style_by_name
 from threadlocal_aws import region, regions
+from threadlocal_aws.clients import sso
 
 from n_utils import (
     aws_infra_util,
@@ -72,7 +74,7 @@ from n_utils.mfa_utils import (
 from n_utils.ndt import find_include, find_all_includes, include_dirs
 from n_utils.ndt_project import Project
 from n_utils.ndt_project import list_jobs, list_components, upsert_codebuild_projects
-from n_utils.profile_util import update_profile
+from n_utils.profile_util import get_profile, read_profiles, read_sso_profile, resolve_profile_type, update_profile, _epoc_to_str
 from n_utils.tf_utils import pull_state, jmespath_var, flat_state
 from n_utils.az_util import fetch_properties
 from n_utils.utils import (
@@ -425,19 +427,53 @@ def session_to_env():
         call_args["token_arn"] = mfa_read_token(args.token_name)["token_arn"]
         call_args["token_value"] = mfa_generate_code(args.token_name)
 
-    creds = session_token(**call_args)
-    if creds:
-        print('AWS_ACCESS_KEY_ID="' + creds["AccessKeyId"] + '"')
-        print('AWS_SECRET_ACCESS_KEY="' + creds["SecretAccessKey"] + '"')
-        print('AWS_SESSION_TOKEN="' + creds["SessionToken"] + '"')
-        print(
-            'AWS_SESSION_EXPIRATION="'
-            + creds["Expiration"].strftime("%a, %d %b %Y %H:%M:%S +0000")
-            + '"'
-        )
+    if "AWS_PROFILE" in os.environ:
+        profile_type = resolve_profile_type(os.environ["AWS_PROFILE"])
+    if profile_type == "sso":
+        profile = get_profile(os.environ["AWS_PROFILE"])
+        cache_json = read_sso_profile(os.environ["AWS_PROFILE"])
+        if "accessToken" in cache_json and cache_json["accessToken"]:
+            access_token = cache_json["accessToken"]
+            creds = sso(region=profile["sso_region"]).get_role_credentials(
+                roleName=profile["sso_role_name"],
+                accountId=profile["sso_account_id"],
+                accessToken=access_token
+            )
+            role_creds = creds["roleCredentials"]
+            print(f"AWS_ACCESS_KEY_ID='{role_creds['accessKeyId']}'")
+            print(f"AWS_SECRET_ACCESS_KEY='{role_creds['secretAccessKey']}'")
+            print(f"AWS_SESSION_TOKEN='{role_creds['sessionToken']}'")
+            print(
+                'AWS_SESSION_EXPIRATION="'
+                + _epoc_to_str(role_creds["expiration"] / 1000)
+                + '"'
+            )
+            print(
+                "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
+            )
+    elif profile_type in ["azure", "adfs", "lastpass"]:
+        profile = get_profile(os.environ["AWS_PROFILE"], include_creds=True)
+        print(f"AWS_ACCESS_KEY_ID='{profile['aws_access_key_id']}'")
+        print(f"AWS_SECRET_ACCESS_KEY='{profile['aws_secret_access_key']}'")
+        print(f"AWS_SESSION_TOKEN='{profile['aws_session_token']}'")
+        print(f"AWS_SESSION_EXPIRATION='{profile['aws_session_expiration']}'")
         print(
             "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
         )
+    else:
+        creds = session_token(**call_args)
+        if creds:
+            print('AWS_ACCESS_KEY_ID="' + creds["AccessKeyId"] + '"')
+            print('AWS_SECRET_ACCESS_KEY="' + creds["SecretAccessKey"] + '"')
+            print('AWS_SESSION_TOKEN="' + creds["SessionToken"] + '"')
+            print(
+                'AWS_SESSION_EXPIRATION="'
+                + creds["Expiration"].strftime("%a, %d %b %Y %H:%M:%S +0000")
+                + '"'
+            )
+            print(
+                "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
+            )
 
 
 def clean_snapshots():
