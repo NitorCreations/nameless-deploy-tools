@@ -10,7 +10,7 @@ usage: ndt account-id [-h]
 Get current account id. Either from instance metadata or current cli
 configuration.
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -26,7 +26,7 @@ positional arguments:
   file        The file to modify
   username    The username to access the server.
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
   --id ID     Optional id for the server. Default is deploy. One server with
               this id is added and another with \'-release\' appended
@@ -45,7 +45,7 @@ current context for use: eval $(ndt assume-role
 positional arguments:
   role_arn              The ARN of the role to assume
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -t TOKEN_NAME, --mfa-token TOKEN_NAME
                         Name of MFA token to use
@@ -63,7 +63,7 @@ usage: ndt assumed-role-name [-h]
 
 Read the name of the assumed role if currently defined
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -75,7 +75,7 @@ usage: ndt aws-config-to-json [-h]
 Prints aws config file contents as json for further parsing and use in other
 tools
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -89,7 +89,7 @@ Ensures that an azure resource group exists
 positional arguments:
   name                  The name of the resource group to make sure exists
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -l LOCATION, --location LOCATION
                         The location for the resource group. If not defined
@@ -108,7 +108,7 @@ Ensures that an azure resource group exists
 positional arguments:
   name        The name of the resource group to make sure exists
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -120,7 +120,7 @@ usage: ndt azure-location [-h]
 Resolve an azure location based on \'AZURE_LOCATION\' enviroment variable, local
 project or az cli configuration. Defaults to \'northeurope\'
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -134,7 +134,7 @@ Lists the parameters in an Azure Resource Manager template
 positional arguments:
   template    The json template to scan for parameters
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -186,7 +186,7 @@ fields aws_access_key_id, aws_secret_access_key and profile_name
 positional arguments:
   entryname   The name of the bitwarden entry to get
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -201,7 +201,7 @@ positional arguments:
   stack_name  Name of the stack to delete
   region      The region to delete the stack from
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -215,7 +215,7 @@ Tail logs from the log group of a cloudformation stack
 positional arguments:
   stack_name            Name of the stack to watch logs for
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -s START, --start START
                         Start time in seconds since epoc
@@ -231,7 +231,7 @@ Get a parameter value from the stack
 positional arguments:
   parameter   The name of the parameter to print
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -242,7 +242,7 @@ usage: ndt cf-logical-id [-h]
 
 Get the logical id that is expecting a signal from this instance
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -253,7 +253,7 @@ usage: ndt cf-region [-h]
 
 Get region of the stack that created this instance
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -268,7 +268,7 @@ either given on the command line or resolved from CloudFormation tags
 positional arguments:
   status                Status to indicate: SUCCESS | FAILURE
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -r RESOURCE, --resource RESOURCE
                         Logical resource name to signal. Looked up from
@@ -282,7 +282,7 @@ usage: ndt cf-stack-id [-h]
 
 Get id of the stack the creted this instance
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -293,7 +293,7 @@ usage: ndt cf-stack-name [-h]
 
 Get name of the stack that created this instance
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -301,7 +301,8 @@ options:
 
 ```bash
 usage: ndt create-account [-h] [-d] [-o ORGANIZATION_ROLE_NAME]
-                          [-r TRUST_ROLE_NAME] [-a [TRUSTED_ACCOUNTS ...]]
+                          [-r TRUST_ROLE_NAME]
+                          [-a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]]
                           [-t TOKEN_NAME]
                           email account_name
 
@@ -311,14 +312,14 @@ positional arguments:
   email                 Email for account root
   account_name          Organization unique account name
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -d, --deny-billing-access
   -o ORGANIZATION_ROLE_NAME, --organization-role-name ORGANIZATION_ROLE_NAME
                         Role name for admin access from parent account
   -r TRUST_ROLE_NAME, --trust-role-name TRUST_ROLE_NAME
                         Role name for admin access from parent account
-  -a [TRUSTED_ACCOUNTS ...], --trusted-accounts [TRUSTED_ACCOUNTS ...]
+  -a [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]], --trusted-accounts [TRUSTED_ACCOUNTS [TRUSTED_ACCOUNTS ...]]
                         Account to trust with user management
   -t TOKEN_NAME, --mfa-token TOKEN_NAME
                         Name of MFA token to use
@@ -334,7 +335,7 @@ Create a stack from a template
 positional arguments:
   template
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
   -y, --yes   Answer yes or use default to all questions
 ```
@@ -395,7 +396,7 @@ positional arguments:
   contactflowname  the name of the connect subcomponent directory that has the
                    contact flow template
 
-options:
+optional arguments:
   -h, --help       show this help message and exit
   -d, --dryrun     Dry run - don\'t do changes but show what would happen of
                    deployed
@@ -466,7 +467,7 @@ positional arguments:
                   you would give sender
 
 optional arguments:
-  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing
   -h, --help    show this help message and exit
 ```
 
@@ -477,7 +478,7 @@ usage: ndt detach-volume [-h] (-m MOUNT_PATH | -i VOLUME_ID | -d DEVICE) [-x]
 
 Create a snapshot of a volume identified by it\'s mount path
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -m MOUNT_PATH, --mount-path MOUNT_PATH
                         Mount point of the volume to be detached
@@ -500,7 +501,7 @@ one of specified tag values
 positional arguments:
   tags                  The tag values to select deleted snapshots
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -r REGION, --region REGION
                         The region to delete snapshots from. Can also be set
@@ -521,7 +522,7 @@ Get the value of a tag for an ec2 instance
 positional arguments:
   name        The name of the tag to get
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -535,7 +536,7 @@ Get userdata defined for an instance into a file
 positional arguments:
   file        File to write userdata into. \'-\' for stdout
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -546,7 +547,7 @@ usage: ndt ec2-instance-id [-h]
 
 Get id for instance
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -558,7 +559,7 @@ usage: ndt ec2-region [-h]
 Get current default region. Defaults to the region of the instance on ec2 if
 not otherwise defined.
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -570,7 +571,7 @@ usage: ndt ec2-wait-for-metadata [-h] [--timeout TIMEOUT]
 Waits for metadata service to be available. All errors are ignored until time
 expires or a socket can be established to the metadata service
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   --timeout TIMEOUT, -t TIMEOUT
                         Maximum time to wait in seconds for the metadata
@@ -587,7 +588,7 @@ Ensure that an ECR repository exists and get the uri and login token for it
 positional arguments:
   name        The name of the ecr repository to verify
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -601,7 +602,7 @@ Get the repo uri for a named docker
 positional arguments:
   name        The name of the ecr repository
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -616,7 +617,7 @@ role profiles are supported
 positional arguments:
   profile               The profile to enable
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -i, --iam             IAM user type profile
   -a, --azure           Azure login type profile
@@ -642,7 +643,7 @@ Export AWS Connect contact flow from an existing instance
 positional arguments:
   name                  The name of the contact flow to export
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -c COMPONENT, --component COMPONENT
                         the component directory where the connect contact flow
@@ -667,7 +668,7 @@ Gets a list of images given a bake job name
 positional arguments:
   job_name    The job name to look for
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -684,7 +685,7 @@ from vault
 positional arguments:
   file                  File to interpolate
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -s STACK, --stack STACK
                         Stack name for values. Automatically resolved on ec2
@@ -710,7 +711,7 @@ yaml with for example scripts externalized
 positional arguments:
   file            File to parse
 
-options:
+optional arguments:
   -h, --help      show this help message and exit
   --colorize, -c  Colorize output
 ```
@@ -725,7 +726,7 @@ Get the latest snapshot with a given tag
 positional arguments:
   tag         The tag to find snapshots with
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -736,7 +737,7 @@ usage: ndt list-components [-h] [-j] [-b BRANCH]
 
 Prints the components in a branch, by default the current branch
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -j, --json            Print in json format.
   -b BRANCH, --branch BRANCH
@@ -753,7 +754,7 @@ usage: ndt list-connect-contact-flows [-h] [-c COMPONENT] [-f CONTACTFLOWNAME]
 
 List existing AWS Connect contact flows in an instance
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -c COMPONENT, --component COMPONENT
                         the component directory where the connect contact flow
@@ -782,7 +783,7 @@ positional arguments:
   arrayname   The name in the json object givento the array
   file        The file to parse
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -794,7 +795,7 @@ usage: ndt list-jobs [-h] [-e] [-j] [-b BRANCH] [-c COMPONENT]
 Prints a line for every runnable job in this git repository, in all branches
 and optionally exports the properties for each under \'$root/job-properties/
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -e, --export-job-properties
                         Set if you want the properties of all jobs into files
@@ -855,7 +856,7 @@ Load parameters from infra*.properties files in the order:
 positional arguments:
   component             Compenent to descend into
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   --branch BRANCH, -b BRANCH
                         Branch to get active parameters for
@@ -898,7 +899,7 @@ Get logs from multiple CloudWatch log groups and possibly filter them.
 positional arguments:
   log_group_pattern     Regular expression to filter log groups with
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -f FILTER, --filter FILTER
                         CloudWatch filter pattern
@@ -926,7 +927,7 @@ positional arguments:
   token_name            Name for the token. Use this to refer to the token
                         later with the assume-role command.
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -i, --interactive     Ask for token details interactively.
   -b BITWARDEN_ENTRY, --bitwarden-entry BITWARDEN_ENTRY
@@ -950,7 +951,7 @@ backup, provide an encryption secret. To decrypt an existing backup, use
 positional arguments:
   backup_secret         Secret to use for encrypting or decrypts the backup.
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -d FILE, --decrypt FILE
                         Outputs a decrypted token backup read from given file.
@@ -966,7 +967,7 @@ Generates a TOTP code using an MFA token.
 positional arguments:
   token_name  Name of the token to use.
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -981,7 +982,7 @@ directory
 positional arguments:
   token_name  Name of the token to delete.
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -995,7 +996,7 @@ Generates a QR code to import a token to other devices.
 positional arguments:
   token_name  Name of the token to use.
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1010,7 +1011,7 @@ file (~/.aws/conf) for autocomplete tools
 positional arguments:
   prefix      Prefix of profiles to print
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1042,7 +1043,7 @@ environment variables
 positional arguments:
   profile     The profile to read expiry info from
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1057,7 +1058,7 @@ able environment variables
 positional arguments:
   profile               The profile to read profile info from
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -t, --target-role     Output also azure_default_role_arn
   -r ROLE_ARN, --role-arn ROLE_ARN
@@ -1076,7 +1077,7 @@ positional arguments:
   image_id    The image to promote
   target_job  The job name to promote the image to
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1090,7 +1091,7 @@ Read and print a file and keep following the end for new data
 positional arguments:
   file        File to follow
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1106,7 +1107,7 @@ https://github.com/NitorCreations/adfs-aws-login).
 positional arguments:
   profile     The profile to read expiry info from
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1118,7 +1119,7 @@ usage: ndt region [-h]
 Get current default region. Defaults to the region of the instance on ec2 if
 not otherwise defined.
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1134,7 +1135,7 @@ positional arguments:
   dns_name              The name to update in route 53
   hosted_zone           The name of the hosted zone to update
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -t TTL, --ttl TTL     Time to live for the record. 60 by default
   -p PRIVATE_IP, --private-ip PRIVATE_IP
@@ -1148,7 +1149,7 @@ usage: ndt session-to-env [-h] [-t TOKEN_NAME] [-d DURATION_MINUTES]
 
 Export current session as environment variables
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -t TOKEN_NAME, --token-name TOKEN_NAME
                         Name of the mfs token to use.
@@ -1166,7 +1167,7 @@ Setup the command line environment to define an aws cli profile with the given
 name and credentials. If an identically named profile exists, it will not be
 overwritten.
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -n NAME, --name NAME  Name for the profile to create
   -k KEY_ID, --key-id KEY_ID
@@ -1192,7 +1193,7 @@ positional arguments:
   ami_name    The name for the ami
   account_id  The account ids to share ami to
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1207,7 +1208,7 @@ positional arguments:
   component             The component containg the azure subcomponet
   azure                 The name of the azure subcomponent
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -p PARAMETER, --parameter PARAMETER
                         Name of paremeter if only one parameter required
@@ -1224,7 +1225,7 @@ Show stack parameters and outputs as a single json documents
 positional arguments:
   stack_name            The stack name to show
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -r REGION, --region REGION
                         Region for the stack to show
@@ -1244,7 +1245,7 @@ positional arguments:
   component             The component containg the terraform subcomponet
   terraform             The name of the terraform subcomponent
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -j JMESPATH, --jmespath JMESPATH
                         Show just a matching jmespath value
@@ -1255,8 +1256,8 @@ options:
 ## `ndt snapshot-from-volume`
 
 ```bash
-usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS ...]] [-t [TAGS ...]]
-                                [-i]
+usage: ndt snapshot-from-volume [-h] [-w] [-c [COPYTAGS [COPYTAGS ...]]]
+                                [-t [TAGS [TAGS ...]]] [-i]
                                 tag_key tag_value mount_path
 
 Create a snapshot of a volume identified by it\'s mount path
@@ -1266,13 +1267,13 @@ positional arguments:
   tag_value             Value of the tag to find volume with
   mount_path            Where to mount the volume
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -w, --wait            Wait for the snapshot to finish before returning
-  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
+  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
                         Tag to copy to the snapshot from instance. Multiple
                         values allowed.
-  -t [TAGS ...], --tags [TAGS ...]
+  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
                         Tag to add to the snapshot in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1397,7 +1398,7 @@ usage: ndt upsert-cloudfront-records [-h]
 
 Upsert Route53 records for all aliases of a CloudFront distribution
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -i DISTRIBUTION_ID, --distribution_id DISTRIBUTION_ID
                         Id for the distribution to upsert
@@ -1441,7 +1442,7 @@ Creates or updates codebuild projects to deploy or bake ndt subcomponents in the
     * SKIP_IMAGE_JOB, SKIP_DOCKER_JOB, SKIP_SERVERLESS_JOB, SKIP_CDK_JOB, SKIP_TERRAFORM_JOB - skip creating jobs where these parameters are \'y\' and match the subcomponent type
     
 
-options:
+optional arguments:
   -h, --help     show this help message and exit
   -d, --dry-run  Do not actually create or update projects, just print
                  configuration
@@ -1458,7 +1459,7 @@ positional arguments:
   name                  The name of the record to create
   value                 The value to put into the record
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -t TYPE, --type TYPE  The type of record to create. Defaults to \'A\'
   -l TTL, --ttl TTL     Time To Live for the record. Defaults to 300
@@ -1468,8 +1469,9 @@ options:
 ## `ndt volume-from-snapshot`
 
 ```bash
-usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS ...]] [-t [TAGS ...]]
-                                [-i] [-u] [--gp2 | --gp3]
+usage: ndt volume-from-snapshot [-h] [-n] [-c [COPYTAGS [COPYTAGS ...]]]
+                                [-t [TAGS [TAGS ...]]] [-i] [-u]
+                                [--gp2 | --gp3]
                                 tag_key tag_value mount_path [size_gb]
 
 Create a volume from an existing snapshot and mount it on the given path. The
@@ -1483,15 +1485,15 @@ positional arguments:
   size_gb               Size in GB for the volume. If different from snapshot
                         size, volume and filesystem are resized
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -n, --no_delete_on_termination
                         Whether to skip deleting the volume on termination,
                         defaults to false
-  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
+  -c [COPYTAGS [COPYTAGS ...]], --copytags [COPYTAGS [COPYTAGS ...]]
                         Tag to copy to the volume from instance. Multiple
                         values allowed.
-  -t [TAGS ...], --tags [TAGS ...]
+  -t [TAGS [TAGS ...]], --tags [TAGS [TAGS ...]]
                         Tag to add to the volume in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1504,7 +1506,9 @@ options:
 ## `ndt yaml-to-json`
 
 ```bash
-usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE ...]] [--small] file
+usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE [MERGE ...]]]
+                        [--small]
+                        file
 
 Convert nameless CloudFormation yaml to CloudFormation json with some
 preprosessing
@@ -1512,10 +1516,10 @@ preprosessing
 positional arguments:
   file                  File to parse
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   --colorize, -c        Colorize output
-  --merge [MERGE ...], -m [MERGE ...]
+  --merge [MERGE [MERGE ...]], -m [MERGE [MERGE ...]]
                         Merge other yaml files to the main file
   --small, -s           Compact representration of json
 ```
@@ -1530,7 +1534,7 @@ Do ndt preprocessing for a yaml file
 positional arguments:
   file            File to parse
 
-options:
+optional arguments:
   -h, --help      show this help message and exit
   --colorize, -c  Colorize output
 ```
@@ -1543,7 +1547,7 @@ usage: associate-eip [-h] [-i IP] [-a ALLOCATIONID] [-e EIPPARAM]
 
 Associate an Elastic IP for the instance that this script runs on
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -i IP, --ip IP        Elastic IP to allocate - default is to get paramEip
                         from the stack that created this instance
@@ -1572,7 +1576,7 @@ given as an argument. Group and stream aare created if they do not exist.
 positional arguments:
   file                  File to follow
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -g GROUP, --group GROUP
                         Log group to log to. Defaults to the stack name that
@@ -1591,7 +1595,7 @@ usage: ec2-associate-eip [-h] [-i IP] [-a ALLOCATIONID] [-e EIPPARAM]
 
 Associate an Elastic IP for the instance that this script runs on
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -i IP, --ip IP        Elastic IP to allocate - default is to get paramEip
                         from the stack that created this instance
@@ -1620,7 +1624,7 @@ given as an argument. Group and stream aare created if they do not exist.
 positional arguments:
   file                  File to follow
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -g GROUP, --group GROUP
                         Log group to log to. Defaults to the stack name that
@@ -1641,7 +1645,7 @@ Find a file from the first of the defined include paths
 positional arguments:
   file        The file to find
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1655,7 +1659,7 @@ Find a file from the first of the defined include paths
 positional arguments:
   pattern     The file pattern to find
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
@@ -1670,7 +1674,7 @@ either given on the command line or resolved from CloudFormation tags
 positional arguments:
   status                Status to indicate: SUCCESS | FAILURE
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -r RESOURCE, --resource RESOURCE
                         Logical resource name to signal. Looked up from
