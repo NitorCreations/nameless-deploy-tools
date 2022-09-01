@@ -108,12 +108,13 @@ function add_gpg_key() {
 function gpg_safe_download() {
   local URL=$1
   local DST=$2
+  local SIG_SUFFIX=${3:-sig}
   if python --version | grep "Python 2" > /dev/null; then
     python -c "from urllib import urlretrieve; urlretrieve('$URL', '$DST')"
-    python -c "from urllib import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
+    python -c "from urllib import urlretrieve; urlretrieve('$URL.$SIG_SUFFIX', '$DST.sig')"
   else
     python -c "from urllib.request import urlretrieve; urlretrieve('$URL', '$DST')"
-    python -c "from urllib.request import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
+    python -c "from urllib.request import urlretrieve; urlretrieve('$URL.$SIG_SUFFIX', '$DST.sig')"
   fi
   gpg --verify $DST.sig $DST
 }
