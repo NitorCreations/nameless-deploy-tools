@@ -427,6 +427,7 @@ def session_to_env():
         call_args["token_arn"] = mfa_read_token(args.token_name)["token_arn"]
         call_args["token_value"] = mfa_generate_code(args.token_name)
 
+    profile_type = None
     if "AWS_PROFILE" in os.environ:
         profile_type = resolve_profile_type(os.environ["AWS_PROFILE"])
     if profile_type == "sso":
