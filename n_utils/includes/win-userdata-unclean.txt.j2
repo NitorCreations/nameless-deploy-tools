@@ -1,7 +1,7 @@
 #jinja2: newline_sequence:'\r\n'
 <powershell>
 $admin = [adsi]("WinNT://./administrator, user")
-$admin.PSBase.Invoke("SetPassword", "{{ ansible_ssh_pass }}")
-net user Administrator "{{ ansible_ssh_pass }}"
+$admin.PSBase.Invoke("SetPassword", "{{ ansible_password }}")
+net user Administrator "{{ ansible_password }}"
 </powershell>
 <persist>true</persist>
