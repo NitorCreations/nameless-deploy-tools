@@ -1,8 +1,8 @@
 #jinja2: newline_sequence:'\r\n'
 <powershell>
 $admin = [adsi]("WinNT://./administrator, user")
-$admin.PSBase.Invoke("SetPassword", "{{ ansible_ssh_pass }}")
-net user Administrator "{{ ansible_ssh_pass }}"
+$admin.PSBase.Invoke("SetPassword", "{{ ansible_password }}")
+net user Administrator "{{ ansible_password }}"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-Expression ((New-Object System.Net.Webclient).DownloadString('https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1'))
 winrm set winrm/config/service '@{AllowUnencrypted="true"}'
