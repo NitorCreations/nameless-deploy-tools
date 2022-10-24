@@ -350,8 +350,9 @@ def update_profile_conf(profile, creds):
         parser = ConfigParser()
         with open(config, "r") as conffile:
             parser.read_file(conffile)
-            if profile_section not in parser.sections():
-                parser.add_section(profile_section)
+            if profile_section in parser.sections():
+                parser.remove_section(profile_section)
+            parser.add_section(profile_section)
             for key in creds:
                 parser.set(profile_section, key, creds[key])
     with open(config, "w") as conffile:
