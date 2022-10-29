@@ -20,14 +20,13 @@ import inspect
 import json
 import locale
 import os
-import profile
 import re
 import six
 import sys
 import time
 from builtins import input
 from builtins import str
-
+from subprocess import Popen, PIPE
 import argcomplete
 import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
@@ -1320,7 +1319,13 @@ def azure_template_parameters():
     ).competer = FilesCompleter()
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    template = json_load(open(args.template).read())
+    template = {}
+    if args.template.endswith(".bicep"):
+        process = Popen(["az", "bicep", "build", "--file", args.template, "--stdout"], stdout=PIPE, stderr=PIPE)
+        out, _ = process.communicate()
+        template = json.loads(out)
+    else:
+        template = json_load(open(args.template).read())
     if "parameters" in template and template["parameters"]:
         print(",".join(template["parameters"].keys()))
 
@@ -1335,11 +1340,11 @@ def azure_location():
 
 def resolve_location():
     if (
-        "AZURE_LOCATION" in environ
-        and environ["AZURE_LOCATION"]
-        and environ["AZURE_LOCATION"] != "default"
+        "AZURE_LOCATION" in os.environ
+        and os.environ["AZURE_LOCATION"]
+        and os.environ["AZURE_LOCATION"] != "default"
     ):
-        return environ["AZURE_LOCATION"]
+        return os.environ["AZURE_LOCATION"]
     else:
         parameters = load_parameters()
         if (

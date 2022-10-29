@@ -106,13 +106,14 @@ elif which assume-azure-deploy-role.sh &> /dev/null && [ -z "$AZURE_SUBSCRIPTION
   eval $(assume-azure-deploy-role.sh)
 fi
 
-DEPLOY_TEMPLATE="$component/azure-$ORIG_AZURE_NAME/azuredeploy.json"
 PARAMETERS="$component/azure-$ORIG_AZURE_NAME/variables.json"
 if [ -r "$component/azure-$ORIG_AZURE_NAME/template.yaml" ]; then
+  DEPLOY_TEMPLATE="$component/azure-$ORIG_AZURE_NAME/azuredeploy.json"
   ndt yaml-to-json "$component/azure-$ORIG_AZURE_NAME/template.yaml" > "$DEPLOY_TEMPLATE"
   TEMPLATE_TYPE=json
 elif [ -r "$component/azure-$ORIG_AZURE_NAME/template.bicep" ]; then
-  ndt interpolate-file -n -o "$component/azure-$ORIG_AZURE_NAME/azuredeploy.bicep" "$component/azure-$ORIG_AZURE_NAME/template.bicep"
+  DEPLOY_TEMPLATE="$component/azure-$ORIG_AZURE_NAME/azuredeploy.bicep"
+  ndt interpolate-file -n -o "$DEPLOY_TEMPLATE" "$component/azure-$ORIG_AZURE_NAME/template.bicep"
   TEMPLATE_TYPE=bicep
 else
   echo "Template not found. Looked for $component/azure-$ORIG_AZURE_NAME/template.yaml and $component/azure-$ORIG_AZURE_NAME/template.bicep"
