@@ -1048,7 +1048,7 @@ def cli_load_parameters():
         filter_types = {}
         for filter_entry in filter_arr.copy():
             if len(filter_entry.split(":")) > 1:
-                filter_arr = list(map(lambda x: x.replace(filter_entry, filter_entry.split(":")[0])))
+                filter_arr = list(map(lambda x: x.replace(filter_entry, filter_entry.split(":")[0]), filter_arr))
                 filter_types[filter_entry.split(":")[0]] = filter_entry.split(":")[1]
     del args.filter
     parameters = load_parameters(**vars(args))
@@ -1343,8 +1343,11 @@ def azure_template_parameters():
         template = json.loads(out)
     else:
         template = json_load(open(args.template).read())
+    parameters = []
     if "parameters" in template and template["parameters"]:
-        print(",".join(template["parameters"].keys()))
+        for param in template["parameters"]:
+            parameters.append(f"{param}:{template['parameters'][param]['type']}")
+        print(",".join(parameters))
 
 
 def azure_location():
