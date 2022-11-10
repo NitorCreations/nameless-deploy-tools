@@ -1045,14 +1045,31 @@ def cli_load_parameters():
     filter_arr = []
     if args.filter:
         filter_arr = args.filter.split(",")
+        filter_types = {}
+        for filter_entry in filter_arr.copy():
+            if len(filter_entry.split(":")) > 1:
+                filter_arr = list(map(lambda x: x.replace(filter_entry, filter_entry.split(":")[0])))
+                filter_types[filter_entry.split(":")[0]] = filter_entry.split(":")[1]
     del args.filter
     parameters = load_parameters(**vars(args))
     if filter_arr:
         for param_key in set(parameters.keys()):
             if param_key not in filter_arr:
                 del parameters[param_key]
+            elif param_key in filter_types:
+                _cast_param(param_key, parameters, filter_types[param_key])
     print(transform(parameters))
 
+def _cast_param(key, params, param_type):
+    if param_type == "int":
+        params[key] = int(params[key])
+    elif param_type == "bool":
+        params[key] = params[key] and params[key].lower() == "true"
+    elif param_type == "object":
+        params[key] = json.loads(params[key])
+    elif param_type == "array":
+        params[key] = params[key].split(",")
+    return
 
 class SubCCompleter:
     def __init__(self, sc_type):

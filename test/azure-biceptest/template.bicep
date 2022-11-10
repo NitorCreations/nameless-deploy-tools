@@ -7,6 +7,10 @@ param subnetPrefix string = '10.0.0.0/24'
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
+@description('Location for all resources.')
+param test int = 30
+
+
 var virtualNetworkName_var = 'NdtTestVNet'
 var subnetName = 'NdtTestBackendSubnet'
 var loadBalancerName_var = 'NdtTestLoadBalancer'
