@@ -27,7 +27,7 @@ cloudformation-utils==0.0.2
     # via nameless-deploy-tools (setup.py)
 configparser==5.2.0
     # via nameless-deploy-tools (setup.py)
-cryptography==37.0.4
+cryptography==38.0.3
     # via
     #   nitor-vault
     #   pyopenssl
