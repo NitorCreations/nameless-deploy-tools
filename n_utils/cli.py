@@ -1065,10 +1065,6 @@ def _cast_param(key, params, param_type):
         params[key] = int(params[key])
     elif param_type == "bool":
         params[key] = params[key] and params[key].lower() == "true"
-    elif param_type == "object":
-        params[key] = json.loads(params[key])
-    elif param_type == "array":
-        params[key] = params[key].split(",")
     return
 
 class SubCCompleter:
