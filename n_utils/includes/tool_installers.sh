@@ -23,9 +23,6 @@ fi
 if [ -z "$MAVEN_VERSION" ]; then
   MAVEN_VERSION=3.8.6
 fi
-if [ -z "$PHANTOMJS_VERSION" ]; then
-  PHANTOMJS_VERSION=2.1.1
-fi
 if [ -z "$NEXUS_VERSION" ]; then
   NEXUS_VERSION=2.12.0-01
 fi
@@ -51,11 +48,6 @@ fi
 install_lein() {
   wget -O /usr/bin/lein https://codeberg.org/leiningen/leiningen/raw/commit/ef5ab97f058e8cb01e9c6a5a1cb6aa45c3b01d27/bin/lein
   chmod 755 /usr/bin/lein
-}
-install_phantomjs() {
-  wget -O - https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 | tar -xjvf -
-  mv phantomjs-*/bin/phantomjs /usr/bin
-  rm -rf phantomjs-*
 }
 install_yarn() {
   mkdir /opt/yarn
