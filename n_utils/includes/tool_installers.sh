@@ -23,6 +23,9 @@ fi
 if [ -z "$MAVEN_VERSION" ]; then
   MAVEN_VERSION=3.8.7
 fi
+if [ -z "$PHANTOMJS_VERSION" ]; then
+  PHANTOMJS_VERSION=2.1.1
+fi
 if [ -z "$NEXUS_VERSION" ]; then
   NEXUS_VERSION=2.15.1-02
 fi
@@ -53,6 +56,21 @@ fi
 install_lein() {
   wget -O /usr/bin/lein https://codeberg.org/leiningen/leiningen/raw/commit/$LEIN_COMMIT/bin/lein
   chmod 755 /usr/bin/lein
+}
+install_phantomjs() {
+  echo "############################################################################"
+  echo " PHANTOMJS IS DEPRECATED AND INSTALLATION IS NO LONGER SUPPORTED BY DEFAULT"
+  echo " IF YOU STILL NEED IT AND CANNOT MIGRATE TO E.G. HEADLESS CHROME AND YOU"
+  echo " UNDERSTAND THE IMPLICATIONS IF RUNNING OBSOLETE BROWSER SOFTWARE, YOU CAN"
+  echo " CHANGE install_phantomjs TO install_phantomjs_insecure"
+  echo " REMOVING PHANTOMJS IS STRONGLY RECOMMENDED HOWEVER."
+  echo "############################################################################"
+
+}
+install_phantomjs_insecure() {
+  wget -O - https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 | tar -xjvf -
+  mv phantomjs-*/bin/phantomjs /usr/bin
+  rm -rf phantomjs-*
 }
 install_yarn() {
   mkdir /opt/yarn
