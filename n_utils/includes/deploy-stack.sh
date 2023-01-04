@@ -57,7 +57,7 @@ if [ "$_ARGCOMPLETE" ]; then
 fi
 
 usage() {
-  echo "usage: ndt deploy-stack [-d] [-h] component stack-name ami-id bake-job" >&2
+  echo "usage: ndt deploy-stack [-d] [-r] [-h] component stack-name ami-id bake-job" >&2
   echo "" >&2
   echo "Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it." >&2
   echo "If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory," >&2
@@ -75,6 +75,7 @@ usage() {
   echo "" >&2
   echo "optional arguments:" >&2
   echo "  -d, --dryrun  dry-run - show only the change set without actually deploying it" >&2
+  echo "  -r, --disable-rollback - disable stack rollback on failure"
   echo "  -h, --help  show this help message and exit" >&2
   exit 1
 }
@@ -84,12 +85,33 @@ fi
 
 source "$(n-include autocomplete-helpers.sh)"
 
-set -xe
+POSITIONAL_ARGS=()
 
-if [ "$1" = "-d" ]; then
-  DRY_RUN="--dry-run"
-  shift
-fi
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -d|--dryrun)
+      DRY_RUN="--dry-run"
+      shift
+      ;;
+    -r|--disable-rollback)
+      DISABLE_ROLLBACK="--disable-rollback"
+      shift
+      ;;
+    -h|--help)
+      usage
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      usage
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+set -xe
 component="$1" ; shift
 stackName="$1" ; shift
 ARG_AMI_ID="$1"
@@ -120,7 +142,7 @@ fi
 cd ../..
 
 set -e
-cf-update-stack "${STACK_NAME}" "${component}/stack-${ORIG_STACK_NAME}/template.yaml" "$REGION" $DRY_RUN
+cf-update-stack "${STACK_NAME}" "${component}/stack-${ORIG_STACK_NAME}/template.yaml" "$REGION" $DRY_RUN $DISABLE_ROLLBACK
 
 cd ${component}/stack-${ORIG_STACK_NAME}
 if [ -z "$DRY_RUN" ] && [ -x "./post_deploy.sh" ]; then

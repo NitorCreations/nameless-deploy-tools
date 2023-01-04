@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import collections
+from dis import dis
 import hashlib
 import locale
 import os
@@ -63,7 +64,7 @@ def log(message):
     )
 
 
-def update_stack(stack_name, template, params, dry_run=False, session=None, tags=None):
+def update_stack(stack_name, template, params, dry_run=False, session=None, tags=None, disable_rollback=False):
     clf = cloudformation(session=session)
     chset_name = stack_name + "-" + time.strftime("%Y%m%d%H%M%S", time.gmtime())
     params = get_template_arguments(stack_name, template, params)
@@ -102,16 +103,17 @@ def update_stack(stack_name, template, params, dry_run=False, session=None, tags
         log("\033[32;1m*** Changeset ***:\033[m")
         log_data(chset_data)
         if not dry_run:
-            clf.execute_change_set(ChangeSetName=chset_id)
+            clf.execute_change_set(ChangeSetName=chset_id, DisableRollback=disable_rollback)
         else:
             clf.delete_change_set(ChangeSetName=chset_id)
     return
 
 
-def create_stack(stack_name, template, params, session=None, tags=None):
+def create_stack(stack_name, template, params, session=None, tags=None, disable_rollback=False):
     params = get_template_arguments(stack_name, template, params)
     if tags:
         params["Tags"] = tags
+    params["DisableRollback"] = disable_rollback
     cloudformation(session=session).create_stack(**params)
     return
 
@@ -161,9 +163,9 @@ def get_end_status(stack_name, session=None):
     return status
 
 
-def create_or_update_stack(stack_name, json_small, params_doc, session=None, tags=None):
+def create_or_update_stack(stack_name, json_small, params_doc, session=None, tags=None, disable_rollback=False):
     stack_func = get_stack_operation(stack_name, session=session)
-    stack_func(stack_name, json_small, params_doc, session=session, tags=tags)
+    stack_func(stack_name, json_small, params_doc, session=session, tags=tags, disable_rollback=disable_rollback)
     return get_end_status(stack_name, session=session)
 
 
@@ -247,7 +249,7 @@ def resolve_ami(template_doc, session=None):
     return ami_id, ami_name, ami_created
 
 
-def deploy(stack_name, yaml_template, regn, dry_run=False, session=None):
+def deploy(stack_name, yaml_template, regn, dry_run=False, session=None, disable_rollback=False):
     os.environ["AWS_DEFAULT_REGION"] = regn
     os.environ["REGION"] = regn
     global REDIRECTED
@@ -315,7 +317,7 @@ def deploy(stack_name, yaml_template, regn, dry_run=False, session=None):
 
     if not dry_run:
         status = create_or_update_stack(
-            stack_name, json_small, params_doc, session=session, tags=tags
+            stack_name, json_small, params_doc, session=session, tags=tags, disable_rollback=disable_rollback
         )
         if not (status == "CREATE_COMPLETE" or status == "UPDATE_COMPLETE"):
             sys.exit("Stack operation failed: end state " + status)
