@@ -85,17 +85,33 @@ fi
 
 source "$(n-include autocomplete-helpers.sh)"
 
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -d|--dryrun)
+      DRY_RUN="--dry-run"
+      shift
+      ;;
+    -r|--disable-rollback)
+      DISABLE_ROLLBACK="--disable-rollback"
+      shift
+      ;;
+    -h|--help)
+      usage
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      usage
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 set -xe
-
-if [ "$1" = "-d" ]; then
-  DRY_RUN="--dry-run"
-  shift
-fi
-if [ "$1" = "-r" ]; then
-  DISABLE_ROLLBACK="--disable-rollback"
-  shift
-fi
-
 component="$1" ; shift
 stackName="$1" ; shift
 ARG_AMI_ID="$1"
