@@ -26,7 +26,7 @@ import sys
 import time
 from builtins import input
 from builtins import str
-
+from subprocess import Popen, PIPE
 import argcomplete
 import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
@@ -37,6 +37,7 @@ from ec2_utils.utils import best_effort_stacks
 from pygments import highlight, lexers, formatters
 from pygments.styles import get_style_by_name
 from threadlocal_aws import region, regions
+from threadlocal_aws.clients import sso
 
 from n_utils import (
     aws_infra_util,
@@ -72,7 +73,7 @@ from n_utils.mfa_utils import (
 from n_utils.ndt import find_include, find_all_includes, include_dirs
 from n_utils.ndt_project import Project
 from n_utils.ndt_project import list_jobs, list_components, upsert_codebuild_projects
-from n_utils.profile_util import update_profile
+from n_utils.profile_util import get_profile, read_profiles, read_sso_profile, resolve_profile_type, update_profile, _epoc_to_str
 from n_utils.tf_utils import pull_state, jmespath_var, flat_state
 from n_utils.az_util import fetch_properties
 from n_utils.utils import (
@@ -437,19 +438,54 @@ def session_to_env():
         call_args["token_arn"] = mfa_read_token(args.token_name)["token_arn"]
         call_args["token_value"] = mfa_generate_code(args.token_name)
 
-    creds = session_token(**call_args)
-    if creds:
-        print('AWS_ACCESS_KEY_ID="' + creds["AccessKeyId"] + '"')
-        print('AWS_SECRET_ACCESS_KEY="' + creds["SecretAccessKey"] + '"')
-        print('AWS_SESSION_TOKEN="' + creds["SessionToken"] + '"')
-        print(
-            'AWS_SESSION_EXPIRATION="'
-            + creds["Expiration"].strftime("%a, %d %b %Y %H:%M:%S +0000")
-            + '"'
-        )
+    profile_type = None
+    if "AWS_PROFILE" in os.environ:
+        profile_type = resolve_profile_type(os.environ["AWS_PROFILE"])
+    if profile_type == "sso":
+        profile = get_profile(os.environ["AWS_PROFILE"])
+        cache_json = read_sso_profile(os.environ["AWS_PROFILE"])
+        if "accessToken" in cache_json and cache_json["accessToken"]:
+            access_token = cache_json["accessToken"]
+            creds = sso(region=profile["sso_region"]).get_role_credentials(
+                roleName=profile["sso_role_name"],
+                accountId=profile["sso_account_id"],
+                accessToken=access_token
+            )
+            role_creds = creds["roleCredentials"]
+            print(f"AWS_ACCESS_KEY_ID='{role_creds['accessKeyId']}'")
+            print(f"AWS_SECRET_ACCESS_KEY='{role_creds['secretAccessKey']}'")
+            print(f"AWS_SESSION_TOKEN='{role_creds['sessionToken']}'")
+            print(
+                'AWS_SESSION_EXPIRATION="'
+                + _epoc_to_str(role_creds["expiration"] / 1000)
+                + '"'
+            )
+            print(
+                "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
+            )
+    elif profile_type in ["azure", "adfs", "lastpass"]:
+        profile = get_profile(os.environ["AWS_PROFILE"], include_creds=True)
+        print(f"AWS_ACCESS_KEY_ID='{profile['aws_access_key_id']}'")
+        print(f"AWS_SECRET_ACCESS_KEY='{profile['aws_secret_access_key']}'")
+        print(f"AWS_SESSION_TOKEN='{profile['aws_session_token']}'")
+        print(f"AWS_SESSION_EXPIRATION='{profile['aws_session_expiration']}'")
         print(
             "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
         )
+    else:
+        creds = session_token(**call_args)
+        if creds:
+            print('AWS_ACCESS_KEY_ID="' + creds["AccessKeyId"] + '"')
+            print('AWS_SECRET_ACCESS_KEY="' + creds["SecretAccessKey"] + '"')
+            print('AWS_SESSION_TOKEN="' + creds["SessionToken"] + '"')
+            print(
+                'AWS_SESSION_EXPIRATION="'
+                + creds["Expiration"].strftime("%a, %d %b %Y %H:%M:%S +0000")
+                + '"'
+            )
+            print(
+                "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
+            )
 
 
 def clean_snapshots():
@@ -1021,14 +1057,27 @@ def cli_load_parameters():
     filter_arr = []
     if args.filter:
         filter_arr = args.filter.split(",")
+        filter_types = {}
+        for filter_entry in filter_arr.copy():
+            if len(filter_entry.split(":")) > 1:
+                filter_arr = list(map(lambda x: x.replace(filter_entry, filter_entry.split(":")[0]), filter_arr))
+                filter_types[filter_entry.split(":")[0]] = filter_entry.split(":")[1]
     del args.filter
     parameters = load_parameters(**vars(args))
     if filter_arr:
         for param_key in set(parameters.keys()):
             if param_key not in filter_arr:
                 del parameters[param_key]
+            elif param_key in filter_types:
+                _cast_param(param_key, parameters, filter_types[param_key])
     print(transform(parameters))
 
+def _cast_param(key, params, param_type):
+    if param_type == "int":
+        params[key] = int(params[key])
+    elif param_type == "bool":
+        params[key] = params[key] and params[key].lower() == "true"
+    return
 
 class SubCCompleter:
     def __init__(self, sc_type):
@@ -1295,9 +1344,18 @@ def azure_template_parameters():
     ).competer = FilesCompleter()
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    template = json_load(open(args.template).read())
+    template = {}
+    if args.template.endswith(".bicep"):
+        process = Popen(["az", "bicep", "build", "--file", args.template, "--stdout"], stdout=PIPE, stderr=PIPE)
+        out, _ = process.communicate()
+        template = json.loads(out)
+    else:
+        template = json_load(open(args.template).read())
+    parameters = []
     if "parameters" in template and template["parameters"]:
-        print(",".join(template["parameters"].keys()))
+        for param in template["parameters"]:
+            parameters.append(f"{param}:{template['parameters'][param]['type']}")
+        print(",".join(parameters))
 
 
 def azure_location():
@@ -1310,11 +1368,11 @@ def azure_location():
 
 def resolve_location():
     if (
-        "AZURE_LOCATION" in environ
-        and environ["AZURE_LOCATION"]
-        and environ["AZURE_LOCATION"] != "default"
+        "AZURE_LOCATION" in os.environ
+        and os.environ["AZURE_LOCATION"]
+        and os.environ["AZURE_LOCATION"] != "default"
     ):
-        return environ["AZURE_LOCATION"]
+        return os.environ["AZURE_LOCATION"]
     else:
         parameters = load_parameters()
         if (

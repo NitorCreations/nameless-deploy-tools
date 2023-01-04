@@ -85,6 +85,7 @@ The checked git local configurations are:
 * `ndt.source.[branch].env` or `ndt.source.env` - source a file on every prompt
 * `ndt.aws.[branch].profile` or `ndt.aws.profile` - export the name of an aws credentials profile on every prompt
 * `ndt.aws.[branch].region` or `ndt.aws.region` - export a default region name on every prompt
+* `ndt.profile.[branch].sso` or `ndt.profile.sso` - enable a profile that uses AWS SSO for login
 * `ndt.profile.[branch].azure` or `ndt.profile.azure` - enable a profile that includes `aws-azure-login` settings
 * `ndt.profile.[branch].iam` or `ndt.profile.iam` - enable a profile that has simple iam keys settings
 * `ndt.profile.[branch].ndt` or `ndt.profile.ndt` - enable a profile that has settings to do a `ndt assume-role` including a potential mfa token.

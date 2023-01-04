@@ -187,13 +187,13 @@ if [ "$IMAGETYPE" != "windows" ]; then
   [ "$VOLUME_SIZE" ] || VOLUME_SIZE=8
 else
   WIN_PASSWD="$(tr -cd '[:alnum:]' < /dev/urandom | head -c16)"
-  PASSWD_ARG="{\"ansible_ssh_pass\": \"$WIN_PASSWD\","
+  PASSWD_ARG="{\"ansible_password\": \"$WIN_PASSWD\","
   PASSWD_ARG="$PASSWD_ARG \"ansible_winrm_operation_timeout_sec\": 60,"
   PASSWD_ARG="$PASSWD_ARG \"ansible_winrm_read_timeout_sec\": 70,"
   PASSWD_ARG="$PASSWD_ARG \"ansible_winrm_server_cert_validation\": \"ignore\","
   PASSWD_ARG="$PASSWD_ARG \"prepare_script\": \"$(n-include prepare.ps1)\"}"
   [ "$VOLUME_SIZE" ] || VOLUME_SIZE=30
-  [ "$WIN_PYTHON_VERSION" ] || WIN_PYTHON_VERSION="3.9.13"
+  [ "$WIN_PYTHON_VERSION" ] || WIN_PYTHON_VERSION="3.8.10"
   extra_args[${#extra_args[@]}]=-e
   extra_args[${#extra_args[@]}]="win_python_version=$WIN_PYTHON_VERSION"
 fi
@@ -313,7 +313,7 @@ if $(which ansible-playbook) \
   -e root_ami=$AMI \
   -e tstamp=$TSTAMP \
   -e aws_region=$REGION \
-  -e ansible_ssh_user=$SSH_USER \
+  -e ansible_user=$SSH_USER \
   -e imagedir="$(realpath "${imagedir}")" \
   -e subnet_id=$SUBNET \
   -e sg_id=$SECURITY_GROUP \

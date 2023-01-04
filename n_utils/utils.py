@@ -514,8 +514,11 @@ def session_token(duration_minutes=60, token_arn=None, token_value=None):
     if token_arn and token_value:
         args["SerialNumber"] = token_arn
         args["TokenCode"] = token_value
-
-    ret = sts().get_session_token(**args)
+    ret = {}
+    try:
+        ret = sts().get_session_token(**args)
+    except:
+        pass
     if "Credentials" not in ret:
         return None
     else:

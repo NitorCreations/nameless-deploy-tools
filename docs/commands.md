@@ -466,7 +466,7 @@ positional arguments:
                   you would give sender
 
 optional arguments:
-  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm i
+  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing
   -h, --help    show this help message and exit
 ```
 

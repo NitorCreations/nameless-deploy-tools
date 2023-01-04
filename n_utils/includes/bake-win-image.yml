@@ -87,7 +87,7 @@
   hosts: "{{ job_name }}_ami_instance"
   vars:
     ansible_connection: winrm
-    ansible_ssh_port: 5986
+    ansible_port: 5986
     ansible_winrm_server_cert_validation: ignore
   tasks:
   - name: Wait for system to become reachable

@@ -6,7 +6,7 @@ ENV LANG=C.UTF-8 \
   YARN_VERSION=1.22.18 \
   JAVA_HOME=/docker-java-home \
   GRADLE_VERSION=7.4.1 \
-  MAVEN_VERSION=3.8.5 \
+  MAVEN_VERSION=3.8.6 \
   LERNA_VERSION=4.0.0 \
   SERVERLESS_VERSION=3.10.0 \
   TERRAFORM_VERSION=1.1.7 \
@@ -176,7 +176,7 @@ RUN set -ex \
   && unzip -d /usr/bin terraform_${TERRAFORM_VERSION}_linux_${dpkgArch}.zip \
   && rm -f terraform_${TERRAFORM_VERSION}_linux_${dpkgArch}.zip terraform_${TERRAFORM_VERSION}_SHA256SUMS terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig
 
-RUN pip install --no-cache-dir nameless-deploy-tools==1.271
+RUN pip install --no-cache-dir nameless-deploy-tools==1.279
 
 VOLUME /var/lib/docker
 

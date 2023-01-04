@@ -21,14 +21,18 @@ if [ -z "$DEPLOYTOOLS_VERSION" ]; then
   fi
 fi
 if [ -z "$MAVEN_VERSION" ]; then
-  MAVEN_VERSION=3.8.6
-  MAVEN_CHECKSUM=c7047a48deb626abf26f71ab3643d296db9b1e67f1faa7d988637deac876b5a9
+  MAVEN_VERSION=3.8.7
 fi
 if [ -z "$PHANTOMJS_VERSION" ]; then
   PHANTOMJS_VERSION=2.1.1
 fi
 if [ -z "$NEXUS_VERSION" ]; then
-  NEXUS_VERSION=2.12.0-01
+  NEXUS_VERSION=2.15.1-02
+fi
+if [ -z "$NEXUS3_VERSION" ]; then
+   # TODO add CSUM check to nexus3 install and enable this
+   # NEXUS3_VERSION=3.45.0-01
+   # NEXUS3_CSUM=5c612608df890ba56b2bd9e66960754bbfe5fcf3
 fi
 if [ -z "$ONEAGENT_VERSION" ]; then
   ONEAGENT_VERSION=1.215.163
@@ -37,11 +41,11 @@ if [ -z "$ACTIVEGATE_VERSION" ]; then
   ACTIVEGATE_VERSION=1.215.163
 fi
 if [ -z "$FLUTTER_VERSION" ]; then
-  FLUTTER_VERSION=3.0.4
-  FLUTTER_CSUM=be1dd08cb18504ddf6d435044fd5e162a4a420b8c48fe66a0002eefe6c58fa0a
+  FLUTTER_VERSION=3.3.10
+  FLUTTER_CSUM=d24e83f7a6b829d163feeef1abfcc30869f0c5d1af93e9917426265dad507024
 fi
 if [ -z "$LEIN_COMMIT" ]; then
-  LEIN_COMMIT=ef5ab97f058e8cb01e9c6a5a1cb6aa45c3b01d27 # 2.9.8
+  LEIN_COMMIT=64e02a842e7bb50edc9b8b35de1e2ef1fac090dd # 2.10.0
 fi
 
 # Make sure we get logging
@@ -50,10 +54,20 @@ if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/nul
 fi
 
 install_lein() {
-  wget -O /usr/bin/lein https://codeberg.org/leiningen/leiningen/raw/commit/ef5ab97f058e8cb01e9c6a5a1cb6aa45c3b01d27/bin/lein
+  wget -O /usr/bin/lein https://codeberg.org/leiningen/leiningen/raw/commit/$LEIN_COMMIT/bin/lein
   chmod 755 /usr/bin/lein
 }
 install_phantomjs() {
+  echo "############################################################################"
+  echo " PHANTOMJS IS DEPRECATED AND INSTALLATION IS NO LONGER SUPPORTED BY DEFAULT"
+  echo " IF YOU STILL NEED IT AND CANNOT MIGRATE TO E.G. HEADLESS CHROME AND YOU"
+  echo " UNDERSTAND THE IMPLICATIONS IF RUNNING OBSOLETE BROWSER SOFTWARE, YOU CAN"
+  echo " CHANGE install_phantomjs TO install_phantomjs_insecure"
+  echo " REMOVING PHANTOMJS IS STRONGLY RECOMMENDED HOWEVER."
+  echo "############################################################################"
+
+}
+install_phantomjs_insecure() {
   wget -O - https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 | tar -xjvf -
   mv phantomjs-*/bin/phantomjs /usr/bin
   rm -rf phantomjs-*
@@ -75,7 +89,8 @@ install_cftools() {
 }
 install_maven() {
   source $(n-include common_tools.sh)
-  safe_download https://www-eu.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz MAVEN_CHECKSUM maven.tar.gz
+  add_gpg_key 6A814B1F869C2BBEAB7CB7271A2A1C94BDE89688
+  gpg_safe_download https://downloads.apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz maven.tar.gz asc
   tar -xzvf maven.tar.gz -C /opt/
   rm maven.tar.gz
   ln -snf /opt/apache-maven-$MAVEN_VERSION /opt/maven

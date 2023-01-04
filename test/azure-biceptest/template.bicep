@@ -7,6 +7,18 @@ param subnetPrefix string = '10.0.0.0/24'
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
+@description('Test int param.')
+param testInt int = 30
+
+@description('Test object param')
+param testObj object = {'Foo': 'Bar'}
+
+@description('Test array param')
+param testArr array = ['Foo', 'Bar']
+
+@description('Test bool param')
+param testBool bool = false
+
 var virtualNetworkName_var = 'NdtTestVNet'
 var subnetName = 'NdtTestBackendSubnet'
 var loadBalancerName_var = 'NdtTestLoadBalancer'

@@ -64,9 +64,15 @@ def read_profiles(prefix=""):
                     ret.append(profile[8:])
     return ret
 
+PROFILES= {}
+PROFILES_WITH_CREDS = {}
 
 def get_profile(profile, include_creds=True):
     home = expanduser("~")
+    if include_creds and profile in PROFILES_WITH_CREDS:
+        return PROFILES_WITH_CREDS[profile]
+    elif not include_creds and profile in PROFILES:
+        return PROFILES[profile]
     from collections import OrderedDict
 
     ret = OrderedDict()
@@ -88,6 +94,8 @@ def get_profile(profile, include_creds=True):
                 if profile in parser.sections():
                     for option in parser.options(profile):
                         ret[option] = parser.get(profile, option)
+        PROFILES_WITH_CREDS[profile] = ret
+    PROFILES[profile] = ret
     return ret
 
 
@@ -106,6 +114,12 @@ def read_profile_expiry(profile, profile_type=None):
     return read_sso_profile_expiry(profile)
 
 def read_sso_profile_expiry(profile):
+    profile_data = read_sso_profile(profile)
+    if profile_data:
+        return profile_data.get("expiresAt", "1970-01-01T00:00:00Z")[:-1] + ".000Z"
+    return "1970-01-01T00:00:00.000Z"
+
+def read_sso_profile(profile):
     profile_data = get_profile(profile, include_creds=False)
     if "sso_start_url" in profile_data:
         home = expanduser("~")
@@ -117,9 +131,8 @@ def read_sso_profile_expiry(profile):
                     with open(full_file, "r") as cache_file:
                         cache_json = json.load(cache_file)
                         if cache_json and "startUrl" in cache_json and cache_json["startUrl"] == profile_data["sso_start_url"]:
-                            return cache_json.get("expiresAt", "1970-01-01T00:00:00Z")[:-1] + ".000Z"
-    return "1970-01-01T00:00:00.000Z"
-
+                            return cache_json
+    return {}
 
 def read_profile_expiry_epoc(profile, profile_type=None):
     return _epoc_secs(parse(read_profile_expiry(profile, profile_type=profile_type)).replace(tzinfo=tzutc()))
@@ -337,8 +350,9 @@ def update_profile_conf(profile, creds):
         parser = ConfigParser()
         with open(config, "r") as conffile:
             parser.read_file(conffile)
-            if profile_section not in parser.sections():
-                parser.add_section(profile_section)
+            if profile_section in parser.sections():
+                parser.remove_section(profile_section)
+            parser.add_section(profile_section)
             for key in creds:
                 parser.set(profile_section, key, creds[key])
     with open(config, "w") as conffile:
