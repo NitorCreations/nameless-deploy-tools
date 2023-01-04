@@ -10,7 +10,6 @@ npm i --no-update-notifier --no-fund --no-audit -g gulp browserify jshint
 
 install_cftools
 install_lein
-install_phantomjs
 install_maven
 install_fail2ban
 sed -i '/Defaults\s*requiretty/d' /etc/sudoers
