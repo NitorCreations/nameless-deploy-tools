@@ -427,7 +427,8 @@ optional arguments:
 
 ```bash
 ami that is tagged with the bake-job name
-usage: ndt deploy-stack [-d] [-h] component stack-name ami-id bake-job
+  -r, --disable-rollback - disable stack rollback on failure
+usage: ndt deploy-stack [-d] [-r] [-h] component stack-name ami-id bake-job
 
 Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it.
 If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
