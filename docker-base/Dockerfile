@@ -20,6 +20,7 @@ ENV DOCKER_BUCKET="download.docker.com" \
     DIND_COMMIT="52379fa76dee07ca038624d639d9e14f4fb719ff" \
     DOCKER_COMPOSE_VERSION="2.2.2"
 
+COPY install_tools.sh /usr/bin/install_tools.sh
 RUN set -x && export DEBIAN_FRONTEND=noninteractive && apt update && apt upgrade -qy \
     && apt install -qy --no-install-recommends \
     apt-transport-https gnupg-agent software-properties-common wget \
@@ -36,7 +37,7 @@ RUN set -x && export DEBIAN_FRONTEND=noninteractive && apt update && apt upgrade
     libxml2-dev libxslt1-dev libyaml-dev make \
     patch xz-utils zlib1g-dev unzip curl \
     e2fsprogs iptables xfsprogs xz-utils \
-    less groff liberror-perl \
+    less groff liberror-perl locales \
     && apt clean && apt autoclean \
     && ARCH="$(uname -m)" \
     && curl -fSL "https://${DOCKER_BUCKET}/linux/static/${DOCKER_CHANNEL}/$ARCH/docker-${DOCKER_VERSION}.tgz" -o docker-$ARCH.tgz \
@@ -52,8 +53,8 @@ RUN set -x && export DEBIAN_FRONTEND=noninteractive && apt update && apt upgrade
     && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-$ARCH > /usr/local/bin/docker-compose \
     && curl -L https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-$ARCH.sha256 | sed "s/docker-compose-linux-$ARCH/\/usr\/local\/bin\/docker-compose/" | sha256sum -c -\
     && chmod +x /usr/local/bin/dind /usr/local/bin/docker-compose \
-    # Ensure docker-compose works
-    && docker-compose version
+    && docker-compose version \
+    && install_tools.sh
 
 # Install dependencies by all python images equivalent to buildpack-deps:jessie
 # on the public repos.
