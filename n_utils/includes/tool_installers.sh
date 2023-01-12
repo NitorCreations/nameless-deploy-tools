@@ -30,9 +30,7 @@ if [ -z "$NEXUS_VERSION" ]; then
   NEXUS_VERSION=2.15.1-02
 fi
 if [ -z "$NEXUS3_VERSION" ]; then
-   # TODO add CSUM check to nexus3 install and enable this
-   # NEXUS3_VERSION=3.45.0-01
-   # NEXUS3_CSUM=5c612608df890ba56b2bd9e66960754bbfe5fcf3
+  NEXUS3_VERSION=3.45.0-01
 fi
 if [ -z "$ONEAGENT_VERSION" ]; then
   ONEAGENT_VERSION=1.215.163
@@ -119,9 +117,15 @@ MARKER
   sed -i 's/nexus-webapp-context-path=.*/nexus-webapp-context-path=\//' /opt/nexus/current/conf/nexus.properties
 }
 install_nexus3() {
-  wget -O - https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/3/nexus-$NEXUS3_VERSION-unix.tar.gz | tar -xzf - -C /opt/nexus
+  source $(n-include common_tools.sh)
+  add_gpg_key 0374CF2E8DD1BDFD
+  gpg_safe_download https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/3/nexus-$NEXUS3_VERSION-unix.tar.gz nexus3.tar.gz asc
+  mkdir -p /opt/nexus
+  tar -xzf nexus3.tar.gz -C /opt/nexus
   chown -R nexus:nexus /opt/nexus
+  rm -f nexus3.tar.gz nexus3.tar.gz.sig
   ln -snf /opt/nexus/nexus-* /opt/nexus/current
+  mkdir -p /opt/nexus/sonatype-work
   mv /opt/nexus/sonatype-work /opt/nexus/sonatype-work-initial
   cat > /usr/lib/systemd/system/nexus.service << MARKER
 [Unit]
