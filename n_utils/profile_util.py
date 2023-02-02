@@ -392,7 +392,7 @@ def store_bw_profile(bw_entry_name):
 
 
 def cli_store_bw_profile():
-    """Fetches a Bitwarde entry and if it contains a definition of a aws credentials, stores it in aws cli
+    """Fetches a Bitwarden entry and if it contains a definition of a aws credentials, stores it in aws cli
     configuration. Namely the entry needs to define the extra fields aws_access_key_id, aws_secret_access_key
     and profile_name"""
     parser = argparse.ArgumentParser(description=cli_store_bw_profile.__doc__)
