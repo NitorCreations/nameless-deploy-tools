@@ -267,12 +267,18 @@ def cli_read_profile_expiry():
 def update_profile(profile, creds):
     home = expanduser("~")
     credentials = join(home, ".aws", "credentials")
+    profile_type = resolve_profile_type(profile)
     if exists(credentials):
         parser = ConfigParser()
         with open(credentials) as credfile:
             parser.read_file(credfile)
             if profile not in parser.sections():
                 parser.add_section(profile)
+            if profile_type == "sso":
+                creds["AccessKeyId"] = creds["accessKeyId"]
+                creds["SecretAccessKey"] = creds["secretAccessKey"]
+                creds["SessionToken"] = creds["sessionToken"]
+                creds["Expiration"] = datetime.fromtimestamp(creds["expiration"] / 1000)
             parser.set(profile, "aws_access_key_id", creds["AccessKeyId"])
             parser.set(profile, "aws_secret_access_key", creds["SecretAccessKey"])
             parser.set(profile, "aws_session_token", creds["SessionToken"])
@@ -286,8 +292,8 @@ def update_profile(profile, creds):
                 "aws_expiration",
                 creds["Expiration"].strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
             )
-    with open(credentials, "w") as credfile:
-        parser.write(credfile)
+        with open(credentials, "w") as credfile:
+            parser.write(credfile)
 
 
 def cli_profiles_to_json():
