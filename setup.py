@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import sys
+
 from setuptools import setup
-from n_utils import PATH_COMMANDS, CONSOLESCRIPTS
+
+from n_utils import CONSOLESCRIPTS, PATH_COMMANDS
 
 win_deps = ["win-unicode-console", "wmi", "pypiwin32"]
 
@@ -38,34 +40,34 @@ setup(
         "console_scripts": CONSOLESCRIPTS,
     },
     install_requires=[
-        "pyaml",
-        "boto3",
-        "requests",
-        "termcolor",
-        "ipaddr",
         "argcomplete",
-        "nitor-vault>=0.41",
-        "pyqrcode",
-        "six",
-        "python-dateutil",
-        "pycryptodomex",
-        "configparser",
-        "scandir",
-        "jmespath",
-        "ec2-utils>=0.38",
+        "boto3",
         "cloudformation-utils==0.0.2",
+        "configparser",
+        "ec2-utils>=0.38",
+        "ipaddr",
+        "jmespath",
+        "nitor-vault>=0.41",
+        "pyaml",
+        "pycryptodomex",
+        "Pygments",
         "pyOpenSSL>=19.1.0",
         "pyotp",
-        "Pygments",
+        "pyqrcode",
+        "python-dateutil",
         "PyYAML>=5.2",
+        "requests",
+        "scandir",
+        "six",
+        "termcolor",
     ]
     + (win_deps if sys.platform.startswith("win") else []),
     tests_require=[
-        "pytest",
-        "pytest-cov",
         "coverage",
-        "pytest-mock",
         "mock",
+        "pytest-cov",
+        "pytest-mock",
+        "pytest",
         "tomli<2.0.0",
     ],
     zip_safe=False,

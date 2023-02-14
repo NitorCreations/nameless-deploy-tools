@@ -1,8 +1,9 @@
 import json
-from os import devnull
-import pyotp
 import string
-from subprocess import Popen, PIPE
+from os import devnull
+from subprocess import PIPE, Popen
+
+import pyotp
 
 
 def strip_whitespace(s):

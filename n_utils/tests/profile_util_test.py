@@ -1,5 +1,6 @@
-from n_utils.profile_util import get_profile, read_profiles, enable_profile
 import json
+
+from n_utils.profile_util import enable_profile, get_profile, read_profiles
 
 
 def test_get_profile():

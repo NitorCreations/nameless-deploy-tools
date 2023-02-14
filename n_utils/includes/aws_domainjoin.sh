@@ -426,11 +426,10 @@ get_servicecreds() {
         fi
     fi
 
-    which python3
-    if [ $? -eq 0 ]; then
-         PYTHON=$(which python3)
+    if [ -n "$(command -v python3)" ]; then
+        PYTHON=$(which python3)
     else
-         PYTHON=$(which python);
+        PYTHON=$(which python)
     fi
     DOMAIN_USERNAME=$(echo "$SECRET_VALUE" | $PYTHON -c 'import sys, json; obj=json.load(sys.stdin); print(obj["awsSeamlessDomainUsername"])')
     if [ $? -ne 0 ] || [ -z "$DOMAIN_USERNAME" ]; then
@@ -712,7 +711,7 @@ reconfigure_samba() {
         if [ $? -ne 0 ]; then
             service winbind restart
         fi
-    fi 
+    fi
 }
 
 ##################################################
@@ -791,7 +790,7 @@ fi
 
 # Deal with scenario where this script is run again after the domain is already joined.
 # We want to avoid rerunning as the set_hostname function can change the hostname of a server that is already
-# domain joined and cause a mismatch. 
+# domain joined and cause a mismatch.
 realm list 2>/dev/null | grep -q "domain-name: ${DIRECTORY_NAME}\$"
 if [ $? -eq 0 ]; then
     echo "########## SKIPPING Domain Join: ${DIRECTORY_NAME} already joined  ##########"

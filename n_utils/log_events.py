@@ -55,13 +55,7 @@ from builtins import object
 from collections import deque
 
 from botocore.exceptions import ClientError
-from ec2_utils.logs import (
-    fmttime,
-    timestamp,
-    uprint,
-    validatestarttime,
-    LogWorkerThread,
-)
+from ec2_utils.logs import LogWorkerThread, fmttime, timestamp, uprint, validatestarttime
 from termcolor import colored
 from threadlocal_aws.clients import cloudformation
 

@@ -15,47 +15,36 @@
 # limitations under the License.
 
 
-from builtins import str
-from builtins import range
 import json
 import os
 import re
 import subprocess
 import sys
-import yaml
-import six
 from base64 import b64encode
+from builtins import range, str
 from collections import OrderedDict
+from copy import copy
 from glob import glob
 from numbers import Number
 from operator import itemgetter
+
+import six
+import yaml
 from botocore.exceptions import ClientError
-from copy import copy
+from cloudformation_utils.tools import cloudformation_yaml_loads as yaml_load, process_script_decorated as import_script
+from ec2_utils.instance_info import dthandler, resolve_account, stack_params_and_outputs_and_stack
 from jmespath import search
-from ec2_utils.instance_info import (
-    resolve_account,
-    stack_params_and_outputs_and_stack,
-    dthandler,
-)
-from n_utils import _to_str
-from n_utils.utils import (
-    expand_vars,
-    expand_only_double_paranthesis_params,
-    get_images,
-    ParamNotAvailable,
-)
-from n_utils.git_utils import Git
-from n_utils.ndt import find_include
-from n_utils.ecr_utils import repo_uri
-from n_utils.tf_utils import pull_state, flat_state, jmespath_var
-from n_utils.az_util import fetch_properties
 from n_vault import Vault
 from threadlocal_aws import region
-from threadlocal_aws.clients import ssm, ec2, connect
-from cloudformation_utils.tools import (
-    process_script_decorated as import_script,
-    cloudformation_yaml_loads as yaml_load,
-)
+from threadlocal_aws.clients import connect, ec2, ssm
+
+from n_utils import _to_str
+from n_utils.az_util import fetch_properties
+from n_utils.ecr_utils import repo_uri
+from n_utils.git_utils import Git
+from n_utils.ndt import find_include
+from n_utils.tf_utils import flat_state, jmespath_var, pull_state
+from n_utils.utils import ParamNotAvailable, expand_only_double_paranthesis_params, expand_vars, get_images
 
 stacks = dict()
 terraforms = dict()

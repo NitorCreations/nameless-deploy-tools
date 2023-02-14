@@ -15,24 +15,23 @@
 # limitations under the License.
 
 import collections
-from dis import dis
 import hashlib
 import locale
 import os
 import re
 import sys
 import time
-from builtins import object
-from builtins import str
+from builtins import object, str
 from datetime import datetime
+from dis import dis
 
 import six
 from botocore.exceptions import ClientError
 from ec2_utils.logs import CloudWatchLogsThread, fmttime
-from pygments import highlight, lexers, formatters
+from pygments import formatters, highlight, lexers
 from pygments.styles import get_style_by_name
 from termcolor import colored
-from threadlocal_aws.clients import cloudformation, s3, ec2
+from threadlocal_aws.clients import cloudformation, ec2, s3
 
 from n_utils import aws_infra_util
 from n_utils.log_events import CloudFormationEvents

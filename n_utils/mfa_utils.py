@@ -28,8 +28,8 @@ from Cryptodome.Hash import SHA256
 from Cryptodome.Util import Counter
 
 from n_utils import _to_bytes, _to_str
-from n_utils.yuuuu3332111i1l1i import IiII1IiiIiI1, I11iIi1I
 from n_utils.bw_util import get_bwentry
+from n_utils.yuuuu3332111i1l1i import I11iIi1I, IiII1IiiIiI1
 
 dthandler = (
     lambda obj: obj.isoformat()

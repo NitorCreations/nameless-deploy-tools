@@ -7,7 +7,7 @@ from subprocess import PIPE, Popen
 
 from argcomplete import split_line
 
-from n_utils import COMMAND_MAPPINGS, VERSION, _to_str, _to_bytes
+from n_utils import COMMAND_MAPPINGS, VERSION, _to_bytes, _to_str
 
 SYS_ENCODING = locale.getpreferredencoding()
 include_dirs = []
@@ -133,7 +133,9 @@ def ndt():
             sys.exit(Popen([command] + sys.argv[2:]).wait())
         else:
             if do_profile:
-                import cProfile, pstats, io
+                import cProfile
+                import io
+                import pstats
                 from pstats import SortKey
                 pr = cProfile.Profile()
                 pr.enable()

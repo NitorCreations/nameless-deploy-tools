@@ -21,71 +21,64 @@ import json
 import locale
 import os
 import re
-import six
 import sys
 import time
-from builtins import input
-from builtins import str
-from subprocess import Popen, PIPE
+from builtins import input, str
+from subprocess import PIPE, Popen
+
 import argcomplete
+import six
 import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
 from ec2_utils import ebs, interface
-from ec2_utils.instance_info import stack_params_and_outputs_and_stack, dthandler
+from ec2_utils.instance_info import dthandler, stack_params_and_outputs_and_stack
 from ec2_utils.logs import CloudWatchLogsThread
 from ec2_utils.utils import best_effort_stacks
-from pygments import highlight, lexers, formatters
+from pygments import formatters, highlight, lexers
 from pygments.styles import get_style_by_name
 from threadlocal_aws import region, regions
 from threadlocal_aws.clients import sso
 
-from n_utils import (
-    aws_infra_util,
-    cf_bootstrap,
-    cf_deploy,
-    utils,
-    _to_bytes,
-    _to_str,
-    connect,
-)
-from n_utils.account_utils import list_created_accounts, create_account
-from n_utils.aws_infra_util import load_parameters, json_save_small, json_load
-from n_utils.cloudfront_utils import (
-    distributions,
-    distribution_comments,
-    upsert_cloudfront_records,
-)
+from n_utils import _to_bytes, _to_str, aws_infra_util, cf_bootstrap, cf_deploy, connect, utils
+from n_utils.account_utils import create_account, list_created_accounts
+from n_utils.aws_infra_util import json_load, json_save_small, load_parameters
+from n_utils.az_util import ensure_group, ensure_management_group, fetch_properties
+from n_utils.cloudfront_utils import distribution_comments, distributions, upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
 from n_utils.git_utils import Git
 from n_utils.log_events import CloudFormationEvents
 from n_utils.maven_utils import add_server
 from n_utils.mfa_utils import (
+    list_mfa_tokens,
     mfa_add_token,
+    mfa_backup_tokens,
+    mfa_decrypt_backup_tokens,
     mfa_delete_token,
     mfa_generate_code,
     mfa_generate_code_with_secret,
-    list_mfa_tokens,
-    mfa_backup_tokens,
-    mfa_decrypt_backup_tokens,
-    mfa_to_qrcode,
     mfa_read_token,
+    mfa_to_qrcode,
 )
-from n_utils.ndt import find_include, find_all_includes, include_dirs
-from n_utils.ndt_project import Project
-from n_utils.ndt_project import list_jobs, list_components, upsert_codebuild_projects
-from n_utils.profile_util import get_profile, read_profiles, read_sso_profile, resolve_profile_type, update_profile, _epoc_to_str
-from n_utils.tf_utils import pull_state, jmespath_var, flat_state
-from n_utils.az_util import fetch_properties
-from n_utils.utils import (
-    session_token,
-    get_images,
-    promote_image,
-    share_to_another_region,
-    interpolate_file,
-    assumed_role_name,
+from n_utils.ndt import find_all_includes, find_include, include_dirs
+from n_utils.ndt_project import Project, list_components, list_jobs, upsert_codebuild_projects
+from n_utils.profile_util import (
+    _epoc_to_str,
+    get_profile,
+    read_profiles,
+    read_sso_profile,
+    resolve_profile_type,
+    update_profile,
 )
-from n_utils.az_util import ensure_group, ensure_management_group
 from n_utils.route53_util import upsert_record
+from n_utils.tf_utils import flat_state, jmespath_var, pull_state
+from n_utils.utils import (
+    assumed_role_name,
+    get_images,
+    interpolate_file,
+    promote_image,
+    session_token,
+    share_to_another_region,
+)
 
 SYS_ENCODING = locale.getpreferredencoding()
 

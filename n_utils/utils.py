@@ -26,27 +26,20 @@ import shutil
 import string
 import tempfile
 import time
-from builtins import object
-from builtins import range
-from builtins import str
+from builtins import object, range, str
 from collections import OrderedDict
 from copy import deepcopy
 from operator import itemgetter
 
 import six
 from botocore.exceptions import ClientError
-from ec2_utils.instance_info import (
-    resolve_account,
-    info,
-    is_ec2,
-    stack_params_and_outputs_and_stack,
-)
+from ec2_utils.instance_info import info, is_ec2, resolve_account, stack_params_and_outputs_and_stack
 from n_vault import Vault
 from threadlocal_aws import region
 from threadlocal_aws.clients import cloudformation, ec2, sts
 
-from n_utils import _to_str, _to_bytes
-from n_utils.mfa_utils import mfa_read_token, mfa_generate_code
+from n_utils import _to_bytes, _to_str
+from n_utils.mfa_utils import mfa_generate_code, mfa_read_token
 
 NoneType = type(None)
 ACCOUNT_ID = None
