@@ -32,6 +32,9 @@ fi
 if [ -z "$NEXUS3_VERSION" ]; then
   NEXUS3_VERSION=3.45.0-01
 fi
+if [ -z "$CARGO_PLUGIN_VERSION" ]; then
+  CARGO_PLUGIN_VERSION=0.0.6
+fi
 if [ -z "$ONEAGENT_VERSION" ]; then
   ONEAGENT_VERSION=1.215.163
 fi
@@ -141,6 +144,30 @@ ExecStart=/opt/nexus/current/bin/nexus run
 Alias=nexus
 WantedBy=default.target
 MARKER
+}
+install_nexus3_cargo_plugin() {
+  add_gpg_key 80900DA1952D7C7968F3CFD98C79C4D0382A0E3A
+  gpg_safe_download https://repo1.maven.org/maven2/org/sonatype/nexus/plugins/nexus-repository-cargo/$CARGO_PLUGIN_VERSION/nexus-repository-cargo-$CARGO_PLUGIN_VERSION.jar nexus-repository-cargo-$CARGO_PLUGIN_VERSION.jar asc
+  mkdir -p /opt/nexus/current/system/org/sonatype/nexus/plugins/nexus-repository-cargo/$CARGO_PLUGIN_VERSION/
+  mv nexus-repository-cargo-$CARGO_PLUGIN_VERSION.jar /opt/nexus/current/system/org/sonatype/nexus/plugins/nexus-repository-cargo/$CARGO_PLUGIN_VERSION/
+
+  cat >> diff.xml << MARKER
+<diff xmlns:krf="http://karaf.apache.org/xmlns/features/v1.6.0">
+  <add sel="//krf:feature[@name='nexus-core-feature']">    <krf:feature prerequisite="false" dependency="false">nexus-repository-cargo</krf:feature>
+    </add>
+  <add sel="//krf:feature[@name='nexus-repository-maven']" pos="after">
+    <krf:feature name="nexus-repository-cargo" description="org.sonatype.nexus.plugins:nexus-repository-cargo" version="$CARGO_PLUGIN_VERSION">
+        <krf:details>org.sonatype.nexus.plugins:nexus-repository-cargo</krf:details>
+        <krf:bundle>mvn:org.sonatype.nexus.plugins/nexus-repository-cargo/$CARGO_PLUGIN_VERSION</krf:bundle>
+    </krf:feature></add>
+</diff>
+MARKER
+  add_gpg_key 379CE192D401AB61
+  gpg_safe_download https://search.maven.org/remotecontent?filepath=com/github/dnault/xml-patch/0.3.1/xml-patch-0.3.1.jar xml-patch.jar asc
+  java -jar xml-patch.jar /opt/nexus/current/system/org/sonatype/nexus/assemblies/nexus-core-feature/*/nexus-core-feature-*-features.xml diff.xml temp.xml
+  mv -f temp.xml /opt/nexus/current/system/org/sonatype/nexus/assemblies/nexus-core-feature/*/nexus-core-feature-*-features.xml
+  chown nexus:nexus /opt/nexus/current/system/org/sonatype/nexus/assemblies/nexus-core-feature/*/nexus-core-feature-*-features.xml
+  rm -f xml-patch.jar diff.xml
 }
 install_fail2ban() {
   yum update -y selinux-policy*
