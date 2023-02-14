@@ -42,7 +42,7 @@ has at it's core a thought-out way of a branching infrastructure development mod
 
 nameless-deploy-tools works by defining _Amazon Machine Images_, _[Docker containers](https://www.docker.com)_,
 _[Serverless services](https://serverless.com)_ and deploying _[CloudFormation](https://aws.amazon.com/cloudformation/)
-stacks_ of resources. CloudFormation stacks can also be defined with _[AWS CDK](https://awslabs.github.io/aws-cdk/)_ 
+stacks_ of resources. CloudFormation stacks can also be defined with _[AWS CDK](https://awslabs.github.io/aws-cdk/)_
 applications. All of the above can also be deployed using _[Terraform](https://www.terraform.io)_.
 
 ## Installation
@@ -50,7 +50,7 @@ applications. All of the above can also be deployed using _[Terraform](https://w
 ```
 pip install nameless-deploy-tools
 ```
-On OSX you may need to add `--ignore-installed` to get around platform installed versions
+On macOS, you may need to add `--ignore-installed` to get around platform installed versions
 of `six` and other packages.
 
 ## Getting started

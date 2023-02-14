@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-VERSION=$(egrep '^VERSION' n_utils/__init__.py | cut -d\" -f 2)
+VERSION=$(grep -E '^VERSION' n_utils/__init__.py | cut -d\" -f 2)
 MAJOR=${VERSION//.*}
 MINOR=${VERSION##*.}
 if [ "$1" = "-m" ]; then
@@ -40,9 +40,22 @@ git commit -m "$1" setup.py README.md docker/Dockerfile docs/commands.md n_utils
 git tag "$NEW_VERSION" -m "$1"
 git push --tags origin master
 
+if [ -n "$(command -v python3)" ]; then
+  PYTHON=$(which python3)
+else
+  PYTHON=$(which python);
+fi
+
+if [ ! -e "$PYTHON" ]; then
+  echo "Python executable not found: $PYTHON"
+  exit 1
+else
+  echo "Using $PYTHON"
+fi
+
 rm -rf dist/*
-python setup.py sdist bdist_wheel
+$PYTHON setup.py sdist bdist_wheel
 twine upload dist/*
 sleep 30
 
-./build-docker.sh $NEW_VERSION
+./build-docker.sh "$NEW_VERSION"
