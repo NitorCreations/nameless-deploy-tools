@@ -13,6 +13,6 @@ until docker info >/dev/null 2>&1; do
         echo 'Timed out trying to connect to internal docker host.' >&2
         exit 1
     fi
-    tries=$(( $tries + 1 ))
+    tries=$(($tries + 1))
     sleep 1
 done

@@ -429,7 +429,7 @@ get_servicecreds() {
     if [ -n "$(command -v python3)" ]; then
         PYTHON=$(which python3)
     else
-        PYTHON=$(which python);
+        PYTHON=$(which python)
     fi
     DOMAIN_USERNAME=$(echo "$SECRET_VALUE" | $PYTHON -c 'import sys, json; obj=json.load(sys.stdin); print(obj["awsSeamlessDomainUsername"])')
     if [ $? -ne 0 ] || [ -z "$DOMAIN_USERNAME" ]; then

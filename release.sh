@@ -15,20 +15,20 @@
 # limitations under the License.
 
 VERSION=$(grep -E '^VERSION' n_utils/__init__.py | cut -d\" -f 2)
-MAJOR=${VERSION//.*}
+MAJOR=${VERSION//.*/}
 MINOR=${VERSION##*.}
 if [ "$1" = "-m" ]; then
-  MAJOR=$(($MAJOR + 1))
-  MINOR="0"
-  NEW_VERSION=$MAJOR.$MINOR
-  shift
+    MAJOR=$(($MAJOR + 1))
+    MINOR="0"
+    NEW_VERSION=$MAJOR.$MINOR
+    shift
 elif [ "$1" = "-v" ]; then
-  shift
-  NEW_VERSION="$1"
-  shift
+    shift
+    NEW_VERSION="$1"
+    shift
 else
-  MINOR=$(($MINOR + 1))
-  NEW_VERSION=$MAJOR.$MINOR
+    MINOR=$(($MINOR + 1))
+    NEW_VERSION=$MAJOR.$MINOR
 fi
 
 ./update-commandlist.sh
@@ -41,16 +41,16 @@ git tag "$NEW_VERSION" -m "$1"
 git push --tags origin master
 
 if [ -n "$(command -v python3)" ]; then
-  PYTHON=$(which python3)
+    PYTHON=$(which python3)
 else
-  PYTHON=$(which python);
+    PYTHON=$(which python)
 fi
 
 if [ ! -e "$PYTHON" ]; then
-  echo "Python executable not found: $PYTHON"
-  exit 1
+    echo "Python executable not found: $PYTHON"
+    exit 1
 else
-  echo "Using $PYTHON"
+    echo "Using $PYTHON"
 fi
 
 rm -rf dist/*
