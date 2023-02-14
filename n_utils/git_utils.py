@@ -1,10 +1,10 @@
 from builtins import object
 from locale import getpreferredencoding
-from os import environ, devnull, linesep
+from os import devnull, environ, linesep
 from re import sub
 from shutil import rmtree
-from subprocess import Popen, PIPE
-from tarfile import open as tar_open, ReadError as TarReadError
+from subprocess import PIPE, Popen
+from tarfile import ReadError as TarReadError, open as tar_open
 from tempfile import mkdtemp
 
 SYS_ENCODING = getpreferredencoding()

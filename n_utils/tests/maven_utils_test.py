@@ -1,8 +1,9 @@
-import pytest
 import xml.etree.ElementTree as ET
-
 from os import environ
 from subprocess import Popen
+
+import pytest
+
 from n_utils.maven_utils import add_server
 
 

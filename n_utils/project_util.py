@@ -1,8 +1,9 @@
 from locale import getpreferredencoding
-from os import linesep, environ, devnull
+from os import devnull, environ, linesep
+from subprocess import PIPE, Popen
 from sys import argv
+
 from n_utils.profile_util import enable_profile
-from subprocess import Popen, PIPE
 
 SYS_ENCODING = getpreferredencoding()
 

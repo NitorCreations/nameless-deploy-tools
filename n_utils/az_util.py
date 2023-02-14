@@ -1,5 +1,5 @@
 import json
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen
 
 ARR_START = "[".encode()
 OBJ_START = "{".encode()

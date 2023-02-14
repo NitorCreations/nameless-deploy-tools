@@ -1,14 +1,9 @@
 import os
 from collections import OrderedDict
+
 from threadlocal_aws.clients import connect
-from n_utils.aws_infra_util import (
-    yaml_to_dict,
-    yaml_save,
-    json_load,
-    json_save_small,
-    load_parameters,
-    import_scripts,
-)
+
+from n_utils.aws_infra_util import import_scripts, json_load, json_save_small, load_parameters, yaml_save, yaml_to_dict
 from n_utils.ndt_project import Project
 
 

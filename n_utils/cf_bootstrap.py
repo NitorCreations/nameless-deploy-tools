@@ -26,13 +26,10 @@ import stat
 import subprocess
 import sys
 from ast import literal_eval
-from builtins import input
-from builtins import object
-from builtins import str
-from builtins import zip
+from builtins import input, object, str, zip
 from collections import OrderedDict
 from copy import deepcopy
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen
 
 import argcomplete
 import ipaddr
@@ -40,10 +37,10 @@ from argcomplete.completers import ChoicesCompleter
 from threadlocal_aws.clients import ec2, route53
 
 from n_utils import _to_str
-from n_utils.writer import ConfigFileWriter
 from n_utils.aws_infra_util import yaml_load, yaml_save
-from n_utils.ndt import find_include, find_all_includes
+from n_utils.ndt import find_all_includes, find_include
 from n_utils.utils import has_output_selector, select_stacks
+from n_utils.writer import ConfigFileWriter
 
 
 def enum(**enums):

@@ -1,5 +1,6 @@
-from n_utils.tf_utils import flat_state, jmespath_var
 import json
+
+from n_utils.tf_utils import flat_state, jmespath_var
 
 state = json.loads(
     """

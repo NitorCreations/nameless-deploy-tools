@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from n_utils.cloudfront_utils import distributions, distribution_comments
+from n_utils.cloudfront_utils import distribution_comments, distributions
 
 DISTRIBUTION = {
     "DistributionList": {

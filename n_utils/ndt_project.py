@@ -1,29 +1,26 @@
 import inspect
+import json
 import os
 import re
 import sys
-import json
-import six
 from builtins import object
 from operator import attrgetter
-from os import sep, path, mkdir
-from threadlocal_aws.clients import codebuild
-from n_utils.aws_infra_util import (
-    yaml_to_dict,
-    import_scripts,
-    yaml_save,
-    json_save_small,
-)
-from n_utils import VERSION
+from os import mkdir, path, sep
+
+import six
 from cloudformation_utils.tools import cloudformation_yaml_loads as yaml_loads
+from threadlocal_aws.clients import codebuild
+
+from n_utils import VERSION
+from n_utils.aws_infra_util import import_scripts, json_save_small, yaml_save, yaml_to_dict
 
 try:
     from os import scandir
 except ImportError:
     from scandir import scandir
 
-from n_utils.git_utils import Git
 from n_utils.aws_infra_util import load_parameters
+from n_utils.git_utils import Git
 
 
 class Component(object):

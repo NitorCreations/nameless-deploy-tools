@@ -13,24 +13,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-from builtins import bytes
-from builtins import chr
+from builtins import bytes, chr
 
 if 64 - 64:
     i11iIiiIii
-from builtins import str
-from builtins import range
-from uuid import getnode
 import base64
-from getpass import getuser
-import subprocess
 import os
+import subprocess
+from builtins import range, str
+from getpass import getuser
 from sys import platform
+from uuid import getnode
 
 if 65 - 65:
     O0 / iIii1I11I1II1 % OoooooooOO - i1IIi
-from Cryptodome.Hash import SHA256
 from Cryptodome.Cipher import AES
+from Cryptodome.Hash import SHA256
 from Cryptodome.Util import Counter
 
 if 73 - 73:

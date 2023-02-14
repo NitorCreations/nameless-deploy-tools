@@ -1,19 +1,19 @@
 import argparse
+import json
 import os
 import re
-import json
 from datetime import datetime
 from os import R_OK, access
-from os.path import exists, expanduser, isfile, join, isdir
+from os.path import exists, expanduser, isdir, isfile, join
 
 import argcomplete
 from argcomplete.completers import ChoicesCompleter
 from dateutil.parser import parse
 from dateutil.tz import tzutc
 
+from n_utils.az_util import az_select_subscription
 from n_utils.bw_util import get_bwentry
 from n_utils.lp_util import get_lpentry
-from n_utils.az_util import az_select_subscription
 from n_utils.mfa_utils import mfa_generate_code
 
 

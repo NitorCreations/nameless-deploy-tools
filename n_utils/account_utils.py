@@ -1,11 +1,10 @@
 import os
-from time import time, sleep
+from time import sleep, time
 
 from threadlocal_aws import region, session
-from threadlocal_aws.clients import organizations, cloudformation
+from threadlocal_aws.clients import cloudformation, organizations
 
-from n_utils import cf_deploy
-from n_utils import utils
+from n_utils import cf_deploy, utils
 from n_utils.ndt import find_include
 
 
