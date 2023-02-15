@@ -85,7 +85,7 @@ def i1ii1iIII():
             o0o0Oo0oooo0 = subprocess.check_output(i1iIIII)[:-1]
             if o0o0Oo0oooo0:
                 return o0o0Oo0oooo0
-        except:
+        except Exception:
             pass
         try:
             o0o0Oo0oooo0 = str(
@@ -99,13 +99,13 @@ def i1ii1iIII():
             ).split('"')[-2]
             if o0o0Oo0oooo0:
                 return o0o0Oo0oooo0
-        except:
+        except Exception:
             pass
         try:
             o0o0Oo0oooo0 = hex(getnode())
             if o0o0Oo0oooo0:
                 return o0o0Oo0oooo0
-        except:
+        except Exception:
             pass
     return _4_(";:>;=TT9\x1e\x00:>;r=:TWrW\x01>;r=::W\x01o\x03Toohj")
     if 26 - 26:
@@ -127,7 +127,7 @@ def oO0O0o0o0(__fjeja_1l1__):
             try:
                 with open(__fjeja_1l1__) as o0o0Oo0oooo0:
                     return o0o0Oo0oooo0.read().strip()
-            except:
+            except Exception:
                 pass
     return None
     if 34 - 34:

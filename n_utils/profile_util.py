@@ -142,7 +142,10 @@ def read_profile_expiry_epoc(profile, profile_type=None):
 
 
 def print_aws_profiles():
-    """Prints profile names from credentials file (~/.aws/credentials) and the conf file (~/.aws/conf) for autocomplete tools"""
+    """
+    Prints profile names from credentials file (~/.aws/credentials),
+    and the conf file (~/.aws/conf) for autocomplete tools.
+    """
     parser = argparse.ArgumentParser(description=print_aws_profiles.__doc__)
     if "_ARGCOMPLETE" in os.environ:
         parser.add_argument(
@@ -247,8 +250,10 @@ def print_profile_expiry(profile, expiry_epoc=None):
 
 
 def cli_read_profile_expiry():
-    """Read expiry field from credentials file, which is there if the login happened
-    with aws-azure-login or another tool that implements the same logic (e.g. https://github.com/NitorCreations/adfs-aws-login).
+    """
+    Read expiry field from credentials file,
+    which is there if the login happened with aws-azure-login or another tool that implements the same logic
+    (e.g. https://github.com/NitorCreations/adfs-aws-login).
     """
     parser = argparse.ArgumentParser(description=cli_read_profile_expiry.__doc__)
     parser.add_argument("profile", help="The profile to read expiry info from").completer = ChoicesCompleter(

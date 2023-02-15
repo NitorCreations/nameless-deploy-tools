@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-from os import environ
 from subprocess import Popen
 
 import pytest

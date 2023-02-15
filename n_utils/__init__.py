@@ -150,7 +150,7 @@ def _to_str(data):
     if callable(decode_method):
         try:
             ret = data.decode()
-        except:
+        except Exception:
             ret = _to_str(base64.b64encode(data))
     return str(ret)
 

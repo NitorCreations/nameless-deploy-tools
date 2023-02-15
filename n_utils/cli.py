@@ -26,7 +26,6 @@ import time
 from subprocess import PIPE, Popen
 
 import argcomplete
-import six
 import yaml
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
 from ec2_utils import ebs, interface
@@ -40,7 +39,7 @@ from threadlocal_aws.clients import sso
 
 from n_utils import _to_bytes, _to_str, aws_infra_util, cf_bootstrap, cf_deploy, connect, utils
 from n_utils.account_utils import create_account, list_created_accounts
-from n_utils.aws_infra_util import json_load, json_save_small, load_parameters
+from n_utils.aws_infra_util import json_load, json_save_small, load_parameters, yaml_to_dict
 from n_utils.az_util import ensure_group, ensure_management_group, fetch_properties
 from n_utils.cloudfront_utils import distribution_comments, distributions, upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
@@ -60,14 +59,7 @@ from n_utils.mfa_utils import (
 )
 from n_utils.ndt import find_all_includes, find_include, include_dirs
 from n_utils.ndt_project import Project, list_components, list_jobs, upsert_codebuild_projects
-from n_utils.profile_util import (
-    _epoc_to_str,
-    get_profile,
-    read_profiles,
-    read_sso_profile,
-    resolve_profile_type,
-    update_profile,
-)
+from n_utils.profile_util import _epoc_to_str, get_profile, read_sso_profile, resolve_profile_type, update_profile
 from n_utils.route53_util import upsert_record
 from n_utils.tf_utils import flat_state, jmespath_var, pull_state
 from n_utils.utils import (
@@ -158,9 +150,15 @@ def yaml_to_json():
         parser.error(args.file + " not found")
     doc = aws_infra_util.yaml_to_dict(args.file, merge=args.merge)
     if args.small:
-        dump = lambda out_doc: json.dumps(out_doc)
+
+        def dump(out_doc):
+            return json.dumps(out_doc)
+
     else:
-        dump = lambda out_doc: json.dumps(out_doc, indent=2, default=dthandler)
+
+        def dump(out_doc):
+            return json.dumps(out_doc, indent=2, default=dthandler)
+
     if args.colorize:
         colorprint(dump(doc), output_format="json")
     else:
@@ -1166,7 +1164,7 @@ def cli_upsert_codebuild_projects():
         - Needed for bakes and for example serverless python dockerized dependencies
     * SKIP_BUILD_JOB - skip creating build jobs where this parameter is 'y'
     * SKIP_IMAGE_JOB, SKIP_DOCKER_JOB, SKIP_SERVERLESS_JOB, SKIP_CDK_JOB, SKIP_TERRAFORM_JOB - skip creating jobs where these parameters are 'y' and match the subcomponent type
-    """
+    """  # noqa
     parser = get_parser(formatter=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         "-d",
@@ -1255,7 +1253,10 @@ def azure_template_parameters():
 
 
 def azure_location():
-    """Resolve an azure location based on 'AZURE_LOCATION' enviroment variable, local project or az cli configuration. Defaults to 'northeurope'"""
+    """
+    Resolve an azure location based on 'AZURE_LOCATION' enviroment variable, local project or az cli configuration.
+    Defaults to 'northeurope'
+    """
     parser = get_parser()
     argcomplete.autocomplete(parser)
     _ = parser.parse_args()

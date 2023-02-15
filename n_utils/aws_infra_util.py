@@ -27,7 +27,6 @@ from glob import glob
 from numbers import Number
 from operator import itemgetter
 
-import six
 import yaml
 from botocore.exceptions import ClientError
 from cloudformation_utils.tools import cloudformation_yaml_loads as yaml_load, process_script_decorated as import_script
@@ -249,9 +248,9 @@ def _process_value(value, used_params):
             yaml_value = yaml_load(value)
             if isinstance(yaml_value, Number):
                 return value
-            if not yaml_value is None:
+            if yaml_value is not None:
                 value = yaml_value
-        except:
+        except Exception:
             pass
     value = expand_vars(value, used_params, None, [])
     if isinstance(value, str):
@@ -357,13 +356,13 @@ def _add_subcomponent_file(component, branch, type, name, files):
         files.append(component + os.sep + type + "-" + name + os.sep + "infra-" + branch + ".properties")
 
 
-def resolve_docker_uri(component, uriParam, image_branch, git):
+def resolve_docker_uri(component, uri_param, image_branch, git):
     if not git:
         git = Git()
     with git:
-        if uriParam in os.environ:
-            return os.environ[uriParam]
-        docker = uriParam[14:]
+        if uri_param in os.environ:
+            return os.environ[uri_param]
+        docker = uri_param[14:]
         docker_params = load_parameters(component=component, docker=docker, branch=image_branch, git=git)
         return repo_uri(docker_params["DOCKER_NAME"])
 
@@ -410,9 +409,10 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
             # resolve with a specifically set image build number
             build = component_params[build_param]
             image_tag = job + "_" + build
-            job_tag_func = (
-                lambda image, image_name_prefix: len([tag for tag in image["Tags"] if tag["Value"] == image_tag]) > 0
-            )
+
+            def job_tag_func(image, image_name_prefix):
+                return len([tag for tag in image["Tags"] if tag["Value"] == image_tag]) > 0
+
             images = get_images(job, job_tag_function=job_tag_func)
         elif imagebranch != branch and not latest_baked:
             # resolve promote job
@@ -526,7 +526,7 @@ def load_parameters(
             ret["REGION"] = region()
         else:
             ret["REGION"] = initial_resolve["REGION"]
-        if not "AWS_DEFAULT_REGION" in os.environ:
+        if "AWS_DEFAULT_REGION" not in os.environ:
             os.environ["AWS_DEFAULT_REGION"] = ret["REGION"]
         if "paramEnvId" not in initial_resolve:
             ret["paramEnvId"] = branch
@@ -757,7 +757,9 @@ def apply_source(data, filename, optional, default):
 
 
 def _preprocess_template(data, root, basefile, path, templateParams):
-    param_refresh_callback = lambda: templateParams.update(_get_params(root, basefile))
+    def param_refresh_callback():
+        return templateParams.update(_get_params(root, basefile))
+
     param_refresh_callback()
     global gotImportErrors
     if isinstance(data, OrderedDict):

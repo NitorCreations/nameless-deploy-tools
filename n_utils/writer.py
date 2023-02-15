@@ -124,7 +124,7 @@ class ConfigFileWriter:
                     # out now.
                     if not isinstance(new_values[key_name], dict):
                         option_value = new_values[key_name]
-                        new_line = "{} = {}\n".format(key_name, option_value)
+                        new_line = f"{key_name} = {option_value}\n"
                         contents[j] = new_line
                         del new_values[key_name]
                     else:
@@ -179,11 +179,11 @@ class ConfigFileWriter:
         for key, value in list(new_values.items()):
             if isinstance(value, dict):
                 subindent = indent + "    "
-                new_contents.append("{}{} =\n".format(indent, key))
+                new_contents.append(f"{indent}{key} =\n")
                 for subkey, subval in list(value.items()):
-                    new_contents.append("{}{} = {}\n".format(subindent, subkey, subval))
+                    new_contents.append(f"{subindent}{subkey} = {subval}\n")
             else:
-                new_contents.append("{}{} = {}\n".format(indent, key, value))
+                new_contents.append(f"{indent}{key} = {value}\n")
             del new_values[key]
         contents.insert(line_number + 1, "".join(new_contents))
 

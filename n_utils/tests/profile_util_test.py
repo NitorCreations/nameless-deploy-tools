@@ -31,7 +31,7 @@ def test_adfs_profile_switch(capsys):
     assert "adfs-aws-login --profile testprofile" in captured.out
 
 
-def test_adfs_profile_switch(capsys):
+def test_lastpass_profile_switch(capsys):
     enable_profile("lastpass", "testprofile")
     captured = capsys.readouterr()
-    assert "lastpass-aws-login --profile testprofile"
+    assert "lastpass-aws-login --profile testprofile" in captured.out

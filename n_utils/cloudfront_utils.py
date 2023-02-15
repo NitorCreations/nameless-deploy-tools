@@ -73,7 +73,7 @@ def upsert_cloudfront_records(args):
             print("Upserting records for " + distribution["Id"] + " (" + distribution["Comment"] + ")")
             for alias in distribution["Aliases"]["Items"]:
                 change = get_record_change(alias, distribution["DomainName"], distribution["Id"], zones)
-                if not change["HostedZoneId"] in changes:
+                if change["HostedZoneId"] not in changes:
                     changes[change["HostedZoneId"]] = []
                 changes[change["HostedZoneId"]].append(change["Change"])
     requests = []

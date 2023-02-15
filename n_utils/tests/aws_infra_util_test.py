@@ -50,7 +50,7 @@ def test_stackref_order(mocker, stack_params_and_outputs_and_stack):
     result = yaml_to_dict("n_utils/tests/templates/test-stackref.yaml")
     assert (
         result["Resources"]["resTaskDefinition"]["Properties"]["ContainerDefinitions"][0]["Environment"][0]["Value"]
-        == '{\n  "s3": [{\n    "path": "/${x-forwarded-for}/*",\n    "bucket": "dev-my-test-bucket",\n    "basePath": "",\n    "region": "${AWS::Region}"\n  }]\n}\n'
+        == '{\n  "s3": [{\n    "path": "/${x-forwarded-for}/*",\n    "bucket": "dev-my-test-bucket",\n    "basePath": "",\n    "region": "${AWS::Region}"\n  }]\n}\n'  # noqa
     )
     assert (
         result["Resources"]["resBackendRole"]["Properties"]["Policies"][0]["PolicyDocument"]["Statement"][1]["Resource"]

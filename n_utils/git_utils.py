@@ -51,7 +51,7 @@ class Git:
         for dir in list(self.export_directories.values()):
             try:
                 rmtree(dir)
-            except:
+            except Exception:
                 # Best effport deleting only - not fatal
                 pass
 

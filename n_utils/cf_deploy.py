@@ -22,9 +22,7 @@ import re
 import sys
 import time
 from datetime import datetime
-from dis import dis
 
-import six
 from botocore.exceptions import ClientError
 from ec2_utils.logs import CloudWatchLogsThread, fmttime
 from pygments import formatters, highlight, lexers
