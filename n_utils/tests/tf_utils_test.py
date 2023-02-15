@@ -78,10 +78,7 @@ state = json.loads(
 
 def test_flat_state(mocker):
     state_doc = flat_state(state)
-    assert (
-        state_doc["sns_platform_app_arn"]
-        == "arn:aws:sns:eu-central-1:00000000:app/GCM/EhMobileDev"
-    )
+    assert state_doc["sns_platform_app_arn"] == "arn:aws:sns:eu-central-1:00000000:app/GCM/EhMobileDev"
     assert state_doc["sns_gcm_application.platform_credential"] == "FOOBAR"
 
 

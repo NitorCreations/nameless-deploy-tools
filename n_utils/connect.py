@@ -8,16 +8,12 @@ from n_utils.ndt_project import Project
 
 
 def deploy_connect_contact_flows(component, contactflowname, dry_run=True):
-    subcomponent = (
-        Project().get_component(component).get_subcomponent("connect", contactflowname)
-    )
+    subcomponent = Project().get_component(component).get_subcomponent("connect", contactflowname)
     extra_parameters = load_parameters(component=component, connect=contactflowname)
     template = subcomponent.get_dir() + os.sep + "template.yaml"
     flow_defs = yaml_to_dict(template, extra_parameters=extra_parameters)
     if "connectInstanceId" not in flow_defs:
-        raise Exception(
-            "Missing connect instance id. Define 'connectInstanceId' in the root of your flows template."
-        )
+        raise Exception("Missing connect instance id. Define 'connectInstanceId' in the root of your flows template.")
 
     instance_id = flow_defs["connectInstanceId"]
     flows = get_flows(instance_id)
@@ -87,9 +83,9 @@ def export_connect_contact_flow(instance_id, flowname):
         for flow in page["ContactFlowSummaryList"]:
             if flow["Name"] == flowname:
                 content = OrderedDict()
-                contact_flow = connect().describe_contact_flow(
-                    InstanceId=instance_id, ContactFlowId=flow["Id"]
-                )["ContactFlow"]
+                contact_flow = connect().describe_contact_flow(InstanceId=instance_id, ContactFlowId=flow["Id"])[
+                    "ContactFlow"
+                ]
                 content["Name"] = contact_flow["Name"]
                 content["Type"] = contact_flow["Type"]
                 content["Tags"] = contact_flow["Tags"]

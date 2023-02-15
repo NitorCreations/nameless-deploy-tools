@@ -33,17 +33,13 @@ class Component(object):
         if not self.subcomponent_classes:
             self.subcomponent_classes = [
                 name_and_obj
-                for name_and_obj in inspect.getmembers(
-                    sys.modules["n_utils.ndt_project"]
-                )
+                for name_and_obj in inspect.getmembers(sys.modules["n_utils.ndt_project"])
                 if name_and_obj[0].startswith("SC") and inspect.isclass(name_and_obj[1])
             ]
 
     def get_subcomponents(self):
         if not self.subcomponents:
-            self.subcomponents = sorted(
-                self._find_subcomponents(), key=attrgetter("name")
-            )
+            self.subcomponents = sorted(self._find_subcomponents(), key=attrgetter("name"))
         return self.subcomponents
 
     def get_subcomponent(self, type, name):
@@ -55,9 +51,7 @@ class Component(object):
     def _find_subcomponents(self):
         ret = []
         for subdir in [
-            de.name
-            for de in scandir(self.project.root + sep + self.name)
-            if self._is_subcomponent(de.name)
+            de.name for de in scandir(self.project.root + sep + self.name) if self._is_subcomponent(de.name)
         ]:
             for _, obj in self.subcomponent_classes:
                 if obj(self, "").match_dirname(subdir):
@@ -174,11 +168,7 @@ class Project(object):
         return None
 
     def _find_components(self):
-        return [
-            Component(de.name, self)
-            for de in scandir(self.root)
-            if de.is_dir() and self._is_component(de.path)
-        ]
+        return [Component(de.name, self) for de in scandir(self.root) if de.is_dir() and self._is_component(de.path)]
 
     def get_all_subcomponents(self, sc_type=None):
         if not self.all_subcomponents:
@@ -198,10 +188,7 @@ class Project(object):
                     if de.is_file()
                     and (
                         de.name == "infra.properties"
-                        or (
-                            de.name.startswith("infra-")
-                            and de.name.endswith(".properties")
-                        )
+                        or (de.name.startswith("infra-") and de.name.endswith(".properties"))
                     )
                 ]
             )
@@ -210,7 +197,6 @@ class Project(object):
 
 
 def guess_project_root():
-
     for guess in [".", Git().get_git_root(), "..", "../..", "../../..", "../../../.."]:
         if len(Project(root=guess).get_all_subcomponents()) > 0:
             if guess == ".":
@@ -246,15 +232,11 @@ def list_jobs(export_job_properties=False, branch=None, json=False, component=No
                         return {}
                     else:
                         return []
-                branch_obj["components"].append(
-                    {"name": c_component.name, "subcomponents": []}
-                )
+                branch_obj["components"].append({"name": c_component.name, "subcomponents": []})
                 components.append(c_component)
             else:
                 for c_component in project.get_components():
-                    branch_obj["components"].append(
-                        {"name": c_component.name, "subcomponents": []}
-                    )
+                    branch_obj["components"].append({"name": c_component.name, "subcomponents": []})
                     components.append(c_component)
         if not json and export_job_properties:
             try:
@@ -268,9 +250,7 @@ def list_jobs(export_job_properties=False, branch=None, json=False, component=No
         if json:
             _collect_json(components, ret, export_job_properties, git)
         else:
-            arr, param_files = _collect_prop_files(
-                components, export_job_properties, current_project.root, git
-            )
+            arr, param_files = _collect_prop_files(components, export_job_properties, current_project.root, git)
             if export_job_properties:
                 _write_prop_files(param_files)
     if json:
@@ -284,12 +264,8 @@ def _collect_json(components, ret, export_job_properties, git):
         for component in components:
             subcomponents = component.get_subcomponents()
             for subcomponent in subcomponents:
-                branch_elem = [
-                    b for b in ret["branches"] if b["name"] == component.project.branch
-                ][0]
-                component_elem = [
-                    c for c in branch_elem["components"] if c["name"] == component.name
-                ][0]
+                branch_elem = [b for b in ret["branches"] if b["name"] == component.project.branch][0]
+                component_elem = [c for c in branch_elem["components"] if c["name"] == component.name][0]
                 subc_elem = {"type": subcomponent.type}
                 if subcomponent.name:
                     subc_elem["name"] = subcomponent.name
@@ -314,9 +290,7 @@ def _collect_prop_files(components, export_job_properties, root, git):
                 arr.append(subcomponent.list_row(component.project.branch))
                 if export_job_properties:
                     # $TYPE-$GIT_BRANCH-$COMPONENT-$NAME.properties
-                    filename = subcomponent.job_properties_filename(
-                        component.project.branch, root
-                    )
+                    filename = subcomponent.job_properties_filename(component.project.branch, root)
                     prop_args = {
                         "component": subcomponent.component.name,
                         subcomponent.type: subcomponent.name,
@@ -437,16 +411,8 @@ phases:
                 subcomponent_name = subcomponent_type
 
             # Check parameters used to skip creating build jobs
-            if (
-                "SKIP_BUILD_JOB" in subcomponent["properties"]
-                and subcomponent["properties"]["SKIP_BUILD_JOB"] == "y"
-            ):
-                print(
-                    "SKIP_BUILD_JOB defined, skipping "
-                    + component_name
-                    + "/"
-                    + subcomponent_name
-                )
+            if "SKIP_BUILD_JOB" in subcomponent["properties"] and subcomponent["properties"]["SKIP_BUILD_JOB"] == "y":
+                print("SKIP_BUILD_JOB defined, skipping " + component_name + "/" + subcomponent_name)
                 continue
 
             skip_type_parameter = "SKIP_" + subcomponent_type.upper() + "_JOB"
@@ -454,26 +420,15 @@ phases:
                 skip_type_parameter in subcomponent["properties"]
                 and subcomponent["properties"][skip_type_parameter] == "y"
             ):
-                print(
-                    skip_type_parameter
-                    + " defined, skipping "
-                    + component_name
-                    + "/"
-                    + subcomponent_name
-                )
+                print(skip_type_parameter + " defined, skipping " + component_name + "/" + subcomponent_name)
                 continue
 
             # Check service role
             if "CODEBUILD_SERVICE_ROLE" in subcomponent["properties"]:
-                component_args["serviceRole"] = subcomponent["properties"][
-                    "CODEBUILD_SERVICE_ROLE"
-                ]
+                component_args["serviceRole"] = subcomponent["properties"]["CODEBUILD_SERVICE_ROLE"]
             else:
                 print(
-                    "CODEBUILD_SERVICE_ROLE needs to be defined, skipping "
-                    + component_name
-                    + "/"
-                    + subcomponent_name
+                    "CODEBUILD_SERVICE_ROLE needs to be defined, skipping " + component_name + "/" + subcomponent_name
                 )
                 continue
 
@@ -481,11 +436,7 @@ phases:
             orig_name_param = "ORIG_" + subcomponent_type.upper() + "_NAME"
             if orig_name_param in subcomponent["properties"]:
                 subcomponent_dir = (
-                    component_name
-                    + "/"
-                    + subcomponent_type
-                    + "-"
-                    + subcomponent["properties"][orig_name_param]
+                    component_name + "/" + subcomponent_type + "-" + subcomponent["properties"][orig_name_param]
                 )
             else:
                 subcomponent_dir = component_name + "/" + subcomponent_type
@@ -512,21 +463,15 @@ phases:
 
             # Setup build environment
             if "BUILD_ENVIRONMENT_COMPUTE" in subcomponent["properties"]:
-                component_args["environment"]["computeType"] = subcomponent[
-                    "properties"
-                ]["BUILD_ENVIRONMENT_COMPUTE"]
+                component_args["environment"]["computeType"] = subcomponent["properties"]["BUILD_ENVIRONMENT_COMPUTE"]
             else:
                 component_args["environment"]["computeType"] = "BUILD_GENERAL1_SMALL"
 
             # Setup source
             if "CODEBUILD_SOURCE_TYPE" in subcomponent["properties"]:
-                component_args["source"]["type"] = subcomponent["properties"][
-                    "CODEBUILD_SOURCE_TYPE"
-                ]
+                component_args["source"]["type"] = subcomponent["properties"]["CODEBUILD_SOURCE_TYPE"]
                 if "CODEBUILD_SOURCE_LOCATION" in subcomponent["properties"]:
-                    component_args["source"]["location"] = subcomponent["properties"][
-                        "CODEBUILD_SOURCE_LOCATION"
-                    ]
+                    component_args["source"]["location"] = subcomponent["properties"]["CODEBUILD_SOURCE_LOCATION"]
                     extra_params = {
                         "component": component_name,
                         "command": command,
@@ -539,9 +484,7 @@ phases:
                     else:
                         build_spec = DEFAULT_BUILD_SPEC
                     try:
-                        interpolated_build_spec = yaml_to_dict(
-                            build_spec, extra_parameters=extra_params
-                        )
+                        interpolated_build_spec = yaml_to_dict(build_spec, extra_parameters=extra_params)
                     except:
                         interpolated_build_spec = yaml_loads(build_spec)
                         interpolated_build_spec = import_scripts(
@@ -549,18 +492,14 @@ phases:
                             subcomponent_dir + os.sep + "infra.properties",
                             extra_parameters=extra_params,
                         )
-                    component_args["source"]["buildspec"] = yaml_save(
-                        interpolated_build_spec
-                    )
+                    component_args["source"]["buildspec"] = yaml_save(interpolated_build_spec)
                 else:
                     del component_args["source"]
             else:
                 del component_args["source"]
 
             if "CODEBUILD_TIMEOUT" in subcomponent["properties"]:
-                component_args["timeoutInMinutes"] = int(
-                    subcomponent["properties"]["CODEBUILD_TIMEOUT"]
-                )
+                component_args["timeoutInMinutes"] = int(subcomponent["properties"]["CODEBUILD_TIMEOUT"])
 
             # Make sure that builds that need docker, start docker
             if (
@@ -584,9 +523,7 @@ phases:
                     if "commands" not in phase:
                         phase["commands"] = []
                     phase["commands"].insert(0, "start-docker.sh")
-                    component_args["source"]["buildspec"] = yaml_save(
-                        interpolated_build_spec
-                    )
+                    component_args["source"]["buildspec"] = yaml_save(interpolated_build_spec)
             # Set up webhook filter
             for flter in webhook_args["filterGroups"][0]:
                 if flter["type"] == "FILE_PATH":
@@ -603,13 +540,8 @@ phases:
                 else:
                     if flter["type"] == "BASE_REF":
                         flter["pattern"] = "^refs/heads/" + branch + "$"
-                    if (
-                        flter["type"] == "EVENT"
-                        and "CODEBUILD_EVENT_FILTER" in subcomponent["properties"]
-                    ):
-                        flter["pattern"] = subcomponent["properties"][
-                            "CODEBUILD_EVENT_FILTER"
-                        ]
+                    if flter["type"] == "EVENT" and "CODEBUILD_EVENT_FILTER" in subcomponent["properties"]:
+                        flter["pattern"] = subcomponent["properties"]["CODEBUILD_EVENT_FILTER"]
             webhook_args["projectName"] = component_args["name"]
 
             # Run update

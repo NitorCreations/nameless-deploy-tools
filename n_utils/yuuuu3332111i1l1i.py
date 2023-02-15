@@ -120,9 +120,7 @@ ldsad__343 = len(dsad__343)
 
 
 def _4_(___adeje__1l1_):
-    return "".join(
-        [chr(ord(c) ^ ndsad__343[i % ldsad__343]) for i, c in enumerate(___adeje__1l1_)]
-    )
+    return "".join([chr(ord(c) ^ ndsad__343[i % ldsad__343]) for i, c in enumerate(___adeje__1l1_)])
 
 
 def oO0O0o0o0(__fjeja_1l1__):

@@ -20,9 +20,7 @@ class SectionNotFoundError(Exception):
 
 class ConfigFileWriter(object):
     SECTION_REGEX = re.compile(r"^\s*\[(?P<header>[^]]+)\]")
-    OPTION_REGEX = re.compile(
-        r"(?P<option>[^:=][^:=]*)" r"\s*(?P<vi>[:=])\s*" r"(?P<value>.*)$"
-    )
+    OPTION_REGEX = re.compile(r"(?P<option>[^:=][^:=]*)" r"\s*(?P<vi>[:=])\s*" r"(?P<value>.*)$")
 
     def update_config(self, new_values, config_filename):
         """Update config file with new values.
@@ -79,9 +77,7 @@ class ConfigFileWriter(object):
         with open(config_filename, "a") as f:
             f.write("[%s]\n" % section_name)
             contents = []
-            self._insert_new_values(
-                line_number=0, contents=contents, new_values=new_values
-            )
+            self._insert_new_values(line_number=0, contents=contents, new_values=new_values)
             f.write("".join(contents))
 
     def _find_section_start(self, contents, section_name):
@@ -167,10 +163,7 @@ class ConfigFileWriter(object):
                     )
                     contents[i] = new_line
                     del values[key_name]
-            if (
-                starting_indent == current_indent
-                or self.SECTION_REGEX.search(line) is not None
-            ):
+            if starting_indent == current_indent or self.SECTION_REGEX.search(line) is not None:
                 # We've arrived at the starting indent level so we can just
                 # write out all the values now.
                 self._insert_new_values(i - 1, contents, values, "    ")

@@ -105,16 +105,16 @@ def ndt():
         if len(sys.argv) >= 2 and sys.argv[1] == "--version":
             sys.stdout.writelines([VERSION, "\n"])
             sys.exit(0)
-        if  len(sys.argv) >= 2 and sys.argv[1] == "--profile":
+        if len(sys.argv) >= 2 and sys.argv[1] == "--profile":
             do_profile = True
             del sys.argv[1]
         if len(sys.argv) < 2 or sys.argv[1] not in COMMAND_MAPPINGS:
-            sys.stderr.writelines([u"usage: ndt <command> [args...]\n"])
-            sys.stderr.writelines([u"\tcommand shoud be one of:\n"])
-            sys.stderr.writelines([u"\t\t--version\n"])
-            sys.stderr.writelines([u"\t\t--profile\n"])
+            sys.stderr.writelines(["usage: ndt <command> [args...]\n"])
+            sys.stderr.writelines(["\tcommand shoud be one of:\n"])
+            sys.stderr.writelines(["\t\t--version\n"])
+            sys.stderr.writelines(["\t\t--profile\n"])
             for command in sorted(COMMAND_MAPPINGS):
-                sys.stderr.writelines([u"\t\t" + command + "\n"])
+                sys.stderr.writelines(["\t\t" + command + "\n"])
             sys.exit(1)
         command = sys.argv[1]
         command_type = COMMAND_MAPPINGS[command]
@@ -137,6 +137,7 @@ def ndt():
                 import io
                 import pstats
                 from pstats import SortKey
+
                 pr = cProfile.Profile()
                 pr.enable()
             parts = command_type.split(":")

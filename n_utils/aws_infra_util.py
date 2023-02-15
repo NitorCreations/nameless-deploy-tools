@@ -60,9 +60,7 @@ CONNECT_INSTANCE_ID = None
 ############################################################################
 # _THE_ yaml & json deserialize/serialize functions
 
-yaml.SafeDumper.yaml_representers[
-    None
-] = lambda self, data: yaml.representer.SafeRepresenter.represent_str(
+yaml.SafeDumper.yaml_representers[None] = lambda self, data: yaml.representer.SafeRepresenter.represent_str(
     self,
     _to_str(data),
 )
@@ -71,9 +69,7 @@ SOURCED_PARAMS = None
 
 
 def run_command(command):
-    proc = subprocess.Popen(
-        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
-    )
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     output = proc.communicate()
     if proc.returncode:
         raise Exception("Failed to run " + str(command))
@@ -82,9 +78,7 @@ def run_command(command):
 
 def _resolve_stackref_from_dict(stack_var):
     if "region" in stack_var and "stackName" in stack_var and "paramName" in stack_var:
-        return _resolve_stackref(
-            stack_var["region"], stack_var["stackName"], stack_var["paramName"]
-        )
+        return _resolve_stackref(stack_var["region"], stack_var["stackName"], stack_var["paramName"])
     elif "component" in stack_var and "stack" in stack_var and "paramName" in stack_var:
         param_name = stack_var["paramName"]
         del stack_var["paramName"]
@@ -102,9 +96,7 @@ def _resolve_stackref(region, stack_name, stack_param):
     if stack_key in stacks:
         stack_params = stacks[stack_key]
     else:
-        stack_params, _ = stack_params_and_outputs_and_stack(
-            stack_name=stack_name, stack_region=region
-        )
+        stack_params, _ = stack_params_and_outputs_and_stack(stack_name=stack_name, stack_region=region)
         stacks[stack_key] = stack_params
     if stack_param in stack_params:
         return stack_params[stack_param]
@@ -112,11 +104,7 @@ def _resolve_stackref(region, stack_name, stack_param):
 
 
 def _resolve_tfref_from_dict(tfref_var):
-    if (
-        "component" in tfref_var
-        and "terraform" in tfref_var
-        and ("paramName" in tfref_var or "jmespath" in tfref_var)
-    ):
+    if "component" in tfref_var and "terraform" in tfref_var and ("paramName" in tfref_var or "jmespath" in tfref_var):
         with Git() as git:
             current_branch = git.get_current_branch()
             if "branch" in tfref_var:
@@ -130,9 +118,7 @@ def _resolve_tfref_from_dict(tfref_var):
                 root = "."
                 if branch != current_branch:
                     root = git.export_branch(branch)
-                terraform = pull_state(
-                    tfref_var["component"], tfref_var["terraform"], root=root
-                )
+                terraform = pull_state(tfref_var["component"], tfref_var["terraform"], root=root)
                 terraforms[tf_key] = terraform
             if "paramName" in tfref_var:
                 flat_state_dict = flat_state(terraform)
@@ -206,10 +192,7 @@ def _resolve_product_ami(product_code, region=None):
             Owners=["aws-marketplace"],
         )
         ami_ids = [
-            image["ImageId"]
-            for image in sorted(
-                ami_resp["Images"], key=itemgetter("CreationDate"), reverse=True
-            )
+            image["ImageId"] for image in sorted(ami_resp["Images"], key=itemgetter("CreationDate"), reverse=True)
         ]
         if ami_ids:
             value = ami_ids[0]
@@ -222,14 +205,9 @@ def _resolve_onwer_named_ami(owner, name, region=None):
     if (owner, name) in owner_amis:
         return owner_amis[(owner, name)]
     else:
-        ami_resp = ec2(region=region).describe_images(
-            Owners=[owner], Filters=[{"Name": "name", "Values": [name]}]
-        )
+        ami_resp = ec2(region=region).describe_images(Owners=[owner], Filters=[{"Name": "name", "Values": [name]}])
         ami_ids = [
-            image["ImageId"]
-            for image in sorted(
-                ami_resp["Images"], key=itemgetter("CreationDate"), reverse=True
-            )
+            image["ImageId"] for image in sorted(ami_resp["Images"], key=itemgetter("CreationDate"), reverse=True)
         ]
         if ami_ids:
             value = ami_ids[0]
@@ -286,10 +264,7 @@ def _process_value(value, used_params):
         # Don't go into external refs if:
         #   a) resolving base variables like REGION and paramEnvId
         #   b) resolving basic variables used in terraform backend configuration
-        if (
-            "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ
-            and "TF_INIT_OUTPUT" not in os.environ
-        ):
+        if "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
             if "StackRef" in value:
                 stack_value = _resolve_stackref_from_dict(value["StackRef"])
                 if stack_value:
@@ -330,10 +305,7 @@ def _process_value(value, used_params):
                 if product_ami:
                     value = product_ami
             if "OwnerNamedAmi" in value:
-                if (
-                    "owner" in value["OwnerNamedAmi"]
-                    and "name" in value["OwnerNamedAmi"]
-                ):
+                if "owner" in value["OwnerNamedAmi"] and "name" in value["OwnerNamedAmi"]:
                     owner = value["OwnerNamedAmi"]["owner"]
                     name = value["OwnerNamedAmi"]["name"]
                     owner_ami = _resolve_onwer_named_ami(owner, name, region=region)
@@ -382,20 +354,8 @@ def import_parameter_file(filename, params):
 def _add_subcomponent_file(component, branch, type, name, files):
     if name:
         os.environ["ORIG_" + type.upper() + "_NAME"] = name
-        files.append(
-            component + os.sep + type + "-" + name + os.sep + "infra.properties"
-        )
-        files.append(
-            component
-            + os.sep
-            + type
-            + "-"
-            + name
-            + os.sep
-            + "infra-"
-            + branch
-            + ".properties"
-        )
+        files.append(component + os.sep + type + "-" + name + os.sep + "infra.properties")
+        files.append(component + os.sep + type + "-" + name + os.sep + "infra-" + branch + ".properties")
 
 
 def resolve_docker_uri(component, uriParam, image_branch, git):
@@ -405,9 +365,7 @@ def resolve_docker_uri(component, uriParam, image_branch, git):
         if uriParam in os.environ:
             return os.environ[uriParam]
         docker = uriParam[14:]
-        docker_params = load_parameters(
-            component=component, docker=docker, branch=image_branch, git=git
-        )
+        docker_params = load_parameters(component=component, docker=docker, branch=image_branch, git=git)
         return repo_uri(docker_params["DOCKER_NAME"])
 
 
@@ -426,9 +384,7 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
         if "paramAmi" + image in os.environ:
             return {
                 "ImageId": os.environ["paramAmi" + image],
-                "Name": os.environ["paramAmiName" + image]
-                if "paramAmiName" + image in os.environ
-                else "Unknown",
+                "Name": os.environ["paramAmiName" + image] if "paramAmiName" + image in os.environ else "Unknown",
             }
         images = []
         image_params = {}
@@ -436,9 +392,7 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
         if "IMAGE_JOB" in os.environ and not image:
             job = re.sub(r"\W", "_", os.environ["IMAGE_JOB"])
         else:
-            image_params = load_parameters(
-                component=component, image=image, branch=imagebranch, git=git
-            )
+            image_params = load_parameters(component=component, image=image, branch=imagebranch, git=git)
             if "JOB_NAME" in image_params:
                 job = re.sub(r"\W", "_", image_params["JOB_NAME"])
             else:
@@ -449,25 +403,16 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
                     job = job + "_" + image
                 job = re.sub(r"\W", "_", job)
         build_param = "paramAmi" + image + "Build"
-        latest_baked = (
-            build_param in component_params
-            and component_params[build_param] == "latest"
-        )
+        latest_baked = build_param in component_params and component_params[build_param] == "latest"
         if latest_baked:
             # get current branch latest images
             images = get_images(job)
-        if (
-            build_param in component_params
-            and component_params[build_param] != "latest"
-        ):
+        if build_param in component_params and component_params[build_param] != "latest":
             # resolve with a specifically set image build number
             build = component_params[build_param]
             image_tag = job + "_" + build
             job_tag_func = (
-                lambda image, image_name_prefix: len(
-                    [tag for tag in image["Tags"] if tag["Value"] == image_tag]
-                )
-                > 0
+                lambda image, image_name_prefix: len([tag for tag in image["Tags"] if tag["Value"] == image_tag]) > 0
             )
             images = get_images(job, job_tag_function=job_tag_func)
         elif imagebranch != branch and not latest_baked:
@@ -478,15 +423,9 @@ def resolve_ami(component_params, component, image, imagebranch, branch, git):
                 suffix += "_" + image
                 repl_suffix += "_" + image
             if not image_params:
-                image_params = load_parameters(
-                    component=component, image=image, branch=imagebranch, git=git
-                )
-            this_branch_prefix = re.sub(
-                r"\W", "_", component_params["BUILD_JOB_PREFIX"] + "_"
-            )
-            image_branch_prefix = re.sub(
-                r"\W", "_", image_params["BUILD_JOB_PREFIX"] + "_"
-            )
+                image_params = load_parameters(component=component, image=image, branch=imagebranch, git=git)
+            this_branch_prefix = re.sub(r"\W", "_", component_params["BUILD_JOB_PREFIX"] + "_")
+            image_branch_prefix = re.sub(r"\W", "_", image_params["BUILD_JOB_PREFIX"] + "_")
             job = lreplace(image_branch_prefix, this_branch_prefix, job)
             job = rreplace(suffix, repl_suffix, job)
             images = get_images(job)
@@ -566,37 +505,18 @@ def load_parameters(
         ]
         if component:
             files.append(prefix + component + os.sep + "infra.properties")
-            files.append(
-                prefix + component + os.sep + "infra-" + branch + ".properties"
-            )
+            files.append(prefix + component + os.sep + "infra-" + branch + ".properties")
             _add_subcomponent_file(prefix + component, branch, "stack", stack, files)
-            _add_subcomponent_file(
-                prefix + component, branch, "serverless", serverless, files
-            )
+            _add_subcomponent_file(prefix + component, branch, "serverless", serverless, files)
             _add_subcomponent_file(prefix + component, branch, "cdk", cdk, files)
-            _add_subcomponent_file(
-                prefix + component, branch, "terraform", terraform, files
-            )
+            _add_subcomponent_file(prefix + component, branch, "terraform", terraform, files)
             _add_subcomponent_file(prefix + component, branch, "azure", azure, files)
             _add_subcomponent_file(prefix + component, branch, "docker", docker, files)
-            _add_subcomponent_file(
-                prefix + component, branch, "connect", connect, files
-            )
+            _add_subcomponent_file(prefix + component, branch, "connect", connect, files)
             _add_subcomponent_file(prefix + component, branch, "image", image, files)
             if isinstance(image, six.string_types):
-                files.append(
-                    prefix + component + os.sep + "image" + os.sep + "infra.properties"
-                )
-                files.append(
-                    prefix
-                    + component
-                    + os.sep
-                    + "image"
-                    + os.sep
-                    + "infra-"
-                    + branch
-                    + ".properties"
-                )
+                files.append(prefix + component + os.sep + "image" + os.sep + "infra.properties")
+                files.append(prefix + component + os.sep + "image" + os.sep + "infra-" + branch + ".properties")
         initial_resolve = ret.copy()
         os.environ["DO_NOT_RESOLVE_EXTERNAL_REFS"] = "true"
         for file in files:
@@ -620,10 +540,7 @@ def load_parameters(
             image_branch = branch
             if "BAKE_IMAGE_BRANCH" in ret:
                 image_branch = ret["BAKE_IMAGE_BRANCH"]
-            for docker in [
-                dockerdir.split("/docker-")[1]
-                for dockerdir in glob(component + os.sep + "docker-*")
-            ]:
+            for docker in [dockerdir.split("/docker-")[1] for dockerdir in glob(component + os.sep + "docker-*")]:
                 try:
                     ret["paramDockerUri" + docker] = resolve_docker_uri(
                         component, "paramDockerUri" + docker, image_branch, git
@@ -633,13 +550,10 @@ def load_parameters(
                     # actually be in use. Missing and used uris will result in an error later.
                     pass
             for image_name in [
-                imagedir.split("/image")[1].replace("-", "").lower()
-                for imagedir in glob(component + os.sep + "image*")
+                imagedir.split("/image")[1].replace("-", "").lower() for imagedir in glob(component + os.sep + "image*")
             ]:
                 try:
-                    image = resolve_ami(
-                        ret, component, image_name, image_branch, branch, git
-                    )
+                    image = resolve_ami(ret, component, image_name, image_branch, branch, git)
                     if image:
                         ret["paramAmi" + image_name] = image["ImageId"]
                         ret["paramAmiName" + image_name] = image["Name"]
@@ -658,9 +572,7 @@ def load_parameters(
         if "ORIG_STACK_NAME" in os.environ:
             ret["ORIG_STACK_NAME"] = os.environ["ORIG_STACK_NAME"]
             if "STACK_NAME" not in ret:
-                ret["STACK_NAME"] = (
-                    component + "-" + ret["ORIG_STACK_NAME"] + "-" + ret["paramEnvId"]
-                )
+                ret["STACK_NAME"] = component + "-" + ret["ORIG_STACK_NAME"] + "-" + ret["paramEnvId"]
         if docker and "NEEDS_DOCKER" not in ret:
             ret["NEEDS_DOCKER"] = "y"
         for k, v in list(os.environ.items()):
@@ -668,9 +580,7 @@ def load_parameters(
                 ret[k] = v
         if "ORIG_DOCKER_NAME" in os.environ:
             if "DOCKER_NAME" not in ret:
-                ret["DOCKER_NAME"] = (
-                    component + "/" + ret["paramEnvId"] + "-" + ret["ORIG_DOCKER_NAME"]
-                )
+                ret["DOCKER_NAME"] = component + "/" + ret["paramEnvId"] + "-" + ret["ORIG_DOCKER_NAME"]
         if "BUILD_JOB_PREFIX" not in ret:
             if "JENKINS_JOB_PREFIX" in ret:
                 ret["BUILD_JOB_PREFIX"] = ret["JENKINS_JOB_PREFIX"]
@@ -678,32 +588,20 @@ def load_parameters(
                 ret["BUILD_JOB_PREFIX"] = "ndt" + ret["paramEnvId"]
         if "JENKINS_JOB_PREFIX" not in ret:
             ret["JENKINS_JOB_PREFIX"] = ret["BUILD_JOB_PREFIX"]
-        if (
-            subc_type
-            and subc_type.upper() + "_NAME" not in ret
-            and "ORIG_" + subc_type.upper() + "_NAME" in ret
-        ):
-            ret[subc_type.upper() + "_NAME"] = ret[
-                "ORIG_" + subc_type.upper() + "_NAME"
-            ]
+        if subc_type and subc_type.upper() + "_NAME" not in ret and "ORIG_" + subc_type.upper() + "_NAME" in ret:
+            ret[subc_type.upper() + "_NAME"] = ret["ORIG_" + subc_type.upper() + "_NAME"]
         if subc_type == "azure":
             if "AZURE_SCOPE" not in ret:
                 if "AZURE_SCOPE" in os.environ and os.environ["AZURE_SCOPE"]:
                     ret["AZURE_SCOPE"] = os.environ["AZURE_SCOPE"]
                 else:
                     ret["AZURE_SCOPE"] = "group"
-            if ret["AZURE_SCOPE"] == "group" and (
-                "AZURE_GROUP" not in ret or not ret["AZURE_GROUP"]
-            ):
-                ret["AZURE_GROUP"] = (
-                    ret["BUILD_JOB_PREFIX"] + "-" + component + "-" + azure
-                )
+            if ret["AZURE_SCOPE"] == "group" and ("AZURE_GROUP" not in ret or not ret["AZURE_GROUP"]):
+                ret["AZURE_GROUP"] = ret["BUILD_JOB_PREFIX"] + "-" + component + "-" + azure
             if ret["AZURE_SCOPE"] == "management-group" and (
                 "AZURE_MANAGEMENT_GROUP" not in ret or not ret["AZURE_MANAGEMENT_GROUP"]
             ):
-                ret["AZURE_MANAGEMENT_GROUP"] = (
-                    ret["BUILD_JOB_PREFIX"] + "-" + component
-                )
+                ret["AZURE_MANAGEMENT_GROUP"] = ret["BUILD_JOB_PREFIX"] + "-" + component
 
         parameters[params_key] = ret
         return ret
@@ -714,9 +612,7 @@ def yaml_save(data):
         pass
 
     def _dict_representer(dumper, data):
-        return dumper.represent_mapping(
-            yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, list(data.items())
-        )
+        return dumper.represent_mapping(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, list(data.items()))
 
     OrderedDumper.add_representer(OrderedDict, _dict_representer)
     return yaml.dump(data, None, OrderedDumper, default_flow_style=False)
@@ -743,9 +639,7 @@ def resolve_file(filename, basefile):
     if filename[0] == "/":
         return existing(filename)
     if re.match(r"^(\.\./\.\./|\.\./|\./)?aws-utils/.*", filename):
-        return existing(
-            find_include(re.sub(r"^(\.\./\.\./|\.\./|\./)?aws-utils/", "", filename))
-        )
+        return existing(find_include(re.sub(r"^(\.\./\.\./|\.\./|\./)?aws-utils/", "", filename)))
     if re.match(r"^\(\(\s?includes\s?\)\)/.*", filename):
         return existing(find_include(re.sub(r"^\(\(\s?includes\s?\)\)/", "", filename)))
     base = os.path.dirname(basefile)
@@ -766,23 +660,13 @@ PARAM_NOT_AVAILABLE = ParamNotAvailable()
 
 def _add_params(target, source, source_prop, use_value):
     if source_prop in source:
-        if isinstance(source[source_prop], OrderedDict) or isinstance(
-            source[source_prop], dict
-        ):
+        if isinstance(source[source_prop], OrderedDict) or isinstance(source[source_prop], dict):
             for k, val in list(source[source_prop].items()):
-                target[k] = (
-                    val["Default"]
-                    if use_value and "Default" in val
-                    else PARAM_NOT_AVAILABLE
-                )
+                target[k] = val["Default"] if use_value and "Default" in val else PARAM_NOT_AVAILABLE
         elif isinstance(source[source_prop], list):
             for list_item in source[source_prop]:
                 for k, val in list(list_item.items()):
-                    target[k] = (
-                        val["Default"]
-                        if use_value and "Default" in val
-                        else PARAM_NOT_AVAILABLE
-                    )
+                    target[k] = val["Default"] if use_value and "Default" in val else PARAM_NOT_AVAILABLE
 
 
 def _get_params(data, template):
@@ -791,26 +675,15 @@ def _get_params(data, template):
     # first load defaults for all parameters in "Parameters"
     if "Parameters" in data:
         _add_params(params, data, "Parameters", True)
-        if (
-            "Fn::Merge" in data["Parameters"]
-            and "Result" in data["Parameters"]["Fn::Merge"]
-        ):
+        if "Fn::Merge" in data["Parameters"] and "Result" in data["Parameters"]["Fn::Merge"]:
             _add_params(params, data["Parameters"]["Fn::Merge"], "Result", True)
-        if (
-            "Fn::ImportYaml" in data["Parameters"]
-            and "Result" in data["Parameters"]["Fn::ImportYaml"]
-        ):
+        if "Fn::ImportYaml" in data["Parameters"] and "Result" in data["Parameters"]["Fn::ImportYaml"]:
             _add_params(params, data["Parameters"]["Fn::ImportYaml"], "Result", True)
     if "resources" in data and "Parameters" in data["resources"]:
         params["ServerlessDeploymentBucket"] = PARAM_NOT_AVAILABLE
         _add_params(params, data["resources"], "Parameters", True)
-        if (
-            "Fn::Merge" in data["resources"]["Parameters"]
-            and "Result" in data["resources"]["Parameters"]["Fn::Merge"]
-        ):
-            _add_params(
-                params, data["resources"]["Parameters"]["Fn::Merge"], "Result", True
-            )
+        if "Fn::Merge" in data["resources"]["Parameters"] and "Result" in data["resources"]["Parameters"]["Fn::Merge"]:
+            _add_params(params, data["resources"]["Parameters"]["Fn::Merge"], "Result", True)
         if (
             "Fn::ImportYaml" in data["resources"]["Parameters"]
             and "Result" in data["resources"]["Parameters"]["Fn::ImportYaml"]
@@ -897,9 +770,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 params = OrderedDict(list(templateParams.items()))
                 params.update(data)
                 data.clear()
-                contents = expand_only_double_paranthesis_params(
-                    import_script(script_import), params, None, []
-                )
+                contents = expand_only_double_paranthesis_params(import_script(script_import), params, None, [])
                 data["Fn::Join"] = ["", contents]
             else:
                 print(
@@ -938,9 +809,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 data.clear()
                 if isinstance(contents, OrderedDict):
                     for k, val in list(contents.items()):
-                        data[k] = _preprocess_template(
-                            val, root, yaml_file, path + k + "_", templateParams
-                        )
+                        data[k] = _preprocess_template(val, root, yaml_file, path + k + "_", templateParams)
                 elif isinstance(contents, list):
                     data = contents
                     for i in range(0, len(data)):
@@ -982,26 +851,11 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 del data["optional"]
             data = _preprocess_template(data, root, yaml_file, path, templateParams)
         elif "Fn::Merge" in data:
-            merge_list = (
-                data["Fn::Merge"]["Source"]
-                if "Source" in data["Fn::Merge"]
-                else data["Fn::Merge"]
-            )
-            result = (
-                data["Fn::Merge"]["Result"]
-                if "Result" in data["Fn::Merge"]
-                else OrderedDict()
-            )
-            data["Fn::Merge"] = OrderedDict(
-                [("Source", merge_list), ("Result", result)]
-            )
+            merge_list = data["Fn::Merge"]["Source"] if "Source" in data["Fn::Merge"] else data["Fn::Merge"]
+            result = data["Fn::Merge"]["Result"] if "Result" in data["Fn::Merge"] else OrderedDict()
+            data["Fn::Merge"] = OrderedDict([("Source", merge_list), ("Result", result)])
             if not isinstance(merge_list, list):
-                print(
-                    "ERROR: "
-                    + path
-                    + ": Fn::Merge must associate to a list in file "
-                    + basefile
-                )
+                print("ERROR: " + path + ": Fn::Merge must associate to a list in file " + basefile)
                 gotImportErrors = True
                 return data
             merge = _preprocess_template(
@@ -1013,9 +867,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             )
             if not result:
                 result = merge
-                data["Fn::Merge"] = OrderedDict(
-                    [("Source", merge_list), ("Result", result)]
-                )
+                data["Fn::Merge"] = OrderedDict([("Source", merge_list), ("Result", result)])
             elif not isinstance(merge, type(result)):
                 print(
                     "ERROR: "
@@ -1049,14 +901,10 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 del data["Fn::Merge"]
                 return result
             else:
-                return _preprocess_template(
-                    data, root, basefile, path + "/", templateParams
-                )
+                return _preprocess_template(data, root, basefile, path + "/", templateParams)
         elif "StackRef" in data:
             stack_var = expand_vars(data["StackRef"], templateParams, None, [])
-            stack_var = _check_refs(
-                stack_var, basefile, path + "StackRef_", templateParams, True
-            )
+            stack_var = _check_refs(stack_var, basefile, path + "StackRef_", templateParams, True)
             data.clear()
             stack_value = _resolve_stackref_from_dict(stack_var)
             if not stack_value:
@@ -1072,17 +920,11 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             return stack_value
         elif "TFRef" in data:
             tf_var = expand_vars(data["TFRef"], templateParams, None, [])
-            tf_var = _check_refs(
-                tf_var, basefile, path + "TFRef_", templateParams, True
-            )
+            tf_var = _check_refs(tf_var, basefile, path + "TFRef_", templateParams, True)
             data.clear()
             tf_value = _resolve_tfref_from_dict(tf_var)
             if not tf_value:
-                ref = (
-                    stack_var["paramName"]
-                    if "paramName" in stack_var
-                    else stack_var["jmespath"]
-                )
+                ref = stack_var["paramName"] if "paramName" in stack_var else stack_var["jmespath"]
                 raise TFRefUnresolved(
                     "Did not find value for: "
                     + ref
@@ -1095,9 +937,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             return tf_value
         elif "AzRef" in data:
             az_var = expand_vars(data["AzRef"], templateParams, None, [])
-            az_var = _check_refs(
-                az_var, basefile, path + "AzRef_", templateParams, True
-            )
+            az_var = _check_refs(az_var, basefile, path + "AzRef_", templateParams, True)
             data.clear()
             az_value = _resolve_azref_from_dict(az_var)
             if not az_value:
@@ -1116,9 +956,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             enc_conf = data["Encrypt"]
             del enc_conf["value"]
             vault = Vault(**enc_conf)
-            resolved_value = _preprocess_template(
-                to_encrypt, root, basefile, path + "Encrypt_", templateParams
-            )
+            resolved_value = _preprocess_template(to_encrypt, root, basefile, path + "Encrypt_", templateParams)
             if not isinstance(resolved_value, six.string_types):
                 raise EncryptException("Encrypted value needs to be a string")
             return b64encode(vault.direct_encrypt(resolved_value))
@@ -1136,9 +974,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
         elif "OwnerNamedAmi" in data:
             owner_named = expand_vars(data["OwnerNamedAmi"], templateParams, None, [])
             if "owner" in owner_named and "name" in owner_named:
-                return _resolve_onwer_named_ami(
-                    owner_named["owner"], owner_named["name"]
-                )
+                return _resolve_onwer_named_ami(owner_named["owner"], owner_named["name"])
         elif "FlowRef" in data:
             flow_name = expand_vars(data["FlowRef"], templateParams, None, [])
             if flow_name:
@@ -1156,18 +992,14 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             for k, val in list(data.items()):
                 if k != "Parameters":
                     data[k] = expand_vars(
-                        _preprocess_template(
-                            val, root, basefile, path + _to_str(k) + "_", templateParams
-                        ),
+                        _preprocess_template(val, root, basefile, path + _to_str(k) + "_", templateParams),
                         templateParams,
                         None,
                         [],
                     )
     elif isinstance(data, list):
         for i in range(0, len(data)):
-            data[i] = _preprocess_template(
-                data[i], root, basefile, path + str(i) + "_", templateParams
-            )
+            data[i] = _preprocess_template(data[i], root, basefile, path + str(i) + "_", templateParams)
     return data
 
 
@@ -1228,14 +1060,10 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
                 del data["__default"]
         else:
             for k, val in list(data.items()):
-                data[k] = _check_refs(
-                    val, templateFile, f"{path}{k}_", templateParams, resolveRefs
-                )
+                data[k] = _check_refs(val, templateFile, f"{path}{k}_", templateParams, resolveRefs)
     elif isinstance(data, list):
         for i in range(0, len(data)):
-            data[i] = _check_refs(
-                data[i], templateFile, path + str(i) + "_", templateParams, resolveRefs
-            )
+            data[i] = _check_refs(data[i], templateFile, path + str(i) + "_", templateParams, resolveRefs)
     return data
 
 
@@ -1290,11 +1118,7 @@ def extract_script(prefix, path, join_args):
             else:
                 var_name = element["Ref"]
                 if not len(var_name) > 0:
-                    raise Exception(
-                        "Failed to convert reference inside "
-                        + "script: "
-                        + str(element)
-                    )
+                    raise Exception("Failed to convert reference inside " + "script: " + str(element))
                 bash_varname = bash_encode_parameter_name(var_name)
                 var_decl = ""
                 # var_decl += "#" + var_name + "\n"
@@ -1306,9 +1130,7 @@ def extract_script(prefix, path, join_args):
         code_idx = 1  # switch to "after" block
 
     filename = encode_script_filename(prefix, path)
-    sys.stderr.write(
-        prefix + ": Exported path '" + path + "' contents to file '" + filename + "'\n"
-    )
+    sys.stderr.write(prefix + ": Exported path '" + path + "' contents to file '" + filename + "'\n")
     with open(filename, "w") as script_file:  # opens file with name of "test.txt"
         script_file.write(code[0])
         script_file.write("\n")
@@ -1383,12 +1205,7 @@ def locate_launchconf_metadata(data):
     if "Resources" in data:
         resources = data["Resources"]
         for val in list(resources.values()):
-            if (
-                val
-                and "Type" in val
-                and val["Type"] == "AWS::AutoScaling::LaunchConfiguration"
-                and "Metadata" in val
-            ):
+            if val and "Type" in val and val["Type"] == "AWS::AutoScaling::LaunchConfiguration" and "Metadata" in val:
                 return val["Metadata"]
     return None
 
@@ -1443,13 +1260,9 @@ def _patch_launchconf(data):
         lc_userdata = locate_launchconf_userdata(data)
         if lc_userdata:
             if isinstance(lc_userdata, list):
-                lc_userdata.append(
-                    "\nexit 0\n# metadata hash: " + str(hash(json_save(lc_meta))) + "\n"
-                )
+                lc_userdata.append("\nexit 0\n# metadata hash: " + str(hash(json_save(lc_meta))) + "\n")
             else:
-                lc_userdata += (
-                    "\nexit 0\n# metadata hash: " + str(hash(json_save(lc_meta))) + "\n"
-                )
+                lc_userdata += "\nexit 0\n# metadata hash: " + str(hash(json_save(lc_meta))) + "\n"
                 reset_launchconf_userdata(data, lc_userdata)
         lc_meta_refs = set(get_refs(lc_meta))
         if len(lc_meta_refs) > 0:

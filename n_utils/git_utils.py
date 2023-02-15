@@ -65,9 +65,7 @@ class Git(object):
             if not exported:
                 export_branch = self._resolve_branch(branch)
                 if not export_branch:
-                    raise CheckoutException(
-                        "Failed to resolve branch " + branch + " for export"
-                    )
+                    raise CheckoutException("Failed to resolve branch " + branch + " for export")
                 proc = Popen(
                     ["git", "archive", "--format", "tar", export_branch],
                     stdout=PIPE,
@@ -95,9 +93,7 @@ class Git(object):
 
     def get_branches(self):
         if not self.branches:
-            proc = Popen(
-                ["git", "branch", "-a"], stdout=PIPE, stderr=open(devnull, "w")
-            )
+            proc = Popen(["git", "branch", "-a"], stdout=PIPE, stderr=open(devnull, "w"))
             output, _ = proc.communicate()
             for line in output.decode(SYS_ENCODING).split(linesep):
                 if "detached" in line or "(no branch)" in line:

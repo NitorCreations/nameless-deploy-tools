@@ -43,21 +43,13 @@ def create_account(
         status = response["CreateAccountStatus"]["State"]
         while time() - startTime < timeout and not status == "SUCCEEDED":
             if response["CreateAccountStatus"]["State"] == "FAILED":
-                raise Exception(
-                    "Account creation failed: "
-                    + response["CreateAccountStatus"]["FailureReason"]
-                )
+                raise Exception("Account creation failed: " + response["CreateAccountStatus"]["FailureReason"])
             print("Waiting for account creation to finish")
             sleep(2)
-            response = organizations().describe_create_account_status(
-                CreateAccountRequestId=create_account_id
-            )
+            response = organizations().describe_create_account_status(CreateAccountRequestId=create_account_id)
             status = response["CreateAccountStatus"]["State"]
         if time() - startTime > timeout and not status == "SUCCEEDED":
-            raise Exception(
-                "Timed out waiting to create account "
-                + response["CreateAccountStatus"]["State"]
-            )
+            raise Exception("Timed out waiting to create account " + response["CreateAccountStatus"]["State"])
         account_id = response["CreateAccountStatus"]["AccountId"]
 
     os.environ["paramManagedAccount"] = account_id
@@ -74,14 +66,10 @@ def create_account(
             aws_session_token=assumed_creds["SessionToken"],
         )
         for trusted_account in trusted_accounts:
-            os.environ["paramTrustedAccount"] = trusted_roles[trusted_account].split(
-                ":"
-            )[4]
+            os.environ["paramTrustedAccount"] = trusted_roles[trusted_account].split(":")[4]
             os.environ["paramRoleName"] = trust_role
             template = find_include("trust-account-role.yaml")
-            cf_deploy.deploy(
-                "trust-" + trusted_account, template, utils.region(), session=sess
-            )
+            cf_deploy.deploy("trust-" + trusted_account, template, utils.region(), session=sess)
         template = find_include("manage-account.yaml")
         for trusted_account in trusted_accounts:
             role_arn = trusted_roles[trusted_account]
@@ -106,10 +94,7 @@ def find_role_arn(trusted_account):
     cf_stacks = cloudformation().get_paginator("describe_stacks")
     for page in cf_stacks.paginate():
         for stack in page["Stacks"]:
-            if (
-                stack["StackName"].endswith(trusted_account)
-                or "-" + trusted_account + "-" in stack["StackName"]
-            ):
+            if stack["StackName"].endswith(trusted_account) or "-" + trusted_account + "-" in stack["StackName"]:
                 for output in stack["Outputs"]:
                     if output["OutputKey"] == "ManageRole":
                         return output["OutputValue"]

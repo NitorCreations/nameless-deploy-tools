@@ -32,9 +32,7 @@ def read_expiring_profiles():
         with open(credentials) as credfile:
             parser.read_file(credfile)
             for profile in parser.sections():
-                if parser.has_option(
-                    profile, "aws_session_expiration"
-                ) or parser.has_option(profile, "aws_expiration"):
+                if parser.has_option(profile, "aws_session_expiration") or parser.has_option(profile, "aws_expiration"):
                     ret.append(profile)
     return ret
 
@@ -56,16 +54,14 @@ def read_profiles(prefix=""):
         with open(config) as configfile:
             parser.read_file(configfile)
             for profile in parser.sections():
-                if (
-                    profile.startswith("profile ")
-                    and profile[8:] not in ret
-                    and profile[8:].startswith(prefix)
-                ):
+                if profile.startswith("profile ") and profile[8:] not in ret and profile[8:].startswith(prefix):
                     ret.append(profile[8:])
     return ret
 
-PROFILES= {}
+
+PROFILES = {}
 PROFILES_WITH_CREDS = {}
+
 
 def get_profile(profile, include_creds=True):
     home = expanduser("~")
@@ -113,11 +109,13 @@ def read_profile_expiry(profile, profile_type=None):
                     return parser.get(profile, "aws_session_expiration")
     return read_sso_profile_expiry(profile)
 
+
 def read_sso_profile_expiry(profile):
     profile_data = read_sso_profile(profile)
     if profile_data:
         return profile_data.get("expiresAt", "1970-01-01T00:00:00Z")[:-1] + ".000Z"
     return "1970-01-01T00:00:00.000Z"
+
 
 def read_sso_profile(profile):
     profile_data = get_profile(profile, include_creds=False)
@@ -130,12 +128,18 @@ def read_sso_profile(profile):
                 if isfile(full_file) and access(full_file, R_OK):
                     with open(full_file, "r") as cache_file:
                         cache_json = json.load(cache_file)
-                        if cache_json and "startUrl" in cache_json and cache_json["startUrl"] == profile_data["sso_start_url"]:
+                        if (
+                            cache_json
+                            and "startUrl" in cache_json
+                            and cache_json["startUrl"] == profile_data["sso_start_url"]
+                        ):
                             return cache_json
     return {}
 
+
 def read_profile_expiry_epoc(profile, profile_type=None):
     return _epoc_secs(parse(read_profile_expiry(profile, profile_type=profile_type)).replace(tzinfo=tzutc()))
+
 
 def print_aws_profiles():
     """Prints profile names from credentials file (~/.aws/credentials) and the conf file (~/.aws/conf) for autocomplete tools"""
@@ -146,9 +150,7 @@ def print_aws_profiles():
         ).completer = ChoicesCompleter(read_profiles())
         argcomplete.autocomplete(parser)
     else:
-        parser.add_argument(
-            "prefix", help="Prefix of profiles to print", default="", nargs="?"
-        )
+        parser.add_argument("prefix", help="Prefix of profiles to print", default="", nargs="?")
     args = parser.parse_args()
     print(" ".join(read_profiles(prefix=args.prefix)))
 
@@ -168,9 +170,9 @@ def profile_to_env():
         help="Output also the role given here as the target role for the profile",
     )
     if "_ARGCOMPLETE" in os.environ:
-        parser.add_argument(
-            "profile", help="The profile to read profile info from"
-        ).completer = ChoicesCompleter(read_profiles())
+        parser.add_argument("profile", help="The profile to read profile info from").completer = ChoicesCompleter(
+            read_profiles()
+        )
         argcomplete.autocomplete(parser)
     else:
         parser.add_argument("profile", help="The profile to read profile info from")
@@ -186,36 +188,15 @@ def profile_to_env():
             parser = ConfigParser()
             with open(config) as configfile:
                 parser.read_file(configfile)
-                if profile_entry in parser.sections() and parser.has_option(
-                    profile_entry, "azure_default_role_arn"
-                ):
+                if profile_entry in parser.sections() and parser.has_option(profile_entry, "azure_default_role_arn"):
                     params.append(role_param)
-                    print(
-                        role_param
-                        + '="'
-                        + parser.get(profile_entry, "azure_default_role_arn")
-                        + '";'
-                    )
-                if profile_entry in parser.sections() and parser.has_option(
-                    profile_entry, "adfs_role_arn"
-                ):
+                    print(role_param + '="' + parser.get(profile_entry, "azure_default_role_arn") + '";')
+                if profile_entry in parser.sections() and parser.has_option(profile_entry, "adfs_role_arn"):
                     params.append(role_param)
-                    print(
-                        role_param
-                        + '="'
-                        + parser.get(profile_entry, "adfs_role_arn")
-                        + '";'
-                    )
-                if profile_entry in parser.sections() and parser.has_option(
-                    profile_entry, "lastpass_role_arn"
-                ):
+                    print(role_param + '="' + parser.get(profile_entry, "adfs_role_arn") + '";')
+                if profile_entry in parser.sections() and parser.has_option(profile_entry, "lastpass_role_arn"):
                     params.append(role_param)
-                    print(
-                        role_param
-                        + '="'
-                        + parser.get(profile_entry, "lastpass_role_arn")
-                        + '";'
-                    )
+                    print(role_param + '="' + parser.get(profile_entry, "lastpass_role_arn") + '";')
     if args.role_arn:
         params.append(role_param)
         print(role_param + '="' + args.role_arn + '";')
@@ -229,13 +210,7 @@ def print_profile(profile_name, params):
         upper_param = key.upper()
         if key == "aws_session_expiration" or key == "aws_expiration":
             d = parse(value)
-            print(
-                "AWS_SESSION_EXPIRATION_EPOC_"
-                + safe_profile
-                + '="'
-                + str(_epoc_secs(d))
-                + '";'
-            )
+            print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + '="' + str(_epoc_secs(d)) + '";')
             params.append("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile)
         params.append(upper_param)
         if value.startswith('"'):
@@ -248,9 +223,9 @@ def profile_expiry_to_env():
     """Prints profile expiry from credentials file (~/.aws/credentials) as eval-able environment variables"""
     parser = argparse.ArgumentParser(description=profile_expiry_to_env.__doc__)
     if "_ARGCOMPLETE" in os.environ:
-        parser.add_argument(
-            "profile", help="The profile to read expiry info from"
-        ).completer = ChoicesCompleter(read_expiring_profiles())
+        parser.add_argument("profile", help="The profile to read expiry info from").completer = ChoicesCompleter(
+            read_expiring_profiles()
+        )
         argcomplete.autocomplete(parser)
     else:
         parser.add_argument("profile", help="The profile to read expiry info from")
@@ -268,22 +243,17 @@ def print_profile_expiry(profile, expiry_epoc=None):
         epoc = _epoc_secs(parse(expiry).replace(tzinfo=tzutc()))
     print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=" + str(epoc))
     print("AWS_SESSION_EXPIRATION_" + safe_profile + "=" + expiry)
-    print(
-        "export AWS_SESSION_EXPIRATION_"
-        + safe_profile
-        + " AWS_SESSION_EXPIRATION_EPOC_"
-        + safe_profile
-        + ";"
-    )
+    print("export AWS_SESSION_EXPIRATION_" + safe_profile + " AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
 
 
 def cli_read_profile_expiry():
     """Read expiry field from credentials file, which is there if the login happened
-    with aws-azure-login or another tool that implements the same logic (e.g. https://github.com/NitorCreations/adfs-aws-login)."""
+    with aws-azure-login or another tool that implements the same logic (e.g. https://github.com/NitorCreations/adfs-aws-login).
+    """
     parser = argparse.ArgumentParser(description=cli_read_profile_expiry.__doc__)
-    parser.add_argument(
-        "profile", help="The profile to read expiry info from"
-    ).completer = ChoicesCompleter(read_expiring_profiles())
+    parser.add_argument("profile", help="The profile to read expiry info from").completer = ChoicesCompleter(
+        read_expiring_profiles()
+    )
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     print(read_profile_expiry(args.profile))
@@ -377,9 +347,7 @@ def store_bw_profile(bw_entry_name):
                 parser.read_file(credfile)
                 if profile not in parser.sections():
                     parser.add_section(profile)
-                parser.set(
-                    profile, "aws_access_key_id", bw_entry.fields["aws_access_key_id"]
-                )
+                parser.set(profile, "aws_access_key_id", bw_entry.fields["aws_access_key_id"])
                 parser.set(
                     profile,
                     "aws_secret_access_key",
@@ -410,34 +378,20 @@ def cli_enable_profile():
     """Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-role profiles are supported"""
     parser = argparse.ArgumentParser(description=cli_enable_profile.__doc__)
     type_select = parser.add_mutually_exclusive_group(required=False)
-    type_select.add_argument(
-        "-i", "--iam", action="store_true", help="IAM user type profile"
-    )
-    type_select.add_argument(
-        "-a", "--azure", action="store_true", help="Azure login type profile"
-    )
-    type_select.add_argument(
-        "-f", "--adfs", action="store_true", help="ADFS login type profile"
-    )
-    type_select.add_argument(
-        "-l", "--lastpass", action="store_true", help="Lastpass login type profile"
-    )
-    type_select.add_argument(
-        "-n", "--ndt", action="store_true", help="NDT assume role type profile"
-    )
+    type_select.add_argument("-i", "--iam", action="store_true", help="IAM user type profile")
+    type_select.add_argument("-a", "--azure", action="store_true", help="Azure login type profile")
+    type_select.add_argument("-f", "--adfs", action="store_true", help="ADFS login type profile")
+    type_select.add_argument("-l", "--lastpass", action="store_true", help="Lastpass login type profile")
+    type_select.add_argument("-n", "--ndt", action="store_true", help="NDT assume role type profile")
     type_select.add_argument(
         "-s",
         "--azure-subscription",
         action="store_true",
         help="Microsoft Azure subscription",
     )
-    type_select.add_argument(
-        "-o", "--sso", action="store_true", help="AWS SSO type profile"
-    )
+    type_select.add_argument("-o", "--sso", action="store_true", help="AWS SSO type profile")
     if "_ARGCOMPLETE" in os.environ:
-        parser.add_argument(
-            "profile", help="The profile to enable"
-        ).completer = ChoicesCompleter(read_profiles())
+        parser.add_argument("profile", help="The profile to enable").completer = ChoicesCompleter(read_profiles())
         argcomplete.autocomplete(parser)
     else:
         parser.add_argument("profile", help="The profile to enable")
@@ -486,9 +440,7 @@ def enable_profile(profile_type, profile):
     expiry = now - 1000
     if profile_type == "iam":
         _print_profile_switch(profile)
-    elif (
-        profile_type == "azure" or profile_type == "adfs" or profile_type == "lastpass" or profile_type == "sso"
-    ):
+    elif profile_type == "azure" or profile_type == "adfs" or profile_type == "lastpass" or profile_type == "sso":
         _print_profile_switch(profile)
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
@@ -515,21 +467,13 @@ def enable_profile(profile_type, profile):
                     bw_prefix = "AZURE_DEFAULT_PASSWORD='" + bw_entry.password + "' "
                 elif lp_entry:
                     bw_prefix = "AZURE_DEFAULT_PASSWORD='" + lp_entry.password + "' "
-                print(
-                    bw_prefix
-                    + "aws-azure-login --profile "
-                    + profile
-                    + gui_mode
-                    + " --no-prompt --no-sandbox"
-                )
+                print(bw_prefix + "aws-azure-login --profile " + profile + gui_mode + " --no-prompt --no-sandbox")
             elif profile_type == "adfs":
                 if bw_entry:
                     bw_prefix = "ADFS_DEFAULT_PASSWORD='" + bw_entry.password + "' "
                 elif lp_entry:
                     bw_prefix = "ADFS_DEFAULT_PASSWORD='" + lp_entry.password + "' "
-                print(
-                    bw_prefix + "adfs-aws-login --profile " + profile + " --no-prompt"
-                )
+                print(bw_prefix + "adfs-aws-login --profile " + profile + " --no-prompt")
             elif profile_type == "lastpass":
                 if bw_entry:
                     bw_prefix = "LASTPASS_DEFAULT_PASSWORD='" + bw_entry.password + "' "
@@ -538,17 +482,8 @@ def enable_profile(profile_type, profile):
                 elif lp_entry:
                     bw_prefix = "LASTPASS_DEFAULT_PASSWORD='" + lp_entry.password + "' "
                 if "ndt_mfa_token" in profile_data:
-                    bw_prefix += (
-                        "LASTPASS_DEFAULT_OTP='"
-                        + mfa_generate_code(profile_data["ndt_mfa_token"])
-                        + "' "
-                    )
-                print(
-                    bw_prefix
-                    + "lastpass-aws-login --profile "
-                    + profile
-                    + " --no-prompt"
-                )
+                    bw_prefix += "LASTPASS_DEFAULT_OTP='" + mfa_generate_code(profile_data["ndt_mfa_token"]) + "' "
+                print(bw_prefix + "lastpass-aws-login --profile " + profile + " --no-prompt")
             elif profile_type == "sso":
                 print("aws sso login --profile " + profile)
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
@@ -592,10 +527,7 @@ def enable_profile(profile_type, profile):
             print_profile_expiry(profile, expiry_epoc=expiry)
         _print_profile_switch(profile)
     elif profile_type == "azure-subscription":
-        if not (
-            "AZURE_SUBSCRIPTION" in os.environ
-            and os.environ["AZURE_SUBSCRIPTION"] == orig_profile
-        ):
+        if not ("AZURE_SUBSCRIPTION" in os.environ and os.environ["AZURE_SUBSCRIPTION"] == orig_profile):
             subscription_id = az_select_subscription(orig_profile)
             if subscription_id:
                 print('AZURE_SUBSCRIPTION="' + orig_profile + '";')
@@ -611,10 +543,7 @@ def _print_profile_switch(profile):
     if unset:
         print("unset " + " ".join(unset) + ";")
     set_env = []
-    if (
-        "AWS_DEFAULT_PROFILE" not in os.environ
-        or os.environ["AWS_DEFAULT_PROFILE"] != profile
-    ):
+    if "AWS_DEFAULT_PROFILE" not in os.environ or os.environ["AWS_DEFAULT_PROFILE"] != profile:
         set_env.append("AWS_DEFAULT_PROFILE")
     if "AWS_PROFILE" not in os.environ or os.environ["AWS_PROFILE"] != profile:
         set_env.append("AWS_PROFILE")
@@ -627,7 +556,6 @@ def _print_profile_switch(profile):
 def _epoc_to_str(epoc):
     return datetime.utcfromtimestamp(epoc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
+
 def _epoc_secs(d):
-    return int(
-        (d - datetime.utcfromtimestamp(0).replace(tzinfo=tzutc())).total_seconds()
-    )
+    return int((d - datetime.utcfromtimestamp(0).replace(tzinfo=tzutc())).total_seconds())
