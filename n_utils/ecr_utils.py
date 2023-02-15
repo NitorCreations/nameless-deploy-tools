@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import base64
 
 # Copyright 2016-2017 Nitor Creations Oy
 #
@@ -15,7 +14,8 @@ import base64
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from builtins import str
+
+import base64
 
 from botocore.exceptions import ClientError
 from threadlocal_aws.clients import ecr

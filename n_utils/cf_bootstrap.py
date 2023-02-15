@@ -26,7 +26,6 @@ import stat
 import subprocess
 import sys
 from ast import literal_eval
-from builtins import input, object, str, zip
 from collections import OrderedDict
 from copy import deepcopy
 from subprocess import PIPE, Popen
@@ -142,7 +141,7 @@ def list_templates():
 def has_entry(prefix, name, file_name):
     if not os.path.isfile(file_name):
         return False
-    with open(file_name, "r") as config:
+    with open(file_name) as config:
         for line in config.readlines():
             if "[" + prefix + name + "]" == line.strip():
                 return True
@@ -398,7 +397,7 @@ def _map_list(context, param, value):
         sys.exit(1)
 
 
-class ContextClassBase(object):
+class ContextClassBase:
     """Base class for template contexts. Can be directly used for
     bootstrap stacks with no parameters to ask can use it directly
     """

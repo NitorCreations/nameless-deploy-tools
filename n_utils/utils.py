@@ -26,7 +26,6 @@ import shutil
 import string
 import tempfile
 import time
-from builtins import object, range, str
 from collections import OrderedDict
 from copy import deepcopy
 from operator import itemgetter
@@ -52,7 +51,7 @@ INSTANCE_DATA_WIN = "C:/nameless/instance-data.json"
 dthandler = lambda obj: obj.isoformat() if hasattr(obj, "isoformat") else json.JSONEncoder().default(obj)
 
 
-class ParamNotAvailable(object):
+class ParamNotAvailable:
     def __init__(self):
         return
 
@@ -193,7 +192,7 @@ def interpolate_file(
     if use_vault:
         vault = Vault()
         vault_keys = vault.list_all()
-    with io.open(file_name, "r", encoding=encoding) as _infile:
+    with open(file_name, encoding=encoding) as _infile:
         with dstfile as _outfile:
             for line in _infile:
                 line = _process_line(line, params, vault, vault_keys)
@@ -232,10 +231,10 @@ def _apply_simple_regex(RE, line, params, vault, vault_keys):
 def expand_vars(line, params, vault, vault_keys):
     if isinstance(line, OrderedDict) or isinstance(line, dict):
         ret = OrderedDict(list(line.items()))
-        if "Fn::" in [x[:4] for x in list(ret.keys()) if isinstance(x, six.string_types)]:
+        if "Fn::" in [x[:4] for x in list(ret.keys()) if isinstance(x, str)]:
             return expand_only_double_paranthesis_params(ret, params, vault, vault_keys)
         for key, value in list(line.items()):
-            if isinstance(key, six.string_types) and key.startswith("Fn::"):
+            if isinstance(key, str) and key.startswith("Fn::"):
                 new_value = expand_only_double_paranthesis_params(value, params, vault, vault_keys)
                 ret = OrderedDict([(key, new_value) if k == key else (k, v) for k, v in list(ret.items())])
             else:
@@ -245,7 +244,7 @@ def expand_vars(line, params, vault, vault_keys):
         return ret
     if isinstance(line, list):
         return [expand_vars(x, params, vault, vault_keys) for x in line]
-    if isinstance(line, six.string_types):
+    if isinstance(line, str):
         ret = _apply_simple_regex(SIMPLE_PARAM_RE, line, params, vault, vault_keys)
         if isinstance(ret, OrderedDict):
             return expand_vars(ret, params, vault, vault_keys)
@@ -266,7 +265,7 @@ def expand_only_double_paranthesis_params(line, params, vault, vault_keys):
         return ret
     if isinstance(line, list):
         return [expand_only_double_paranthesis_params(x, params, vault, vault_keys) for x in line]
-    if isinstance(line, six.string_types):
+    if isinstance(line, str):
         ret = _apply_simple_regex(DOUBLE_PARANTHESIS_RE, line, params, vault, vault_keys)
         if isinstance(ret, OrderedDict):
             return expand_only_double_paranthesis_params(ret, params, vault, vault_keys)

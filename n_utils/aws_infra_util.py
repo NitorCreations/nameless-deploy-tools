@@ -21,7 +21,6 @@ import re
 import subprocess
 import sys
 from base64 import b64encode
-from builtins import range, str
 from collections import OrderedDict
 from copy import copy
 from glob import glob
@@ -235,14 +234,14 @@ def _process_infra_prop_line(line, params, used_params):
             value = key_val[1]
         value = _process_value(value, used_params)
         params[key] = value
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             used_params[key] = value
         else:
             used_params[key] = json_save_small(value)
 
 
 def _process_value(value, used_params):
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         if not value.strip():
             return ""
         value = expand_vars(value, used_params, None, [])
@@ -255,7 +254,7 @@ def _process_value(value, used_params):
         except:
             pass
     value = expand_vars(value, used_params, None, [])
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         value = value.strip()
     elif isinstance(value, OrderedDict):
         region = None
@@ -319,7 +318,7 @@ def _process_value(value, used_params):
 
 
 def joined_file_lines(filename):
-    with open(filename, "r") as f:
+    with open(filename) as f:
         prevline = ""
         to_yeild = None
         for line in f.readlines():
@@ -463,7 +462,7 @@ def load_parameters(
     if docker:
         subc_type = "docker"
         subc_name = "docker=" + docker
-    if isinstance(image, six.string_types):
+    if isinstance(image, str):
         subc_type = "image"
         subc_name = "image=" + image
     if cdk:
@@ -514,7 +513,7 @@ def load_parameters(
             _add_subcomponent_file(prefix + component, branch, "docker", docker, files)
             _add_subcomponent_file(prefix + component, branch, "connect", connect, files)
             _add_subcomponent_file(prefix + component, branch, "image", image, files)
-            if isinstance(image, six.string_types):
+            if isinstance(image, str):
                 files.append(prefix + component + os.sep + "image" + os.sep + "infra.properties")
                 files.append(prefix + component + os.sep + "image" + os.sep + "infra-" + branch + ".properties")
         initial_resolve = ret.copy()
@@ -957,7 +956,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             del enc_conf["value"]
             vault = Vault(**enc_conf)
             resolved_value = _preprocess_template(to_encrypt, root, basefile, path + "Encrypt_", templateParams)
-            if not isinstance(resolved_value, six.string_types):
+            if not isinstance(resolved_value, str):
                 raise EncryptException("Encrypted value needs to be a string")
             return b64encode(vault.direct_encrypt(resolved_value))
         elif "Ref" in data:
@@ -1152,7 +1151,7 @@ def extract_scripts(data, prefix, path=""):
         if k == "Fn::Join":
             if not val[0] == "":
                 continue
-            if isinstance(val[1][0], six.string_types) and (val[1][0].find("#!") != 0):
+            if isinstance(val[1][0], str) and (val[1][0].find("#!") != 0):
                 continue
             script_file = extract_script(prefix, path, val[1])
             del data[k]

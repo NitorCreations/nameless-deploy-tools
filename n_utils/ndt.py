@@ -2,7 +2,6 @@ import glob
 import locale
 import os
 import sys
-from builtins import str
 from subprocess import PIPE, Popen
 
 from argcomplete import split_line

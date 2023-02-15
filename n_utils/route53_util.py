@@ -19,8 +19,7 @@ def upsert_record(dns_name, record_type, value, ttl=300, wait=True):
 def hosted_zones():
     pages = route53().get_paginator("list_hosted_zones")
     for page in pages.paginate():
-        for hosted_zone in page.get("HostedZones", []):
-            yield hosted_zone
+        yield from page.get("HostedZones", [])
 
 
 def longest_matching_zone(alias, hosted_zones):

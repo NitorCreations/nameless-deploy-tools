@@ -1,8 +1,8 @@
 import json
 from subprocess import PIPE, Popen
 
-ARR_START = "[".encode()
-OBJ_START = "{".encode()
+ARR_START = b"["
+OBJ_START = b"{"
 
 
 def az_login():

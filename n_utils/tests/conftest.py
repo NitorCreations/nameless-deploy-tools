@@ -13,9 +13,9 @@ def get_test_target_module(test_module):
 
 @pytest.fixture(scope="function")
 def cloudformation(mocker, request):
-    target = "{}.{}.cloudformation".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
+    target = f"{BASE_MODULE_NAME}.{get_test_target_module(request.module.__name__)}.cloudformation"
     if load_class(target):
-        print("Mocking {}".format(target))
+        print(f"Mocking {target}")
         client = mocker.MagicMock()
         client_func = mocker.patch(target)
         client_func.return_value = client
@@ -24,9 +24,9 @@ def cloudformation(mocker, request):
 
 @pytest.fixture(scope="function")
 def cloudfront(mocker, request):
-    target = "{}.{}.cloudfront".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
+    target = f"{BASE_MODULE_NAME}.{get_test_target_module(request.module.__name__)}.cloudfront"
     if load_class(target):
-        print("Mocking {}".format(target))
+        print(f"Mocking {target}")
         client = mocker.MagicMock()
         client_func = mocker.patch(target)
         client_func.return_value = client
@@ -35,9 +35,9 @@ def cloudfront(mocker, request):
 
 @pytest.fixture(scope="function")
 def ec2(mocker, request):
-    target = "{}.{}.ec2".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
+    target = f"{BASE_MODULE_NAME}.{get_test_target_module(request.module.__name__)}.ec2"
     if load_class(target):
-        print("Mocking {}".format(target))
+        print(f"Mocking {target}")
         client = mocker.MagicMock()
         client_func = mocker.patch(target)
         client_func.return_value = client
@@ -46,9 +46,9 @@ def ec2(mocker, request):
 
 @pytest.fixture(scope="function")
 def ecr(mocker, request):
-    target = "{}.{}.ecr".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
+    target = f"{BASE_MODULE_NAME}.{get_test_target_module(request.module.__name__)}.ecr"
     if load_class(target):
-        print("Mocking {}".format(target))
+        print(f"Mocking {target}")
         client = mocker.MagicMock()
         client_func = mocker.patch(target)
         client_func.return_value = client
@@ -57,9 +57,9 @@ def ecr(mocker, request):
 
 @pytest.fixture(scope="function")
 def organizations(mocker, request):
-    target = "{}.{}.organizations".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
+    target = f"{BASE_MODULE_NAME}.{get_test_target_module(request.module.__name__)}.organizations"
     if load_class(target):
-        print("Mocking {}".format(target))
+        print(f"Mocking {target}")
         client = mocker.MagicMock()
         client_func = mocker.patch(target)
         client_func.return_value = client
@@ -68,9 +68,9 @@ def organizations(mocker, request):
 
 @pytest.fixture(scope="function")
 def route53(mocker, request):
-    target = "{}.{}.route53".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
+    target = f"{BASE_MODULE_NAME}.{get_test_target_module(request.module.__name__)}.route53"
     if load_class(target):
-        print("Mocking {}".format(target))
+        print(f"Mocking {target}")
         client = mocker.MagicMock()
         client_func = mocker.patch(target)
         client_func.return_value = client
@@ -79,9 +79,9 @@ def route53(mocker, request):
 
 @pytest.fixture(scope="function")
 def s3(mocker, request):
-    target = "{}.{}.s3".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
+    target = f"{BASE_MODULE_NAME}.{get_test_target_module(request.module.__name__)}.s3"
     if load_class(target):
-        print("Mocking {}".format(target))
+        print(f"Mocking {target}")
         client = mocker.MagicMock()
         client_func = mocker.patch(target)
         client_func.return_value = client
@@ -94,7 +94,7 @@ def stack_params_and_outputs_and_stack(mocker, request):
         BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
     )
     if load_class(target):
-        print("Mocking {}".format(target))
+        print(f"Mocking {target}")
         client_func = mocker.patch(target)
         return client_func
 

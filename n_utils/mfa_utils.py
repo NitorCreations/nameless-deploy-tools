@@ -17,7 +17,6 @@ import os
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-from builtins import object
 from os import walk
 
 import pyotp
@@ -60,7 +59,7 @@ def mfa_add_token(args):
 def mfa_read_token(token_name):
     """Reads a previously added MFA token file and returns its data."""
     data = None
-    with open(get_ndt_dir() + "/mfa_" + token_name, "r") as infile:
+    with open(get_ndt_dir() + "/mfa_" + token_name) as infile:
         try:
             data = yaml.load(infile, yaml.SafeLoader)
         except yaml.YAMLError as exc:
@@ -141,14 +140,14 @@ def mfa_backup_tokens(backup_secret):
 
 def mfa_decrypt_backup_tokens(backup_secret, file):
     """Decrypts backed up MFA secrets from file, prints to stdout."""
-    with open(os.path.expanduser(file), "r") as infile:
+    with open(os.path.expanduser(file)) as infile:
         data = infile.read()
     counter = Counter.new(128, initial_value=1337)
     cipher = AES.new(get_backup_key_digest(backup_secret), AES.MODE_CTR, counter=counter)
     return cipher.decrypt(base64.b64decode(data)).decode()
 
 
-class Struct(object):
+class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
