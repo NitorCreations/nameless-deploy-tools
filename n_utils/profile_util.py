@@ -126,7 +126,7 @@ def read_sso_profile(profile):
             for filename in os.listdir(sso_cache):
                 full_file = os.path.join(sso_cache, filename)
                 if isfile(full_file) and access(full_file, R_OK):
-                    with open(full_file, "r") as cache_file:
+                    with open(full_file) as cache_file:
                         cache_json = json.load(cache_file)
                         if (
                             cache_json
@@ -264,7 +264,7 @@ def update_profile(profile, creds):
     credentials = join(home, ".aws", "credentials")
     if exists(credentials):
         parser = ConfigParser()
-        with open(credentials, "r") as credfile:
+        with open(credentials) as credfile:
             parser.read_file(credfile)
             if profile not in parser.sections():
                 parser.add_section(profile)
@@ -301,7 +301,7 @@ def profiles_to_json():
     ret = OrderedDict()
     if exists(config):
         parser = ConfigParser()
-        with open(config, "r") as conffile:
+        with open(config) as conffile:
             parser.read_file(conffile)
             for section in parser.sections():
                 if section.startswith("profile "):
@@ -318,7 +318,7 @@ def update_profile_conf(profile, creds):
     profile_section = "profile " + profile
     if exists(config):
         parser = ConfigParser()
-        with open(config, "r") as conffile:
+        with open(config) as conffile:
             parser.read_file(conffile)
             if profile_section in parser.sections():
                 parser.remove_section(profile_section)
@@ -343,7 +343,7 @@ def store_bw_profile(bw_entry_name):
         credentials = join(home, ".aws", "credentials")
         if exists(credentials):
             parser = ConfigParser()
-            with open(credentials, "r") as credfile:
+            with open(credentials) as credfile:
                 parser.read_file(credfile)
                 if profile not in parser.sections():
                     parser.add_section(profile)

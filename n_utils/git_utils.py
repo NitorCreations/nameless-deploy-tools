@@ -1,4 +1,3 @@
-from builtins import object
 from locale import getpreferredencoding
 from os import devnull, environ, linesep
 from re import sub
@@ -10,7 +9,7 @@ from tempfile import mkdtemp
 SYS_ENCODING = getpreferredencoding()
 
 
-class Git(object):
+class Git:
     def __init__(self):
         self.entered = 0
         self.export_directories = {}

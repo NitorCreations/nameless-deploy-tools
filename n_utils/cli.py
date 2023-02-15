@@ -23,7 +23,6 @@ import os
 import re
 import sys
 import time
-from builtins import input, str
 from subprocess import PIPE, Popen
 
 import argcomplete
@@ -1017,12 +1016,12 @@ def map_to_exports(map):
     ret = ""
     keys = []
     for key, val in list(map.items()):
-        if isinstance(val, six.string_types):
+        if isinstance(val, str):
             value = "'" + val.replace("'", "'\"'\"'") + "'"
         elif isinstance(val, list):
             value = "("
             for elem in val:
-                if isinstance(elem, six.string_types):
+                if isinstance(elem, str):
                     value += "'" + elem.replace("'", "'\"'\"'") + "' "
                 else:
                     value += "'" + json_save_small(elem).replace("'", "'\"'\"'") + "' "
@@ -1042,7 +1041,7 @@ def map_to_properties(map):
     ret = ""
     for key, val in list(map.items()):
         key = re.sub("[^a-zA-Z0-9_]", "", key)
-        if isinstance(val, six.string_types):
+        if isinstance(val, str):
             ret += key + "=" + val + os.linesep
         else:
             ret += key + "=" + json_save_small(val) + os.linesep

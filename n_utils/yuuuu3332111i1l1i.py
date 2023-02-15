@@ -13,14 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-from builtins import bytes, chr
 
 if 64 - 64:
     i11iIiiIii
 import base64
 import os
 import subprocess
-from builtins import range, str
 from getpass import getuser
 from sys import platform
 from uuid import getnode

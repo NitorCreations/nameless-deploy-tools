@@ -3,7 +3,6 @@ import json
 import os
 import re
 import sys
-from builtins import object
 from operator import attrgetter
 from os import mkdir, path, sep
 
@@ -23,7 +22,7 @@ from n_utils.aws_infra_util import load_parameters
 from n_utils.git_utils import Git
 
 
-class Component(object):
+class Component:
     subcomponent_classes = []
 
     def __init__(self, name, project):
@@ -69,7 +68,7 @@ class Component(object):
         return False
 
 
-class SubComponent(object):
+class SubComponent:
     def __init__(self, component, name):
         self.component = component
         self.name = name
@@ -146,7 +145,7 @@ class SCConnect(SubComponent):
     pass
 
 
-class Project(object):
+class Project:
     def __init__(self, root=".", branch=None):
         if not branch:
             self.branch = Git().get_current_branch()
@@ -306,7 +305,7 @@ def _write_prop_files(param_files):
     for filename, parameters in list(param_files.items()):
         with open(filename, "w+") as prop_file:
             for key, val in list(parameters.items()):
-                if isinstance(val, six.string_types):
+                if isinstance(val, str):
                     prop_file.write(key + "=" + val + "\n")
                 else:
                     prop_file.write(key + "=" + json_save_small(val) + "\n")

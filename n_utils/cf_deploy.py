@@ -21,7 +21,6 @@ import os
 import re
 import sys
 import time
-from builtins import object, str
 from datetime import datetime
 from dis import dis
 
@@ -48,7 +47,7 @@ def log_data(data, output_format="yaml"):
     lexer = lexers.get_lexer_by_name(output_format)
     formatter = formatters.get_formatter_by_name("256")
     formatter.__init__(style=get_style_by_name("emacs"))
-    if not isinstance(formatted, six.string_types):
+    if not isinstance(formatted, str):
         formatted = str(formatted, "UTF-8")
     colored_yaml = os.linesep + highlight(formatted, lexer, formatter)
     log(colored_yaml)
@@ -314,7 +313,7 @@ def deploy(stack_name, yaml_template, regn, dry_run=False, session=None, disable
     log("Done!")
 
 
-class Unbuffered(object):
+class Unbuffered:
     def __init__(self, stream):
         self.stream = stream
         self.SYS_ENCODING = locale.getpreferredencoding(False)
@@ -322,7 +321,7 @@ class Unbuffered(object):
             self.SYS_ENCODING = "ISO8859-15"
 
     def write(self, data):
-        if isinstance(data, six.string_types):
+        if isinstance(data, str):
             self.stream.write(data)
         elif isinstance(data, bytes):
             self.stream.write(data.decode(self.SYS_ENCODING))
