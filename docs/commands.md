@@ -179,9 +179,10 @@ optional arguments:
 ```bash
 usage: ndt bw-store-aws-cli-creds [-h] entryname
 
-Fetches a Bitwarde entry and if it contains a definition of a aws credentials,
-stores it in aws cli configuration. Namely the entry needs to define the extra
-fields aws_access_key_id, aws_secret_access_key and profile_name
+Fetches a Bitwarden entry and if it contains a definition of a aws
+credentials, stores it in aws cli configuration. Namely the entry needs to
+define the extra fields aws_access_key_id, aws_secret_access_key and
+profile_name
 
 positional arguments:
   entryname   The name of the bitwarden entry to get
