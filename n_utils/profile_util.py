@@ -141,6 +141,12 @@ def read_profile_expiry_epoc(profile, profile_type=None):
     return _epoc_secs(parse(read_profile_expiry(profile, profile_type=profile_type)).replace(tzinfo=tzutc()))
 
 
+def check_profile_expired(profile, profile_type=None):
+    return _epoc_secs(
+        parse(read_profile_expiry(profile, profile_type=profile_type)).replace(tzinfo=tzutc())
+    ) < _epoc_secs(datetime.now(tzutc()))
+
+
 def print_aws_profiles():
     """
     Prints profile names from credentials file (~/.aws/credentials),
