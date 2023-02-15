@@ -71,43 +71,26 @@ def upsert_cloudfront_records(args):
     changes = {}
     for distribution in distributions:
         if "Aliases" in distribution:
-            print(
-                "Upserting records for "
-                + distribution["Id"]
-                + " ("
-                + distribution["Comment"]
-                + ")"
-            )
+            print("Upserting records for " + distribution["Id"] + " (" + distribution["Comment"] + ")")
             for alias in distribution["Aliases"]["Items"]:
-                change = get_record_change(
-                    alias, distribution["DomainName"], distribution["Id"], zones
-                )
+                change = get_record_change(alias, distribution["DomainName"], distribution["Id"], zones)
                 if not change["HostedZoneId"] in changes:
                     changes[change["HostedZoneId"]] = []
                 changes[change["HostedZoneId"]].append(change["Change"])
     requests = []
     for req in list(changes.keys()):
         requests.append(
-            route53().change_resource_record_sets(
-                HostedZoneId=req, ChangeBatch={"Changes": changes[req]}
-            )["ChangeInfo"]
+            route53().change_resource_record_sets(HostedZoneId=req, ChangeBatch={"Changes": changes[req]})["ChangeInfo"]
         )
     if args.wait:
         not_synced_count = 1
         while not_synced_count > 0:
             not_synced_count = 0
             for req in requests:
-                if (
-                    not route53().get_change(Id=req["Id"])["ChangeInfo"]["Status"]
-                    == "INSYNC"
-                ):
+                if not route53().get_change(Id=req["Id"])["ChangeInfo"]["Status"] == "INSYNC":
                     not_synced_count = not_synced_count + 1
             if not_synced_count > 0:
-                print(
-                    "Waiting for requests to sync - "
-                    + str(not_synced_count)
-                    + " not synced"
-                )
+                print("Waiting for requests to sync - " + str(not_synced_count) + " not synced")
                 time.sleep(2)
             else:
                 print(str(len(requests)) + " requests INSYNC")
@@ -116,9 +99,7 @@ def upsert_cloudfront_records(args):
 def get_record_change(alias, dns_name, distribution_id, hosted_zones):
     zone = longest_matching_zone(alias, hosted_zones)
     if zone:
-        print(
-            alias + " => " + dns_name + "(" + distribution_id + ") in " + zone["Name"]
-        )
+        print(alias + " => " + dns_name + "(" + distribution_id + ") in " + zone["Name"])
         if alias + "." == zone["Name"]:
             type = "A"
         else:

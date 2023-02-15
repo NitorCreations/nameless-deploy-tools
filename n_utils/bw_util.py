@@ -31,9 +31,7 @@ def get_bwentry(search_term):
     item_data = json.loads(item)
     if len(item_data) > 0:
         # find exact match for search term
-        item = [
-            item for item in item_data if item["name"].lower() == search_term.lower()
-        ][0]
+        item = [item for item in item_data if item["name"].lower() == search_term.lower()][0]
         ret = BwEntry(item)
         _BW_CACHE[search_term] = ret
         return ret

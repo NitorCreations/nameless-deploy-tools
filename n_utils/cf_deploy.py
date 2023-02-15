@@ -57,9 +57,7 @@ def log_data(data, output_format="yaml"):
 def log(message):
     os.write(
         1,
-        (
-            colored(fmttime(datetime.now()), "yellow") + " " + message + os.linesep
-        ).encode(locale.getpreferredencoding()),
+        (colored(fmttime(datetime.now()), "yellow") + " " + message + os.linesep).encode(locale.getpreferredencoding()),
     )
 
 
@@ -81,8 +79,7 @@ def update_stack(stack_name, template, params, dry_run=False, session=None, tags
         clf.delete_change_set(ChangeSetName=chset_id)
         if (
             "StatusReason" in chset_data
-            and "The submitted information didn't contain changes"
-            in chset_data["StatusReason"]
+            and "The submitted information didn't contain changes" in chset_data["StatusReason"]
         ):
             failed_for_real = False
         else:
@@ -120,17 +117,15 @@ def create_stack(stack_name, template, params, session=None, tags=None, disable_
 def get_stack_operation(stack_name, session=None):
     stack_oper = "create_stack"
     try:
-        stack_data = cloudformation(session=session).describe_stacks(
-            StackName=stack_name
-        )
+        stack_data = cloudformation(session=session).describe_stacks(StackName=stack_name)
         # Dump original status, for the record
         status = stack_data["Stacks"][0]["StackStatus"]
         log("Status: \033[32;1m" + status + "\033[m")
         stack_oper = "update_stack"
     except ClientError as err:
-        if err.response["Error"]["Code"] == "ValidationError" and err.response["Error"][
-            "Message"
-        ].endswith("does not exist"):
+        if err.response["Error"]["Code"] == "ValidationError" and err.response["Error"]["Message"].endswith(
+            "does not exist"
+        ):
             log("Status: \033[32;1mNEW_STACK\033[m")
         else:
             raise
@@ -145,9 +140,7 @@ def get_end_status(stack_name, session=None):
     log("Waiting for stack operation to complete:")
     status = "_IN_PROGRESS"
     while True:
-        stack_info = cloudformation(session=session).describe_stacks(
-            StackName=stack_name
-        )
+        stack_info = cloudformation(session=session).describe_stacks(StackName=stack_name)
         status = stack_info["Stacks"][0]["StackStatus"]
         if "ROLLBACK" in status:
             color = "\033[31;1m"
@@ -204,9 +197,9 @@ def delete(stack_name, regn, session=None):
             time.sleep(5)
         except ClientError as err:
             cf_events.stop()
-            if err.response["Error"]["Code"] == "ValidationError" and err.response[
-                "Error"
-            ]["Message"].endswith("does not exist"):
+            if err.response["Error"]["Code"] == "ValidationError" and err.response["Error"]["Message"].endswith(
+                "does not exist"
+            ):
                 log("Status: \033[32;1mDELETE_COMPLETE\033[m")
                 break
             else:
@@ -234,11 +227,7 @@ def resolve_ami(template_doc, session=None):
             ami_id = image["ImageId"]
             ami_name = image["Name"]
             ami_created = image["CreationDate"]
-    elif (
-        ami_id
-        and "Parameters" in template_doc
-        and "paramAmi" in template_doc["Parameters"]
-    ):
+    elif ami_id and "Parameters" in template_doc and "paramAmi" in template_doc["Parameters"]:
         log("Looking for ami metadata with id " + ami_id)
         ami_meta = ec2(session=session).describe_images(ImageIds=[ami_id])
         log("Result: " + aws_infra_util.json_save(ami_meta))
@@ -321,9 +310,7 @@ def deploy(stack_name, yaml_template, regn, dry_run=False, session=None, disable
         if not (status == "CREATE_COMPLETE" or status == "UPDATE_COMPLETE"):
             sys.exit("Stack operation failed: end state " + status)
     elif get_stack_operation(stack_name).__name__ == "update_stack":
-        update_stack(
-            stack_name, json_small, params_doc, dry_run=True, session=session, tags=tags
-        )
+        update_stack(stack_name, json_small, params_doc, dry_run=True, session=session, tags=tags)
     log("Done!")
 
 

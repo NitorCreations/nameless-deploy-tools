@@ -90,9 +90,7 @@ def get_parser(formatter=None):
     caller = sys._getframe().f_back
     func = caller.f_locals.get(func_name, caller.f_globals.get(func_name))
     if formatter:
-        return argparse.ArgumentParser(
-            formatter_class=formatter, description=func.__doc__
-        )
+        return argparse.ArgumentParser(formatter_class=formatter, description=func.__doc__)
     else:
         return argparse.ArgumentParser(description=func.__doc__)
 
@@ -120,9 +118,7 @@ def add_deployer_server():
     """
     parser = get_parser()
     parser.add_argument("file", help="The file to modify").completer = FilesCompleter()
-    parser.add_argument(
-        "username", help="The username to access the server."
-    ).completer = ChoicesCompleter(())
+    parser.add_argument("username", help="The username to access the server.").completer = ChoicesCompleter(())
     parser.add_argument(
         "--id",
         help="Optional id for the server. Default is"
@@ -154,12 +150,8 @@ def yaml_to_json():
     """
     parser = get_parser()
     parser.add_argument("--colorize", "-c", help="Colorize output", action="store_true")
-    parser.add_argument(
-        "--merge", "-m", help="Merge other yaml files to the main file", nargs="*"
-    )
-    parser.add_argument(
-        "--small", "-s", help="Compact representration of json", action="store_true"
-    )
+    parser.add_argument("--merge", "-m", help="Merge other yaml files to the main file", nargs="*")
+    parser.add_argument("--small", "-s", help="Compact representration of json", action="store_true")
     parser.add_argument("file", help="File to parse").completer = FilesCompleter()
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -216,9 +208,7 @@ def associate_eip():
     parser.add_argument(
         "-i",
         "--ip",
-        help="Elastic IP to allocate - default"
-        + " is to get paramEip from the stack"
-        + " that created this instance",
+        help="Elastic IP to allocate - default" + " is to get paramEip from the stack" + " that created this instance",
     )
     parser.add_argument(
         "-a",
@@ -233,9 +223,7 @@ def associate_eip():
     parser.add_argument(
         "-e",
         "--eipparam",
-        help="Parameter to look up for "
-        + "Elastic IP in the stack - "
-        + "default is paramEip",
+        help="Parameter to look up for " + "Elastic IP in the stack - " + "default is paramEip",
         default="paramEip",
     )
     parser.add_argument(
@@ -262,20 +250,15 @@ def associate_eip():
 
 def update_stack():
     """Create or update existing CloudFormation stack"""
-    parser = argparse.ArgumentParser(
-        description="Create or update existing " + "CloudFormation stack"
-    )
+    parser = argparse.ArgumentParser(description="Create or update existing " + "CloudFormation stack")
     parser.add_argument("stack_name", help="Name of the stack to create or " + "update")
-    parser.add_argument(
-        "yaml_template", help="Yaml template to pre-process " + "and use for creation"
-    )
+    parser.add_argument("yaml_template", help="Yaml template to pre-process " + "and use for creation")
     parser.add_argument("region", help="The region to deploy the stack to")
     parser.add_argument(
         "-d",
         "--dry-run",
         action="store_true",
-        help="Do not actually deploy anything, but just "
-        + "assemble the json and associated parameters",
+        help="Do not actually deploy anything, but just " + "assemble the json and associated parameters",
     )
     parser.add_argument(
         "-r",
@@ -335,9 +318,7 @@ def resolve_include():
     args = parser.parse_args()
     inc_file = find_include(args.file)
     if not inc_file:
-        parser.error(
-            "Include " + args.file + " not found on include paths " + str(include_dirs)
-        )
+        parser.error("Include " + args.file + " not found on include paths " + str(include_dirs))
     print(inc_file)
 
 
@@ -349,12 +330,7 @@ def resolve_all_includes():
     args = parser.parse_args()
     inc_file = find_all_includes(args.pattern)
     if not inc_file:
-        parser.error(
-            "Include "
-            + args.pattern
-            + " not found on include paths "
-            + str(include_dirs)
-        )
+        parser.error("Include " + args.pattern + " not found on include paths " + str(include_dirs))
     for next_file in inc_file:
         print(next_file)
 
@@ -391,9 +367,7 @@ def assume_role():
     )
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    creds = utils.assume_role(
-        args.role_arn, mfa_token_name=args.mfa_token, duration_minutes=args.duration
-    )
+    creds = utils.assume_role(args.role_arn, mfa_token_name=args.mfa_token, duration_minutes=args.duration)
     if args.profile:
         update_profile(args.profile, creds)
     else:
@@ -401,22 +375,16 @@ def assume_role():
         print('AWS_ACCESS_KEY_ID="' + creds["AccessKeyId"] + '"')
         print('AWS_SECRET_ACCESS_KEY="' + creds["SecretAccessKey"] + '"')
         print('AWS_SESSION_TOKEN="' + creds["SessionToken"] + '"')
-        print(
-            'AWS_SESSION_EXPIRATION="'
-            + creds["Expiration"].strftime("%a, %d %b %Y %H:%M:%S +0000")
-            + '"'
-        )
-        print(
-            "export AWS_ROLE_ARN AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
-        )
+        print('AWS_SESSION_EXPIRATION="' + creds["Expiration"].strftime("%a, %d %b %Y %H:%M:%S +0000") + '"')
+        print("export AWS_ROLE_ARN AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION")
 
 
 def session_to_env():
     """Export current session as environment variables"""
     parser = get_parser()
-    parser.add_argument(
-        "-t", "--token-name", help="Name of the mfs token to use."
-    ).completer = ChoicesCompleter(list_mfa_tokens())
+    parser.add_argument("-t", "--token-name", help="Name of the mfs token to use.").completer = ChoicesCompleter(
+        list_mfa_tokens()
+    )
     parser.add_argument(
         "-d",
         "--duration-minutes",
@@ -440,45 +408,29 @@ def session_to_env():
         if "accessToken" in cache_json and cache_json["accessToken"]:
             access_token = cache_json["accessToken"]
             creds = sso(region=profile["sso_region"]).get_role_credentials(
-                roleName=profile["sso_role_name"],
-                accountId=profile["sso_account_id"],
-                accessToken=access_token
+                roleName=profile["sso_role_name"], accountId=profile["sso_account_id"], accessToken=access_token
             )
             role_creds = creds["roleCredentials"]
             print(f"AWS_ACCESS_KEY_ID='{role_creds['accessKeyId']}'")
             print(f"AWS_SECRET_ACCESS_KEY='{role_creds['secretAccessKey']}'")
             print(f"AWS_SESSION_TOKEN='{role_creds['sessionToken']}'")
-            print(
-                'AWS_SESSION_EXPIRATION="'
-                + _epoc_to_str(role_creds["expiration"] / 1000)
-                + '"'
-            )
-            print(
-                "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
-            )
+            print('AWS_SESSION_EXPIRATION="' + _epoc_to_str(role_creds["expiration"] / 1000) + '"')
+            print("export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION")
     elif profile_type in ["azure", "adfs", "lastpass"]:
         profile = get_profile(os.environ["AWS_PROFILE"], include_creds=True)
         print(f"AWS_ACCESS_KEY_ID='{profile['aws_access_key_id']}'")
         print(f"AWS_SECRET_ACCESS_KEY='{profile['aws_secret_access_key']}'")
         print(f"AWS_SESSION_TOKEN='{profile['aws_session_token']}'")
         print(f"AWS_SESSION_EXPIRATION='{profile['aws_session_expiration']}'")
-        print(
-            "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
-        )
+        print("export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION")
     else:
         creds = session_token(**call_args)
         if creds:
             print('AWS_ACCESS_KEY_ID="' + creds["AccessKeyId"] + '"')
             print('AWS_SECRET_ACCESS_KEY="' + creds["SecretAccessKey"] + '"')
             print('AWS_SESSION_TOKEN="' + creds["SessionToken"] + '"')
-            print(
-                'AWS_SESSION_EXPIRATION="'
-                + creds["Expiration"].strftime("%a, %d %b %Y %H:%M:%S +0000")
-                + '"'
-            )
-            print(
-                "export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION"
-            )
+            print('AWS_SESSION_EXPIRATION="' + creds["Expiration"].strftime("%a, %d %b %Y %H:%M:%S +0000") + '"')
+            print("export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SESSION_EXPIRATION")
 
 
 def clean_snapshots():
@@ -499,9 +451,7 @@ def clean_snapshots():
     parser.add_argument(
         "-d",
         "--days",
-        help="The number of days that is the"
-        + "minimum age for snapshots to "
-        + "be deleted",
+        help="The number of days that is the" + "minimum age for snapshots to " + "be deleted",
         type=int,
         default=30,
     )
@@ -510,9 +460,7 @@ def clean_snapshots():
         action="store_true",
         help="Do not delete, but print what would be deleted",
     )
-    parser.add_argument(
-        "tags", help="The tag values to select deleted " + "snapshots", nargs="+"
-    )
+    parser.add_argument("tags", help="The tag values to select deleted " + "snapshots", nargs="+")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     if args.region:
@@ -546,14 +494,10 @@ def show_stack_params_and_outputs():
         "--parameter",
         help="Name of paremeter if only" + " one parameter required",
     )
-    parser.add_argument(
-        "stack_name", help="The stack name to show"
-    ).completer = ChoicesCompleter(best_effort_stacks())
+    parser.add_argument("stack_name", help="The stack name to show").completer = ChoicesCompleter(best_effort_stacks())
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    resp, _ = stack_params_and_outputs_and_stack(
-        stack_name=args.stack_name, stack_region=args.region
-    )
+    resp, _ = stack_params_and_outputs_and_stack(stack_name=args.stack_name, stack_region=args.region)
     if args.parameter:
         if args.parameter in resp:
             print(resp[args.parameter])
@@ -569,9 +513,9 @@ def show_terraform_params():
     parser.add_argument(
         "component", help="The component containg the terraform subcomponet"
     ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("terraform"))
-    parser.add_argument(
-        "terraform", help="The name of the terraform subcomponent"
-    ).completer = SubCCompleter("terraform")
+    parser.add_argument("terraform", help="The name of the terraform subcomponent").completer = SubCCompleter(
+        "terraform"
+    )
     param = parser.add_mutually_exclusive_group(required=False)
     param.add_argument("-j", "--jmespath", help="Show just a matching jmespath value")
     param.add_argument(
@@ -596,12 +540,10 @@ def show_terraform_params():
 def show_azure_params():
     """Show available parameters for a azure subcomponent"""
     parser = get_parser()
-    parser.add_argument(
-        "component", help="The component containg the azure subcomponet"
-    ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("azure"))
-    parser.add_argument(
-        "azure", help="The name of the azure subcomponent"
-    ).completer = SubCCompleter("azure")
+    parser.add_argument("component", help="The component containg the azure subcomponet").completer = ChoicesCompleter(
+        component_having_a_subcomponent_of_type("azure")
+    )
+    parser.add_argument("azure", help="The name of the azure subcomponent").completer = SubCCompleter("azure")
     param = parser.add_mutually_exclusive_group(required=False)
     param.add_argument(
         "-p",
@@ -610,9 +552,7 @@ def show_azure_params():
     )
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    azure = fetch_properties(
-        load_parameters(component=args.component, azure=args.azure)
-    )
+    azure = fetch_properties(load_parameters(component=args.component, azure=args.azure))
     if args.parameter:
         if args.parameter in azure:
             print(azure[args.parameter])
@@ -647,13 +587,9 @@ def cli_share_to_another_region():
     """Shares an image to another region for potentially another account"""
     parser = get_parser()
     parser.add_argument("ami_id", help="The ami to share")
-    parser.add_argument(
-        "to_region", help="The region to share to"
-    ).completer = ChoicesCompleter(regions())
+    parser.add_argument("to_region", help="The region to share to").completer = ChoicesCompleter(regions())
     parser.add_argument("ami_name", help="The name for the ami")
-    parser.add_argument(
-        "account_id", nargs="+", help="The account ids to sh" + "are ami to"
-    )
+    parser.add_argument("account_id", nargs="+", help="The account ids to sh" + "are ami to")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     share_to_another_region(args.ami_id, args.to_region, args.ami_name, args.account_id)
@@ -684,9 +620,7 @@ def cli_interpolate_file():
     parser.add_argument(
         "-v",
         "--vault",
-        help="Use vault values as well."
-        + "Vault resovled from env "
-        + "variables or default is used",
+        help="Use vault values as well." + "Vault resovled from env " + "variables or default is used",
         action="store_true",
     )
     parser.add_argument("-o", "--output", help="Output file")
@@ -745,9 +679,7 @@ def cli_upsert_cloudfront_records():
         "--distribution_comment",
         help="Comment for the" + " distribution " + "to upsert",
     ).completer = ChoicesCompleter(distribution_comments())
-    parser.add_argument(
-        "-w", "--wait", help="Wait for request to sync", action="store_true"
-    )
+    parser.add_argument("-w", "--wait", help="Wait for request to sync", action="store_true")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     upsert_cloudfront_records(args)
@@ -760,8 +692,7 @@ def cli_mfa_add_token():
     parser = get_parser()
     parser.add_argument(
         "token_name",
-        help="Name for the token. Use this to refer to the token later with "
-        + "the assume-role command.",
+        help="Name for the token. Use this to refer to the token later with " + "the assume-role command.",
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -808,9 +739,9 @@ def cli_mfa_delete_token():
     """Deletes an MFA token file from the .ndt subdirectory in the user's
     home directory"""
     parser = get_parser()
-    parser.add_argument(
-        "token_name", help="Name of the token to delete."
-    ).completer = ChoicesCompleter(list_mfa_tokens())
+    parser.add_argument("token_name", help="Name of the token to delete.").completer = ChoicesCompleter(
+        list_mfa_tokens()
+    )
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     mfa_delete_token(args.token_name)
@@ -819,9 +750,7 @@ def cli_mfa_delete_token():
 def cli_mfa_code():
     """Generates a TOTP code using an MFA token."""
     parser = get_parser()
-    parser.add_argument(
-        "token_name", help="Name of the token to use."
-    ).completer = ChoicesCompleter(list_mfa_tokens())
+    parser.add_argument("token_name", help="Name of the token to use.").completer = ChoicesCompleter(list_mfa_tokens())
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     print(mfa_generate_code(args.token_name))
@@ -830,9 +759,7 @@ def cli_mfa_code():
 def cli_mfa_to_qrcode():
     """Generates a QR code to import a token to other devices."""
     parser = get_parser()
-    parser.add_argument(
-        "token_name", help="Name of the token to use."
-    ).completer = ChoicesCompleter(list_mfa_tokens())
+    parser.add_argument("token_name", help="Name of the token to use.").completer = ChoicesCompleter(list_mfa_tokens())
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     mfa_to_qrcode(args.token_name)
@@ -846,9 +773,7 @@ def cli_mfa_backup_tokens():
     To decrypt an existing backup, use --decrypt <file>.
     """
     parser = get_parser()
-    parser.add_argument(
-        "backup_secret", help="Secret to use for encrypting or decrypts the backup."
-    )
+    parser.add_argument("backup_secret", help="Secret to use for encrypting or decrypts the backup.")
     parser.add_argument(
         "-d",
         "--decrypt",
@@ -941,12 +866,12 @@ def cli_load_parameters():
     (arrays not supported)
     """
     parser = get_parser(formatter=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument(
-        "component", nargs="?", help="Compenent to descend into"
-    ).completer = ChoicesCompleter([c.name for c in Project().get_components()])
-    parser.add_argument(
-        "--branch", "-b", help="Branch to get active parameters for"
-    ).completer = ChoicesCompleter(Git().get_branches())
+    parser.add_argument("component", nargs="?", help="Compenent to descend into").completer = ChoicesCompleter(
+        [c.name for c in Project().get_components()]
+    )
+    parser.add_argument("--branch", "-b", help="Branch to get active parameters for").completer = ChoicesCompleter(
+        Git().get_branches()
+    )
     parser.add_argument(
         "--resolve-images",
         "-r",
@@ -970,9 +895,9 @@ def cli_load_parameters():
         nargs="?",
         help="AMI image subcomponent to descent into",
     ).completer = SubCCompleter("image")
-    subcomponent_group.add_argument(
-        "--cdk", "-c", help="CDK subcomponent to descent into"
-    ).completer = SubCCompleter("cdk")
+    subcomponent_group.add_argument("--cdk", "-c", help="CDK subcomponent to descent into").completer = SubCCompleter(
+        "cdk"
+    )
     subcomponent_group.add_argument(
         "--terraform", "-t", help="Terraform subcomponent to descent into"
     ).completer = SubCCompleter("terraform")
@@ -983,15 +908,9 @@ def cli_load_parameters():
         "--connect", "-n", help="Connect subcomponent to descent into"
     ).completer = SubCCompleter("connect")
     format_group = parser.add_mutually_exclusive_group()
-    format_group.add_argument(
-        "--json", "-j", action="store_true", help="JSON format output (default)"
-    )
-    format_group.add_argument(
-        "--yaml", "-y", action="store_true", help="YAML format output"
-    )
-    format_group.add_argument(
-        "--properties", "-p", action="store_true", help="properties file format output"
-    )
+    format_group.add_argument("--json", "-j", action="store_true", help="JSON format output (default)")
+    format_group.add_argument("--yaml", "-y", action="store_true", help="YAML format output")
+    format_group.add_argument("--properties", "-p", action="store_true", help="properties file format output")
     format_group.add_argument(
         "--terraform-variables",
         "-v",
@@ -1010,9 +929,7 @@ def cli_load_parameters():
         action="store_true",
         help="Azure parameter file syntax variables",
     )
-    parser.add_argument(
-        "-f", "--filter", help="Comma separated list of parameter names to output"
-    )
+    parser.add_argument("-f", "--filter", help="Comma separated list of parameter names to output")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
@@ -1065,12 +982,14 @@ def cli_load_parameters():
                 _cast_param(param_key, parameters, filter_types[param_key])
     print(transform(parameters))
 
+
 def _cast_param(key, params, param_type):
     if param_type == "int":
         params[key] = int(params[key])
     elif param_type == "bool":
         params[key] = params[key] and params[key].lower() == "true"
     return
+
 
 class SubCCompleter:
     def __init__(self, sc_type):
@@ -1083,17 +1002,11 @@ class SubCCompleter:
         if hasattr(parsed_args, "component") and parsed_args.component:
             return [
                 sc.name
-                for sc in Project(**p_args)
-                .get_component(parsed_args.component)
-                .get_subcomponents()
+                for sc in Project(**p_args).get_component(parsed_args.component).get_subcomponents()
                 if sc.type == self.sc_type and sc.name.startswith(prefix)
             ]
         else:
-            return [
-                sc.name
-                for sc in Project(**p_args).get_all_subcomponents()
-                if sc.type == self.sc_type
-            ]
+            return [sc.name for sc in Project(**p_args).get_all_subcomponents() if sc.type == self.sc_type]
         return None
 
 
@@ -1179,8 +1092,7 @@ def cli_list_jobs():
         "-j",
         "--json",
         action="store_true",
-        help="Print in json format. Optionally "
-        "exported parameters will be in the json document",
+        help="Print in json format. Optionally " "exported parameters will be in the json document",
     )
     parser.add_argument(
         "-b",
@@ -1211,9 +1123,7 @@ def branch_components(prefix, parsed_args, **kwargs):
 def cli_list_components():
     """Prints the components in a branch, by default the current branch"""
     parser = get_parser()
-    parser.add_argument(
-        "-j", "--json", action="store_true", help="Print in json format."
-    )
+    parser.add_argument("-j", "--json", action="store_true", help="Print in json format.")
     parser.add_argument(
         "-b",
         "--branch",
@@ -1308,9 +1218,7 @@ def azure_ensure_group():
         help="The location for the resource group. If not defined looked from the environment "
         + "variable AZURE_LOCATION and after that seen if location is defined for the project.",
     )
-    parser.add_argument(
-        "name", help="The name of the resource group to make sure exists"
-    )
+    parser.add_argument("name", help="The name of the resource group to make sure exists")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     if not args.location:
@@ -1321,9 +1229,7 @@ def azure_ensure_group():
 def azure_ensure_management_group():
     """Ensures that an azure resource group exists"""
     parser = get_parser()
-    parser.add_argument(
-        "name", help="The name of the resource group to make sure exists"
-    )
+    parser.add_argument("name", help="The name of the resource group to make sure exists")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     ensure_management_group(args.name)
@@ -1332,9 +1238,7 @@ def azure_ensure_management_group():
 def azure_template_parameters():
     """Lists the parameters in an Azure Resource Manager template"""
     parser = get_parser()
-    parser.add_argument(
-        "template", help="The json template to scan for parameters"
-    ).competer = FilesCompleter()
+    parser.add_argument("template", help="The json template to scan for parameters").competer = FilesCompleter()
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     template = {}
@@ -1360,11 +1264,7 @@ def azure_location():
 
 
 def resolve_location():
-    if (
-        "AZURE_LOCATION" in os.environ
-        and os.environ["AZURE_LOCATION"]
-        and os.environ["AZURE_LOCATION"] != "default"
-    ):
+    if "AZURE_LOCATION" in os.environ and os.environ["AZURE_LOCATION"] and os.environ["AZURE_LOCATION"] != "default":
         return os.environ["AZURE_LOCATION"]
     else:
         parameters = load_parameters()
@@ -1385,12 +1285,7 @@ def resolve_location():
             if proc.returncode == 0 and output:
                 confs = json.loads(output)
                 for conf in confs:
-                    if (
-                        "name" in conf
-                        and conf["name"] == "location"
-                        and "value" in conf
-                        and conf["value"]
-                    ):
+                    if "name" in conf and conf["name"] == "location" and "value" in conf and conf["value"]:
                         default_location = conf["value"]
             if default_location:
                 return default_location
@@ -1417,9 +1312,7 @@ def deploy_connect_contact_flows():
     )
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    connect.deploy_connect_contact_flows(
-        args.component, args.contactflowname, dry_run=args.dryrun
-    )
+    connect.deploy_connect_contact_flows(args.component, args.contactflowname, dry_run=args.dryrun)
 
 
 def export_connect_contact_flow():
@@ -1443,16 +1336,12 @@ def export_connect_contact_flow():
         "-a", "--instancealias", help="alias of the connect instance to export from"
     ).completer = lambda **kwargs: connect.get_instance_aliases()
     parser.add_argument("--colorize", "-o", help="Colorize output", action="store_true")
-    parser.add_argument(
-        "name", help="The name of the contact flow to export"
-    ).competer = FlowNameCompleter()
+    parser.add_argument("name", help="The name of the contact flow to export").competer = FlowNameCompleter()
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     instance_id = _resolve_connect_instance(args)
     if not instance_id:
-        parser.error(
-            "Need to define an instance, either with an id or alias or by referring to a connect template."
-        )
+        parser.error("Need to define an instance, either with an id or alias or by referring to a connect template.")
     out = connect.export_connect_contact_flow(instance_id, args.name)
     if args.colorize:
         colorprint(out)
@@ -1480,17 +1369,13 @@ def list_connect_contact_flows():
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
     ).completer = lambda **kwargs: connect.get_instance_aliases()
-    parser.add_argument(
-        "-t", "--trash", help="Include trashed flows", action="store_true"
-    )
+    parser.add_argument("-t", "--trash", help="Include trashed flows", action="store_true")
     parser.add_argument("-m", "--match", help="Pattern to match printed flows")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     instance_id = _resolve_connect_instance(args)
     if not instance_id:
-        parser.error(
-            "Need to define an instance, either with an id or alias or by referring to a connect template."
-        )
+        parser.error("Need to define an instance, either with an id or alias or by referring to a connect template.")
     for flow in connect.get_flows(instance_id).keys():
         if not flow.startswith("zzTrash_") or args.trash:
             if not args.match or re.match(args.match, flow):
@@ -1513,17 +1398,9 @@ def _resolve_connect_instance(args):
         return args.instanceid
     if hasattr(args, "instancealias") and args.instancealias:
         return connect.alias_to_id(args.instancealias)
-    if (
-        hasattr(args, "component")
-        and args.component
-        and hasattr(args, "contactflowname")
-        and args.contactflowname
-    ):
+    if hasattr(args, "component") and args.component and hasattr(args, "contactflowname") and args.contactflowname:
         template_dir = (
-            Project()
-            .get_component(args.component)
-            .get_subcomponent("connect", args.contactflowname)
-            .get_dir()
+            Project().get_component(args.component).get_subcomponent("connect", args.contactflowname).get_dir()
         )
         flow_template = yaml_to_dict(template_dir + os.sep + "template.yaml")
         if "connectInstanceId" in flow_template:
@@ -1535,8 +1412,4 @@ class FlowNameCompleter:
     def __call__(self, prefix="", action=None, parser=None, parsed_args=None):
         instance_id = _resolve_connect_instance(parsed_args)
         if instance_id:
-            return [
-                flow
-                for flow in connect.get_flows(instance_id).keys()
-                if flow.startswith(prefix)
-            ]
+            return [flow for flow in connect.get_flows(instance_id).keys() if flow.startswith(prefix)]

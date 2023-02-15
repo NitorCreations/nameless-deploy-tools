@@ -13,9 +13,7 @@ def get_test_target_module(test_module):
 
 @pytest.fixture(scope="function")
 def cloudformation(mocker, request):
-    target = "{}.{}.cloudformation".format(
-        BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
-    )
+    target = "{}.{}.cloudformation".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
     if load_class(target):
         print("Mocking {}".format(target))
         client = mocker.MagicMock()
@@ -26,9 +24,7 @@ def cloudformation(mocker, request):
 
 @pytest.fixture(scope="function")
 def cloudfront(mocker, request):
-    target = "{}.{}.cloudfront".format(
-        BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
-    )
+    target = "{}.{}.cloudfront".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
     if load_class(target):
         print("Mocking {}".format(target))
         client = mocker.MagicMock()
@@ -39,9 +35,7 @@ def cloudfront(mocker, request):
 
 @pytest.fixture(scope="function")
 def ec2(mocker, request):
-    target = "{}.{}.ec2".format(
-        BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
-    )
+    target = "{}.{}.ec2".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
     if load_class(target):
         print("Mocking {}".format(target))
         client = mocker.MagicMock()
@@ -52,9 +46,7 @@ def ec2(mocker, request):
 
 @pytest.fixture(scope="function")
 def ecr(mocker, request):
-    target = "{}.{}.ecr".format(
-        BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
-    )
+    target = "{}.{}.ecr".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
     if load_class(target):
         print("Mocking {}".format(target))
         client = mocker.MagicMock()
@@ -65,9 +57,7 @@ def ecr(mocker, request):
 
 @pytest.fixture(scope="function")
 def organizations(mocker, request):
-    target = "{}.{}.organizations".format(
-        BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
-    )
+    target = "{}.{}.organizations".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
     if load_class(target):
         print("Mocking {}".format(target))
         client = mocker.MagicMock()
@@ -78,9 +68,7 @@ def organizations(mocker, request):
 
 @pytest.fixture(scope="function")
 def route53(mocker, request):
-    target = "{}.{}.route53".format(
-        BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
-    )
+    target = "{}.{}.route53".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
     if load_class(target):
         print("Mocking {}".format(target))
         client = mocker.MagicMock()
@@ -91,9 +79,7 @@ def route53(mocker, request):
 
 @pytest.fixture(scope="function")
 def s3(mocker, request):
-    target = "{}.{}.s3".format(
-        BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
-    )
+    target = "{}.{}.s3".format(BASE_MODULE_NAME, get_test_target_module(request.module.__name__))
     if load_class(target):
         print("Mocking {}".format(target))
         client = mocker.MagicMock()

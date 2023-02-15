@@ -18,9 +18,7 @@ def _branch_var_name(current_branch, suffix):
 
 def _check_enable_profile(vars, current_branch, profile_type):
     if _branch_var_name(current_branch, profile_type) in vars:
-        enable_profile(
-            profile_type, vars[_branch_var_name(current_branch, profile_type)]
-        )
+        enable_profile(profile_type, vars[_branch_var_name(current_branch, profile_type)])
     elif _var_name(profile_type) in vars:
         enable_profile(profile_type, vars[_var_name(profile_type)])
 
@@ -47,9 +45,7 @@ def _check_disable_virtualenv():
 
 def load_project_env():
     """Print parameters set by git config variables to setup project environment with region and aws credentials"""
-    proc = Popen(
-        ["git", "config", "--list", "--local"], stdout=PIPE, stderr=open(devnull, "w")
-    )
+    proc = Popen(["git", "config", "--list", "--local"], stdout=PIPE, stderr=open(devnull, "w"))
     proc2 = Popen(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
         stdout=PIPE,

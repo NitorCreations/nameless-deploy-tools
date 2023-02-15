@@ -60,9 +60,7 @@ BRANCH_MODES = enum(SINGLE_STACK="single", MULTI_STACK="multi")
 
 
 def _add_default_params(parser):
-    parser.add_argument("template", nargs="?").completer = ChoicesCompleter(
-        list_templates()
-    )
+    parser.add_argument("template", nargs="?").completer = ChoicesCompleter(list_templates())
     parser.add_argument(
         "-y",
         "--yes",
@@ -77,9 +75,7 @@ def create_stack():
     _add_default_params(parser)
     parser.add_argument("-h", "--help", action="store_true")
     if "_ARGCOMPLETE" in os.environ:
-        ac_args = argcomplete.split_line(
-            os.environ["COMP_LINE"], os.environ["COMP_POINT"]
-        )[3]
+        ac_args = argcomplete.split_line(os.environ["COMP_LINE"], os.environ["COMP_POINT"])[3]
         if len(ac_args) >= 2:
             template = ac_args[1]
             template_yaml = load_template(template)
@@ -159,9 +155,7 @@ def setup_cli(name=None, key_id=None, secret=None, region=None):
     home_dir = os.path.expanduser("~")
     config_file = os.path.join(home_dir, ".aws", "config")
     credentials_file = os.path.join(home_dir, ".aws", "credentials")
-    if has_entry("profile ", name, config_file) or has_entry(
-        "", name, credentials_file
-    ):
+    if has_entry("profile ", name, config_file) or has_entry("", name, credentials_file):
         print("Profile " + name + " already exists. Not overwriting.")
         return
     if key_id is None:
@@ -241,45 +235,31 @@ def _append_network_resources(public, letter, resources, availability_zone):
     subnet_res_dict = deepcopy(resources[subnet_resource])
     subnet_res_dict["Properties"]["CidrBlock"]["Ref"] = cidr_param
     subnet_res_dict["Properties"]["AvailabilityZone"] = availability_zone
-    subnet_res_dict["Properties"]["Tags"][0]["Value"]["Fn::Join"][1][
-        1
-    ] += availability_zone
+    subnet_res_dict["Properties"]["Tags"][0]["Value"]["Fn::Join"][1][1] += availability_zone
     resources.update({subnet_to_create: subnet_res_dict})
     if not public:
         route_table_dict = deepcopy(resources[route_table])
-        route_table_dict["Properties"]["Tags"][0]["Value"]["Fn::Join"][1][1] = (
-            " private route table " + letter
-        )
+        route_table_dict["Properties"]["Tags"][0]["Value"]["Fn::Join"][1][1] = " private route table " + letter
         resources.update(OrderedDict([(route_table[:-1] + letter, route_table_dict)]))
     route_table_assoc_dict = deepcopy(resources[route_table_assoc])
     if not public:
-        route_table_assoc_dict["Properties"]["RouteTableId"]["Ref"] = (
-            route_table[:-1] + letter
-        )
+        route_table_assoc_dict["Properties"]["RouteTableId"]["Ref"] = route_table[:-1] + letter
     route_table_assoc_dict["Properties"]["SubnetId"]["Ref"] = subnet_to_create
-    resources.update(
-        OrderedDict([(route_table_assoc[:-1] + letter, route_table_assoc_dict)])
-    )
+    resources.update(OrderedDict([(route_table_assoc[:-1] + letter, route_table_assoc_dict)]))
 
-    resources[db_subnet]["Properties"]["SubnetIds"].append(
-        OrderedDict([("Ref", subnet_to_create)])
-    )
+    resources[db_subnet]["Properties"]["SubnetIds"].append(OrderedDict([("Ref", subnet_to_create)]))
 
 
 def _nts(net):
     return str(net).lower()
 
 
-def _get_network_yaml(
-    network, vpc_cidr, subnet_prefixlen, subnet_base, network_yaml, common_yaml
-):
+def _get_network_yaml(network, vpc_cidr, subnet_prefixlen, subnet_base, network_yaml, common_yaml):
     subnet_bits = 32 - int(subnet_prefixlen)
-    subnet_size = 2 ** subnet_bits
+    subnet_size = 2**subnet_bits
     last_subnet = subnet_base - subnet_size
     az_response = ec2().describe_availability_zones()
-    az_names = sorted(
-        [az_data["ZoneName"] for az_data in az_response["AvailabilityZones"]]
-    )
+    az_names = sorted([az_data["ZoneName"] for az_data in az_response["AvailabilityZones"]])
     network_yaml["Parameters"]["paramVPCCidr"]["Default"] = _nts(vpc_cidr)
     for az_name in az_names:
         zone_letter = az_name[-1:]
@@ -287,37 +267,23 @@ def _get_network_yaml(
         last_subnet += subnet_size
         private_subnet_addr = last_subnet + (len(az_names) * subnet_size)
         subnet = ipaddr.IPv4Network(str(last_subnet) + "/" + str(subnet_prefixlen))
-        private_subnet = ipaddr.IPv4Network(
-            str(private_subnet_addr) + "/" + str(subnet_prefixlen)
-        )
+        private_subnet = ipaddr.IPv4Network(str(private_subnet_addr) + "/" + str(subnet_prefixlen))
         if zone_letter == "a":
             network_yaml["Parameters"]["paramPubACidr"]["Default"] = _nts(subnet)
-            network_yaml["Parameters"]["paramPrivACidr"]["Default"] = _nts(
-                private_subnet
-            )
-            network_yaml["Resources"]["resourcePubSubnetA"]["Properties"][
-                "AvailabilityZone"
-            ] = az_name
-            network_yaml["Resources"]["resourcePrivSubnetA"]["Properties"][
-                "AvailabilityZone"
-            ] = az_name
+            network_yaml["Parameters"]["paramPrivACidr"]["Default"] = _nts(private_subnet)
+            network_yaml["Resources"]["resourcePubSubnetA"]["Properties"]["AvailabilityZone"] = az_name
+            network_yaml["Resources"]["resourcePrivSubnetA"]["Properties"]["AvailabilityZone"] = az_name
             common_yaml["paramNetwork"]["Default"] = _nts(network)
         else:
-            _append_cidr_param(
-                True, zone_upper_letter, _nts(subnet), network_yaml["Parameters"]
-            )
+            _append_cidr_param(True, zone_upper_letter, _nts(subnet), network_yaml["Parameters"])
             _append_cidr_param(
                 False,
                 zone_upper_letter,
                 _nts(private_subnet),
                 network_yaml["Parameters"],
             )
-            _append_network_resources(
-                True, zone_upper_letter, network_yaml["Resources"], az_name
-            )
-            _append_network_resources(
-                False, zone_upper_letter, network_yaml["Resources"], az_name
-            )
+            _append_network_resources(True, zone_upper_letter, network_yaml["Resources"], az_name)
+            _append_network_resources(False, zone_upper_letter, network_yaml["Resources"], az_name)
             network_yaml["Outputs"]["subnet" + zone_upper_letter] = {
                 "Description": "Public Subnet " + zone_upper_letter,
                 "Value": {"Ref": "resourcePubSubnet" + zone_upper_letter},
@@ -494,9 +460,7 @@ class ContextClassBase(object):
         shorts.pop(0)
         for short_arg, long_arg in zip(shorts, parameters):
             if short_arg:
-                parser.add_argument(
-                    "-" + short_arg, "--" + long_arg, help=self.format_prompt(long_arg)
-                )
+                parser.add_argument("-" + short_arg, "--" + long_arg, help=self.format_prompt(long_arg))
             else:
                 parser.add_argument("--" + long_arg, help=self.format_prompt(long_arg))
 
@@ -531,9 +495,7 @@ class ContextClassBase(object):
                 index = index + 1
         self.value_mappers["ssh_key"] = _map_ssh_key
         self.template_transformers.append(
-            lambda myself: _set_first_parameter(
-                myself.template, "paramSshKeyName", myself.ssh_key
-            )
+            lambda myself: _set_first_parameter(myself.template, "paramSshKeyName", myself.ssh_key)
         )
 
     def _ask_elastic_ip(self):
@@ -548,15 +510,11 @@ class ContextClassBase(object):
             for address in eips["Addresses"]:
                 if "InstanceId" not in address:
                     self.elastic_ips.append(address["PublicIp"])
-                    self.elastic_ip = (
-                        self.elastic_ip + str(index) + ": " + address["PublicIp"] + "\n"
-                    )
+                    self.elastic_ip = self.elastic_ip + str(index) + ": " + address["PublicIp"] + "\n"
                     index = index + 1
         self.value_mappers["elastic_ip"] = _map_elastic_ip
         self.template_transformers.append(
-            lambda myself: _set_first_parameter(
-                myself.template, "paramEip", myself.elastic_ip
-            )
+            lambda myself: _set_first_parameter(myself.template, "paramEip", myself.elastic_ip)
         )
 
     def write(self, yes=False):
@@ -636,9 +594,7 @@ class Network(ContextClassBase):
                 return "10." + str(random.randint(0, 255)) + ".0.0"
 
     def set_template(self, template):
-        common_yaml = yaml_load(
-            open(find_include("creatable-templates/network/common.yaml"))
-        )
+        common_yaml = yaml_load(open(find_include("creatable-templates/network/common.yaml")))
         self.template, self.common_yaml = _get_network_yaml(
             self.stack_name,
             self.vpc_cidr,
@@ -676,38 +632,28 @@ class BakeryRoles(ContextClassBase):
         if self.network_stacks:
             index = 1
             for stack_name in self.network_stacks:
-                self.network_stack = (
-                    self.network_stack + str(index) + ": " + stack_name + "\n"
-                )
+                self.network_stack = self.network_stack + str(index) + ": " + stack_name + "\n"
                 index = index + 1
         self.value_mappers["network_stack"] = _map_list
         self.template_transformers.append(
-            lambda myself: _set_first_parameter(
-                myself.template, "paramNetworkStack", myself.network_stack
-            )
+            lambda myself: _set_first_parameter(myself.template, "paramNetworkStack", myself.network_stack)
         )
 
     def _ask_vault_stack(self):
         self.vault_stack = "Vault stack ({0}):\n"
 
         def vault_sel(stack):
-            return has_output_selector(
-                stack, "decryptPolicy", lambda stack: stack["StackName"]
-            )
+            return has_output_selector(stack, "decryptPolicy", lambda stack: stack["StackName"])
 
         self.vault_stacks = select_stacks(vault_sel)
         if self.vault_stacks:
             index = 1
             for stack_name in self.vault_stacks:
-                self.vault_stack = (
-                    self.vault_stack + str(index) + ": " + stack_name + "\n"
-                )
+                self.vault_stack = self.vault_stack + str(index) + ": " + stack_name + "\n"
                 index = index + 1
         self.value_mappers["vault_stack"] = _map_list
         self.template_transformers.append(
-            lambda myself: _set_first_parameter(
-                myself.template, "paramVaultStack", myself.vault_stack
-            )
+            lambda myself: _set_first_parameter(myself.template, "paramVaultStack", myself.vault_stack)
         )
 
     def stack_name_default(self):
@@ -805,13 +751,9 @@ class Jenkins(ContextClassBase):
     def set_template(self, template):
         ContextClassBase.set_template(self, template)
         az_response = ec2().describe_availability_zones()
-        az_names = sorted(
-            [az_data["ZoneName"] for az_data in az_response["AvailabilityZones"]]
-        )
+        az_names = sorted([az_data["ZoneName"] for az_data in az_response["AvailabilityZones"]])
         for az_name in az_names:
-            self.template["Resources"]["Fn::Merge"][0]["resourceAsg"]["Properties"][
-                "AvailabilityZones"
-            ].append(az_name)
-            self.template["Resources"]["Fn::Merge"][0]["resourceAsg"]["Properties"][
-                "VPCZoneIdentifier"
-            ].append("paramSubnet" + az_name[-1:].upper())
+            self.template["Resources"]["Fn::Merge"][0]["resourceAsg"]["Properties"]["AvailabilityZones"].append(az_name)
+            self.template["Resources"]["Fn::Merge"][0]["resourceAsg"]["Properties"]["VPCZoneIdentifier"].append(
+                "paramSubnet" + az_name[-1:].upper()
+            )

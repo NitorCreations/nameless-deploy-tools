@@ -31,11 +31,8 @@ from n_utils import _to_bytes, _to_str
 from n_utils.bw_util import get_bwentry
 from n_utils.yuuuu3332111i1l1i import I11iIi1I, IiII1IiiIiI1
 
-dthandler = (
-    lambda obj: obj.isoformat()
-    if hasattr(obj, "isoformat")
-    else json.JSONEncoder().default(obj)
-)
+dthandler = lambda obj: obj.isoformat() if hasattr(obj, "isoformat") else json.JSONEncoder().default(obj)
+
 
 def mfa_add_token(args):
     """Adds or overwrites an MFA token to be used with role assumption.
@@ -51,14 +48,10 @@ def mfa_add_token(args):
     if args.bitwarden_entry:
         data["bitwarden_entry"] = args.bitwarden_entry
     else:
-        data["token_secret"] = "enc--" + _to_str(
-            IiII1IiiIiI1(_to_bytes(args.token_secret))
-        )
+        data["token_secret"] = "enc--" + _to_str(IiII1IiiIiI1(_to_bytes(args.token_secret)))
     token_file = ndt_dir + "/mfa_" + args.token_name
     if os.path.isfile(token_file) and not args.force:
-        raise ValueError(
-            "A token with the name " + args.token_name + " already exists!"
-        )
+        raise ValueError("A token with the name " + args.token_name + " already exists!")
     with open(token_file, "w") as outfile:
         os.chmod(token_file, 0o600)
         yaml.safe_dump(data, outfile, allow_unicode=True, default_flow_style=False)
@@ -78,15 +71,9 @@ def mfa_read_token(token_name):
             if "token_arn" in bw_entry.fields:
                 data["token_arn"] = bw_entry.fields["token_arn"]
             if bw_entry.totp:
-                data["token_secret"] = "enc--" + _to_str(
-                    IiII1IiiIiI1(_to_bytes(bw_entry.totp))
-                )
+                data["token_secret"] = "enc--" + _to_str(IiII1IiiIiI1(_to_bytes(bw_entry.totp)))
             else:
-                raise ValueError(
-                    "No totp secret found for bitwarden entry '"
-                    + data["bitwarden_entry"]
-                    + "'"
-                )
+                raise ValueError("No totp secret found for bitwarden entry '" + data["bitwarden_entry"] + "'")
         if "token_secret" in data and not data["token_secret"].startswith("enc--"):
             data["force"] = True
             mfa_add_token(Struct(**data))
@@ -145,19 +132,11 @@ def mfa_backup_tokens(backup_secret):
     for token in list_mfa_tokens():
         token_data = mfa_read_token(token)
         if token_data["token_secret"].startswith("enc--"):
-            token_data["token_secret"] = _to_str(
-                I11iIi1I(token_data["token_secret"][5:])
-            )
+            token_data["token_secret"] = _to_str(I11iIi1I(token_data["token_secret"][5:]))
         tokens.append(token_data)
     counter = Counter.new(128, initial_value=1337)
-    cipher = AES.new(
-        get_backup_key_digest(backup_secret), AES.MODE_CTR, counter=counter
-    )
-    return _to_str(
-        base64.b64encode(
-            cipher.encrypt(_to_bytes(json.dumps(tokens, default=dthandler)))
-        )
-    )
+    cipher = AES.new(get_backup_key_digest(backup_secret), AES.MODE_CTR, counter=counter)
+    return _to_str(base64.b64encode(cipher.encrypt(_to_bytes(json.dumps(tokens, default=dthandler)))))
 
 
 def mfa_decrypt_backup_tokens(backup_secret, file):
@@ -165,9 +144,7 @@ def mfa_decrypt_backup_tokens(backup_secret, file):
     with open(os.path.expanduser(file), "r") as infile:
         data = infile.read()
     counter = Counter.new(128, initial_value=1337)
-    cipher = AES.new(
-        get_backup_key_digest(backup_secret), AES.MODE_CTR, counter=counter
-    )
+    cipher = AES.new(get_backup_key_digest(backup_secret), AES.MODE_CTR, counter=counter)
     return cipher.decrypt(base64.b64decode(data)).decode()
 
 
@@ -178,7 +155,7 @@ class Struct(object):
 
 def list_mfa_tokens():
     tokens = []
-    for (dirpath, dirnames, filenames) in walk(get_ndt_dir()):
+    for dirpath, dirnames, filenames in walk(get_ndt_dir()):
         tokens.extend([fn[4:] for fn in filenames if fn.startswith("mfa_")])
         break
     return tokens
