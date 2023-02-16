@@ -15,6 +15,7 @@ from n_utils.az_util import az_select_subscription
 from n_utils.bw_util import get_bwentry
 from n_utils.lp_util import get_lpentry
 from n_utils.mfa_utils import mfa_generate_code
+from threadlocal_aws.clients import sso
 
 
 def ConfigParser():
@@ -142,9 +143,7 @@ def read_profile_expiry_epoc(profile, profile_type=None):
 
 
 def check_profile_expired(profile, profile_type=None):
-    return _epoc_secs(
-        parse(read_profile_expiry(profile, profile_type=profile_type)).replace(tzinfo=tzutc())
-    ) < _epoc_secs(datetime.now(tzutc()))
+    return read_profile_expiry_epoc(profile, profile_type) < _epoc_secs(datetime.now(tzutc()))
 
 
 def print_aws_profiles():
@@ -270,36 +269,59 @@ def cli_read_profile_expiry():
     print(read_profile_expiry(args.profile))
 
 
+def cli_update_sso_profile():
+    """update current SSO-profile's session to ~/.aws/credentials. Running this enables SSO-support for the Serverless Framework."""
+    parser = argparse.ArgumentParser(description=cli_update_sso_profile.__doc__)
+    argcomplete.autocomplete(parser)
+    _ = parser.parse_args()
+    if "AWS_PROFILE" not in os.environ:
+        return
+    profile_name = os.environ["AWS_PROFILE"]
+    profile = get_profile(profile_name)
+    profile_type = resolve_profile_type(profile_name)
+    if profile_type == "sso":
+        cache_json = read_sso_profile(profile_name)
+        if "accessToken" in cache_json and cache_json["accessToken"]:
+            access_token = cache_json["accessToken"]
+            creds = sso(region=profile["sso_region"]).get_role_credentials(
+                roleName=profile["sso_role_name"], accountId=profile["sso_account_id"], accessToken=access_token
+            )
+            role_creds = creds["roleCredentials"]
+            update_profile(profile_name, role_creds)
+
+
 def update_profile(profile, creds):
     home = expanduser("~")
     credentials = join(home, ".aws", "credentials")
     profile_type = resolve_profile_type(profile)
-    if exists(credentials):
-        parser = ConfigParser()
-        with open(credentials) as credfile:
-            parser.read_file(credfile)
-            if profile not in parser.sections():
-                parser.add_section(profile)
-            if profile_type == "sso":
-                creds["AccessKeyId"] = creds["accessKeyId"]
-                creds["SecretAccessKey"] = creds["secretAccessKey"]
-                creds["SessionToken"] = creds["sessionToken"]
-                creds["Expiration"] = datetime.fromtimestamp(creds["expiration"] / 1000)
-            parser.set(profile, "aws_access_key_id", creds["AccessKeyId"])
-            parser.set(profile, "aws_secret_access_key", creds["SecretAccessKey"])
-            parser.set(profile, "aws_session_token", creds["SessionToken"])
-            parser.set(
-                profile,
-                "aws_session_expiration",
-                creds["Expiration"].strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
-            )
-            parser.set(
-                profile,
-                "aws_expiration",
-                creds["Expiration"].strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
-            )
-        with open(credentials, "w") as credfile:
-            parser.write(credfile)
+    parser = ConfigParser()
+    if not exists(credentials):
+        with open(credentials, "w"):
+            pass
+    with open(credentials, "r") as credfile:
+        parser.read_file(credfile)
+        if profile not in parser.sections():
+            parser.add_section(profile)
+        if profile_type == "sso":
+            creds["AccessKeyId"] = creds["accessKeyId"]
+            creds["SecretAccessKey"] = creds["secretAccessKey"]
+            creds["SessionToken"] = creds["sessionToken"]
+            creds["Expiration"] = datetime.fromtimestamp(creds["expiration"] / 1000)
+        parser.set(profile, "aws_access_key_id", creds["AccessKeyId"])
+        parser.set(profile, "aws_secret_access_key", creds["SecretAccessKey"])
+        parser.set(profile, "aws_session_token", creds["SessionToken"])
+        parser.set(
+            profile,
+            "aws_session_expiration",
+            creds["Expiration"].strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+        )
+        parser.set(
+            profile,
+            "aws_expiration",
+            creds["Expiration"].strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+        )
+    with open(credentials, "w") as credfile:
+        parser.write(credfile)
 
 
 def cli_profiles_to_json():
@@ -453,19 +475,16 @@ def enable_profile(profile_type, profile):
     orig_profile = profile
     profile = re.sub("[^a-zA-Z0-9_-]", "_", profile)
     safe_profile = re.sub("[^A-Z0-9]", "_", profile.upper())
-    now = _epoc_secs(datetime.now(tzutc()))
-    expiry = now - 1000
+    profile_expired = check_profile_expired(profile, profile_type=profile_type)
     if profile_type == "iam":
         _print_profile_switch(profile)
     elif profile_type == "azure" or profile_type == "adfs" or profile_type == "lastpass" or profile_type == "sso":
         _print_profile_switch(profile)
-        if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
-            expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
-        if expiry < now:
+        if profile_expired:
             expiry = read_profile_expiry_epoc(profile, profile_type=profile_type)
             if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
                 del os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile]
-        if expiry < now:
+        if profile_expired:
             bw_prefix = ""
             bw_entry = None
             lp_entry = None
@@ -502,15 +521,17 @@ def enable_profile(profile_type, profile):
                     bw_prefix += "LASTPASS_DEFAULT_OTP='" + mfa_generate_code(profile_data["ndt_mfa_token"]) + "' "
                 print(bw_prefix + "lastpass-aws-login --profile " + profile + " --no-prompt")
             elif profile_type == "sso":
-                print("aws sso login --profile " + profile)
+                print("aws sso login --profile " + profile + ";")
+                print('eval "$(ndt update-sso-profile)"')
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
+            expiry = read_profile_expiry_epoc(profile, profile_type=profile_type)
             print_profile_expiry(profile, expiry_epoc=expiry)
     elif profile_type == "ndt":
         if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
             expiry = int(os.environ["AWS_SESSION_EXPIRATION_EPOC_" + safe_profile])
-        if expiry < now:
+        if profile_expired:
             expiry = read_profile_expiry_epoc(profile)
-        if expiry < now:
+        if profile_expired:
             if "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile in os.environ:
                 print("unset AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
             profile_data = get_profile(profile)
@@ -554,6 +575,7 @@ def enable_profile(profile_type, profile):
 
 def _print_profile_switch(profile):
     unset = []
+    profile_type = resolve_profile_type(profile_name=profile)
     for env in ["AWS_SESSION_TOKEN", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"]:
         if env in os.environ:
             unset.append(env)
@@ -568,6 +590,8 @@ def _print_profile_switch(profile):
         for param in set_env:
             print(param + '="' + profile + '";')
         print("export " + " ".join(set_env) + ";")
+        if profile_type == "sso":
+            print('eval "$(ndt update-sso-profile)"')
 
 
 def _epoc_to_str(epoc):
