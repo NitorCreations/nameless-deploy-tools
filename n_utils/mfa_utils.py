@@ -30,7 +30,9 @@ from n_utils import _to_bytes, _to_str
 from n_utils.bw_util import get_bwentry
 from n_utils.yuuuu3332111i1l1i import I11iIi1I, IiII1IiiIiI1
 
-dthandler = lambda obj: obj.isoformat() if hasattr(obj, "isoformat") else json.JSONEncoder().default(obj)
+
+def dthandler(obj):
+    return obj.isoformat() if hasattr(obj, "isoformat") else json.JSONEncoder().default(obj)
 
 
 def mfa_add_token(args):

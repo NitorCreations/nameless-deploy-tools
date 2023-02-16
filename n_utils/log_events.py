@@ -86,7 +86,7 @@ class CloudFormationEvents(LogWorkerThread):
                     event_timestamp = timestamp(event["Timestamp"])
                     if event_timestamp < max(self.start_time, seen_events_up_to):
                         break
-                    if not event["EventId"] in dedup_queue:
+                    if event["EventId"] not in dedup_queue:
                         dedup_queue.append(event["EventId"])
                         unseen_events.append(event)
 

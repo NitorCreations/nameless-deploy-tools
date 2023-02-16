@@ -46,7 +46,7 @@ def deploy_connect_contact_flows(component, contactflowname, dry_run=True):
                             Description=flow_description,
                             Name=flow_name,
                         )
-                    except:
+                    except Exception:
                         print("Failed to update flow " + flow_name)
                         print(yaml_save(flow))
             else:
@@ -72,7 +72,7 @@ def deploy_connect_contact_flows(component, contactflowname, dry_run=True):
                             Content=flow_content,
                             Tags=flow_tags,
                         )
-                    except:
+                    except Exception:
                         print("Failed to create flow " + flow_name)
                         print(yaml_save(flow))
 

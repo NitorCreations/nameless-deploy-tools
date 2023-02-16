@@ -51,7 +51,7 @@ def type_guess(val):
         return None
     try:
         return literal_eval(val)
-    except:
+    except Exception:
         return _to_str(val)
 
 
@@ -444,11 +444,11 @@ class ContextClassBase:
         parameters = self.getattr("ask_fields")
         shorts = ["h"]
         for param in parameters:
-            if not param[0] in shorts:
+            if param[0] not in shorts:
                 shorts.append(param[0])
             else:
                 attempt = [x[0] for x in re.split("[\b_]", param)]
-                if len(attempt) > 1 and not attempt[1] in shorts:
+                if len(attempt) > 1 and attempt[1] not in shorts:
                     shorts.append(attempt[1])
                 else:
                     attempt = param[1]

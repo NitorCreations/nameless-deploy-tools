@@ -1,6 +1,7 @@
 # Nameless Deploy Tools
 [![Build Status](https://api.travis-ci.com/NitorCreations/nameless-deploy-tools.svg?branch=master)](https://app.travis-ci.com/github/NitorCreations/nameless-deploy-tools/)
 [![Coverage Status](https://coveralls.io/repos/github/NitorCreations/nameless-deploy-tools/badge.svg?branch=master)](https://coveralls.io/github/NitorCreations/nameless-deploy-tools?branch=master)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## Released version 1.282
 
@@ -52,6 +53,8 @@ pip install nameless-deploy-tools
 ```
 On macOS, you may need to add `--ignore-installed` to get around platform installed versions
 of `six` and other packages.
+
+Requires Python 3.6 or newer.
 
 ## Getting started
 

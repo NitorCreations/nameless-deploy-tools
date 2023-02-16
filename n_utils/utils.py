@@ -14,10 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""" Utilities to work with instances made by nameless-deploy-tools stacks
-"""
+"""Utilities to work with instances made by nameless-deploy-tools stacks."""
 
-import io
 import json
 import os
 import random
@@ -30,7 +28,6 @@ from collections import OrderedDict
 from copy import deepcopy
 from operator import itemgetter
 
-import six
 from botocore.exceptions import ClientError
 from ec2_utils.instance_info import info, is_ec2, resolve_account, stack_params_and_outputs_and_stack
 from n_vault import Vault
@@ -48,7 +45,9 @@ USER_DATA_URL = "http://169.254.169.254/latest/user-data"
 INSTANCE_DATA_LINUX = "/opt/nameless/instance-data.json"
 INSTANCE_DATA_WIN = "C:/nameless/instance-data.json"
 
-dthandler = lambda obj: obj.isoformat() if hasattr(obj, "isoformat") else json.JSONEncoder().default(obj)
+
+def dthandler(obj):
+    return obj.isoformat() if hasattr(obj, "isoformat") else json.JSONEncoder().default(obj)
 
 
 class ParamNotAvailable:
@@ -87,9 +86,9 @@ def assumed_role_name():
     global ROLE_NAME
     if not ROLE_NAME:
         try:
-            roleArn = sts().get_caller_identity()["Arn"]
-            if ":assumed-role/" in roleArn:
-                ROLE_NAME = roleArn.split("/")[1]
+            role_arn = sts().get_caller_identity()["Arn"]
+            if ":assumed-role/" in role_arn:
+                ROLE_NAME = role_arn.split("/")[1]
         except BaseException:
             pass
     return ROLE_NAME
@@ -436,7 +435,7 @@ def read_if_readable(filename):
                 return read_file.read()
         else:
             return ""
-    except:
+    except Exception:
         return ""
 
 
@@ -453,7 +452,7 @@ def session_token(duration_minutes=60, token_arn=None, token_value=None):
     ret = {}
     try:
         ret = sts().get_session_token(**args)
-    except:
+    except Exception:
         pass
     if "Credentials" not in ret:
         return None

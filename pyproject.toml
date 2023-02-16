@@ -22,7 +22,7 @@ extend_skip = ['.idea', '.vscode', 'venv']
 
 [tool.ruff]
 # https://github.com/charliermarsh/ruff#configuration
-target-version = "py36"
+target-version = "py37"
 line-length = 120
 select = ["E", "F", "W", "I", "N", "UP"]
 ignore = []

@@ -6,7 +6,6 @@ import sys
 from operator import attrgetter
 from os import mkdir, path, sep
 
-import six
 from cloudformation_utils.tools import cloudformation_yaml_loads as yaml_loads
 from threadlocal_aws.clients import codebuild
 
@@ -484,7 +483,7 @@ phases:
                         build_spec = DEFAULT_BUILD_SPEC
                     try:
                         interpolated_build_spec = yaml_to_dict(build_spec, extra_parameters=extra_params)
-                    except:
+                    except Exception:
                         interpolated_build_spec = yaml_loads(build_spec)
                         interpolated_build_spec = import_scripts(
                             interpolated_build_spec,
@@ -544,7 +543,7 @@ phases:
             webhook_args["projectName"] = component_args["name"]
 
             # Run update
-            subc_region = region = subcomponent["properties"]["REGION"]
+            subc_region = subcomponent["properties"]["REGION"]
             print("Updating " + component_args["name"] + " in " + subc_region)
             if dry_run:
                 print(json.dumps(component_args, indent=2))
@@ -552,11 +551,11 @@ phases:
             else:
                 try:
                     codebuild(region=subc_region).update_project(**component_args)
-                except:
+                except Exception:
                     print("Project not found, creating " + component_args["name"])
                     codebuild(region=subc_region).create_project(**component_args)
                 try:
                     codebuild(region=subc_region).update_webhook(**webhook_args)
-                except:
+                except Exception:
                     print("Creating webhook for " + component_args["name"])
                     codebuild(region=subc_region).create_webhook(**webhook_args)

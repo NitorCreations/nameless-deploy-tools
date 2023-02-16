@@ -39,16 +39,16 @@ def create_account(
     )
     if "CreateAccountStatus" in response and "Id" in response["CreateAccountStatus"]:
         create_account_id = response["CreateAccountStatus"]["Id"]
-        startTime = time()
+        start_time = time()
         status = response["CreateAccountStatus"]["State"]
-        while time() - startTime < timeout and not status == "SUCCEEDED":
+        while time() - start_time < timeout and not status == "SUCCEEDED":
             if response["CreateAccountStatus"]["State"] == "FAILED":
                 raise Exception("Account creation failed: " + response["CreateAccountStatus"]["FailureReason"])
             print("Waiting for account creation to finish")
             sleep(2)
             response = organizations().describe_create_account_status(CreateAccountRequestId=create_account_id)
             status = response["CreateAccountStatus"]["State"]
-        if time() - startTime > timeout and not status == "SUCCEEDED":
+        if time() - start_time > timeout and not status == "SUCCEEDED":
             raise Exception("Timed out waiting to create account " + response["CreateAccountStatus"]["State"])
         account_id = response["CreateAccountStatus"]["AccountId"]
 
