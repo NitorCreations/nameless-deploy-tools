@@ -279,6 +279,8 @@ def cli_update_sso_profile():
     profile_name = os.environ["AWS_PROFILE"]
     profile = get_profile(profile_name)
     profile_type = resolve_profile_type(profile_name)
+    if check_profile_expired(profile=profile_name, profile_type=profile_type):
+        return
     if profile_type == "sso":
         cache_json = read_sso_profile(profile_name)
         if "accessToken" in cache_json and cache_json["accessToken"]:
