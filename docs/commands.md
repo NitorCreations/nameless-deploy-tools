@@ -1006,8 +1006,8 @@ options:
 ```bash
 usage: ndt print-aws-profiles [-h] [prefix]
 
-Prints profile names from credentials file (~/.aws/credentials) and the conf
-file (~/.aws/conf) for autocomplete tools
+Prints profile names from credentials file (~/.aws/credentials), and the conf
+file (~/.aws/conf) for autocomplete tools.
 
 positional arguments:
   prefix      Prefix of profiles to print
@@ -1388,6 +1388,18 @@ positional arguments:
 
 optional arguments:
   -h, --help    show this help message and exit
+```
+
+## `ndt update-sso-profile`
+
+```bash
+usage: ndt update-sso-profile [-h]
+
+update current SSO-profile\'s session to ~/.aws/credentials. Running this
+enables SSO-support for the Serverless Framework.
+
+options:
+  -h, --help  show this help message and exit
 ```
 
 ## `ndt upsert-cloudfront-records`
