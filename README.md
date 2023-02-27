@@ -1,4 +1,5 @@
 # Nameless Deploy Tools
+
 [![Build Status](https://api.travis-ci.com/NitorCreations/nameless-deploy-tools.svg?branch=master)](https://app.travis-ci.com/github/NitorCreations/nameless-deploy-tools/)
 [![Coverage Status](https://coveralls.io/repos/github/NitorCreations/nameless-deploy-tools/badge.svg?branch=master)](https://coveralls.io/github/NitorCreations/nameless-deploy-tools?branch=master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -15,7 +16,7 @@ a YAML syntax) and Bicep.
 A common analogy for cloud infrastructure has been to move from having pets with
 names that need lots of looking after, to cattle that has at most id's. It's time
 to move to the industrial age from the agrarian era. The infrastructure our
-applications runs now comes and goes and we know at most some statistical information
+applications runs now comes and goes, and we know at most some statistical information
 about the actual executions. Run times, memory usage, used bandwidth and the like.
 We no longer know even the id's of the things that actually run the code. Hence -
 nameless.
@@ -28,16 +29,16 @@ DevOps has a natural appeal to us and immediately "infrastructure as code" meant
 that we should apply the best development practices to infrastructure development. It starts
 with version control and continues with testing new features in isolation and a workflow
 that supports this. Our teams usually take into use a feature branch workflow if it is
-feasible and we expect all of the tools and practices to support this. For infrastructure
+feasible, and we expect all the tools and practices to support this. For infrastructure
 this type of branching means that you should be able to spin up enough of the infrastructure
-to be able to verify the changes you want to implement in production. Also the testing
+to be able to verify the changes you want to implement in production. Also, the testing
 environment should be close enough to the target environment for the results to be valid.
 So the differences between testing and production environments should be minimized and
 reviewable.
 
 With the popular tools like Ansible, Terraform, Chef etc. you need to come up with and
 implement the ways to achieve the goals above. As far as I know, no tool besides ndt
-has at it's core a thought-out way of a branching infrastructure development model.
+has at its core a thought-out way of a branching infrastructure development model.
 
 ## What it is
 
@@ -48,9 +49,10 @@ applications. All of the above can also be deployed using _[Terraform](https://w
 
 ## Installation
 
-```
+```sh
 pip install nameless-deploy-tools
 ```
+
 On macOS, you may need to add `--ignore-installed` to get around platform installed versions
 of `six` and other packages.
 
@@ -77,11 +79,11 @@ For full list of commands see [here](docs/commands.md)
 
 ## Documentation
 
-- [Command Reference](docs/commands.md)
-- [ndt workspace tooling](docs/workspace.md)
-- [Template Pre-Processing](docs/template-processing.md)
-- [Multifactor Authentication](docs/mfa.md)
-- [Common parameters](docs/parameters.md)
+* [Command Reference](docs/commands.md)
+* [ndt workspace tooling](docs/workspace.md)
+* [Template Pre-Processing](docs/template-processing.md)
+* [Multifactor Authentication](docs/mfa.md)
+* [Common parameters](docs/parameters.md)
 
 ## Versioning
 
