@@ -10,12 +10,12 @@ import argcomplete
 from argcomplete.completers import ChoicesCompleter
 from dateutil.parser import parse
 from dateutil.tz import tzutc
+from threadlocal_aws.clients import sso
 
 from n_utils.az_util import az_select_subscription
 from n_utils.bw_util import get_bwentry
 from n_utils.lp_util import get_lpentry
 from n_utils.mfa_utils import mfa_generate_code
-from threadlocal_aws.clients import sso
 
 
 def ConfigParser():
