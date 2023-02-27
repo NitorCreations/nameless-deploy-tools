@@ -5,7 +5,7 @@ is a template pre-processing step that is fairly important. The pre-processing i
 client side functionality that greatly improves the usability and modularisation of stacks and
 serverless projects. The flow of the prosessing is roughly as follows:
 
-* Resolve ndt parameters from `*.properties` files along the path to the template. The 
+* Resolve ndt parameters from `*.properties` files along the path to the template. The
   properties files are processed in the following order starting at the root of the workspace
   and continuing to the component level and subcomponent:
     - `branch.properties`
@@ -216,15 +216,15 @@ An example would be:
 Which will be translated when imported into the stack into:
 ```json
 "Fn::Join": [
-  "", 
+  "",
   [
-    "{\n", 
-    "    \"Reference\": \"", 
+    "{\n",
+    "    \"Reference\": \"",
     {
       "Ref": "MyLambdaArn"
-    }, 
-    "\",", 
-    "    \"Name\": \"MyLambda\"\n", 
+    },
+    "\",",
+    "    \"Name\": \"MyLambda\"\n",
     "}"
   ]
 ]

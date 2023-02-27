@@ -19,7 +19,7 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              AWS: 
+              AWS:
                 !Sub "arn:aws:iam::${paramTrustedAccount}:root"
             Action: 'sts:AssumeRole'
       Path: /

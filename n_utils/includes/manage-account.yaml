@@ -13,7 +13,7 @@ Resources:
   AllowManagePolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      ManagedPolicyName: 
+      ManagedPolicyName:
         !Sub "AllowAssumeManageRoleFor${paramManagedAccount}"
       PolicyDocument:
         Version: '2012-10-17'
@@ -22,7 +22,7 @@ Resources:
           Effect: Allow
           Action:
             - 'sts:AssumeRole'
-          Resource: 
+          Resource:
             - !Sub "arn:aws:iam::${paramManagedAccount}:role/${paramManageRole}"
 Outputs:
   ManagePolicy:

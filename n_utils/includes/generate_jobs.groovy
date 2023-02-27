@@ -12,7 +12,7 @@ public class Settings {
         this.gitCredentials = remoteConfig.credentialsId
         this.workspace = new File(__FILE__).parentFile.absoluteFile
         this.jobPropertiesDir = new File(workspace, "job-properties")
-        
+
         /**
          * Get mappings for image jobs to trigger (and block) deploy jobs
          **/
@@ -75,7 +75,7 @@ public class Settings {
                 }
             } finally {
                 return properties
-            } 
+            }
         }
     }
     /**
@@ -239,7 +239,7 @@ for (jobDef in jobDefs) {
                 cps{
                     script("""env.GIT_BRANCH=\"$gitBranch\"
 node {
-    checkout([\$class: 'GitSCM', branches: [[name: \"*/$gitBranch\"]], 
+    checkout([\$class: 'GitSCM', branches: [[name: \"*/$gitBranch\"]],
               doGenerateSubmoduleConfigurations: false,
               extensions: [
                 [\$class: 'PathRestriction',

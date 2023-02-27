@@ -96,4 +96,3 @@ resources:
         intervalInSeconds: 15
         numberOfProbes: 2
       name: '[variables(''lbprobename'')]'
-

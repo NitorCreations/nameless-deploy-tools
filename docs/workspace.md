@@ -125,7 +125,7 @@ and assume role if that is how multi-account access is setup for you.
 every time the shell prompt is created. By default that will be a python script and will have
 the usual python startup slowness attached. On some systems you can work around this by compiling
 that command into a native binary with [nuitka](http://nuitka.net/). The process of replacing
-that python script with a binary version is as follows: 
+that python script with a binary version is as follows:
 
 ```bash
 sudo -H pip install -U nuitka

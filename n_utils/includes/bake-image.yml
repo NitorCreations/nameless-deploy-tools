@@ -29,7 +29,7 @@
         instance.group-id: "{{ sg_id }}"
         instance-type: "{{ instance_type }}"
         image-id: "{{ root_ami }}"
-      
+
 - name: "create instance"
   hosts: localhost
   connection: local
