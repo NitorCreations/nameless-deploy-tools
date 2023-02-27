@@ -58,17 +58,6 @@ of `six` and other packages.
 
 Requires Python 3.6 or newer.
 
-## Dependencies
-
-Python dependencies are specified in [setup.cfg](./setup.cfg).
-[pip-compile](https://github.com/jazzband/pip-tools/) is used to generate the `requirements.txt` file.
-To update the requirements, use the following commands:
-
-```shell
-pip install --upgrade pip-tools
-pip-compile setup.py
-``` 
-
 ## Getting started
 
 To use nameless-deploy-tools you need to set up a _project repository_ that
@@ -105,3 +94,35 @@ new functionality and bugfixes, since we don't think it matters and is not a thi
 worth wasting time on. We will release often and if we need changes that are not comptatible,
 we will fork the next major version and release alphas versions of that until we are
 happy to release the next major version and try and have a painless upgrade path.
+
+## Dependencies
+
+Python dependencies are specified in [setup.cfg](./setup.cfg).
+[pip-compile](https://github.com/jazzband/pip-tools/) is used to generate the `requirements.txt` file.
+To update the requirements, use the following commands:
+
+```shell
+pip install --upgrade pip-tools
+pip-compile setup.py
+``` 
+
+## Code formatting
+
+This project uses [Black](https://github.com/psf/black) together with [isort](https://github.com/PyCQA/isort) for Python code formatting, 
+and [flake8](https://github.com/PyCQA/flake8) for linting.
+They are configured with a custom line length limit of 120.
+
+Usage:
+
+```shell
+pip install --upgrade black isort flake8
+black .
+isort .
+flake8 .
+```
+
+These can also be integrated to IDEs / editors or run as a pre-commit hook.
+See the documentation for example for Black [here](https://black.readthedocs.io/en/stable/integrations/editors.html). 
+VS Code has built-in support for [Black](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter), 
+[isort](https://marketplace.visualstudio.com/items?itemName=ms-python.isort), 
+and [flake8](https://marketplace.visualstudio.com/items?itemName=ms-python.flake8) through official plugins.
