@@ -1,4 +1,4 @@
-# Copyright 2016-2017 Nitor Creations Oy
+# Copyright 2016-2023 Nitor Creations Oy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
