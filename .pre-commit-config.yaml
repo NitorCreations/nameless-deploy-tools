@@ -1,18 +1,21 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
+    # https://github.com/pre-commit/pre-commit-hooks
     hooks:
-      - id: check-ast
       - id: check-added-large-files
-      - id: check-merge-conflict
+      - id: check-ast
       - id: check-case-conflict
       - id: check-docstring-first
       - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
       - id: check-yaml
+        args: [--unsafe]
       - id: debug-statements
       - id: end-of-file-fixer
-      - id: trailing-whitespace
       - id: mixed-line-ending
+      - id: trailing-whitespace
   - repo: https://github.com/pycqa/flake8
     rev: 6.0.0
     hooks:
@@ -26,5 +29,4 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-        name: isort (python)
 exclude: ^(.idea|.vscode)/
