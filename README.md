@@ -49,7 +49,7 @@ applications. All of the above can also be deployed using _[Terraform](https://w
 
 ## Installation
 
-```sh
+```shell
 pip install nameless-deploy-tools
 ```
 
@@ -57,6 +57,17 @@ On macOS, you may need to add `--ignore-installed` to get around platform instal
 of `six` and other packages.
 
 Requires Python 3.6 or newer.
+
+## Dependencies
+
+Python dependencies are specified in [setup.cfg](./setup.cfg).
+[pip-compile](https://github.com/jazzband/pip-tools/) is used to generate the `requirements.txt` file.
+To update the requirements, use the following commands:
+
+```shell
+pip install --upgrade pip-tools
+pip-compile setup.py
+``` 
 
 ## Getting started
 
