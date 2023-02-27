@@ -104,11 +104,11 @@ To update the requirements, use the following commands:
 ```shell
 pip install --upgrade pip-tools
 pip-compile setup.py
-``` 
+```
 
-## Code formatting
+## Code formatting and linting
 
-This project uses [Black](https://github.com/psf/black) together with [isort](https://github.com/PyCQA/isort) for Python code formatting, 
+This project uses [Black](https://github.com/psf/black) together with [isort](https://github.com/PyCQA/isort) for Python code formatting,
 and [flake8](https://github.com/PyCQA/flake8) for linting.
 They are configured with a custom line length limit of 120.
 
@@ -122,7 +122,17 @@ flake8 .
 ```
 
 These can also be integrated to IDEs / editors or run as a pre-commit hook.
-See the documentation for example for Black [here](https://black.readthedocs.io/en/stable/integrations/editors.html). 
-VS Code has built-in support for [Black](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter), 
-[isort](https://marketplace.visualstudio.com/items?itemName=ms-python.isort), 
+See the documentation for example for Black [here](https://black.readthedocs.io/en/stable/integrations/editors.html).
+VS Code has built-in support for [Black](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter),
+[isort](https://marketplace.visualstudio.com/items?itemName=ms-python.isort),
 and [flake8](https://marketplace.visualstudio.com/items?itemName=ms-python.flake8) through official plugins.
+
+Using with [pre-commit](https://pre-commit.com/):
+
+```shell
+# setup to be run automatically on git commit
+pre-commit install
+
+# run manually
+pre-commit run --all-files
+```
