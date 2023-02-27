@@ -1,4 +1,4 @@
-name: Black
+name: isort
 
 # Run either when pushing directly to main/master or in a PR targeting main/master
 on:
@@ -15,11 +15,12 @@ on:
     paths:
       - '**.py'
 
+# https://github.com/marketplace/actions/python-isort
 jobs:
-  format:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Check out source repository
         uses: actions/checkout@v3
 
       - name: Set up Python environment
@@ -27,7 +28,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Black format
-        uses: psf/black@stable
+      - name: isort
+        uses: isort/isort-action@v1.1.0
         with:
-          options: "--check --verbose --diff --color"
+            requirementsFiles: "requirements.txt"

@@ -1,4 +1,4 @@
-name: flake8 Lint
+name: flake8
 
 # Run either when pushing directly to main/master or in a PR targeting main/master
 on:
@@ -22,9 +22,11 @@ jobs:
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
+
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: flake8 Lint
+
+      - name: flake8 lint
         uses: py-actions/flake8@v2
