@@ -28,6 +28,7 @@ description = "Tools for deploying to AWS via CloudFormation and Serverless fram
 license = {text = "Apache 2.0"}
 authors = [{name = "Pasi Niemi", email = "pasi@nitor.com"}]
 version = "1.283"
+dynamic = ["entry-points"]
 dependencies = [
     "argcomplete",
     "boto3",
