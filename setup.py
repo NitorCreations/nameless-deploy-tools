@@ -11,6 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# https://setuptools.pypa.io/en/latest/userguide/dependency_management.html
+
 import sys
 
 from setuptools import setup
@@ -27,7 +30,7 @@ setup(
     version="1.283",
     description="Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow",  # noqa
     url="http://github.com/NitorCreations/nameless-deploy-tools",
-    download_url="https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.157",
+    download_url="https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.283",
     author="Pasi Niemi",
     author_email="pasi@nitor.com",
     long_description=long_description,
