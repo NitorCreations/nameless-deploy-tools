@@ -15,5 +15,6 @@
 # https://setuptools.pypa.io/en/latest/userguide/dependency_management.html
 
 from setuptools import setup
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     setup()
