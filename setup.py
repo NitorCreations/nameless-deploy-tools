@@ -27,6 +27,7 @@ with open("README.md") as f:
 
 setup(
     name="nameless-deploy-tools",
+    python_requires=">=3.6",
     version="1.283",
     description="Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow",  # noqa
     url="http://github.com/NitorCreations/nameless-deploy-tools",
