@@ -116,12 +116,12 @@ if [ -z "$SKIP_NPM" -o "$SKIP_NPM" = "n" ]; then
 fi
 
 if [ -n "$DRYRUN" ]; then
-  sls package $VERBOSE -s $paramEnvId
+  npx serverless package $VERBOSE -s $paramEnvId
   exit 0
 fi
 
 set -e
-sls deploy --conceal $VERBOSE -s $paramEnvId
+npx serverless deploy --conceal $VERBOSE -s $paramEnvId
 
 if [ -x "./post_deploy.sh" ]; then
   "./post_deploy.sh"

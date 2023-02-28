@@ -87,4 +87,4 @@ ndt yaml-to-yaml "$component/serverless-$ORIG_SERVERLESS_NAME/template.yaml" > "
 
 cd "$component/serverless-$ORIG_SERVERLESS_NAME"
 
-sls remove -s $paramEnvId
+npx serverless remove -s $paramEnvId
