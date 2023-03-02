@@ -49,6 +49,11 @@ elif [ "$1" = "-v" ]; then
 else
     MINOR=$(($MINOR + 1))
     NEW_VERSION=$MAJOR.$MINOR
+    MESSAGE="$1"
+fi
+
+if [ -z "$MESSAGE" ]; then
+  MESSAGE="$NEW_VERSION"
 fi
 
 ./update-commandlist.sh
@@ -57,9 +62,10 @@ fi
 "${SED_COMMAND[@]}" "s/## Released version.*/## Released version $NEW_VERSION/g" README.md
 "${SED_COMMAND[@]}" "s/nameless-deploy-tools==.*/nameless-deploy-tools==$NEW_VERSION/g" docker/Dockerfile
 "${SED_COMMAND[@]}" "s/^VERSION.*=.*/VERSION\ =\ \"$NEW_VERSION\"/" n_utils/__init__.py
+
 git commit -m "$1" setup.cfg pyproject.toml README.md docker/Dockerfile docs/commands.md n_utils/__init__.py
-git tag "$NEW_VERSION" -m "$1"
-git push --tags origin master
+git tag "$NEW_VERSION" -m "$MESSAGE"
+git push origin "$NEW_VERSION"
 
 if [ -n "$(command -v python3)" ]; then
     PYTHON=$(which python3)
@@ -71,7 +77,7 @@ if [ ! -e "$PYTHON" ]; then
     echo "Python executable not found: $PYTHON"
     exit 1
 else
-    echo "Using $PYTHON"
+    echo "Using $PYTHON $($PYTHON --version)"
 fi
 
 rm -rf dist/*
