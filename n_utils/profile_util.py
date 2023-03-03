@@ -10,12 +10,12 @@ import argcomplete
 from argcomplete.completers import ChoicesCompleter
 from dateutil.parser import parse
 from dateutil.tz import tzutc
+from threadlocal_aws.clients import sso
 
 from n_utils.az_util import az_select_subscription
 from n_utils.bw_util import get_bwentry
 from n_utils.lp_util import get_lpentry
 from n_utils.mfa_utils import mfa_generate_code
-from threadlocal_aws.clients import sso
 
 
 def ConfigParser():
@@ -228,7 +228,9 @@ def print_profile(profile_name, params):
 
 
 def profile_expiry_to_env():
-    """Prints profile expiry from credentials file (~/.aws/credentials) as eval-able environment variables"""
+    """
+    Prints profile expiry from credentials file (~/.aws/credentials) as eval-able environment variables.
+    """
     parser = argparse.ArgumentParser(description=profile_expiry_to_env.__doc__)
     if "_ARGCOMPLETE" in os.environ:
         parser.add_argument("profile", help="The profile to read expiry info from").completer = ChoicesCompleter(
@@ -270,7 +272,10 @@ def cli_read_profile_expiry():
 
 
 def cli_update_sso_profile():
-    """update current SSO-profile's session to ~/.aws/credentials. Running this enables SSO-support for the Serverless Framework."""
+    """
+    Update current SSO-profile's session to ~/.aws/credentials.
+    Running this enables SSO-support for the Serverless Framework.
+    """
     parser = argparse.ArgumentParser(description=cli_update_sso_profile.__doc__)
     argcomplete.autocomplete(parser)
     _ = parser.parse_args()

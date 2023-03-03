@@ -109,7 +109,7 @@ if [ "$IMAGETYPE" != "windows" ]; then
 else
   [ "$IMAGE_WAIT" ] || IMAGE_WAIT=1800
 fi
-if ! [ "$AMIBAKE_INSTANCEPROFILE" ]; then 
+if ! [ "$AMIBAKE_INSTANCEPROFILE" ]; then
   [ "$INSTANCE_PROFILE_PARAM" ] || INSTANCE_PROFILE_PARAM="bakeInstanceInstanceprofile"
   AMIBAKE_INSTANCEPROFILE="$(ndt show-stack-params-and-outputs -r $REGION $BAKERY_ROLES_STACK -p $INSTANCE_PROFILE_PARAM)"
 fi

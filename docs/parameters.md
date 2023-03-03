@@ -27,7 +27,7 @@ I will go through some parameters that effect how stacks work.
 
 This parameter will be a part of default value for stack names, docker
 repository urls and tags that mark baked images. This paremeter sets also
-the value for the `stage` parameter on serverless projects. 
+the value for the `stage` parameter on serverless projects.
 The default value is the branch name if not set.
 
 ### `STACK_NAME`
@@ -48,7 +48,7 @@ Old parameter for prerfing build job names
 
 ### `BUILD_JOB_PREFIX`
 
-The roots of ndt are in baking and deploying stacks via build tool jobs (e.g. 
+The roots of ndt are in baking and deploying stacks via build tool jobs (e.g.
 jenkins or codebuild), but this parameter has effects besides build jobs. It
 is part of the default tag that baked AMI images are found with, which defaults
 to `${BUILD_JOB_PREFIX}_[component]_bake`.
@@ -247,7 +247,7 @@ instances or defining launch configurations. The AMI id in `paramAmi`
 can be given on the command line for deploying the stack or the
 tag that marks the set of baked AMIs given on the command line is used
 to resolve the latest image with that tag. `ndt deploy-stack` has
-command-completion to resolve both. The tag defaults to 
+command-completion to resolve both. The tag defaults to
 `${JENKINS_JOB_PREFIX}_[component]_bake`. Ami id is not available
 for serverless deploys.
 
@@ -255,7 +255,7 @@ All docker ECR repo urls for docker images
 in the same component are resolved for both Serverless services
 and CloudFormation stacks. The ECS uris that you can used in
 ECS TaskDefinitions are found in `paramDockerUri[orig_docker_name]`.
-A common convertion is to define another parameter 
+A common convertion is to define another parameter
 `paramDockerTag[orig_docker_name]` and use `latest` as the default
 value in development environments and override that to a fixed
 build number for pre-production and production.

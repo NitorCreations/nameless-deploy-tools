@@ -7,22 +7,22 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+*.egg
+*.egg-info/
 .Python
-env/
+.eggs/
+.installed.cfg
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
+env/
 lib/
 lib64/
 parts/
 sdist/
 var/
-*.egg-info/
-.installed.cfg
-*.egg
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -35,15 +35,15 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-htmlcov/
-.tox/
+*,cover
+.cache
 .coverage
 .coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*,cover
 .hypothesis/
+.tox/
+coverage.xml
+htmlcov/
+nosetests.xml
 
 # Translations
 *.mo
@@ -86,17 +86,21 @@ ENV/
 .spyderproject
 
 # Rope project settings
-.ropeproject
-.pydevproject
 .project
+.pydevproject
+.ropeproject
 
 # tmp files
 *~
 
 # Pytest
 .pytest_cache
-.idea
-.vscode
+
+# IDE / Editor
+/.idea
+/.vscode
+
+# Other
+azuredeploy.bicep
 azuredeploy.json
 variables.json
-azuredeploy.bicep

@@ -177,4 +177,3 @@ jenkins_wait_service_up () {
     fail "Jenkins server not started"
   fi
 }
-

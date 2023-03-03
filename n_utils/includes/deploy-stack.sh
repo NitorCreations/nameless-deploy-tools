@@ -19,7 +19,7 @@ if [ "$_ARGCOMPLETE" ]; then
   source $(n-include autocomplete-helpers.sh)
   # Handle command completion executions
   COMP_WORDS=( $COMP_LINE )
-  if [ "${COMP_WORDS[2]}" = "-d" ]; then 
+  if [ "${COMP_WORDS[2]}" = "-d" ]; then
     COMP_INDEX=$(($COMP_CWORD - 1))
     IMAGE_DIR=${COMP_WORDS[3]}
     STACK=${COMP_WORDS[4]}

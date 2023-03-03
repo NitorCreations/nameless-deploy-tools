@@ -42,5 +42,5 @@ host="$1"
 if [ ! "$host" -o "$host" = "--help" ]; then
   usage
 fi
-create-shell-archive.sh /etc/ssh/ssh_host_* > ${host}-ssh-hostkeys.sh 
+create-shell-archive.sh /etc/ssh/ssh_host_* > ${host}-ssh-hostkeys.sh
 chmod og= ${host}-ssh-hostkeys.sh
