@@ -510,7 +510,7 @@ def enable_profile(profile_type, profile):
                     bw_prefix = "AZURE_DEFAULT_PASSWORD='" + bw_entry.password + "' "
                 elif lp_entry:
                     bw_prefix = "AZURE_DEFAULT_PASSWORD='" + lp_entry.password + "' "
-                print(bw_prefix + "aws-azure-login --profile " + profile + gui_mode + " --no-prompt --no-sandbox")
+                print(bw_prefix + "npx aws-azure-login --profile " + profile + gui_mode + " --no-prompt --no-sandbox")
             elif profile_type == "adfs":
                 if bw_entry:
                     bw_prefix = "ADFS_DEFAULT_PASSWORD='" + bw_entry.password + "' "
