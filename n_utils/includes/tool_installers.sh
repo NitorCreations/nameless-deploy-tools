@@ -21,7 +21,7 @@ if [ -z "$DEPLOYTOOLS_VERSION" ]; then
   fi
 fi
 if [ -z "$MAVEN_VERSION" ]; then
-  MAVEN_VERSION=3.8.7
+  MAVEN_VERSION=3.9.0
 fi
 if [ -z "$PHANTOMJS_VERSION" ]; then
   PHANTOMJS_VERSION=2.1.1
@@ -90,8 +90,8 @@ install_cftools() {
 }
 install_maven() {
   source $(n-include common_tools.sh)
-  add_gpg_key 6A814B1F869C2BBEAB7CB7271A2A1C94BDE89688
-  gpg_safe_download https://downloads.apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz maven.tar.gz asc
+  add_gpg_key 29BEA2A645F2D6CED7FB12E02B172E3E156466E8
+  gpg_safe_download https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz maven.tar.gz asc
   tar -xzvf maven.tar.gz -C /opt/
   rm maven.tar.gz
   ln -snf /opt/apache-maven-$MAVEN_VERSION /opt/maven
