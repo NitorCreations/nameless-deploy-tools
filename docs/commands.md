@@ -852,7 +852,7 @@ Load parameters from infra*.properties files in the order:
 
     See https://www.tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_03.html
     (arrays not supported)
-
+    
 
 positional arguments:
   component             Compenent to descend into
@@ -1039,7 +1039,7 @@ optional arguments:
 usage: ndt profile-expiry-to-env [-h] profile
 
 Prints profile expiry from credentials file (~/.aws/credentials) as eval-able
-environment variables
+environment variables.
 
 positional arguments:
   profile     The profile to read expiry info from
@@ -1395,7 +1395,7 @@ optional arguments:
 ```bash
 usage: ndt update-sso-profile [-h]
 
-update current SSO-profile\'s session to ~/.aws/credentials. Running this
+Update current SSO-profile\'s session to ~/.aws/credentials. Running this
 enables SSO-support for the Serverless Framework.
 
 options:
@@ -1453,7 +1453,7 @@ Creates or updates codebuild projects to deploy or bake ndt subcomponents in the
         - Needed for bakes and for example serverless python dockerized dependencies
     * SKIP_BUILD_JOB - skip creating build jobs where this parameter is \'y\'
     * SKIP_IMAGE_JOB, SKIP_DOCKER_JOB, SKIP_SERVERLESS_JOB, SKIP_CDK_JOB, SKIP_TERRAFORM_JOB - skip creating jobs where these parameters are \'y\' and match the subcomponent type
-
+    
 
 options:
   -h, --help     show this help message and exit
@@ -1814,3 +1814,4 @@ positional arguments
 optional arguments:
   -h, --help  show this help message and exit
 ```
+
