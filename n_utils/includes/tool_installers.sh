@@ -291,7 +291,7 @@ install_github_actions_runner(){
   source $(n-include common_tools.sh)
   mkdir /opt/github-runner
   safe_download https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz $GITHUB_RUNNER_CSUM actions-runner-linux-x64.tar.gz
-  tar -xJvf actions-runner-linux-x64.tar.gz -C /opt/github-runner
+  tar -xzvf actions-runner-linux-x64.tar.gz -C /opt/github-runner
   rm -f actions-runner-linux-x64.tar.gz
   /opt/github-runner/bin/installdependencies.sh
 }
