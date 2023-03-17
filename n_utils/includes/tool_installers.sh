@@ -48,6 +48,10 @@ fi
 if [ -z "$LEIN_COMMIT" ]; then
   LEIN_COMMIT=64e02a842e7bb50edc9b8b35de1e2ef1fac090dd # 2.10.0
 fi
+if [ -z "$GITHUB_RUNNER_VERSION" ]; then
+  GITHUB_RUNNER_VERSION=2.303.0
+  GITHUB_RUNNER_CSUM=e4a9fb7269c1a156eb5d5369232d0cd62e06bec2fd2b321600e85ac914a9cc73
+fi
 
 # Make sure we get logging
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null ; then
@@ -282,4 +286,22 @@ MARKER
   source /etc/profile.d/flutter.sh
   flutter precache
   yes | flutter doctor --android-licenses
+}
+install_github_actions_runner(){
+  source $(n-include common_tools.sh)
+  mkdir /opt/github-runner
+  safe_download https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz $GITHUB_RUNNER_CSUM actions-runner-linux-x64.tar.gz
+  tar -xJvf actions-runner-linux-x64.tar.gz -C /opt/github-runner
+  rm -f actions-runner-linux-x64.tar.gz
+  /opt/github-runner/bin/installdependencies.sh
+}
+start_github_actions_runner(){
+ local LOCAL_USER = $1
+ local URL_TARGET= $2
+ local TOKEN = $3
+
+ chown -R $LOCAL_USER /opt/github-runner
+ runuser -u $LOCAL_USER -c /opt/github-runner/config.sh ./config.sh --url $URL_TARGET --token $TOKEN
+ /opt/github-runner/svc.sh install $LOCAL_USER
+ /opt/github-runner/svc.sh start
 }
