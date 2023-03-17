@@ -296,9 +296,9 @@ install_github_actions_runner(){
   /opt/github-runner/bin/installdependencies.sh
 }
 start_github_actions_runner(){
- local LOCAL_USER = $1
- local URL_TARGET= $2
- local TOKEN = $3
+ local LOCAL_USER=$1
+ local URL_TARGET=$2
+ local TOKEN=$3
 
  chown -R $LOCAL_USER /opt/github-runner
  runuser -u $LOCAL_USER -c /opt/github-runner/config.sh ./config.sh --url $URL_TARGET --token $TOKEN
