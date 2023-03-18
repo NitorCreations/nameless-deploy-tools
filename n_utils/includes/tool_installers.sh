@@ -302,7 +302,20 @@ start_github_actions_runner(){
  chown -R $LOCAL_USER /opt/github-runner
  pushd /opt/github-runner 
  sudo -u $LOCAL_USER bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
- popd
  /opt/github-runner/svc.sh install $LOCAL_USER
  /opt/github-runner/svc.sh start
+ popd
+}
+# requires PAT-TOKEN with write-access to org self hosted runner endpoints
+# https://docs.github.com/en/rest/overview/permissions-required-for-fine-grained-personal-access-tokens?apiVersion=2022-11-28#organization-self-hosted-runners
+# NOTE: create a fine-grained solely for this purpose
+github_actions_get_create_token(){
+  local PAT_TOKEN=$1
+  local ORGANIZATION=$2
+  echo $(curl -sL \
+  -X POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $PAT_TOKEN"\
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token)
 }
