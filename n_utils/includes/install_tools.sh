@@ -41,9 +41,9 @@ fi
 function add_gpg_key() {
   local key=$1
   gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" ||
-  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ||
-  gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ||
-  gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
+    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ||
+    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ||
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
 }
 
 function gpg_safe_download() {

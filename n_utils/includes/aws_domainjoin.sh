@@ -58,7 +58,7 @@ set_hostname() {
   fi
 
   HOSTNAMECTL=$(which hostnamectl)
-  if [ ! -z "$HOSTNAMECTL" ]; then
+  if [ -n "$HOSTNAMECTL" ]; then
     hostnamectl set-hostname $COMPUTER_NAME.$DIRECTORY_NAME > /dev/null
   else
     hostname $COMPUTER_NAME.$DIRECTORY_NAME > /dev/null
@@ -142,18 +142,15 @@ find_unused_hostname() {
     # with the same hostname prefix
     # and then remove the hostname in each line so only the number suffixes remain.
     # This gives us the list of suffixes that already exist.
-    cat $AWS_CLI_INSTALL_DIR/ldap_search.txt \
-                                           | grep -iP "^[ ]*$SET_HOSTNAME\d{$SET_HOSTNAME_APPEND_NUM_DIGITS}$" \
-                                                                     | sort | sed "s/$SET_HOSTNAME//gI" | tr -d ' ' \
-      > $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt
+    cat $AWS_CLI_INSTALL_DIR/ldap_search.txt |
+      grep -iP "^[ ]*$SET_HOSTNAME\d{$SET_HOSTNAME_APPEND_NUM_DIGITS}$" |
+      sort | sed "s/$SET_HOSTNAME//gI" | tr -d ' ' > $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt
 
     # The 'comm' utility does 'set complement' between
     # $AWS_CLI_INSTALL_DIR/all_suffixes.txt
     # and $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt
     # to find suffixes that do not exist in ldap_filtered_hosts.
-    comm -23 $AWS_CLI_INSTALL_DIR/all_suffixes.txt \
-      $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt \
-      > $AWS_CLI_INSTALL_DIR/possible_suffixes.txt
+    comm -23 $AWS_CLI_INSTALL_DIR/all_suffixes.txt $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt > $AWS_CLI_INSTALL_DIR/possible_suffixes.txt
     if [ $? -ne 0 ]; then
       echo "**Failed: Could not execute comm utility"
       cleanup_temp_files
@@ -169,10 +166,9 @@ find_unused_hostname() {
 
     # When we have a list of possible hosts, one in each line, we can use
     # a random number to choose one of the unused suffixes.
-    RANDOM_VALUE=$(head -c 512 /dev/urandom | xxd -p | tr -dc '0-9' \
-                                                                  | fold -w $MAX_APPEND_DIGITS | head -n 1)
+    RANDOM_VALUE=$(head -c 512 /dev/urandom | xxd -p | tr -dc '0-9' | fold -w $MAX_APPEND_DIGITS | head -n 1)
     if [ -z $RANDOM_VALUE ]; then
-      LINE_N = 1
+      LINE_N=1
     else
       LINE_N=$(expr $RANDOM_VALUE % $num_lines)
       if [ $LINE_N -eq 0 -o $num_lines -eq 1 ]; then

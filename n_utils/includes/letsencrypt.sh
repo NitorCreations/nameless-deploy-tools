@@ -552,23 +552,23 @@ init_system() {
   if [[ ${API} -eq 1 ]]; then
     # shellcheck disable=SC2015
     CA_NEW_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-cert)" &&
-    CA_NEW_AUTHZ="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-authz)" &&
-    CA_NEW_REG="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-reg)" &&
-    CA_TERMS="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value terms-of-service)" &&
-    CA_REQUIRES_EAB="false" &&
-    CA_REVOKE_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value revoke-cert)" ||
-    _exiterr "Problem retrieving ACME/CA-URLs, check if your configured CA points to the directory entrypoint."
+      CA_NEW_AUTHZ="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-authz)" &&
+      CA_NEW_REG="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-reg)" &&
+      CA_TERMS="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value terms-of-service)" &&
+      CA_REQUIRES_EAB="false" &&
+      CA_REVOKE_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value revoke-cert)" ||
+      _exiterr "Problem retrieving ACME/CA-URLs, check if your configured CA points to the directory entrypoint."
     # Since reg URI is missing from directory we will assume it is the same as CA_NEW_REG without the new part
     CA_REG=${CA_NEW_REG/new-reg/reg}
   else
     # shellcheck disable=SC2015
     CA_NEW_ORDER="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newOrder)" &&
-    CA_NEW_NONCE="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newNonce)" &&
-    CA_NEW_ACCOUNT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newAccount)" &&
-    CA_TERMS="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value -p '"meta","termsOfService"')" &&
-    CA_REQUIRES_EAB="$(printf "%s" "${CA_DIRECTORY}" | get_json_bool_value -p '"meta","externalAccountRequired"' || echo false)" &&
-    CA_REVOKE_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value revokeCert)" ||
-    _exiterr "Problem retrieving ACME/CA-URLs, check if your configured CA points to the directory entrypoint."
+      CA_NEW_NONCE="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newNonce)" &&
+      CA_NEW_ACCOUNT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newAccount)" &&
+      CA_TERMS="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value -p '"meta","termsOfService"')" &&
+      CA_REQUIRES_EAB="$(printf "%s" "${CA_DIRECTORY}" | get_json_bool_value -p '"meta","externalAccountRequired"' || echo false)" &&
+      CA_REVOKE_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value revokeCert)" ||
+      _exiterr "Problem retrieving ACME/CA-URLs, check if your configured CA points to the directory entrypoint."
     # Since acct URI is missing from directory we will assume it is the same as CA_NEW_ACCOUNT without the new part
     CA_ACCOUNT=${CA_NEW_ACCOUNT/new-acct/acct}
   fi
