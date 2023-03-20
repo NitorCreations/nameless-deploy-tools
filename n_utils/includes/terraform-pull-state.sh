@@ -44,7 +44,7 @@ usage() {
   echo "                  you would give sender" >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -h, --help    show this help message and exit"  >&2
+  echo "  -h, --help    show this help message and exit" >&2
   if "$@"; then
     echo "" >&2
     echo "$@" >&2
@@ -54,26 +54,28 @@ usage() {
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
   usage
 fi
-die () {
+die() {
   echo "$1" >&4
   usage
 }
 onexit() {
-    EXIT_VAL=$?
-    if [ "$EXIT_VAL" != "0" ]; then
-        cat $TF_INIT_OUTPUT >&4
-    fi
-    rm -f $OUTPUT
-    exit "$EXIT_VAL"
+  EXIT_VAL=$?
+  if [ "$EXIT_VAL" != "0" ]; then
+    cat $TF_INIT_OUTPUT >&4
+  fi
+  rm -f $OUTPUT
+  exit "$EXIT_VAL"
 }
 export TF_INIT_OUTPUT="$(mktemp)"
-exec 3>&1 4>&2 >$TF_INIT_OUTPUT 2>&1
+exec 3>&1 4>&2 > $TF_INIT_OUTPUT 2>&1
 trap onexit EXIT
 set -xe
 
-component="$1" ; shift
+component="$1"
+shift
 [ "${component}" ] || die "You must give the component name as argument"
-terraform="$1"; shift
+terraform="$1"
+shift
 [ "${terraform}" ] || die "You must give the terraform name as argument"
 
 eval "$(ndt load-parameters "$component" -t "$terraform" -e -r)"

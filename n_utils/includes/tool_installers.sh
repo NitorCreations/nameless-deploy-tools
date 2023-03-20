@@ -54,7 +54,7 @@ if [ -z "$GITHUB_RUNNER_VERSION" ]; then
 fi
 
 # Make sure we get logging
-if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null ; then
+if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null; then
   echo "output: {all: '| tee -a /var/log/cloud-init-output.log'}" >> /etc/cloud/cloud.cfg.d/05_logging.cfg
 fi
 
@@ -202,7 +202,7 @@ update_deploytools() {
   echo "Updating nameless-deploy-tools to $DEPLOYTOOLS_VERSION"
   bash "$(n-include install_tools.sh)" "${DEPLOYTOOLS_VERSION}"
 }
-update_aws_utils () {
+update_aws_utils() {
   echo "###########################"
   echo "#        DEPRECATED       #"
   echo "###########################"
@@ -213,16 +213,17 @@ update_aws_utils () {
 install_dynatrace_oneagent() {
   # Requires secrets dynatrace.apikey and dt-root.cert.pem (from dynatrace web installation instructions) to be stored in secrets storage
   wget -O Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh \
-  "https://bmq38893.live.dynatrace.com/api/v1/deployment/installer/agent/unix/default/latest?arch=x86&flavor=default" \
-  --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
+    "https://bmq38893.live.dynatrace.com/api/v1/deployment/installer/agent/unix/default/latest?arch=x86&flavor=default" \
+    --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
 
   fetch-secrets.sh get 400 dt-root.cert.pem
-  ( echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
+  (
+    echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
     echo
     echo
     echo '----SIGNED-INSTALLER'
-    cat Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh ) | \
-  openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
+    cat Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
+  ) | openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
   rm -f dt-root.cert.pem
 
   /bin/sh Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
@@ -236,12 +237,13 @@ install_dynatrace_activegate() {
     --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
 
   fetch-secrets.sh get 400 dt-root.cert.pem
-  ( echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
+  (
+    echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
     echo
     echo
     echo '----SIGNED-INSTALLER'
-    cat  Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh ) | \
-  openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
+    cat Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
+  ) | openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
   rm -f dt-root.cert.pem
 
   /bin/sh Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
@@ -265,7 +267,7 @@ install_androidsdk() {
   unzip -d /opt/android platform-tools-linux.zip
   rm -f commandlinetools-linux_latest.zip platform-tools-linux.zip
   mkdir /opt/android/cmdline-tools/latest
-  mv /opt/android/cmdline-tools/* /opt/android/cmdline-tools/latest ||:
+  mv /opt/android/cmdline-tools/* /opt/android/cmdline-tools/latest || :
   cat > /etc/profile.d/android.sh << MARKER
 export PATH="\$PATH:/opt/android/platform-tools:/opt/android/cmdline-tools/latest/bin"
 MARKER
@@ -287,7 +289,7 @@ MARKER
   flutter precache
   yes | flutter doctor --android-licenses
 }
-install_github_actions_runner(){
+install_github_actions_runner() {
   source $(n-include common_tools.sh)
   mkdir /opt/github-runner
   safe_download https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz $GITHUB_RUNNER_CSUM actions-runner-linux-x64.tar.gz
@@ -295,27 +297,27 @@ install_github_actions_runner(){
   rm -f actions-runner-linux-x64.tar.gz
   /opt/github-runner/bin/installdependencies.sh
 }
-start_github_actions_runner(){
- local LOCAL_USER=$1
- local URL_TARGET=$2
- local TOKEN=$3
- chown -R $LOCAL_USER /opt/github-runner
- pushd /opt/github-runner 
- sudo -u $LOCAL_USER bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
- /opt/github-runner/svc.sh install $LOCAL_USER
- /opt/github-runner/svc.sh start
- popd
+start_github_actions_runner() {
+  local LOCAL_USER=$1
+  local URL_TARGET=$2
+  local TOKEN=$3
+  chown -R $LOCAL_USER /opt/github-runner
+  pushd /opt/github-runner
+  sudo -u $LOCAL_USER bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
+  /opt/github-runner/svc.sh install $LOCAL_USER
+  /opt/github-runner/svc.sh start
+  popd
 }
 # requires PAT-TOKEN with write-access to org self hosted runner endpoints
 # https://docs.github.com/en/rest/overview/permissions-required-for-fine-grained-personal-access-tokens?apiVersion=2022-11-28#organization-self-hosted-runners
 # NOTE: create a fine-grained solely for this purpose
-github_actions_get_create_token(){
+github_actions_get_create_token() {
   local PAT_TOKEN=$1
   local ORGANIZATION=$2
   echo $(curl -sL \
-  -X POST \
-  -H "Accept: application/vnd.github+json" \
-  -H "Authorization: Bearer $PAT_TOKEN"\
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token)
+    -X POST \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $PAT_TOKEN" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token)
 }

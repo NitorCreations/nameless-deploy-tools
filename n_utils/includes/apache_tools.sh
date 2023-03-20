@@ -16,13 +16,13 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/common_tools.sh"
 
-case  "$SYSTEM_TYPE" in
+case "$SYSTEM_TYPE" in
   ubuntu)
     APACHE_SSL_CONF=/etc/apache2/sites-enabled/default-ssl.conf
     APACHE_WELCOME_CONF=/etc/apache2/sites-enabled/welcome.conf
     APACHE_SERVICE=apache2
     ;;
-  centos|fedora|rocky|rhel)
+  centos | fedora | rocky | rhel)
     APACHE_SSL_CONF=/etc/httpd/conf.d/ssl.conf
     APACHE_WELCOME_CONF=/etc/httpd/conf.d/welcome.conf
     APACHE_SERVICE=httpd
@@ -33,27 +33,30 @@ case  "$SYSTEM_TYPE" in
     ;;
 esac
 
-apache_replace_domain_vars () {
+apache_replace_domain_vars() {
   check_parameters APACHE_SSL_CONF APACHE_WELCOME_CONF CF_paramDnsName
   CERTNAME=${CF_paramDnsName//./_}
-  perl -i -pe 's!%domain%!'"${CF_paramDnsName}"'!g;s!%zone%!'"${CF_paramDnsName#*.}"'!g;s!%certname%!'"${CERTNAME}"'!g'  ${APACHE_SSL_CONF} ${APACHE_WELCOME_CONF}
+  perl -i -pe 's!%domain%!'"${CF_paramDnsName}"'!g;s!%zone%!'"${CF_paramDnsName#*.}"'!g;s!%certname%!'"${CERTNAME}"'!g' \
+    ${APACHE_SSL_CONF} ${APACHE_WELCOME_CONF}
 }
 
-perlgrep () { local RE="$1" ; shift ; perl -ne 'print if(m!'"$RE"'!)' "$@" ; }
+perlgrep() {
+  local RE="$1"
+  shift
+  perl -ne 'print if(m!'"$RE"'!)' "$@"
+}
 
-apache_install_certs () {
+apache_install_certs() {
   check_parameters APACHE_SSL_CONF CF_paramDnsName
   DOMAIN=${CF_paramDnsName#*.}
   (
     perlgrep '^\s*(SSLCertificateFile|SSLCertificateKeyFile|SSLCACertificateFile)' ${APACHE_SSL_CONF} | awk '{ print $2 }'
   ) | sort -u | xargs fetch-secrets.sh get 444
-  CONF_CHAIN=$(perlgrep '^\s*SSLCertificateChainFile' ${APACHE_SSL_CONF} \
-    | awk '{ print $2 }')
-  for CHAIN in "/etc/certs/${CF_paramDnsName}.chain" "/etc/certs/$DOMAIN.chain" \
-    "$CONF_CHAIN"; do
+  CONF_CHAIN=$(perlgrep '^\s*SSLCertificateChainFile' ${APACHE_SSL_CONF} | awk '{ print $2 }')
+  for CHAIN in "/etc/certs/${CF_paramDnsName}.chain" "/etc/certs/$DOMAIN.chain" "$CONF_CHAIN"; do
     if fetch-secrets.sh get 444 "$CHAIN"; then
-        FETCHED_CHAIN="$CHAIN"
-        break
+      FETCHED_CHAIN="$CHAIN"
+      break
     fi
   done
   [ -n "$FETCHED_CHAIN" ]
@@ -103,7 +106,7 @@ MARK
 </VirtualHost>
 MARKER
 
-cat > ${APACHE_WELCOME_CONF} << MARKER
+  cat > ${APACHE_WELCOME_CONF} << MARKER
 <VirtualHost *:80>
    ServerName %domain%
    DocumentRoot /var/www/html
@@ -116,15 +119,15 @@ MARKER
   fi
 }
 
-apache_disable_and_shutdown_service () {
+apache_disable_and_shutdown_service() {
   systemctl disable $APACHE_SERVICE
   systemctl stop $APACHE_SERVICE
 }
-apache_reload_service () {
+apache_reload_service() {
   systemctl reload $APACHE_SERVICE
 }
 
-apache_enable_and_start_service () {
+apache_enable_and_start_service() {
   systemctl enable firewalld
   systemctl start firewalld
   firewall-cmd --permanent --zone=public --add-service=https

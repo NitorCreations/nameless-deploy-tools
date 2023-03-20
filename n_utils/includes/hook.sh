@@ -45,7 +45,7 @@ execute_challenge_op() {
   local TOKEN_FILENAME="$3"
   local TOKEN_VALUE="$4"
   ZONE_ID=$(find_longest_hosted_zone_id $DOMAIN)
-cat > challenge.json << MARKER
+  cat > challenge.json << MARKER
 {
   "Changes": [{
     "Action": "$OPERATION",
@@ -101,7 +101,7 @@ deploy_cert() {
   store-secret.sh $DOMAIN.chained.crt < $CHAINED_CERT
   rm -f $CHAINED_CERT
   store-secret.sh logout
-#  rm -f $KEYFILE $CERTFILE $CHAINFILE
+  #  rm -f $KEYFILE $CERTFILE $CHAINFILE
 }
 
 unchanged_cert() {
@@ -118,10 +118,10 @@ unchanged_cert() {
   store-secret.sh $DOMAIN.chained.crt < $CHAINED_CERT
   rm -f $CHAINED_CERT
   store-secret.sh logout
-#  rm -f $KEYFILE $CERTFILE $CHAINFILE
+  #  rm -f $KEYFILE $CERTFILE $CHAINFILE
 }
 
 HANDLER=$1
 shift
-type $HANDLER &>/dev/null && echo "calling $HANDLER" || exit 0
+type $HANDLER &> /dev/null && echo "calling $HANDLER" || exit 0
 $HANDLER $@

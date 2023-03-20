@@ -52,8 +52,8 @@ usage() {
   echo "                  you would give sender" >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing"  >&2
-  echo "  -h, --help    show this help message and exit"  >&2
+  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing" >&2
+  echo "  -h, --help    show this help message and exit" >&2
   if "$@"; then
     echo "" >&2
     echo "$@" >&2
@@ -67,15 +67,17 @@ if [ "$1" = "-d" -o "$1" = "--dryrun" ]; then
   DRYRUN=1
   shift
 fi
-die () {
+die() {
   echo "$1" >&2
   usage
 }
 set -xe
 
-component="$1" ; shift
+component="$1"
+shift
 [ "${component}" ] || die "You must give the component name as argument"
-terraform="$1"; shift
+terraform="$1"
+shift
 [ "${terraform}" ] || die "You must give the terraform name as argument"
 
 TSTAMP=$(date +%Y%m%d%H%M%S)

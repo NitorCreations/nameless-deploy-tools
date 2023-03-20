@@ -26,17 +26,17 @@ done
 set +x
 ADMIN_AUTH=$(cat /var/lib/jenkins/secrets/initialAdminPassword)
 for PLUGIN in ansicolor cron_column extensible-choice-parameter extra-columns git \
- git-client git-server greenballs job-dsl mailer next-build-number parameterized-trigger \
- pipeline-input-step progress-bar-column-plugin rebuild script-security simple-theme-plugin; do
-   java -jar jenkins-cli.jar -s http://localhost:8080/ -auth "admin:$ADMIN_AUTH" install-plugin $PLUGIN -deploy
+  git-client git-server greenballs job-dsl mailer next-build-number parameterized-trigger \
+  pipeline-input-step progress-bar-column-plugin rebuild script-security simple-theme-plugin; do
+  java -jar jenkins-cli.jar -s http://localhost:8080/ -auth "admin:$ADMIN_AUTH" install-plugin $PLUGIN -deploy
 done
 set -x
 systemctl disable jenkins
 systemctl disable httpd
-systemctl disable docker ||:
-systemctl stop jenkins ||:
-systemctl stop httpd ||:
-systemctl stop docker ||:
+systemctl disable docker || :
+systemctl stop jenkins || :
+systemctl stop httpd || :
+systemctl stop docker || :
 
 groupadd -aG docker jenkins
 

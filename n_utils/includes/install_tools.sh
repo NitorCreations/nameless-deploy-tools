@@ -23,8 +23,14 @@ else
 fi
 rm -f /opt/nameless/instance-data.json
 
-OS_TYPE=$(source /etc/os-release; echo ${ID})
-OS_VERSION=$(source /etc/os-release; echo ${VERSION_ID})
+OS_TYPE=$(
+  source /etc/os-release
+  echo ${ID}
+)
+OS_VERSION=$(
+  source /etc/os-release
+  echo ${VERSION_ID}
+)
 if [ "$OS_TYPE" = "ubuntu" ]; then
   export LC_ALL="en_US.UTF-8"
   export LC_CTYPE="en_US.UTF-8"
@@ -34,9 +40,9 @@ fi
 
 function add_gpg_key() {
   local key=$1
-  gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" || \
-  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" || \
-  gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
+  gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" ||
+  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ||
+  gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ||
   gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
 }
 
@@ -102,6 +108,6 @@ fi
 aws configure set default.s3.signature_version s3v4
 rm -f /opt/nameless/instance-data.json
 # Make sure we get logging
-if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null ; then
+if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null; then
   echo "output: {all: '| tee -a /var/log/cloud-init-output.log'}" >> /etc/cloud/cloud.cfg.d/05_logging.cfg
 fi

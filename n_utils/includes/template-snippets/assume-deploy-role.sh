@@ -19,7 +19,6 @@ set -e
 CF_paramBakeRoleStack="bakery-roles"
 CF_AWS__Region="eu-west-1"
 
-
 if [ -n "$DEPLOY_ROLE_ARN" ]; then
   ROLE_ARN="$DEPLOY_ROLE_ARN"
 else

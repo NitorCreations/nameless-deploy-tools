@@ -16,7 +16,7 @@
 
 source "$(n-include common_tools.sh)"
 
-configure_and_start_nexus () {
+configure_and_start_nexus() {
   check_parameters CF_paramDnsName CF_paramSonatypeWorkSize
   ndt volume-from-snapshot --gp3 nexus-data nexus-data /opt/nexus/sonatype-work ${CF_paramSonatypeWorkSize}
   chown -R nexus:nexus /opt/nexus/sonatype-work
@@ -50,7 +50,7 @@ configure_and_start_nexus () {
   systemctl enable nexus
   systemctl start nexus
 }
-configure_and_start_nexus3 () {
+configure_and_start_nexus3() {
   ndt volume-from-snapshot --gp3 nexus-data nexus-data /opt/nexus/sonatype-work ${CF_paramSonatypeWorkSize}
   chown -R nexus:nexus /opt/nexus/sonatype-work
   if ! [ -d /opt/nexus/sonatype-work/nexus3 ]; then
@@ -60,7 +60,7 @@ configure_and_start_nexus3 () {
   systemctl enable nexus
   systemctl start nexus
 }
-nexus_wait_service_up () {
+nexus_wait_service_up() {
   # Tests to see if everything is OK
   COUNT=0
   while [ $COUNT -lt 300 ] && [ "$SERVER" != "Sonatype" ]; do
@@ -84,7 +84,7 @@ nexus3_wait_service_up() {
   fi
 }
 
-nexus_setup_snapshot_cron () {
+nexus_setup_snapshot_cron() {
   cat > /etc/cron.d/home-snapshot << MARKER
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin

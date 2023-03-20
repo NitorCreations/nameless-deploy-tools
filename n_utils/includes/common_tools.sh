@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-check_parameters () {
+check_parameters() {
   fail=0
-  for param ; do
-    if ! eval echo \"\$\{"${param}"\}\" | grep -q . ; then
+  for param; do
+    if ! eval echo \"\$\{"${param}"\}\" | grep -q .; then
       echo "Missing parameter: $param"
       fail=1
     fi
@@ -28,16 +28,22 @@ check_parameters () {
 }
 
 system_type() {
-  (source /etc/os-release; echo $ID)
+  (
+    source /etc/os-release
+    echo $ID
+  )
 }
 
 system_like() {
   source /etc/os-release
-  [[ "$ID_LIKE"  =~ $1 ]]
+  [[ "$ID_LIKE" =~ $1 ]]
 }
 
 system_type_and_version() {
-  (source /etc/os-release; echo ${ID}_$VERSION_ID)
+  (
+    source /etc/os-release
+    echo ${ID}_$VERSION_ID
+  )
 }
 
 set_timezone() {
@@ -48,10 +54,11 @@ set_timezone() {
   ln -snf ../usr/share/zoneinfo/$tz /etc/localtime
   [ ! -e /etc/timezone ] || echo $tz > /etc/timezone
 }
+
 # Set aws-cli region to the region of the current instance
 set_region() {
   [ "${REGION}" -o ! "${CF_AWS__Region}" ] || REGION="${CF_AWS__Region}"
-  [ "${REGION}" ] || REGION=$(curl -s --connect-timeout 3 http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}')
+  [ "${REGION}" ] || REGION=$(curl -s --connect-timeout 3 http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
   aws configure set default.region $REGION
 }
 
@@ -61,6 +68,7 @@ set_hostname() {
     echo "${CF_paramDnsName}" > /etc/hostname
   fi
 }
+
 allow_cloud_init_firewall_cmd() {
   local SOURCE=$(n-include cloud-init-firewall-cmd.te)
   local BASE=${SOURCE%.te}
@@ -70,6 +78,7 @@ allow_cloud_init_firewall_cmd() {
   semodule_package -o $PACKAGE -m $MODULE
   semodule -i $PACKAGE
 }
+
 allow_authorizedkeyscommand() {
   if system_like rhel; then
     yum update -y selinux-policy*
@@ -84,6 +93,7 @@ allow_authorizedkeyscommand() {
   semodule_package -o $PACKAGE -m $MODULE
   semodule -i $PACKAGE
 }
+
 safe_download() {
   url="$1"
   csum="$2"
@@ -92,20 +102,22 @@ safe_download() {
   wget --no-verbose --output-document="$out" "$url"
   echo "$csum  $out" | sha256sum --check
 }
+
 wait_background_jobs() {
   for i in $(jobs -p); do
     wait $i
   done
 }
-function add_gpg_key() {
+
+add_gpg_key() {
   local key=$1
-  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" || \
-  gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" || \
-  gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-  gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
+  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ||
+    gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" ||
+    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ||
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
 }
 
-function gpg_safe_download() {
+gpg_safe_download() {
   local URL=$1
   local DST=$2
   local SIG_SUFFIX=${3:-sig}
@@ -118,4 +130,5 @@ function gpg_safe_download() {
   fi
   gpg --verify $DST.sig $DST
 }
+
 SYSTEM_TYPE=$(system_type)

@@ -17,7 +17,7 @@
 mode="444"
 
 fetch() {
-  for path ; do
+  for path; do
     if [ "$path" = "--optional" ]; then
       optional=1
       continue
@@ -26,14 +26,14 @@ fetch() {
     DNAME="$(dirname "$path")"
     mkdir -p "$DNAME"
     if [ -e "$path" ]; then
-        TMPDIR=$(mktemp -d $path.XXXXXXX)
-        mv "$path" "$TMPDIR/"
+      TMPDIR=$(mktemp -d $path.XXXXXXX)
+      mv "$path" "$TMPDIR/"
     fi
     if ! vault -l "$FNAME" > "$path"; then
       rm -f "$path"
       if [ -n "$TMPDIR" ]; then
-          mv "$TMPDIR/$FNAME" "$path"
-          rm -rf "$TMPDIR"
+        mv "$TMPDIR/$FNAME" "$path"
+        rm -rf "$TMPDIR"
       fi
       if [ ! "$optional" ]; then
         echo "ERROR: Failed to get file $path"

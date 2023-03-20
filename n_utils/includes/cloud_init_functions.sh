@@ -15,7 +15,7 @@
 # limitations under the License.
 
 set -e
-: <<'EOF'
+: << 'EOF'
 
 For required parameters, see end of this script.
 
@@ -48,7 +48,7 @@ Required template policies - please update all the Ref resource names as necessa
       - {Ref: roleResource}
 EOF
 
-onexit () {
+onexit() {
   echo -----------------------------------------------------------------
   set +e
   if which fetch-secrets.sh &> /dev/null 2>&1; then

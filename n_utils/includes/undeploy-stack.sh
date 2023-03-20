@@ -55,11 +55,14 @@ fi
 set -xe
 
 if [ "$1" == "-f" ]; then
-  FORCE="yes"; shift
+  FORCE="yes"
+  shift
 fi
 
-image="$1" ; shift
-stackName="$1" ; shift
+image="$1"
+shift
+stackName="$1"
+shift
 
 eval "$(ndt load-parameters "$image" -s "$stackName" -e)"
 
@@ -71,15 +74,13 @@ elif which assume-deploy-role.sh &> /dev/null && [ -z "$AWS_SESSION_TOKEN" ]; th
 fi
 
 # Delete will fail if S3 buckets have data - so delete those...
-for BUCKET in $(aws --region $REGION cloudformation list-stack-resources --stack-name ${STACK_NAME} \
- --query "StackResourceSummaries[*]" \
- | python -c "import sys, json; print('\n'.join([bucket['PhysicalResourceId'] for bucket in json.load(sys.stdin) if bucket['ResourceType'] == 'AWS::S3::Bucket']))"); do
-   if [ -n "$FORCE" ]; then
-     echo "force flag defined - deleting content of bucket $BUCKET"
-     aws s3 rm s3://$BUCKET --recursive ||:
-   else
-     echo "force flag not defined - delete will fail if bucket $BUCKET is not empty"
-   fi
+for BUCKET in $(aws --region "$REGION" cloudformation list-stack-resources --stack-name "$STACK_NAME" --query "StackResourceSummaries[*]" | python -c "import sys, json; print('\n'.join([bucket['PhysicalResourceId'] for bucket in json.load(sys.stdin) if bucket['ResourceType'] == 'AWS::S3::Bucket']))"); do
+  if [ -n "$FORCE" ]; then
+    echo "force flag defined - deleting content of bucket $BUCKET"
+    aws s3 rm s3://"$BUCKET" --recursive || :
+  else
+    echo "force flag not defined - delete will fail if bucket $BUCKET is not empty"
+  fi
 done
 
 ndt cf-delete-stack "${STACK_NAME}" "$REGION"

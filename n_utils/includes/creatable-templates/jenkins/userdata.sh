@@ -30,9 +30,9 @@ source $(n-include ssh_tools.sh)
 source $(n-include apache_tools.sh)
 source $(n-include ssh_tools.sh)
 
-fail () {
-    echo "FAIL: $@"
-    exit 1
+fail() {
+  echo "FAIL: $@"
+  exit 1
 }
 usermod -s /bin/bash jenkins
 set_region

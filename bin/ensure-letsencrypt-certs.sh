@@ -71,7 +71,7 @@ for DOMAIN in "$@"; do
     chmod 600 $CERT
   fi
   if fetch-secrets.sh get 444 $CERT; then
-    VALID="$(openssl x509 -enddate -noout -in "$CERT" | cut -d= -f2- )"
+    VALID="$(openssl x509 -enddate -noout -in "$CERT" | cut -d= -f2-)"
     echo "Valid: $VALID"
     if ! openssl x509 -checkend $((RENEW_DAYS * 86400)) -noout -in "$CERT"; then
       renew_cert $DOMAIN
