@@ -1,0 +1,13 @@
+[*.sh]
+indent_style = space
+indent_size = 2
+shell_variant = bash
+binary_next_line = true
+switch_case_indent = true
+space_redirects = true
+keep_padding = true
+function_next_line = false
+
+# Ignore the entire "third_party" directory.
+[third_party/**]
+ignore = true
