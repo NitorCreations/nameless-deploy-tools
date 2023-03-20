@@ -56,7 +56,7 @@ pip install nameless-deploy-tools
 On macOS, you may need to add `--ignore-installed` to get around platform installed versions
 of `six` and other packages.
 
-Requires Python 3.6 or newer.
+Requires Python 3.7 or newer.
 
 ## Getting started
 
