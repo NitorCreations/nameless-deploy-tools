@@ -4,7 +4,7 @@
 #
 #    pip-compile setup.py
 #
-argcomplete==2.0.5
+argcomplete==3.0.2
     # via
     #   ec2-utils
     #   nameless-deploy-tools (setup.py)
