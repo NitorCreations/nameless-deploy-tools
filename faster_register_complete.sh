@@ -5,15 +5,15 @@ REPO_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 # Check platform
 case "$(uname -s)" in
-"Darwin")
-  PLATFORM="mac"
-  ;;
-"MINGW"*)
-  PLATFORM="windows"
-  ;;
-*)
-  PLATFORM="linux"
-  ;;
+  "Darwin")
+    PLATFORM="mac"
+    ;;
+  "MINGW"*)
+    PLATFORM="windows"
+    ;;
+  *)
+    PLATFORM="linux"
+    ;;
 esac
 
 if [ -n "$(command -v python3)" ]; then
