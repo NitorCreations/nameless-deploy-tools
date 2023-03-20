@@ -16,19 +16,6 @@ case "$(uname -s)" in
     ;;
 esac
 
-if [ -n "$(command -v python3)" ]; then
-  PYTHON=$(which python3)
-else
-  PYTHON=$(which python)
-fi
-
-if [ ! -e "$PYTHON" ]; then
-  echo "Python executable not found: $PYTHON"
-  exit 1
-else
-  echo "Using $PYTHON $($PYTHON --version)"
-fi
-
 ARGS=(-std=c++20 -O3 -Wall -Wextra)
 if [ "$PLATFORM" = mac ]; then
   # 03/2023:
@@ -47,7 +34,27 @@ else
   ARGS+=(-march=native -mtune=native)
 fi
 
-ARGS+=("$REPO_ROOT/n_utils/nameless-dt-register-complete.cpp" -o "$(dirname "$PYTHON")/nameless-dt-register-complete")
+if [ -n "$(command -v nameless-dt-register-complete)" ]; then
+  echo "Overwriting existing script"
+  DESTINATION="$(which nameless-dt-register-complete)"
+else
+  if [ -n "$(command -v python3)" ]; then
+    PYTHON=$(which python3)
+  else
+    PYTHON=$(which python)
+  fi
+
+  if [ ! -e "$PYTHON" ]; then
+    echo "Python executable not found: $PYTHON"
+    exit 1
+  else
+    echo "$($PYTHON --version) from $PYTHON"
+  fi
+
+  DESTINATION="$(dirname "$PYTHON")/nameless-dt-register-complete"
+fi
+
+ARGS+=("$REPO_ROOT/n_utils/nameless-dt-register-complete.cpp" -o "$DESTINATION")
 
 if [ -z "$(command -v "$COMPILER")" ]; then
   echo "Compiler not found: $COMPILER"
