@@ -111,10 +111,9 @@ wait_background_jobs() {
 
 add_gpg_key() {
   local key=$1
-  gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ||
-    gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" ||
-    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ||
-    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
+    gpg --batch --keyserver hkps://keyserver.ubuntu.com:443 --recv-keys "$key" ||
+    gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys "$key" ||
+    gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$key"
 }
 
 gpg_safe_download() {

@@ -15,6 +15,7 @@
 # limitations under the License.
 
 set -xe
+source "$(dirname "${BASH_SOURCE[0]}")/common_tools.sh"
 
 if [ -z "$1" -o "$1" = "latest" -o "$1" = "alpha" ]; then
   DEPLOYTOOLS_VERSION=""
@@ -38,26 +39,6 @@ if [ "$OS_TYPE" = "ubuntu" ]; then
   echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 fi
 
-function add_gpg_key() {
-  local key=$1
-  gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" ||
-    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ||
-    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ||
-    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key"
-}
-
-function gpg_safe_download() {
-  local URL=$1
-  local DST=$2
-  if python --version | grep "Python 2" > /dev/null; then
-    python -c "from urllib import urlretrieve; urlretrieve('$URL', '$DST')"
-    python -c "from urllib import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
-  else
-    python -c "from urllib.request import urlretrieve; urlretrieve('$URL', '$DST')"
-    python -c "from urllib.request import urlretrieve; urlretrieve('$URL.sig', '$DST.sig')"
-  fi
-  gpg --verify $DST.sig $DST
-}
 
 function install_awscliv2() {
   AWS_CLI_INSTALL_DIR=$(mktemp -d)
