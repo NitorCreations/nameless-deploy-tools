@@ -15,7 +15,7 @@
 # limitations under the License.
 
 set -xe
-source "$(dirname "${BASH_SOURCE[0]}")/common_tools.sh"
+source "$(n-include common_tools.sh)"
 
 if [ -z "$1" -o "$1" = "latest" -o "$1" = "alpha" ]; then
   DEPLOYTOOLS_VERSION=""
