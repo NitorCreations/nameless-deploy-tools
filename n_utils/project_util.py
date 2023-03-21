@@ -130,62 +130,61 @@ def load_project_env():
 
 
 def ndt_register_complete():
-    """Print out shell function and command to register ndt command completion"""
+    """Print out shell function and command to register ndt command completion."""
     print(
-        """_ndt_complete() {
-    local IFS=$'\\013'
-    local COMP_CUR="${COMP_WORDS[COMP_CWORD]}"
-    local COMP_PREV="${COMP_WORDS[COMP_CWORD-1]}"
-    local SUPPRESS_SPACE=0
-    if compopt +o nospace 2> /dev/null; then
-      SUPPRESS_SPACE=1
-    fi
-    COMPREPLY=( $(IFS="$IFS" \\
-      COMP_LINE="$COMP_LINE" \\
-      COMP_POINT="$COMP_POINT" \\
-      COMP_TYPE="$COMP_TYPE" \\
-      COMP_CUR="$COMP_CUR" \\
-      COMP_PREV="$COMP_PREV" \\
-      COMP_CWORD=$COMP_CWORD \\
-      _ARGCOMPLETE_COMP_WORDBREAKS="$COMP_WORDBREAKS" \\
-      _ARGCOMPLETE=1 \\
-      _ARGCOMPLETE_SUPPRESS_SPACE=$SUPPRESS_SPACE \\
-      "$1" 8>&1 9>&2 1>/dev/null 2>/dev/null) )
-    if [[ $? != 0 ]]; then
-      unset COMPREPLY
-    elif [[ $SUPPRESS_SPACE == 1 ]] && [[ "$COMPREPLY" =~ [=/:]$ ]]; then
-      compopt -o nospace
-    fi
+        R"""_ndt_complete() {
+  local IFS=$'\013'
+  local COMP_CUR="${COMP_WORDS[COMP_CWORD]}"
+  local COMP_PREV="${COMP_WORDS[COMP_CWORD - 1]}"
+  local SUPPRESS_SPACE=0
+  if compopt +o nospace 2> /dev/null; then
+    SUPPRESS_SPACE=1
+  fi
+  COMPREPLY=( $(IFS="$IFS" \
+    COMP_LINE="$COMP_LINE" \
+    COMP_POINT="$COMP_POINT" \
+    COMP_TYPE="$COMP_TYPE" \
+    COMP_CUR="$COMP_CUR" \
+    COMP_PREV="$COMP_PREV" \
+    COMP_CWORD=$COMP_CWORD \
+    _ARGCOMPLETE_COMP_WORDBREAKS="$COMP_WORDBREAKS" \
+    _ARGCOMPLETE=1 \
+    _ARGCOMPLETE_SUPPRESS_SPACE=$SUPPRESS_SPACE \
+    "$1" 8>&1 9>&2 1> /dev/null 2> /dev/null) )
+  if [[ $? != 0 ]]; then
+    unset COMPREPLY
+  elif [[ $SUPPRESS_SPACE == 1 ]] && [[ "$COMPREPLY" =~ [=/:]$ ]]; then
+    compopt -o nospace
+  fi
 }
 complete -o nospace -F _ndt_complete "ndt"
 """
     )
     if len(argv) > 1 and "--project-env" in argv:
         print(
-            """_projectenv_hook() {
-  local previous_exit_status=$?;
-  eval "$(nameless-dt-load-project-env)";
-  return $previous_exit_status;
-};
+            R"""_projectenv_hook() {
+  local previous_exit_status=$?
+  eval "$(nameless-dt-load-project-env)"
+  return $previous_exit_status
+}
 if ! [[ "$PROMPT_COMMAND" =~ _projectenv_hook ]]; then
-  PROMPT_COMMAND="_projectenv_hook;$PROMPT_COMMAND";
+  PROMPT_COMMAND="_projectenv_hook;$PROMPT_COMMAND"
 fi
 """
         )
     if len(argv) > 1 and "--nep-function" in argv:
         print(
-            """_nep_complete() {
-    COMPREPLY=( $(ndt print-aws-profiles "${COMP_WORDS[COMP_CWORD]}" ) )
+            R"""_nep_complete() {
+  COMPREPLY=($(ndt print-aws-profiles "${COMP_WORDS[COMP_CWORD]}"))
 }
 
 nep() {
-    if [ "$1" = "-h" -o "$1" = "--help" ]; then
-        ndt enable-profile -h
-        return
-    fi
-    eval "$(ndt enable-profile $@)"
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    ndt enable-profile -h
+    return
+  fi
+  eval "$(ndt enable-profile "$@")"
 }
-
 complete -F _nep_complete nep
 """
         )
