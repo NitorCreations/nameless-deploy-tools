@@ -27,6 +27,7 @@ if [ "$PLATFORM" = mac ]; then
     COMPILER="$(brew --prefix)/opt/llvm/bin/clang++"
     ARGS+=(-march=native -mtune=native)
   else
+    echo "You might want to install the latest Clang from brew ('brew install llvm') to get the best results..."
     COMPILER="g++"
   fi
 else
