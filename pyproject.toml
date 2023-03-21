@@ -75,14 +75,7 @@ ndt = "n_utils.ndt:ndt"
 signal-cf-status = "ec2_utils.cli:cf_signal_status"
 
 [project.optional-dependencies]
-testing = [
-    "coverage",
-    "mock",
-    "pytest-cov",
-    "pytest-mock",
-    "pytest",
-    "tomli<2.0.0",
-]
+testing = ["coverage", "mock", "pytest-cov", "pytest-mock", "pytest"]
 dev = ["black", "flake8", "isort", "pip-tools", "pyupgrade", "ruff"]
 
 [tool.setuptools]
