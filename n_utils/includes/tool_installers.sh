@@ -300,7 +300,7 @@ start_github_actions_runner(){
  local URL_TARGET=$2
  local TOKEN=$3
  chown -R $LOCAL_USER /opt/github-runner
- pushd /opt/github-runner 
+ pushd /opt/github-runner
  sudo -u $LOCAL_USER bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
  /opt/github-runner/svc.sh install $LOCAL_USER
  /opt/github-runner/svc.sh start
