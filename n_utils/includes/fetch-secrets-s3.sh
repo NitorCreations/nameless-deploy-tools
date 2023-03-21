@@ -27,7 +27,7 @@ case "$COMMAND" in
   show)
     SHOW=1
     ;;
-  login|logout)
+  login | logout)
     exit 0
     ;;
   *)

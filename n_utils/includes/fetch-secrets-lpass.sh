@@ -17,7 +17,7 @@
 [ "$CF_paramSecretsBucket" ] || CF_paramSecretsBucket="$(ndt cf-get-parameter paramSecretsBucket)"
 [ "$CF_paramSecretsUser" ] || CF_paramSecretsUser="$(ndt cf-get-parameter paramSecretsUser)"
 
-login_if_not_already () {
+login_if_not_already() {
   if ! lpass ls not-meant-to-return-anything > /dev/null 2>&1; then
     export AWS_DEFAULT_REGION=$(ndt ec2-region)
     aws s3 cp s3://${CF_paramSecretsBucket}/webmaster.pwd - | $(n-include lastpass-login.sh) ${CF_paramSecretsUser} - > /dev/null 2>&1

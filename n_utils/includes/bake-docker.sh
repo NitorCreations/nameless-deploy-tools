@@ -46,8 +46,8 @@ usage() {
   echo "              you would give cluster" >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -h, --help  show this help message and exit"  >&2
-  echo "  -i, --imagedefinitions  create imagedefinitions.json for AWS CodePipeline"  >&2
+  echo "  -h, --help  show this help message and exit" >&2
+  echo "  -i, --imagedefinitions  create imagedefinitions.json for AWS CodePipeline" >&2
   if "$@"; then
     echo "" >&2
     echo "$@" >&2
@@ -58,7 +58,7 @@ if [ "$1" = "--help" -o "$1" = "-h" ]; then
   usage
 fi
 
-die () {
+die() {
   usage
 }
 set -xe
@@ -68,9 +68,11 @@ if [ "$1" = "--imagedefinitions" -o "$1" = "-i" ]; then
   OUTPUT_DEFINITION=1
 fi
 
-component="$1" ; shift
+component="$1"
+shift
 [ "${component}" ] || die "You must give the component name as argument"
-docker="$1"; shift
+docker="$1"
+shift
 [ "${docker}" ] || die "You must give the docker name as argument"
 
 TSTAMP=$(date +%Y%m%d%H%M%S)
@@ -101,13 +103,13 @@ fi
 
 eval "$(ndt session-to-env)"
 if [ -z "$NO_PULL" ]; then
-   PULL="--pull"
+  PULL="--pull"
 fi
 
 eval "$(ndt ecr-ensure-repo "$DOCKER_NAME")"
 if [ -z "$PLATFORM" ]; then
   PLATFORM="linux/amd64"
-  docker build $PULL --tag "$DOCKER_NAME" --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"  --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
+  docker build $PULL --tag "$DOCKER_NAME" --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
 
   docker tag $DOCKER_NAME:latest $DOCKER_NAME:$BUILD_NUMBER
   docker tag $DOCKER_NAME:latest $REPO:latest
@@ -122,7 +124,7 @@ else
       "./pre_build_${N_PLATFORM_SAFE}.sh"
       cd ../..
     fi
-    docker buildx build $PULL --tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" --platform $N_PLATFORM --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"  --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
+    docker buildx build $PULL --tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" --platform $N_PLATFORM --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
     docker tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
     docker push $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
   done

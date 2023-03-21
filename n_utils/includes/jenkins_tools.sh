@@ -16,7 +16,7 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/common_tools.sh"
 
-jenkins_setup_dotssh () {
+jenkins_setup_dotssh() {
   check_parameters CF_paramDnsName
   DOT_SSH_DIR=/var/lib/jenkins/jenkins-home/.ssh
   mkdir -p $DOT_SSH_DIR
@@ -56,7 +56,7 @@ MARKER
   <master>$MASTER_PWD</master>
 </settingsSecurity>
 MARKER
-    chmod 600 "$MAVEN_HOME/settings-security.xml"
+      chmod 600 "$MAVEN_HOME/settings-security.xml"
     fi
     if ! [ -r "$MAVEN_HOME/settings.xml" ]; then
       cat > "$MAVEN_HOME/settings.xml" << MARKER
@@ -80,14 +80,14 @@ MARKER
   fi
 }
 
-jenkins_mount_ebs_home () {
+jenkins_mount_ebs_home() {
   check_parameters CF_paramEBSTag
   local SIZE=$1
   if [ -z "$SIZE" ]; then
     SIZE=32
   fi
   local MOUNT_PATH=/var/lib/jenkins/jenkins-home
-  ndt volume-from-snapshot --gp3 ${CF_paramEBSTag} ${CF_paramEBSTag} $MOUNT_PATH  $SIZE
+  ndt volume-from-snapshot --gp3 ${CF_paramEBSTag} ${CF_paramEBSTag} $MOUNT_PATH $SIZE
   usermod -d /var/lib/jenkins/jenkins-home jenkins
   mkdir -p /var/lib/jenkins/jenkins-home
   if ! [ -e /var/lib/jenkins/jenkins-home/config.xml ]; then
@@ -103,50 +103,48 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 MARKER
 }
 
-
-jenkins_setup_snapshot_on_shutdown () {
+jenkins_setup_snapshot_on_shutdown() {
   local SYSCONFIG=/usr/lib/systemd/system/jenkins.service
-#  check_parameters CF_paramEBSTag
+  #  check_parameters CF_paramEBSTag
   sed -i -e "/ExecStart=.*/a ExecStopPost=/usr/local/bin/ndt snapshot-from-volume '${CF_paramEBSTag}' '${CF_paramEBSTag}' /var/lib/jenkins/jenkins-home" $SYSCONFIG
 }
 
-
-jenkins_discard_default_install () {
+jenkins_discard_default_install() {
   rm -rf /var/lib/jenkins-default
 }
 
-jenkins_fetch_additional_files () {
+jenkins_fetch_additional_files() {
   fetch-secrets.sh get 600 ${CF_paramAdditionalFiles}
-  for i in ${CF_paramAdditionalFiles} ; do
+  for i in ${CF_paramAdditionalFiles}; do
     case "$i" in
       /var/lib/jenkins/*)
-	      chown -R jenkins:jenkins "$i"
-	      ;;
+        chown -R jenkins:jenkins "$i"
+        ;;
     esac
   done
 }
 
-jenkins_improve_config_security () {
+jenkins_improve_config_security() {
   mkdir -p /var/lib/jenkins/jenkins-home/secrets/
   echo false > /var/lib/jenkins/jenkins-home/secrets/slave-to-master-security-kill-switch
 }
 
-jenkins_set_home () {
+jenkins_set_home() {
   local SYSCONFIG=/usr/lib/systemd/system/jenkins.service
   [ -n "$CF_paramJenkinsStartTimeOut" ] || CF_paramJenkinsStartTimeOut=300
   sed -i -e 's/Environment=\"JENKINS_HOME=.*/Environment=\"JENKINS_HOME=\/var\/lib\/jenkins\/jenkins-home\"/g' \
-  -e 's/WorkingDirectory=.*/WorkingDirectory=\/var\/lib\/jenkins\/jenkins-home/g' \
-  -e 's/Environment=\"JAVA_OPTS=.*/Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Dhudson.model.DirectoryBrowserSupport.CSP= -Dhudson.model.User.SECURITY_243_FULL_DEFENSE=false -Dhudson.model.ParametersAction.keepUndefinedParameters=true\"/g' \
-  -e '/Environment=\"JENKINS_PORT=.*/a Environment=\"JENKINS_AJP_PORT=-1\"' \
-  -e 's/^.*TimeoutStartSec=.*$/TimeoutStartSec='$CF_paramJenkinsStartTimeOut'/g' $SYSCONFIG
+    -e 's/WorkingDirectory=.*/WorkingDirectory=\/var\/lib\/jenkins\/jenkins-home/g' \
+    -e 's/Environment=\"JAVA_OPTS=.*/Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Dhudson.model.DirectoryBrowserSupport.CSP= -Dhudson.model.User.SECURITY_243_FULL_DEFENSE=false -Dhudson.model.ParametersAction.keepUndefinedParameters=true\"/g' \
+    -e '/Environment=\"JENKINS_PORT=.*/a Environment=\"JENKINS_AJP_PORT=-1\"' \
+    -e 's/^.*TimeoutStartSec=.*$/TimeoutStartSec='$CF_paramJenkinsStartTimeOut'/g' $SYSCONFIG
 }
 
-jenkins_disable_and_shutdown_service () {
+jenkins_disable_and_shutdown_service() {
   systemctl disable jenkins
   systemctl stop jenkins
 }
 
-jenkins_enable_and_start_service () {
+jenkins_enable_and_start_service() {
   chown -R jenkins:jenkins /var/lib/jenkins/ /var/lib/jenkins/jenkins-home/
   systemctl enable jenkins
   systemctl start jenkins
@@ -164,7 +162,7 @@ jenkins_setup() {
   jenkins_enable_and_start_service
 }
 
-jenkins_wait_service_up () {
+jenkins_wait_service_up() {
   # Tests to see if everything is OK
   COUNT=0
   SERVER=""

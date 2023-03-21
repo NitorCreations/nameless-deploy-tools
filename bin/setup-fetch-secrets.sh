@@ -36,15 +36,15 @@ usage() {
   echo "  lpass|s3|vault   the selected secrets backend." >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -h, --help  show this help message and exit" >&2  exit 1
+  echo "  -h, --help  show this help message and exit" exit 1 >&2
 }
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
   usage
 fi
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit 1
 fi
 if ! [[ "$1" =~ ^lpass$|^s3$|^vault$ ]]; then

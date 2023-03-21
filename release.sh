@@ -16,40 +16,40 @@
 
 # Check platform
 case "$(uname -s)" in
-    "Darwin")
-        PLATFORM="mac"
-        ;;
-    "MINGW"*)
-        PLATFORM="windows"
-        ;;
-    *)
-        PLATFORM="linux"
-        ;;
+  "Darwin")
+    PLATFORM="mac"
+    ;;
+  "MINGW"*)
+    PLATFORM="windows"
+    ;;
+  *)
+    PLATFORM="linux"
+    ;;
 esac
 
 # BSD sed on MacOS works differently
 if [ "$PLATFORM" = mac ]; then
-    SED_COMMAND=(sed -i '')
+  SED_COMMAND=(sed -i '')
 else
-    SED_COMMAND=(sed -i)
+  SED_COMMAND=(sed -i)
 fi
 
 VERSION=$(grep -E '^VERSION' n_utils/__init__.py | cut -d\" -f 2)
 MAJOR=${VERSION//.*/}
 MINOR=${VERSION##*.}
 if [ "$1" = "-m" ]; then
-    MAJOR=$(($MAJOR + 1))
-    MINOR="0"
-    NEW_VERSION=$MAJOR.$MINOR
-    shift
+  MAJOR=$(($MAJOR + 1))
+  MINOR="0"
+  NEW_VERSION=$MAJOR.$MINOR
+  shift
 elif [ "$1" = "-v" ]; then
-    shift
-    NEW_VERSION="$1"
-    shift
+  shift
+  NEW_VERSION="$1"
+  shift
 else
-    MINOR=$(($MINOR + 1))
-    NEW_VERSION=$MAJOR.$MINOR
-    MESSAGE="$1"
+  MINOR=$(($MINOR + 1))
+  NEW_VERSION=$MAJOR.$MINOR
+  MESSAGE="$1"
 fi
 
 if [ -z "$MESSAGE" ]; then
@@ -68,16 +68,16 @@ git tag "$NEW_VERSION" -m "$MESSAGE"
 git push origin "$NEW_VERSION"
 
 if [ -n "$(command -v python3)" ]; then
-    PYTHON=$(which python3)
+  PYTHON=$(which python3)
 else
-    PYTHON=$(which python)
+  PYTHON=$(which python)
 fi
 
 if [ ! -e "$PYTHON" ]; then
-    echo "Python executable not found: $PYTHON"
-    exit 1
+  echo "Python executable not found: $PYTHON"
+  exit 1
 else
-    echo "Using $PYTHON $($PYTHON --version)"
+  echo "Using $PYTHON $($PYTHON --version)"
 fi
 
 rm -rf dist/*

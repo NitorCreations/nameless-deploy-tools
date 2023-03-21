@@ -45,7 +45,7 @@ usage() {
   echo "                  you would give sender" >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -h, --help    show this help message and exit"  >&2
+  echo "  -h, --help    show this help message and exit" >&2
   if "$@"; then
     echo "" >&2
     echo "$@" >&2
@@ -55,15 +55,17 @@ usage() {
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
   usage
 fi
-die () {
+die() {
   echo "$1" >&2
   usage
 }
 set -xe
 
-component="$1" ; shift
+component="$1"
+shift
 [ "${component}" ] || die "You must give the component name as argument"
-cdk="$1"; shift
+cdk="$1"
+shift
 [ "${cdk}" ] || die "You must give the cdk name as argument"
 
 TSTAMP=$(date +%Y%m%d%H%M%S)

@@ -53,7 +53,7 @@ if [ "$1" = "--help" -o "$1" = "-h" ]; then
 fi
 
 crypted_devices() {
-  for dev in  $(dmsetup ls --target crypt | grep -v "No devices found" | awk '{ print $1 }'); do
+  for dev in $(dmsetup ls --target crypt | grep -v "No devices found" | awk '{ print $1 }'); do
     echo -n "$dev "
     dmsetup deps $dev -o blkdevname | awk -NF '\\(|\\)' '{ print $2 }'
   done
@@ -90,7 +90,7 @@ chmod 600 $TMPDIR/disk.pwd
 dd if=/dev/urandom of=$TMPDIR/disk.pwd bs=512 count=4 status=none iflag=fullblock
 #Open plain dm-crypt mapping
 cryptsetup --cipher=aes-xts-plain64 --key-file=$TMPDIR/disk.pwd --key-size=512 \
-open --type=plain $DEVPATH $CRYPTDEV
+  open --type=plain $DEVPATH $CRYPTDEV
 # Get rid of keyfile
 umount -f $TMPDIR
 # Make sure the mount path is not already mounted

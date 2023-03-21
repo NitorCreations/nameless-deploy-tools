@@ -22,22 +22,22 @@ VERSION="0.7.1"
 # Find directory in which this script is stored by traversing all symbolic links
 SOURCE="${0}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
   SOURCE="$(readlink "$SOURCE")"
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
-SCRIPTDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+SCRIPTDIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 
 BASEDIR="${SCRIPTDIR}"
 ORIGARGS=("${@}")
 
 # Generate json.sh path matching string
 json_path() {
-	if [ ! "${1}" = "-p" ]; then
-		printf '"%s"' "${1}"
-	else
-		printf '%s' "${2}"
-	fi
+  if [ ! "${1}" = "-p" ]; then
+    printf '"%s"' "${1}"
+  else
+    printf '%s' "${2}"
+  fi
 }
 
 # Get string value from json dictionary
@@ -55,7 +55,7 @@ get_json_array_values() {
 # Get sub-dictionary from json
 get_json_dict_value() {
   local filter
-	echo "$(json_path "${1:-}" "${2:-}")"
+  echo "$(json_path "${1:-}" "${2:-}")"
   filter="$(printf 's/.*\[%s\][[:space:]]*\(.*\)/\\1/p' "$(json_path "${1:-}" "${2:-}")")"
   sed -n "${filter}" | jsonsh
 }
@@ -85,7 +85,7 @@ jsonsh() {
     exit 1
   }
 
-  awk_egrep () {
+  awk_egrep() {
     local pattern_string=$1
 
     gawk '{
@@ -98,20 +98,18 @@ jsonsh() {
     }' pattern="$pattern_string"
   }
 
-  tokenize () {
+  tokenize() {
     local GREP
     local ESCAPE
     local CHAR
 
-    if echo "test string" | egrep -ao --color=never "test" >/dev/null 2>&1
-    then
+    if echo "test string" | egrep -ao --color=never "test" > /dev/null 2>&1; then
       GREP='egrep -ao --color=never'
     else
       GREP='egrep -ao'
     fi
 
-    if echo "test string" | egrep -o "test" >/dev/null 2>&1
-    then
+    if echo "test string" | egrep -o "test" > /dev/null 2>&1; then
       ESCAPE='(\\[^u[:cntrl:]]|\\u[0-9a-fA-F]{4})'
       CHAR='[^[:cntrl:]"\\]'
     else
@@ -126,23 +124,22 @@ jsonsh() {
     local SPACE='[[:space:]]+'
 
     # Force zsh to expand $A into multiple words
-    local is_wordsplit_disabled=$(unsetopt 2>/dev/null | grep -c '^shwordsplit$')
+    local is_wordsplit_disabled=$(unsetopt 2> /dev/null | grep -c '^shwordsplit$')
     if [ $is_wordsplit_disabled != 0 ]; then setopt shwordsplit; fi
     $GREP "$STRING|$NUMBER|$KEYWORD|$SPACE|." | egrep -v "^$SPACE$"
     if [ $is_wordsplit_disabled != 0 ]; then unsetopt shwordsplit; fi
   }
 
-  parse_array () {
+  parse_array() {
     local index=0
     local ary=''
     read -r token
     case "$token" in
       ']') ;;
       *)
-        while :
-        do
+        while :; do
           parse_value "$1" "$index"
-          index=$((index+1))
+          index=$((index + 1))
           ary="$ary""$value"
           read -r token
           case "$token" in
@@ -158,15 +155,14 @@ jsonsh() {
     :
   }
 
-  parse_object () {
+  parse_object() {
     local key
     local obj=''
     read -r token
     case "$token" in
       '}') ;;
       *)
-        while :
-        do
+        while :; do
           case "$token" in
             '"'*'"') key=$token ;;
             *) throw "EXPECTED string GOT ${token:-EOF}" ;;
@@ -187,25 +183,26 @@ jsonsh() {
           esac
           read -r token
         done
-      ;;
+        ;;
     esac
     value=$(printf '{%s}' "$obj") || value=
     :
   }
 
-  parse_value () {
+  parse_value() {
     local jpath="${1:+$1,}${2:-}" isleaf=0 isempty=0 print=0
     case "$token" in
       '{') parse_object "$jpath" ;;
-      '[') parse_array  "$jpath" ;;
+      '[') parse_array "$jpath" ;;
       # At this point, the only valid single-character tokens are digits.
-      ''|[!0-9]) throw "EXPECTED value GOT ${token:-EOF}" ;;
-      *) value=$token
-         # replace solidus ("\/") in json strings with normalized value: "/"
-         value=$(echo "$value" | sed 's#\\/#/#g')
-         isleaf=1
-         [ "$value" = '""' ] && isempty=1
-         ;;
+      '' | [!0-9]) throw "EXPECTED value GOT ${token:-EOF}" ;;
+      *)
+        value=$token
+        # replace solidus ("\/") in json strings with normalized value: "/"
+        value=$(echo "$value" | sed 's#\\/#/#g')
+        isleaf=1
+        [ "$value" = '""' ] && isempty=1
+        ;;
     esac
     [ "$value" = '' ] && return
     [ -z "$jpath" ] && return # do not print head
@@ -214,7 +211,7 @@ jsonsh() {
     :
   }
 
-  parse () {
+  parse() {
     read -r token
     parse_value
     read -r token || true
@@ -237,7 +234,7 @@ _mktemp() {
 check_dependencies() {
   # look for required binaries
   for binary in grep mktemp diff sed awk curl cut; do
-    bin_path="$(command -v "${binary}" 2>/dev/null)" || _exiterr "This script requires ${binary}."
+    bin_path="$(command -v "${binary}" 2> /dev/null)" || _exiterr "This script requires ${binary}."
     [[ -x "${bin_path}" ]] || _exiterr "${binary} found in PATH but it's not executable"
   done
 
@@ -536,7 +533,10 @@ init_system() {
   if [[ -n "${LOCKFILE}" ]]; then
     LOCKDIR="$(dirname "${LOCKFILE}")"
     [[ -w "${LOCKDIR}" ]] || _exiterr "Directory ${LOCKDIR} for LOCKFILE ${LOCKFILE} is not writable, aborting."
-    ( set -C; date > "${LOCKFILE}" ) 2>/dev/null || _exiterr "Lock file '${LOCKFILE}' present, aborting."
+    (
+      set -C
+      date > "${LOCKFILE}"
+    ) 2> /dev/null || _exiterr "Lock file '${LOCKFILE}' present, aborting."
     remove_lock() { rm -f "${LOCKFILE}"; }
     trap 'remove_lock' EXIT
   fi
@@ -552,23 +552,23 @@ init_system() {
   if [[ ${API} -eq 1 ]]; then
     # shellcheck disable=SC2015
     CA_NEW_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-cert)" &&
-    CA_NEW_AUTHZ="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-authz)" &&
-    CA_NEW_REG="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-reg)" &&
-    CA_TERMS="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value terms-of-service)" &&
-    CA_REQUIRES_EAB="false" &&
-    CA_REVOKE_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value revoke-cert)" ||
-    _exiterr "Problem retrieving ACME/CA-URLs, check if your configured CA points to the directory entrypoint."
+      CA_NEW_AUTHZ="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-authz)" &&
+      CA_NEW_REG="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value new-reg)" &&
+      CA_TERMS="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value terms-of-service)" &&
+      CA_REQUIRES_EAB="false" &&
+      CA_REVOKE_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value revoke-cert)" ||
+      _exiterr "Problem retrieving ACME/CA-URLs, check if your configured CA points to the directory entrypoint."
     # Since reg URI is missing from directory we will assume it is the same as CA_NEW_REG without the new part
     CA_REG=${CA_NEW_REG/new-reg/reg}
   else
     # shellcheck disable=SC2015
     CA_NEW_ORDER="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newOrder)" &&
-    CA_NEW_NONCE="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newNonce)" &&
-    CA_NEW_ACCOUNT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newAccount)" &&
-    CA_TERMS="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value -p '"meta","termsOfService"')" &&
-    CA_REQUIRES_EAB="$(printf "%s" "${CA_DIRECTORY}" | get_json_bool_value -p '"meta","externalAccountRequired"' || echo false)" &&
-    CA_REVOKE_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value revokeCert)" ||
-    _exiterr "Problem retrieving ACME/CA-URLs, check if your configured CA points to the directory entrypoint."
+      CA_NEW_NONCE="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newNonce)" &&
+      CA_NEW_ACCOUNT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value newAccount)" &&
+      CA_TERMS="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value -p '"meta","termsOfService"')" &&
+      CA_REQUIRES_EAB="$(printf "%s" "${CA_DIRECTORY}" | get_json_bool_value -p '"meta","externalAccountRequired"' || echo false)" &&
+      CA_REVOKE_CERT="$(printf "%s" "${CA_DIRECTORY}" | get_json_string_value revokeCert)" ||
+      _exiterr "Problem retrieving ACME/CA-URLs, check if your configured CA points to the directory entrypoint."
     # Since acct URI is missing from directory we will assume it is the same as CA_NEW_ACCOUNT without the new part
     CA_ACCOUNT=${CA_NEW_ACCOUNT/new-acct/acct}
   fi
@@ -605,7 +605,7 @@ init_system() {
       register_new_key="yes"
     fi
   fi
-  "${OPENSSL}" rsa -in "${ACCOUNT_KEY}" -check 2>/dev/null > /dev/null || _exiterr "Account key is not valid, cannot continue."
+  "${OPENSSL}" rsa -in "${ACCOUNT_KEY}" -check 2> /dev/null > /dev/null || _exiterr "Account key is not valid, cannot continue."
 
   # Get public components from private key and calculate thumbprint
   pubExponent64="$(printf '%x' "$("${OPENSSL}" rsa -in "${ACCOUNT_KEY}" -noout -text | awk '/publicExponent/ {print $2}')" | hex2bin | urlbase64)"
@@ -625,7 +625,7 @@ init_system() {
 
     # ZeroSSL special sauce
     if [[ "${CA}" = "${CA_ZEROSSL}" ]]; then
-      if [[ -z "${EAB_KID:-}" ]] ||  [[ -z "${EAB_HMAC_KEY:-}" ]]; then
+      if [[ -z "${EAB_KID:-}" ]] || [[ -z "${EAB_HMAC_KEY:-}" ]]; then
         if [[ -z "${CONTACT_EMAIL}" ]]; then
           echo "ZeroSSL requires contact email to be set or EAB_KID/EAB_HMAC_KEY to be manually configured"
           FAILED=true
@@ -633,7 +633,7 @@ init_system() {
           zeroapi="$(curl -s "https://api.zerossl.com/acme/eab-credentials-email" -d "email=${CONTACT_EMAIL}" | jsonsh)"
           EAB_KID="$(printf "%s" "${zeroapi}" | get_json_string_value eab_kid)"
           EAB_HMAC_KEY="$(printf "%s" "${zeroapi}" | get_json_string_value eab_hmac_key)"
-          if [[ -z "${EAB_KID:-}" ]] ||  [[ -z "${EAB_HMAC_KEY:-}" ]]; then
+          if [[ -z "${EAB_KID:-}" ]] || [[ -z "${EAB_HMAC_KEY:-}" ]]; then
             echo "Unknown error retrieving ZeroSSL API credentials"
             echo "${zeroapi}"
             FAILED=true
@@ -764,7 +764,8 @@ deurlbase64() {
   data="$(cat | tr -d ' \n\r')"
   modlen=$((${#data} % 4))
   padding=""
-  if [[ "${modlen}" = "2" ]]; then padding="==";
+  if [[ "${modlen}" = "2" ]]; then
+    padding="=="
   elif [[ "${modlen}" = "3" ]]; then padding="="; fi
   printf "%s%s" "${data}" "${padding}" | tr -d '\n\r' | _sed -e 'y:-_:+/:' | "${OPENSSL}" base64 -d -A
 }
@@ -803,7 +804,7 @@ http_request() {
   tempheaders="$(_mktemp)"
 
   if [[ -n "${IP_VERSION:-}" ]]; then
-      ip_version="-${IP_VERSION}"
+    ip_version="-${IP_VERSION}"
   fi
 
   set +e
@@ -860,7 +861,7 @@ http_request() {
     fi
   fi
 
-  if { true >&4; } 2>/dev/null; then
+  if { true >&4; } 2> /dev/null; then
     cat "${tempheaders}" >&4
   fi
   cat "${tempcont}"
@@ -916,41 +917,41 @@ signed_request() {
 extract_altnames() {
   csr="${1}" # the CSR itself (not a file)
 
-  if ! <<<"${csr}" "${OPENSSL}" req -verify -noout 2>/dev/null; then
+  if ! "${OPENSSL}" <<< "${csr}" req -verify -noout 2> /dev/null; then
     _exiterr "Certificate signing request isn't valid"
   fi
 
-  reqtext="$( <<<"${csr}" "${OPENSSL}" req -noout -text )"
-  if <<<"${reqtext}" grep -q '^[[:space:]]*X509v3 Subject Alternative Name:[[:space:]]*$'; then
+  reqtext="$("${OPENSSL}" <<< "${csr}" req -noout -text)"
+  if grep <<< "${reqtext}" -q '^[[:space:]]*X509v3 Subject Alternative Name:[[:space:]]*$'; then
     # SANs used, extract these
-    altnames="$( <<<"${reqtext}" awk '/X509v3 Subject Alternative Name:/{print;getline;print;}' | tail -n1 )"
+    altnames="$(awk <<< "${reqtext}" '/X509v3 Subject Alternative Name:/{print;getline;print;}' | tail -n1)"
     # split to one per line:
     # shellcheck disable=SC1003
-    altnames="$( <<<"${altnames}" _sed -e 's/^[[:space:]]*//; s/, /\'$'\n''/g' )"
+    altnames="$(_sed <<< "${altnames}" -e 's/^[[:space:]]*//; s/, /\'$'\n''/g')"
     # we can only get DNS: ones signed
-    if grep -qEv '^(DNS|othername):' <<<"${altnames}"; then
+    if grep -qEv '^(DNS|othername):' <<< "${altnames}"; then
       _exiterr "Certificate signing request contains non-DNS Subject Alternative Names"
     fi
     # strip away the DNS: prefix
-    altnames="$( <<<"${altnames}" _sed -e 's/^(DNS:|othername:<unsupported>)//' )"
+    altnames="$(_sed <<< "${altnames}" -e 's/^(DNS:|othername:<unsupported>)//')"
     printf "%s" "${altnames}" | tr '\n' ' '
   else
     # No SANs, extract CN
-    altnames="$( <<<"${reqtext}" grep '^[[:space:]]*Subject:' | _sed -e 's/.*[ /]CN ?= ?([^ /,]*).*/\1/' )"
+    altnames="$(grep <<< "${reqtext}" '^[[:space:]]*Subject:' | _sed -e 's/.*[ /]CN ?= ?([^ /,]*).*/\1/')"
     printf "%s" "${altnames}"
   fi
 }
 
 # Get last issuer CN in certificate chain
 get_last_cn() {
-  <<<"${1}" _sed 'H;/-----BEGIN CERTIFICATE-----/h;$!d;x' | "${OPENSSL}" x509 -noout -issuer | head -n1 | _sed -e 's/.*[ /]CN ?= ?([^/,]*).*/\1/'
+  _sed <<< "${1}" 'H;/-----BEGIN CERTIFICATE-----/h;$!d;x' | "${OPENSSL}" x509 -noout -issuer | head -n1 | _sed -e 's/.*[ /]CN ?= ?([^/,]*).*/\1/'
 }
 
 # Create certificate for domain(s) and outputs it FD 3
 sign_csr() {
   csr="${1}" # the CSR itself (not a file)
 
-  if { true >&3; } 2>/dev/null; then
+  if { true >&3; } 2> /dev/null; then
     : # fd 3 looks OK
   else
     _exiterr "sign_csr: FD 3 not open"
@@ -992,7 +993,7 @@ sign_csr() {
     local idx=0
     for uri in ${order_authorizations}; do
       authorizations[${idx}]="${uri}"
-      idx=$((idx+1))
+      idx=$((idx + 1))
     done
     echo " + Received ${idx} authorizations URLs from the CA"
   else
@@ -1000,7 +1001,7 @@ sign_csr() {
     local idx=0
     for altname in ${altnames}; do
       authorizations[${idx}]="${altname}"
-      idx=$((idx+1))
+      idx=$((idx + 1))
     done
   fi
 
@@ -1074,7 +1075,7 @@ sign_csr() {
     keyauths[${idx}]="${keyauth}"
     deploy_args[${idx}]="${identifier} ${challenge_tokens[${idx}]} ${keyauth_hook}"
 
-    idx=$((idx+1))
+    idx=$((idx + 1))
   done
   local num_pending_challenges=${idx}
   echo " + ${num_pending_challenges} pending challenge(s)"
@@ -1089,7 +1090,7 @@ sign_csr() {
       local idx=0
       while [ ${idx} -lt ${num_pending_challenges} ]; do
         "${HOOK}" "deploy_challenge" ${deploy_args[${idx}]} || _exiterr 'deploy_challenge hook returned with non-zero exit code'
-        idx=$((idx+1))
+        idx=$((idx + 1))
       done
     fi
   fi
@@ -1127,7 +1128,7 @@ sign_csr() {
       [[ -n "${HOOK}" ]] && ("${HOOK}" "invalid_challenge" "${altname}" "${result}" || _exiterr 'invalid_challenge hook returned with non-zero exit code')
       break
     fi
-    idx=$((idx+1))
+    idx=$((idx + 1))
   done
 
   if [[ ${num_pending_challenges} -ne 0 ]]; then
@@ -1145,7 +1146,7 @@ sign_csr() {
       [[ "${CHALLENGETYPE}" = "tls-alpn-01" ]] && rm -f "${ALPNCERTDIR}/${challenge_names[${idx}]}.crt.pem" "${ALPNCERTDIR}/${challenge_names[${idx}]}.key.pem"
       # Clean challenge token using non-chained hook
       [[ -n "${HOOK}" ]] && [[ "${HOOK_CHAIN}" != "yes" ]] && ("${HOOK}" "clean_challenge" ${deploy_args[${idx}]} || _exiterr 'clean_challenge hook returned with non-zero exit code')
-      idx=$((idx+1))
+      idx=$((idx + 1))
     done
 
     if [[ "${reqstatus}" != "valid" ]]; then
@@ -1156,22 +1157,21 @@ sign_csr() {
 
   # Finally request certificate from the acme-server and store it in cert-${timestamp}.pem and link from cert.pem
   echo " + Requesting certificate..."
-  csr64="$( <<<"${csr}" "${OPENSSL}" req -config "${OPENSSL_CNF}" -outform DER | urlbase64)"
+  csr64="$("${OPENSSL}" <<< "${csr}" req -config "${OPENSSL_CNF}" -outform DER | urlbase64)"
   if [[ ${API} -eq 1 ]]; then
     crt64="$(signed_request "${CA_NEW_CERT}" '{"resource": "new-cert", "csr": "'"${csr64}"'"}' | "${OPENSSL}" base64 -e)"
-    crt="$( printf -- '-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n' "${crt64}" )"
+    crt="$(printf -- '-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n' "${crt64}")"
   else
     result="$(signed_request "${finalize}" '{"csr": "'"${csr64}"'"}' | jsonsh)"
     while :; do
       orderstatus="$(echo "${result}" | get_json_string_value status)"
-      case "${orderstatus}"
-      in
+      case "${orderstatus}" in
         "processing" | "pending")
           echo " + Order is ${orderstatus}..."
-          sleep 2;
+          sleep 2
           ;;
         "valid")
-          break;
+          break
           ;;
         *)
           _exiterr "Order in status ${orderstatus}"
@@ -1182,7 +1182,7 @@ sign_csr() {
 
     resheaders="$(_mktemp)"
     certificate="$(echo "${result}" | get_json_string_value certificate)"
-    crt="$(signed_request "${certificate}" "" 4>"${resheaders}")"
+    crt="$(signed_request "${certificate}" "" 4> "${resheaders}")"
 
     if [ -n "${PREFERRED_CHAIN:-}" ]; then
       foundaltchain=0
@@ -1214,7 +1214,7 @@ sign_csr() {
 
   # Try to load the certificate to detect corruption
   echo " + Checking certificate..."
-  _openssl x509 -text <<<"${crt}"
+  _openssl x509 -text <<< "${crt}"
 
   echo "${crt}" >&3
 
@@ -1257,13 +1257,17 @@ walk_chain() {
     http_request get "${issuer_cert_uri}" > "${tmpcert_raw}"
 
     # PEM
-    if grep -q "BEGIN CERTIFICATE" "${tmpcert_raw}"; then mv "${tmpcert_raw}" "${tmpcert}"
+    if grep -q "BEGIN CERTIFICATE" "${tmpcert_raw}"; then
+      mv "${tmpcert_raw}" "${tmpcert}"
     # DER
-    elif "${OPENSSL}" x509 -in "${tmpcert_raw}" -inform DER -out "${tmpcert}" -outform PEM 2> /dev/null > /dev/null; then :
+    elif "${OPENSSL}" x509 -in "${tmpcert_raw}" -inform DER -out "${tmpcert}" -outform PEM 2> /dev/null > /dev/null; then
+      :
     # PKCS7
-    elif "${OPENSSL}" pkcs7 -in "${tmpcert_raw}" -inform DER -out "${tmpcert}" -outform PEM -print_certs 2> /dev/null > /dev/null; then :
+    elif "${OPENSSL}" pkcs7 -in "${tmpcert_raw}" -inform DER -out "${tmpcert}" -outform PEM -print_certs 2> /dev/null > /dev/null; then
+      :
     # Unknown certificate type
-    else _exiterr "Unknown certificate type in chain"
+    else
+      _exiterr "Unknown certificate type in chain"
     fi
 
     local next_issuer_cert_uri
@@ -1328,8 +1332,8 @@ sign_domain() {
       privkey="privkey-${timestamp}.pem"
       local tmp_privkey="$(_mktemp)"
       case "${KEY_ALGO}" in
-        rsa) _openssl genrsa -out "${tmp_privkey}" "${KEYSIZE}";;
-        prime256v1|secp384r1) _openssl ecparam -genkey -name "${KEY_ALGO}" -out "${tmp_privkey}";;
+        rsa) _openssl genrsa -out "${tmp_privkey}" "${KEYSIZE}" ;;
+        prime256v1 | secp384r1) _openssl ecparam -genkey -name "${KEY_ALGO}" -out "${tmp_privkey}" ;;
       esac
       cat "${tmp_privkey}" > "${certdir}/privkey-${timestamp}.pem"
       rm "${tmp_privkey}"
@@ -1345,8 +1349,8 @@ sign_domain() {
     if [[ ! -r "${certdir}/privkey.roll.pem" && "${PRIVATE_KEY_ROLLOVER}" = "yes" && "${PRIVATE_KEY_RENEW}" = "yes" ]]; then
       echo " + Generating private rollover key..."
       case "${KEY_ALGO}" in
-        rsa) _openssl genrsa -out "${certdir}/privkey.roll.pem" "${KEYSIZE}";;
-        prime256v1|secp384r1) _openssl ecparam -genkey -name "${KEY_ALGO}" -out "${certdir}/privkey.roll.pem";;
+        rsa) _openssl genrsa -out "${certdir}/privkey.roll.pem" "${KEYSIZE}" ;;
+        prime256v1 | secp384r1) _openssl ecparam -genkey -name "${KEY_ALGO}" -out "${certdir}/privkey.roll.pem" ;;
       esac
     fi
     # delete rolloverkeys if disabled
@@ -1381,7 +1385,7 @@ sign_domain() {
 
   crt_path="${certdir}/cert-${timestamp}.pem"
   # shellcheck disable=SC2086
-  sign_csr "$(< "${certdir}/cert-${timestamp}.csr")" ${altnames} 3>"${crt_path}"
+  sign_csr "$(< "${certdir}/cert-${timestamp}.csr")" ${altnames} 3> "${crt_path}"
 
   # Create fullchain.pem
   echo " + Creating fullchain.pem..."
@@ -1437,15 +1441,18 @@ command_version() {
   echo "https://dehydrated.io"
   echo ""
   echo "Dehydrated version: ${VERSION}"
-  revision="$(cd "${SCRIPTDIR}"; git rev-parse HEAD 2>/dev/null || echo "unknown")"
+  revision="$(
+    cd "${SCRIPTDIR}"
+    git rev-parse HEAD 2> /dev/null || echo "unknown"
+  )"
   echo "GIT-Revision: ${revision}"
   echo ""
   if [[ "${OSTYPE}" =~ "BSD" ]]; then
     echo "OS: $(uname -sr)"
   elif [[ -e /etc/os-release ]]; then
-    ( . /etc/os-release && echo "OS: $PRETTY_NAME" )
+    (. /etc/os-release && echo "OS: $PRETTY_NAME")
   elif [[ -e /usr/lib/os-release ]]; then
-    ( . /usr/lib/os-release && echo "OS: $PRETTY_NAME" )
+    (. /usr/lib/os-release && echo "OS: $PRETTY_NAME")
   else
     echo "OS: $(cat /etc/issue | grep -v ^$ | head -n1 | _sed 's/\\(r|n|l) .*//g')"
   fi
@@ -1564,12 +1571,12 @@ command_sign_domains() {
   # Generate certificates for all domains found in domains.txt. Check if existing certificate are about to expire
   ORIGIFS="${IFS}"
   IFS=$'\n'
-  for line in $(<"${DOMAINS_TXT}" tr -d '\r' | awk '{print tolower($0)}' | _sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g' -e 's/[[:space:]]+/ /g' -e 's/([^ ])>/\1 >/g' -e 's/> />/g' | (grep -vE '^(#|$)' || true)); do
+  for line in $(tr < "${DOMAINS_TXT}" -d '\r' | awk '{print tolower($0)}' | _sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g' -e 's/[[:space:]]+/ /g' -e 's/([^ ])>/\1 >/g' -e 's/> />/g' | (grep -vE '^(#|$)' || true)); do
     reset_configvars
     IFS="${ORIGIFS}"
     alias="$(grep -Eo '>[^ ]+' <<< "${line}" || true)"
     line="$(_sed -e 's/>[^ ]+[ ]*//g' <<< "${line}")"
-    aliascount="$(grep -Eo '>' <<< "${alias}" | awk 'END {print NR}' || true )"
+    aliascount="$(grep -Eo '>' <<< "${alias}" | awk 'END {print NR}' || true)"
     [ ${aliascount} -gt 1 ] && _exiterr "Only one alias per line is allowed in domains.txt!"
 
     domain="$(printf '%s\n' "${line}" | cut -d' ' -f1)"
@@ -1577,7 +1584,7 @@ command_sign_domains() {
     [ ${aliascount} -lt 1 ] && alias="${domain}" || alias="${alias#>}"
     export alias
 
-    if [[ -z "${morenames}" ]];then
+    if [[ -z "${morenames}" ]]; then
       echo "Processing ${domain}"
     else
       echo "Processing ${domain} with alternative names: ${morenames}"
@@ -1628,15 +1635,15 @@ command_sign_domains() {
       ); do
         config_var="$(echo "${cfgline:1}" | cut -d'=' -f1)"
         config_value="$(echo "${cfgline:1}" | cut -d'=' -f2- | tr -d "'")"
-	# All settings that are allowed here should also be stored and
-	# restored in store_configvars() and reset_configvars()
+        # All settings that are allowed here should also be stored and
+        # restored in store_configvars() and reset_configvars()
         case "${config_var}" in
-          KEY_ALGO|OCSP_MUST_STAPLE|OCSP_FETCH|OCSP_DAYS|PRIVATE_KEY_RENEW|PRIVATE_KEY_ROLLOVER|KEYSIZE|CHALLENGETYPE|HOOK|PREFERRED_CHAIN|WELLKNOWN|HOOK_CHAIN|OPENSSL_CNF|RENEW_DAYS)
+          KEY_ALGO | OCSP_MUST_STAPLE | OCSP_FETCH | OCSP_DAYS | PRIVATE_KEY_RENEW | PRIVATE_KEY_ROLLOVER | KEYSIZE | CHALLENGETYPE | HOOK | PREFERRED_CHAIN | WELLKNOWN | HOOK_CHAIN | OPENSSL_CNF | RENEW_DAYS)
             echo "   + ${config_var} = ${config_value}"
             declare -- "${config_var}=${config_value}"
             ;;
           _) ;;
-          *) echo "   ! Setting ${config_var} on a per-certificate base is not (yet) supported" >&2
+          *) echo "   ! Setting ${config_var} on a per-certificate base is not (yet) supported" >&2 ;;
         esac
       done
       IFS="${ORIGIFS}"
@@ -1666,7 +1673,7 @@ command_sign_domains() {
       printf " + Checking domain name(s) of existing cert..."
 
       certnames="$("${OPENSSL}" x509 -in "${cert}" -text -noout | grep DNS: | _sed 's/DNS://g' | tr -d ' ' | tr ',' '\n' | sort -u | tr '\n' ' ' | _sed 's/ $//')"
-      givennames="$(echo "${domain}" "${morenames}"| tr ' ' '\n' | sort -u | tr '\n' ' ' | _sed 's/ $//' | _sed 's/^ //')"
+      givennames="$(echo "${domain}" "${morenames}" | tr ' ' '\n' | sort -u | tr '\n' ' ' | _sed 's/ $//' | _sed 's/^ //')"
 
       if [[ "${certnames}" = "${givennames}" ]]; then
         echo " unchanged."
@@ -1683,7 +1690,7 @@ command_sign_domains() {
     # Check expire date of existing certificate
     if [[ -e "${cert}" ]]; then
       echo " + Checking expire date of existing cert..."
-      valid="$("${OPENSSL}" x509 -enddate -noout -in "${cert}" | cut -d= -f2- )"
+      valid="$("${OPENSSL}" x509 -enddate -noout -in "${cert}" | cut -d= -f2-)"
 
       printf " + Valid till %s " "${valid}"
       if ("${OPENSSL}" x509 -checkend $((RENEW_DAYS * 86400)) -noout -in "${cert}" > /dev/null 2>&1); then
@@ -1724,7 +1731,7 @@ command_sign_domains() {
 
       if [[ ! -e "${certdir}/ocsp.der" ]]; then
         update_ocsp="yes"
-      elif ! ("${OPENSSL}" ocsp -no_nonce -issuer "${chain}" -verify_other "${chain}" -cert "${cert}" -respin "${certdir}/ocsp.der" -status_age $((OCSP_DAYS*24*3600)) 2>&1 | grep -q "${cert}: good"); then
+      elif ! ("${OPENSSL}" ocsp -no_nonce -issuer "${chain}" -verify_other "${chain}" -cert "${cert}" -respin "${certdir}/ocsp.der" -status_age $((OCSP_DAYS * 24 * 3600)) 2>&1 | grep -q "${cert}: good"); then
         update_ocsp="yes"
       fi
 
@@ -1907,7 +1914,7 @@ command_cleanup() {
         # Look up current file in use
         current="$(basename "$(readlink "${certdir}/${filetype}")")"
       else
-        if [[ -h "${certdir}/${filetype}" ]]; then
+        if [[ -L "${certdir}/${filetype}" ]]; then
           echo "Removing broken symlink: ${certdir}/${filetype}"
           rm -f "${certdir}/${filetype}"
         fi
@@ -1945,21 +1952,27 @@ command_cleanupdelete() {
   command_cleanup
 }
 
-
 # Usage: --help (-h)
 # Description: Show help text
 command_help() {
   printf "Usage: %s [-h] [command [argument]] [parameter [argument]] [parameter [argument]] ...\n\n" "${0}"
   printf "Default command: help\n\n"
   echo "Commands:"
-  grep -e '^[[:space:]]*# Usage:' -e '^[[:space:]]*# Description:' -e '^command_.*()[[:space:]]*{' "${0}" | while read -r usage; read -r description; read -r command; do
+  grep -e '^[[:space:]]*# Usage:' -e '^[[:space:]]*# Description:' -e '^command_.*()[[:space:]]*{' "${0}" | while
+    read -r usage
+    read -r description
+    read -r command
+  do
     if [[ ! "${usage}" =~ Usage ]] || [[ ! "${description}" =~ Description ]] || [[ ! "${command}" =~ ^command_ ]]; then
       _exiterr "Error generating help text."
     fi
     printf " %-32s %s\n" "${usage##"# Usage: "}" "${description##"# Description: "}"
   done
   printf -- "\nParameters:\n"
-  grep -E -e '^[[:space:]]*# PARAM_Usage:' -e '^[[:space:]]*# PARAM_Description:' "${0}" | while read -r usage; read -r description; do
+  grep -E -e '^[[:space:]]*# PARAM_Usage:' -e '^[[:space:]]*# PARAM_Description:' "${0}" | while
+    read -r usage
+    read -r description
+  do
     if [[ ! "${usage}" =~ Usage ]] || [[ ! "${description}" =~ Description ]]; then
       _exiterr "Error generating help text."
     fi
@@ -1999,18 +2012,18 @@ main() {
   # shellcheck disable=SC2199
   [[ -z "${@}" ]] && eval set -- "--help"
 
-  while (( ${#} )); do
+  while ((${#})); do
     case "${1}" in
-      --help|-h)
+      --help | -h)
         command_help
         exit 0
         ;;
 
-      --env|-e)
+      --env | -e)
         set_command env
         ;;
 
-      --cron|-c)
+      --cron | -c)
         set_command sign_domains
         ;;
 
@@ -2032,14 +2045,14 @@ main() {
         set_command terms
         ;;
 
-      --signcsr|-s)
+      --signcsr | -s)
         shift 1
         set_command sign_csr
         check_parameters "${1:-}"
         PARAM_CSR="${1}"
         ;;
 
-      --revoke|-r)
+      --revoke | -r)
         shift 1
         set_command revoke
         check_parameters "${1:-}"
@@ -2050,47 +2063,47 @@ main() {
         set_command deactivate
         ;;
 
-      --version|-v)
+      --version | -v)
         set_command version
         ;;
 
-      --cleanup|-gc)
+      --cleanup | -gc)
         set_command cleanup
         ;;
 
-      --cleanup-delete|-gcd)
+      --cleanup-delete | -gcd)
         set_command cleanupdelete
         PARAM_CLEANUPDELETE="yes"
         ;;
 
       # PARAM_Usage: --full-chain (-fc)
       # PARAM_Description: Print full chain when using --signcsr
-      --full-chain|-fc)
+      --full-chain | -fc)
         PARAM_FULL_CHAIN="1"
         ;;
 
       # PARAM_Usage: --ipv4 (-4)
       # PARAM_Description: Resolve names to IPv4 addresses only
-      --ipv4|-4)
+      --ipv4 | -4)
         PARAM_IP_VERSION="4"
         ;;
 
       # PARAM_Usage: --ipv6 (-6)
       # PARAM_Description: Resolve names to IPv6 addresses only
-      --ipv6|-6)
+      --ipv6 | -6)
         PARAM_IP_VERSION="6"
         ;;
 
       # PARAM_Usage: --domain (-d) domain.tld
       # PARAM_Description: Use specified domain name(s) instead of domains.txt entry (one certificate!)
-      --domain|-d)
+      --domain | -d)
         shift 1
         check_parameters "${1:-}"
         if [[ -z "${PARAM_DOMAIN:-}" ]]; then
           PARAM_DOMAIN="${1}"
         else
           PARAM_DOMAIN="${PARAM_DOMAIN} ${1}"
-         fi
+        fi
         ;;
 
       # PARAM_Usage: --ca url/preset
@@ -2113,13 +2126,13 @@ main() {
 
       # PARAM_Usage: --keep-going (-g)
       # PARAM_Description: Keep going after encountering an error while creating/renewing multiple certificates in cron mode
-      --keep-going|-g)
+      --keep-going | -g)
         PARAM_KEEP_GOING="yes"
         ;;
 
       # PARAM_Usage: --force (-x)
       # PARAM_Description: Force renew of certificate even if it is longer valid than value in RENEW_DAYS
-      --force|-x)
+      --force | -x)
         PARAM_FORCE="yes"
         ;;
 
@@ -2131,7 +2144,7 @@ main() {
 
       # PARAM_Usage: --no-lock (-n)
       # PARAM_Description: Don't use lockfile (potentially dangerous!)
-      --no-lock|-n)
+      --no-lock | -n)
         PARAM_NO_LOCK="yes"
         ;;
 
@@ -2151,7 +2164,7 @@ main() {
 
       # PARAM_Usage: --privkey (-p) path/to/key.pem
       # PARAM_Description: Use specified private key instead of account key (useful for revocation)
-      --privkey|-p)
+      --privkey | -p)
         shift 1
         check_parameters "${1:-}"
         PARAM_ACCOUNT_KEY="${1}"
@@ -2167,7 +2180,7 @@ main() {
 
       # PARAM_Usage: --config (-f) path/to/config
       # PARAM_Description: Use specified config file
-      --config|-f)
+      --config | -f)
         shift 1
         check_parameters "${1:-}"
         CONFIG="${1}"
@@ -2175,7 +2188,7 @@ main() {
 
       # PARAM_Usage: --hook (-k) path/to/hook.sh
       # PARAM_Description: Use specified script for hooks
-      --hook|-k)
+      --hook | -k)
         shift 1
         check_parameters "${1:-}"
         PARAM_HOOK="${1}"
@@ -2191,7 +2204,7 @@ main() {
 
       # PARAM_Usage: --out (-o) certs/directory
       # PARAM_Description: Output certificates into the specified directory
-      --out|-o)
+      --out | -o)
         shift 1
         check_parameters "${1:-}"
         PARAM_CERTDIR="${1}"
@@ -2207,7 +2220,7 @@ main() {
 
       # PARAM_Usage: --challenge (-t) http-01|dns-01|tls-alpn-01
       # PARAM_Description: Which challenge should be used? Currently http-01, dns-01, and tls-alpn-01 are supported
-      --challenge|-t)
+      --challenge | -t)
         shift 1
         check_parameters "${1:-}"
         PARAM_CHALLENGETYPE="${1}"
@@ -2215,7 +2228,7 @@ main() {
 
       # PARAM_Usage: --algo (-a) rsa|prime256v1|secp384r1
       # PARAM_Description: Which public key algorithm should be used? Supported: rsa, prime256v1 and secp384r1
-      --algo|-a)
+      --algo | -a)
         shift 1
         check_parameters "${1:-}"
         PARAM_KEY_ALGO="${1}"
@@ -2232,18 +2245,21 @@ main() {
   done
 
   case "${COMMAND}" in
-    env) command_env;;
-    sign_domains) command_sign_domains;;
-    register) command_register;;
-    account) command_account;;
-    sign_csr) command_sign_csr "${PARAM_CSR}";;
-    revoke) command_revoke "${PARAM_REVOKECERT}";;
-    deactivate) command_deactivate;;
-    cleanup) command_cleanup;;
-    terms) command_terms;;
-    cleanupdelete) command_cleanupdelete;;
-    version) command_version;;
-    *) command_help; exit 1;;
+    env) command_env ;;
+    sign_domains) command_sign_domains ;;
+    register) command_register ;;
+    account) command_account ;;
+    sign_csr) command_sign_csr "${PARAM_CSR}" ;;
+    revoke) command_revoke "${PARAM_REVOKECERT}" ;;
+    deactivate) command_deactivate ;;
+    cleanup) command_cleanup ;;
+    terms) command_terms ;;
+    cleanupdelete) command_cleanupdelete ;;
+    version) command_version ;;
+    *)
+      command_help
+      exit 1
+      ;;
   esac
 
   exit "${exit_with_errorcode}"

@@ -14,22 +14,22 @@ openvpn_install_easyrsa() {
   tar -xzvf easy-rsa.tgz --strip-components=1 --directory /etc/openvpn/easy-rsa
   rm -f easy-rsa.tgz.sig easy-rsa.tgz
   cd /etc/openvpn/easy-rsa/ || return
-  echo "set_var EASYRSA_ALGO ec" >vars
-  echo "set_var EASYRSA_CURVE prime256v1" >>vars
+  echo "set_var EASYRSA_ALGO ec" > vars
+  echo "set_var EASYRSA_CURVE prime256v1" >> vars
   fetch-secrets.sh get 500 --optional /etc/openvpn/easy-rsa/${CF_paramDnsName}-easyrsa-keys.sh
   if [ -x /etc/openvpn/easy-rsa/${CF_paramDnsName}-easyrsa-keys.sh ]; then
     /etc/openvpn/easy-rsa/${CF_paramDnsName}-easyrsa-keys.sh
     SERVER_NAME=$(cat SERVER_NAME_GENERATED)
     SERVER_CN=$(cat SERVER_CN_GENERATED)
-    echo "set_var EASYRSA_REQ_CN $SERVER_CN" >>vars
+    echo "set_var EASYRSA_REQ_CN $SERVER_CN" >> vars
   else
     # Generate a random, alphanumeric identifier of 16 characters for CN and one for server name
     SERVER_CN="cn_$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)"
-    echo "$SERVER_CN" >SERVER_CN_GENERATED
+    echo "$SERVER_CN" > SERVER_CN_GENERATED
     SERVER_NAME="server_$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)"
-    echo "$SERVER_NAME" >SERVER_NAME_GENERATED
+    echo "$SERVER_NAME" > SERVER_NAME_GENERATED
 
-    echo "set_var EASYRSA_REQ_CN $SERVER_CN" >>vars
+    echo "set_var EASYRSA_REQ_CN $SERVER_CN" >> vars
 
     # Create the PKI, set up the CA, the DH params and the server certificate
     ./easyrsa init-pki
@@ -106,7 +106,7 @@ EOF
   sed -ne 's/^nameserver[[:space:]]\+\([^[:space:]]\+\).*$/\1/p' $RESOLVCONF | while read -r line; do
     # Copy, if it's a IPv4
     if [[ $line =~ ^[0-9.]*$ ]]; then
-      echo "push \"dhcp-option DNS $line\"" >>/etc/openvpn/server.conf
+      echo "push \"dhcp-option DNS $line\"" >> /etc/openvpn/server.conf
     fi
   done
   # Create client-config-dir dir
@@ -115,7 +115,7 @@ EOF
   mkdir -p /var/log/openvpn
 
   # Enable routing
-  echo 'net.ipv4.ip_forward=1' >/etc/sysctl.d/99-openvpn.conf
+  echo 'net.ipv4.ip_forward=1' > /etc/sysctl.d/99-openvpn.conf
   sysctl --system
 
   source /etc/os-release
@@ -233,12 +233,12 @@ function openvpn_add_route() {
   echo "push \"route $ADDR $NETMASK\"" >> /etc/openvpn/server.conf
 }
 function openvpn_add_domain() {
-  echo "push \"dhcp-option DOMAIN $1\""  >> /etc/openvpn/server.conf
+  echo "push \"dhcp-option DOMAIN $1\"" >> /etc/openvpn/server.conf
 }
 function openvpn_new_client() {
   local CLIENT=$1
   cd /etc/openvpn/easy-rsa/ || return
-    ./easyrsa build-client-full "$CLIENT" nopass
+  ./easyrsa build-client-full "$CLIENT" nopass
   echo "Client $CLIENT added."
 
   homeDir="/root"
@@ -258,10 +258,10 @@ function openvpn_new_client() {
     cat "/etc/openvpn/easy-rsa/pki/private/$CLIENT.key"
     echo "</key>"
 
-      echo "<tls-crypt>"
-      cat /etc/openvpn/tls-crypt.key
-      echo "</tls-crypt>"
-  } >>"$homeDir/$CLIENT.ovpn"
+    echo "<tls-crypt>"
+    cat /etc/openvpn/tls-crypt.key
+    echo "</tls-crypt>"
+  } >> "$homeDir/$CLIENT.ovpn"
 
   echo ""
   echo "The configuration file has been written to $homeDir/$CLIENT.ovpn."

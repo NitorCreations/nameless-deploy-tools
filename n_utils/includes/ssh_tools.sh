@@ -16,7 +16,7 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/common_tools.sh"
 
-ssh_install_hostkeys () {
+ssh_install_hostkeys() {
   check_parameters CF_paramDnsName
   fetch-secrets.sh get 500 --optional /etc/ssh/${CF_paramDnsName}-ssh-hostkeys.sh
   if [ -x /etc/ssh/${CF_paramDnsName}-ssh-hostkeys.sh ]; then
@@ -27,13 +27,13 @@ ssh_install_hostkeys () {
   fi
 }
 
-ssh_restart_service () {
+ssh_restart_service() {
   sed -i 's/^#PermitRootLogin.*$/PermitRootLogin no/g' /etc/ssh/sshd_config
-  case  "$SYSTEM_TYPE" in
+  case "$SYSTEM_TYPE" in
     ubuntu)
       service ssh restart
       ;;
-    centos|rhel|rocky|fedora)
+    centos | rhel | rocky | fedora)
       systemctl restart sshd
       ;;
     *)

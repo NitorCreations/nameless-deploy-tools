@@ -55,7 +55,7 @@ if [ ! "$mode" ]; then
   usage
 fi
 
-for path ; do
+for path; do
   if [ "$path" = "--optional" ]; then
     optional=1
     continue
@@ -64,14 +64,14 @@ for path ; do
   DNAME="$(dirname "$path")"
   mkdir -p "$DNAME"
   if [ -e "$path" ]; then
-      TMPDIR=$(mktemp -d $path.XXXXXXX)
-      mv "$path" "$TMPDIR/"
+    TMPDIR=$(mktemp -d $path.XXXXXXX)
+    mv "$path" "$TMPDIR/"
   fi
   if ! lpass show --notes "$FNAME" > "$path"; then
     rm -f "$path"
     if [ -n "$TMPDIR" ]; then
-        mv "$TMPDIR/$FNAME" "$path"
-        rm -rf "$TMPDIR"
+      mv "$TMPDIR/$FNAME" "$path"
+      rm -rf "$TMPDIR"
     fi
     if [ ! "$optional" ]; then
       echo "ERROR: Failed to get file $path"

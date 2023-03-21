@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 if [ "$_ARGCOMPLETE" ]; then
   # Handle command completion executions
   unset _ARGCOMPLETE
@@ -32,7 +31,6 @@ if [ "$_ARGCOMPLETE" ]; then
   esac
   exit 0
 fi
-
 
 usage() {
   echo "usage: ndt bake-image [-h] component [image-name]" >&2
@@ -57,12 +55,13 @@ if [ "$1" = "--help" -o "$1" = "-h" ]; then
   usage
 fi
 
-die () {
+die() {
   usage
 }
 set -xe
 
-component="$1" ; shift
+component="$1"
+shift
 [ "${component}" ] || die "You must give the component name as argument"
 
 export AWS_PAGER=""
@@ -114,7 +113,7 @@ if ! [ "$AMIBAKE_INSTANCEPROFILE" ]; then
   AMIBAKE_INSTANCEPROFILE="$(ndt show-stack-params-and-outputs -r $REGION $BAKERY_ROLES_STACK -p $INSTANCE_PROFILE_PARAM)"
 fi
 [ "$PAUSE_SECONDS" ] || PAUSE_SECONDS=15
-for var in REGION SUBNET SECURITY_GROUP AMIBAKE_INSTANCEPROFILE ; do
+for var in REGION SUBNET SECURITY_GROUP AMIBAKE_INSTANCEPROFILE; do
   [ "${!var}" ] || die "Could not determine $var automatically. Please set ${var} manually in ${infrapropfile}"
 done
 
@@ -169,9 +168,9 @@ trap cleanup EXIT
 if [ "$IMAGETYPE" != "windows" ]; then
   eval $(ssh-agent)
   if ! [ -e $HOME/.ssh/$AWS_KEY_NAME -o -e $HOME/.ssh/$AWS_KEY_NAME.pem \
-         -o -e $HOME/.ssh/$AWS_KEY_NAME.rsa ]; then
+    -o -e $HOME/.ssh/$AWS_KEY_NAME.rsa ]; then
     fetch-secrets.sh get 600 --optional "$HOME/.ssh/$AWS_KEY_NAME" \
-        "$HOME/.ssh/$AWS_KEY_NAME.pem" "$HOME/.ssh/$AWS_KEY_NAME.rsa" ||:
+      "$HOME/.ssh/$AWS_KEY_NAME.pem" "$HOME/.ssh/$AWS_KEY_NAME.rsa" || :
   fi
   if [ -r "$HOME/.ssh/$AWS_KEY_NAME" ]; then
     ssh-add "$HOME/.ssh/$AWS_KEY_NAME"
@@ -288,7 +287,7 @@ if [ "$IMAGETYPE" = "windows" ]; then
 else
   PLAYBOOK="$(n-include bake-image.yml)"
 fi
-rm -f ami.properties ||:
+rm -f ami.properties || :
 cat > ansible.cfg << MARKER
 [defaults]
 retry_files_enabled = False
@@ -335,7 +334,7 @@ fi
 
 if [ -n "${SHARE_REGIONS}" ]; then
   echo "--------------------- Share to ${SHARE_REGIONS}"
-  for region in ${SHARE_REGIONS//,/ } ; do
+  for region in ${SHARE_REGIONS//,/ }; do
     var_region_accounts=REGION_${region//-/_}_ACCOUNTS
     if [ ! "${!var_region_accounts}" ]; then
       echo "Missing setting '${var_region_accounts}' in ${infrapropfile}"

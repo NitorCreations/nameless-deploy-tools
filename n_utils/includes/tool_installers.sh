@@ -54,7 +54,7 @@ if [ -z "$GITHUB_RUNNER_VERSION" ]; then
 fi
 
 # Make sure we get logging
-if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null ; then
+if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null; then
   echo "output: {all: '| tee -a /var/log/cloud-init-output.log'}" >> /etc/cloud/cloud.cfg.d/05_logging.cfg
 fi
 
@@ -62,6 +62,7 @@ install_lein() {
   wget -O /usr/bin/lein https://codeberg.org/leiningen/leiningen/raw/commit/$LEIN_COMMIT/bin/lein
   chmod 755 /usr/bin/lein
 }
+
 install_phantomjs() {
   echo "############################################################################"
   echo " PHANTOMJS IS DEPRECATED AND INSTALLATION IS NO LONGER SUPPORTED BY DEFAULT"
@@ -72,16 +73,19 @@ install_phantomjs() {
   echo "############################################################################"
 
 }
+
 install_phantomjs_insecure() {
   wget -O - https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 | tar -xjvf -
   mv phantomjs-*/bin/phantomjs /usr/bin
   rm -rf phantomjs-*
 }
+
 install_yarn() {
   mkdir /opt/yarn
   # The tarball unpacks to dist/, we strip that out
   wget -O - https://yarnpkg.com/latest.tar.gz | tar --strip-components=1 -C /opt/yarn -xzv
 }
+
 install_cftools() {
   if python --version | grep -q "Python 3"; then
     wget -O - https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-py3-latest.tar.gz | tar -xzvf -
@@ -92,6 +96,7 @@ install_cftools() {
   pip install --disable-pip-version-check .
   cd ..
 }
+
 install_maven() {
   source $(n-include common_tools.sh)
   add_gpg_key 29BEA2A645F2D6CED7FB12E02B172E3E156466E8
@@ -101,6 +106,7 @@ install_maven() {
   ln -snf /opt/apache-maven-$MAVEN_VERSION /opt/maven
   ln -snf /opt/maven/bin/mvn /usr/bin/mvn
 }
+
 install_nexus() {
   wget -O - https://sonatype-download.global.ssl.fastly.net/nexus/oss/nexus-$NEXUS_VERSION-bundle.tar.gz | tar -xzf - -C /opt/nexus
   chown -R nexus:nexus /opt/nexus
@@ -123,6 +129,7 @@ WantedBy=default.target
 MARKER
   sed -i 's/nexus-webapp-context-path=.*/nexus-webapp-context-path=\//' /opt/nexus/current/conf/nexus.properties
 }
+
 install_nexus3() {
   source $(n-include common_tools.sh)
   add_gpg_key 0374CF2E8DD1BDFD
@@ -149,6 +156,7 @@ Alias=nexus
 WantedBy=default.target
 MARKER
 }
+
 install_nexus3_cargo_plugin() {
   add_gpg_key 80900DA1952D7C7968F3CFD98C79C4D0382A0E3A
   gpg_safe_download https://repo1.maven.org/maven2/org/sonatype/nexus/plugins/nexus-repository-cargo/$CARGO_PLUGIN_VERSION/nexus-repository-cargo-$CARGO_PLUGIN_VERSION.jar nexus-repository-cargo-$CARGO_PLUGIN_VERSION.jar asc
@@ -173,6 +181,7 @@ MARKER
   chown nexus:nexus /opt/nexus/current/system/org/sonatype/nexus/assemblies/nexus-core-feature/*/nexus-core-feature-*-features.xml
   rm -f xml-patch.jar diff.xml
 }
+
 install_fail2ban() {
   yum update -y selinux-policy*
   mkdir -p /var/run/fail2ban
@@ -194,6 +203,7 @@ MARKER
   systemctl enable fail2ban
   systemctl start fail2ban
 }
+
 update_deploytools() {
   if [ ! "$DEPLOYTOOLS_VERSION" ]; then
     echo "Specific version not defined - updating to latest"
@@ -202,7 +212,8 @@ update_deploytools() {
   echo "Updating nameless-deploy-tools to $DEPLOYTOOLS_VERSION"
   bash "$(n-include install_tools.sh)" "${DEPLOYTOOLS_VERSION}"
 }
-update_aws_utils () {
+
+update_aws_utils() {
   echo "###########################"
   echo "#        DEPRECATED       #"
   echo "###########################"
@@ -213,16 +224,17 @@ update_aws_utils () {
 install_dynatrace_oneagent() {
   # Requires secrets dynatrace.apikey and dt-root.cert.pem (from dynatrace web installation instructions) to be stored in secrets storage
   wget -O Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh \
-  "https://bmq38893.live.dynatrace.com/api/v1/deployment/installer/agent/unix/default/latest?arch=x86&flavor=default" \
-  --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
+    "https://bmq38893.live.dynatrace.com/api/v1/deployment/installer/agent/unix/default/latest?arch=x86&flavor=default" \
+    --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
 
   fetch-secrets.sh get 400 dt-root.cert.pem
-  ( echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
+  (
+    echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
     echo
     echo
     echo '----SIGNED-INSTALLER'
-    cat Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh ) | \
-  openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
+    cat Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
+  ) | openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
   rm -f dt-root.cert.pem
 
   /bin/sh Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
@@ -236,17 +248,19 @@ install_dynatrace_activegate() {
     --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
 
   fetch-secrets.sh get 400 dt-root.cert.pem
-  ( echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
+  (
+    echo 'Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="--SIGNED-INSTALLER"'
     echo
     echo
     echo '----SIGNED-INSTALLER'
-    cat  Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh ) | \
-  openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
+    cat Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
+  ) | openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
   rm -f dt-root.cert.pem
 
   /bin/sh Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
   rm -f Dynatrace-ActiveGate-Linux-x86-$ACTIVEGATE_VERSION.sh
 }
+
 enable_systemd_portforward() {
   local SOURCE=$(n-include systemd-portforward.te)
   local BASE=${SOURCE%.te}
@@ -256,6 +270,7 @@ enable_systemd_portforward() {
   semodule_package -o $PACKAGE -m $MODULE
   semodule -i $PACKAGE
 }
+
 install_androidsdk() {
   source $(n-include common_tools.sh)
   safe_download https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip 2ccbda4302db862a28ada25aa7425d99dce9462046003c1714b059b5c47970d8 commandlinetools-linux_latest.zip
@@ -265,7 +280,7 @@ install_androidsdk() {
   unzip -d /opt/android platform-tools-linux.zip
   rm -f commandlinetools-linux_latest.zip platform-tools-linux.zip
   mkdir /opt/android/cmdline-tools/latest
-  mv /opt/android/cmdline-tools/* /opt/android/cmdline-tools/latest ||:
+  mv /opt/android/cmdline-tools/* /opt/android/cmdline-tools/latest || :
   cat > /etc/profile.d/android.sh << MARKER
 export PATH="\$PATH:/opt/android/platform-tools:/opt/android/cmdline-tools/latest/bin"
 MARKER
@@ -274,6 +289,7 @@ MARKER
   yes | sdkmanager --sdk_root=/opt/android "platform-tools" "platforms;android-31" "platforms;android-30" "platforms;android-29" "emulator" "build-tools;33.0.0"
   yes | sdkmanager --sdk_root=/opt/android --licenses
 }
+
 install_flutter() {
   source $(n-include common_tools.sh)
   safe_download https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$FLUTTER_VERSION-stable.tar.xz $FLUTTER_CSUM flutter_linux-stable.tar.xz
@@ -287,7 +303,8 @@ MARKER
   flutter precache
   yes | flutter doctor --android-licenses
 }
-install_github_actions_runner(){
+
+install_github_actions_runner() {
   source $(n-include common_tools.sh)
   mkdir /opt/github-runner
   safe_download https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz $GITHUB_RUNNER_CSUM actions-runner-linux-x64.tar.gz
@@ -295,27 +312,29 @@ install_github_actions_runner(){
   rm -f actions-runner-linux-x64.tar.gz
   /opt/github-runner/bin/installdependencies.sh
 }
-start_github_actions_runner(){
- local LOCAL_USER=$1
- local URL_TARGET=$2
- local TOKEN=$3
- chown -R $LOCAL_USER /opt/github-runner
- pushd /opt/github-runner
- sudo -u $LOCAL_USER bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
- /opt/github-runner/svc.sh install $LOCAL_USER
- /opt/github-runner/svc.sh start
- popd
+
+start_github_actions_runner() {
+  local LOCAL_USER=$1
+  local URL_TARGET=$2
+  local TOKEN=$3
+  chown -R $LOCAL_USER /opt/github-runner
+  pushd /opt/github-runner
+  sudo -u $LOCAL_USER bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
+  /opt/github-runner/svc.sh install $LOCAL_USER
+  /opt/github-runner/svc.sh start
+  popd
 }
+
 # requires PAT-TOKEN with write-access to org self hosted runner endpoints
 # https://docs.github.com/en/rest/overview/permissions-required-for-fine-grained-personal-access-tokens?apiVersion=2022-11-28#organization-self-hosted-runners
 # NOTE: create a fine-grained solely for this purpose
-github_actions_get_create_token(){
+github_actions_get_create_token() {
   local PAT_TOKEN=$1
   local ORGANIZATION=$2
   echo $(curl -sL \
-  -X POST \
-  -H "Accept: application/vnd.github+json" \
-  -H "Authorization: Bearer $PAT_TOKEN"\
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token)
+    -X POST \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $PAT_TOKEN" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token)
 }

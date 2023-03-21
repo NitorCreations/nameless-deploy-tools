@@ -50,9 +50,9 @@ usage() {
   echo "                  you would give sender" >&2
   echo "" >&2
   echo "optional arguments:" >&2
-  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm ci"  >&2
-  echo "  -v, --verbose verbose - verbose output from serverless framework"  >&2
-  echo "  -h, --help    show this help message and exit"  >&2
+  echo "  -d, --dryrun  dry-run - do only parameter expansion and template pre-processing and npm ci" >&2
+  echo "  -v, --verbose verbose - verbose output from serverless framework" >&2
+  echo "  -h, --help    show this help message and exit" >&2
   if "$@"; then
     echo "" >&2
     echo "$@" >&2
@@ -71,15 +71,17 @@ while [ "$1" = "-d" -o "$1" = "--dryrun" -o "$1" = "-v" -o "$1" = "--verbose" ];
     shift
   fi
 done
-die () {
+die() {
   echo "$1" >&2
   usage
 }
 set -xe
 
-component="$1" ; shift
+component="$1"
+shift
 [ "${component}" ] || die "You must give the component name as argument"
-serverless="$1"; shift
+serverless="$1"
+shift
 [ "${serverless}" ] || die "You must give the serverless name as argument"
 
 TSTAMP=$(date +%Y%m%d%H%M%S)

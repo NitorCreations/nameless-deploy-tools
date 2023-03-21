@@ -17,4 +17,4 @@
 if [ "$_ARGCOMPLETE" ]; then
   exit 0
 fi
-LPASS_DISABLE_PINENTRY=1 lpass logout -f 2>&1 >/dev/null
+LPASS_DISABLE_PINENTRY=1 lpass logout -f 2>&1 > /dev/null

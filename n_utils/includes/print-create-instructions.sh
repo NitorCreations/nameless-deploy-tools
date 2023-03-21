@@ -4,10 +4,10 @@ if [ "$_ARGCOMPLETE" ]; then
   unset _ARGCOMPLETE
   source $(n-include autocomplete-helpers.sh)
   # Handle command completion executions
-  COMP_WORDS=( $COMP_LINE )
+  COMP_WORDS=($COMP_LINE)
   IMAGE_DIR=${COMP_WORDS[2]}
   STACK=${COMP_WORDS[3]}
-  IMAGE=$(echo $IMAGE_DIR| tr "-" "_")
+  IMAGE=$(echo $IMAGE_DIR | tr "-" "_")
   case $COMP_CWORD in
     2)
       compgen -W "$(get_stack_dirs)" -- $COMP_CUR

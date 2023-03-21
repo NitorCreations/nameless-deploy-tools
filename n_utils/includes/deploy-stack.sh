@@ -18,7 +18,7 @@ if [ "$_ARGCOMPLETE" ]; then
   unset _ARGCOMPLETE
   source $(n-include autocomplete-helpers.sh)
   # Handle command completion executions
-  COMP_WORDS=( $COMP_LINE )
+  COMP_WORDS=($COMP_LINE)
   if [ "${COMP_WORDS[2]}" = "-d" ]; then
     COMP_INDEX=$(($COMP_CWORD - 1))
     IMAGE_DIR=${COMP_WORDS[3]}
@@ -28,7 +28,7 @@ if [ "$_ARGCOMPLETE" ]; then
     IMAGE_DIR=${COMP_WORDS[2]}
     STACK=${COMP_WORDS[3]}
   fi
-  IMAGE=$(echo $IMAGE_DIR| tr "-" "_")
+  IMAGE=$(echo $IMAGE_DIR | tr "-" "_")
   case $COMP_INDEX in
     2)
       if [ "$COMP_INDEX" = "$COMP_CWORD" ]; then
@@ -89,18 +89,18 @@ POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    -d|--dryrun)
+    -d | --dryrun)
       DRY_RUN="--dry-run"
       shift
       ;;
-    -r|--disable-rollback)
+    -r | --disable-rollback)
       DISABLE_ROLLBACK="--disable-rollback"
       shift
       ;;
-    -h|--help)
+    -h | --help)
       usage
       ;;
-    -*|--*)
+    -* | --*)
       echo "Unknown option $1"
       usage
       ;;
@@ -112,12 +112,14 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 set -xe
-component="$1" ; shift
-stackName="$1" ; shift
+component="$1"
+shift
+stackName="$1"
+shift
 ARG_AMI_ID="$1"
-shift ||:
+shift || :
 ARG_IMAGE_JOB="$1"
-shift ||:
+shift || :
 
 if [ -n "$ARG_AMI_ID" ]; then
   export AMI_ID=$ARG_AMI_ID paramAmi=$ARG_AMI_ID
