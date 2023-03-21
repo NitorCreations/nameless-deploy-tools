@@ -15,18 +15,15 @@
 # https://setuptools.pypa.io/en/latest/userguide/dependency_management.html
 
 [build-system]
-requires = [
-    "setuptools",
-    "wheel",
-]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "nameless-deploy-tools"
-requires-python = ">=3.6"
+requires-python = ">=3.7"
 description = "Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow"
-license = {text = "Apache 2.0"}
-authors = [{name = "Pasi Niemi", email = "pasi@nitor.com"}]
+license = { text = "Apache 2.0" }
+authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
 version = "1.287"
 dynamic = ["entry-points"]
 dependencies = [
@@ -86,14 +83,7 @@ testing = [
     "pytest",
     "tomli<2.0.0",
 ]
-dev = [
-    "black",
-    "flake8",
-    "isort",
-    "pip-tools",
-    "pyupgrade",
-    "ruff",
-]
+dev = ["black", "flake8", "isort", "pip-tools", "pyupgrade", "ruff"]
 
 [tool.setuptools]
 packages = ["n_utils"]
@@ -119,7 +109,7 @@ addopts = "--cov-config=.coveragerc --cov=n_utils/ --capture=sys"
 [tool.black]
 # https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
 line-length = 120
-target-version = ['py36']
+target-version = ['py37']
 include = '\.pyi?$'
 extend-exclude = 'venv'
 
@@ -134,8 +124,8 @@ force_grid_wrap = 0
 use_parentheses = true
 ensure_newline_before_comments = true
 line_length = 120
-py_version = 36
-sections=['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
+py_version = 37
+sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
 extend_skip = ['.idea', '.vscode', 'venv']
 
 [tool.ruff]

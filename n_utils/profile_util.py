@@ -305,7 +305,7 @@ def update_profile(profile, creds):
     if not exists(credentials):
         with open(credentials, "w"):
             pass
-    with open(credentials, "r") as credfile:
+    with open(credentials) as credfile:
         parser.read_file(credfile)
         if profile not in parser.sections():
             parser.add_section(profile)

@@ -1,3 +1,4 @@
+exclude: ^(.idea|.vscode)/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
@@ -29,4 +30,8 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-exclude: ^(.idea|.vscode)/
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+      - id: pyupgrade
+        args: [--py37-plus]
