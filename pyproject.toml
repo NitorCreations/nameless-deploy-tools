@@ -81,7 +81,7 @@ testing = [
     "pytest-cov",
     "pytest-mock",
     "pytest",
-    "tomli<2.0.0",
+    "tomli<3.0.0",
 ]
 dev = ["black", "flake8", "isort", "pip-tools", "pyupgrade", "ruff"]
 
