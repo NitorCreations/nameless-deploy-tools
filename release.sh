@@ -78,6 +78,7 @@ if [ -z "$MESSAGE" ]; then
   MESSAGE="$NEW_VERSION"
 fi
 
+print_magenta "Updating command list..."
 ./update-commandlist.sh
 "${SED_COMMAND[@]}" "s/$VERSION/$NEW_VERSION/g" setup.cfg
 "${SED_COMMAND[@]}" "s/$VERSION/$NEW_VERSION/g" pyproject.toml
@@ -85,15 +86,18 @@ fi
 "${SED_COMMAND[@]}" "s/nameless-deploy-tools==.*/nameless-deploy-tools==$NEW_VERSION/g" docker/Dockerfile
 "${SED_COMMAND[@]}" "s/^VERSION.*=.*/VERSION\ =\ \"$NEW_VERSION\"/" n_utils/__init__.py
 
+print_magenta "Version tagging release..."
 run_command git commit -m "$1" setup.cfg pyproject.toml README.md docker/Dockerfile docs/commands.md n_utils/__init__.py
 run_command git tag "$NEW_VERSION" -m "$MESSAGE"
 run_command git push origin "$NEW_VERSION"
 
 check_and_set_python
 
+print_magenta "Build and upload package..."
 rm -rf dist/*
 $PYTHON setup.py sdist bdist_wheel
 run_command twine upload dist/*
 run_command sleep 30
 
+print_magenta "Building Docker image..."
 run_command ./build-docker.sh "$NEW_VERSION"
