@@ -22,11 +22,11 @@ BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBraces: Custom
 BraceWrapping:
-  AfterClass: true
+  AfterClass: false
   AfterControlStatement: MultiLine
   AfterEnum: false
-  AfterFunction: true
-  AfterNamespace: true
+  AfterFunction: false
+  AfterNamespace: false
   AfterObjCDeclaration: false
   AfterStruct: false
   AfterUnion: false
@@ -50,7 +50,7 @@ DerivePointerAlignment: false
 FixNamespaceComments: true
 IncludeBlocks: Regroup
 IndentCaseLabels: true
-IndentWidth: 4
+IndentWidth: 2
 IndentWrappedFunctionNames: true
 InsertBraces: true
 KeepEmptyLinesAtTheStartOfBlocks: false
@@ -65,6 +65,7 @@ PenaltyBreakString: 1000
 PenaltyExcessCharacter: 1000000
 PenaltyReturnTypeOnItsOwnLine: 20000
 PointerAlignment: Left
+SeparateDefinitionBlocks: Always
 SortIncludes: CaseInsensitive
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
@@ -80,11 +81,10 @@ SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 2
 SpacesInAngles: false
-SpacesInCStyleCastParentheses: false
 SpacesInContainerLiterals: false
+SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard: c++20
-TabWidth: 4
+TabWidth: 2
 UseTab: Never
-...
