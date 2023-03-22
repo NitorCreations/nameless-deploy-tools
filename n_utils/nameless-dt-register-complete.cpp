@@ -55,13 +55,13 @@ complete -F _nep_complete nep
 )delimiter";
 
 int main(int argc, const char* argv[]) {
-  std::cout << BASE_STR << std::endl;
-  std::vector<std::string> arguments(argv, argv + argc);
-  for (const auto& arg : arguments) {
-    if (arg == "--project-env") {
-      std::cout << PROJECT_ENV_STR << std::endl;
-    } else if (arg == "--nep-function") {
-      std::cout << NEP_COMPLETE_STR << std::endl;
+    std::cout << BASE_STR << std::endl;
+    std::vector<std::string> arguments(argv, argv + argc);
+    for (const auto& arg : arguments) {
+        if (arg == "--project-env") {
+            std::cout << PROJECT_ENV_STR << std::endl;
+        } else if (arg == "--nep-function") {
+            std::cout << NEP_COMPLETE_STR << std::endl;
+        }
     }
-  }
 }

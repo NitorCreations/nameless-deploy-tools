@@ -50,7 +50,7 @@ DerivePointerAlignment: false
 FixNamespaceComments: true
 IncludeBlocks: Regroup
 IndentCaseLabels: true
-IndentWidth: 2
+IndentWidth: 4
 IndentWrappedFunctionNames: true
 InsertBraces: true
 KeepEmptyLinesAtTheStartOfBlocks: false
@@ -86,5 +86,5 @@ SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard: c++20
-TabWidth: 2
+TabWidth: 4
 UseTab: Never
