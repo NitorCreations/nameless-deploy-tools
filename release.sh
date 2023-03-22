@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Copyright 2016-2023 Nitor Creations Oy
 #
@@ -14,17 +14,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -eo pipefail
+
+USAGE="Usage: $0 [OPTIONS]
+
+Create new release for ndt.
+
+OPTIONS: All options are optional
+  -h | --help
+      Display these instructions.
+
+  -d | --dryrun
+      Only print commands instead of executing them.
+
+  -v | --verbose
+      Display commands being executed."
+
+init_options() {
+  DRYRUN=false
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        -h | --help)
+          echo "$USAGE"
+          exit 1
+          ;;
+        -d | --dryrun)
+          DRYRUN=true
+          ;;
+        -v | --verbose)
+          set -x
+          ;;
+    esac
+      shift
+  done
+}
+
+init_options "$@"
+
 # Import common functions
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=./common.sh
 source "$DIR/common.sh"
-
-# BSD sed on MacOS works differently
-if [ "$PLATFORM" = mac ]; then
-  SED_COMMAND=(sed -i '')
-else
-  SED_COMMAND=(sed -i)
-fi
 
 VERSION=$(grep -E '^VERSION' n_utils/__init__.py | cut -d\" -f 2)
 MAJOR=${VERSION//.*/}
@@ -55,26 +85,15 @@ fi
 "${SED_COMMAND[@]}" "s/nameless-deploy-tools==.*/nameless-deploy-tools==$NEW_VERSION/g" docker/Dockerfile
 "${SED_COMMAND[@]}" "s/^VERSION.*=.*/VERSION\ =\ \"$NEW_VERSION\"/" n_utils/__init__.py
 
-git commit -m "$1" setup.cfg pyproject.toml README.md docker/Dockerfile docs/commands.md n_utils/__init__.py
-git tag "$NEW_VERSION" -m "$MESSAGE"
-git push origin "$NEW_VERSION"
+run_command git commit -m "$1" setup.cfg pyproject.toml README.md docker/Dockerfile docs/commands.md n_utils/__init__.py
+run_command git tag "$NEW_VERSION" -m "$MESSAGE"
+run_command git push origin "$NEW_VERSION"
 
-if [ -n "$(command -v python3)" ]; then
-  PYTHON=$(which python3)
-else
-  PYTHON=$(which python)
-fi
-
-if [ ! -e "$PYTHON" ]; then
-  echo "Python executable not found: $PYTHON"
-  exit 1
-else
-  echo "Using $PYTHON $($PYTHON --version)"
-fi
+check_and_set_python
 
 rm -rf dist/*
 $PYTHON setup.py sdist bdist_wheel
-twine upload dist/*
-sleep 30
+run_command twine upload dist/*
+run_command sleep 30
 
-./build-docker.sh "$NEW_VERSION"
+run_command ./build-docker.sh "$NEW_VERSION"

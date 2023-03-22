@@ -6,32 +6,31 @@ USAGE="Usage: $0 [OPTIONS]
 Compile faster register complete binaries for ndt.
 
 OPTIONS: All options are optional
-    -h | --help
-        Display these instructions.
+  -h | --help
+      Display these instructions.
 
-    -d | --dryrun
-        Only print commands instead of executing them.
+  -d | --dryrun
+      Only print commands instead of executing them.
 
-    -v | --verbose
-        Display commands being executed.
-"
+  -v | --verbose
+      Display commands being executed."
 
 init_options() {
   DRYRUN=false
     while [ $# -gt 0 ]; do
-        case "$1" in
-            -h | --help)
-                echo "$USAGE"
-                exit 1
-                ;;
-            -d | --dryrun)
-              DRYRUN=true
-              ;;
-            -v | --verbose)
-                set -x
-                ;;
+      case "$1" in
+        -h | --help)
+          echo "$USAGE"
+          exit 1
+          ;;
+        -d | --dryrun)
+          DRYRUN=true
+          ;;
+        -v | --verbose)
+          set -x
+          ;;
     esac
-        shift
+      shift
   done
 }
 

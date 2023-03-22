@@ -18,6 +18,13 @@ case "$(uname -s)" in
     ;;
 esac
 
+# BSD sed on MacOS works differently
+if [ "$PLATFORM" = mac ]; then
+  SED_COMMAND=(sed -i '')
+else
+  SED_COMMAND=(sed -i)
+fi
+
 # Print a message with red color
 print_red() {
   printf "\e[1;49;31m%s\e[0m\n" "$1"
