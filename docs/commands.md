@@ -1039,7 +1039,7 @@ optional arguments:
 usage: ndt profile-expiry-to-env [-h] profile
 
 Prints profile expiry from credentials file (~/.aws/credentials) as eval-able
-environment variables
+environment variables.
 
 positional arguments:
   profile     The profile to read expiry info from
@@ -1395,7 +1395,7 @@ optional arguments:
 ```bash
 usage: ndt update-sso-profile [-h]
 
-update current SSO-profile\'s session to ~/.aws/credentials. Running this
+Update current SSO-profile\'s session to ~/.aws/credentials. Running this
 enables SSO-support for the Serverless Framework.
 
 options:
