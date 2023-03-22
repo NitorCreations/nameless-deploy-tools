@@ -39,7 +39,6 @@ if [ "$OS_TYPE" = "ubuntu" ]; then
   echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 fi
 
-
 function install_awscliv2() {
   AWS_CLI_INSTALL_DIR=$(mktemp -d)
   ZIP_DST="$AWS_CLI_INSTALL_DIR"/awscliv2.zip

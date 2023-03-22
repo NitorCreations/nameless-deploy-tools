@@ -14,18 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Check platform
-case "$(uname -s)" in
-  "Darwin")
-    PLATFORM="mac"
-    ;;
-  "MINGW"*)
-    PLATFORM="windows"
-    ;;
-  *)
-    PLATFORM="linux"
-    ;;
-esac
+# Import common functions
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=./common.sh
+source "$DIR/common.sh"
 
 # BSD sed on MacOS works differently
 if [ "$PLATFORM" = mac ]; then

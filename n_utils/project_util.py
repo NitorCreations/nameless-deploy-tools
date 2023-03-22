@@ -46,7 +46,12 @@ fi
 """
 
 NEP_COMPLETE_STR = R"""_nep_complete() {
-  COMPREPLY=($(ndt print-aws-profiles "${COMP_WORDS[COMP_CWORD]}"))
+  if [ -n "$(command -v nameless-dt-print-aws-profiles)" ]; then
+    ndt_print_command="nameless-dt-print-aws-profiles"
+  else
+    ndt_print_command="ndt print-aws-profiles"
+  fi
+  COMPREPLY=($($ndt_print_command "${COMP_WORDS[COMP_CWORD]}"))
 }
 
 nep() {

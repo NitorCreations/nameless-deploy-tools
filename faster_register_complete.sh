@@ -1,22 +1,49 @@
 #!/bin/bash
 set -eo pipefail
 
-REPO_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+USAGE="Usage: $0 [OPTIONS]
 
-# Check platform
-case "$(uname -s)" in
-  "Darwin")
-    PLATFORM="mac"
-    ;;
-  "MINGW"*)
-    PLATFORM="windows"
-    ;;
-  *)
-    PLATFORM="linux"
-    ;;
-esac
+Compile faster register complete binaries for ndt.
+
+OPTIONS: All options are optional
+    -h | --help
+        Display these instructions.
+
+    -d | --dryrun
+        Only print commands instead of executing them.
+
+    -v | --verbose
+        Display commands being executed.
+"
+
+init_options() {
+  DRYRUN=false
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -h | --help)
+                echo "$USAGE"
+                exit 1
+                ;;
+            -d | --dryrun)
+              DRYRUN=true
+              ;;
+            -v | --verbose)
+                set -x
+                ;;
+    esac
+        shift
+  done
+}
+
+init_options "$@"
+
+# Import common functions
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=./common.sh
+source "$DIR/common.sh"
 
 ARGS=(-std=c++20 -O3 -Wall -Wextra)
+
 if [ "$PLATFORM" = mac ]; then
   # 03/2023:
   # try to use brew llvm / Clang since it is newer than what Apple includes.
@@ -36,32 +63,23 @@ else
 fi
 
 if [ -n "$(command -v nameless-dt-register-complete)" ]; then
-  echo "Overwriting existing script"
+  print_yellow "Overwriting existing script: nameless-dt-register-complete"
   DESTINATION="$(which nameless-dt-register-complete)"
 else
-  if [ -n "$(command -v python3)" ]; then
-    PYTHON=$(which python3)
-  else
-    PYTHON=$(which python)
-  fi
-
-  if [ ! -e "$PYTHON" ]; then
-    echo "Python executable not found: $PYTHON"
-    exit 1
-  else
-    echo "$($PYTHON --version) from $PYTHON"
-  fi
-
+  check_and_set_python
   DESTINATION="$(dirname "$PYTHON")/nameless-dt-register-complete"
 fi
-
-ARGS+=("$REPO_ROOT/n_utils/nameless-dt-register-complete.cpp" -o "$DESTINATION")
 
 if [ -z "$(command -v "$COMPILER")" ]; then
   echo "Compiler not found: $COMPILER"
   exit 1
 fi
 
-echo "Running: $COMPILER ${ARGS[*]}"
 $COMPILER --version
-$COMPILER "${ARGS[@]}"
+
+print_magenta "Compiling nameless-dt-register-complete.cpp"
+run_command $COMPILER "${ARGS[@]}" "$REPO_ROOT/n_utils/nameless-dt-register-complete.cpp" -o "$DESTINATION"
+
+print_magenta "Compiling nameless-dt-print-aws-profiles.cpp"
+DESTINATION="$(dirname "$DESTINATION")/nameless-dt-print-aws-profiles"
+run_command $COMPILER "${ARGS[@]}" "$REPO_ROOT/n_utils/nameless-dt-print-aws-profiles.cpp" -o "$DESTINATION"
