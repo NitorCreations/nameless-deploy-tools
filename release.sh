@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Copyright 2016-2023 Nitor Creations Oy
 #
@@ -14,48 +14,96 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Check platform
-case "$(uname -s)" in
-  "Darwin")
-    PLATFORM="mac"
-    ;;
-  "MINGW"*)
-    PLATFORM="windows"
-    ;;
-  *)
-    PLATFORM="linux"
-    ;;
-esac
+set -eo pipefail
 
-# BSD sed on MacOS works differently
-if [ "$PLATFORM" = mac ]; then
-  SED_COMMAND=(sed -i '')
-else
-  SED_COMMAND=(sed -i)
-fi
+USAGE="Usage: $0 [OPTIONS] [MESSAGE]
+
+Create new release for ndt.
+
+OPTIONS: All options are optional
+  -h | --help
+    Display these instructions.
+
+  -d | --dryrun
+    Only print commands instead of executing them.
+
+  -m | --major
+    Increment major version.
+
+  --message
+    Message for git version tag.
+
+  -v | --version <NEW_VERSION>
+    Use given version as the new version number.
+
+  --verbose
+    Display commands being executed."
+
+init_options() {
+  DRYRUN=false
+  INCREMENT_MAJOR=false
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -h | --help)
+        echo "$USAGE"
+        exit 1
+        ;;
+      -d | --dryrun)
+        DRYRUN=true
+        ;;
+      -m | --major)
+        INCREMENT_MAJOR=true
+        ;;
+      --message)
+        MESSAGE="$2"
+        shift
+        ;;
+      -v | --version)
+        NEW_VERSION="$2"
+        shift
+        ;;
+      --verbose)
+        set -x
+        ;;
+      *)
+        MESSAGE="$1"
+        ;;
+    esac
+    shift
+  done
+}
+
+init_options "$@"
+
+# Import common functions
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=./common.sh
+source "$DIR/common.sh"
 
 VERSION=$(grep -E '^VERSION' n_utils/__init__.py | cut -d\" -f 2)
 MAJOR=${VERSION//.*/}
 MINOR=${VERSION##*.}
-if [ "$1" = "-m" ]; then
+
+if [ "$INCREMENT_MAJOR" = true ]; then
+  echo "Incrementing major version"
   MAJOR=$(($MAJOR + 1))
   MINOR="0"
   NEW_VERSION=$MAJOR.$MINOR
-  shift
-elif [ "$1" = "-v" ]; then
-  shift
-  NEW_VERSION="$1"
-  shift
-else
+elif [ -z "$NEW_VERSION" ]; then
+  echo "Incrementing minor version"
   MINOR=$(($MINOR + 1))
   NEW_VERSION=$MAJOR.$MINOR
-  MESSAGE="$1"
 fi
 
+echo "Current version: $VERSION"
+print_green "New version:     $NEW_VERSION"
+
 if [ -z "$MESSAGE" ]; then
+  print_yellow "No message given, using new version"
   MESSAGE="$NEW_VERSION"
 fi
 
+print_magenta "Updating command list..."
 ./update-commandlist.sh
 "${SED_COMMAND[@]}" "s/$VERSION/$NEW_VERSION/g" setup.cfg
 "${SED_COMMAND[@]}" "s/$VERSION/$NEW_VERSION/g" pyproject.toml
@@ -63,26 +111,19 @@ fi
 "${SED_COMMAND[@]}" "s/nameless-deploy-tools==.*/nameless-deploy-tools==$NEW_VERSION/g" docker/Dockerfile
 "${SED_COMMAND[@]}" "s/^VERSION.*=.*/VERSION\ =\ \"$NEW_VERSION\"/" n_utils/__init__.py
 
-git commit -m "$1" setup.cfg pyproject.toml README.md docker/Dockerfile docs/commands.md n_utils/__init__.py
+print_magenta "Version tagging release..."
+git commit -m "$MESSAGE" setup.cfg pyproject.toml README.md docker/Dockerfile docs/commands.md n_utils/__init__.py
 git tag "$NEW_VERSION" -m "$MESSAGE"
-git push origin "$NEW_VERSION"
+run_command git push origin "$NEW_VERSION"
 
-if [ -n "$(command -v python3)" ]; then
-  PYTHON=$(which python3)
-else
-  PYTHON=$(which python)
-fi
+check_and_set_python
 
-if [ ! -e "$PYTHON" ]; then
-  echo "Python executable not found: $PYTHON"
-  exit 1
-else
-  echo "Using $PYTHON $($PYTHON --version)"
-fi
-
+print_magenta "Build and upload package..."
 rm -rf dist/*
-$PYTHON setup.py sdist bdist_wheel
-twine upload dist/*
-sleep 30
+# https://pypa-build.readthedocs.io/en/stable/
+$PYTHON -m build
+run_command twine upload dist/*
+run_command sleep 30
 
-./build-docker.sh "$NEW_VERSION"
+print_magenta "Building Docker image..."
+run_command ./build-docker.sh "$NEW_VERSION"

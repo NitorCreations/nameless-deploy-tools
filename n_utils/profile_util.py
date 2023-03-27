@@ -332,7 +332,7 @@ def update_profile(profile, creds):
 
 
 def cli_profiles_to_json():
-    """Prints aws config file contents as json for further parsing and use in other tools"""
+    """Prints aws config file contents as json for further parsing and use in other tools."""
     parser = argparse.ArgumentParser(description=cli_profiles_to_json.__doc__)
     argcomplete.autocomplete(parser)
     _ = parser.parse_args()
@@ -421,7 +421,7 @@ def cli_store_bw_profile():
 
 
 def cli_enable_profile():
-    """Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-role profiles are supported"""
+    """Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-role profiles are supported."""
     parser = argparse.ArgumentParser(description=cli_enable_profile.__doc__)
     type_select = parser.add_mutually_exclusive_group(required=False)
     type_select.add_argument("-i", "--iam", action="store_true", help="IAM user type profile")
