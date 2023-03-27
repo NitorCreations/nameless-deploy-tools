@@ -13,7 +13,7 @@ boto3==1.26.99
     # via
     #   nameless-deploy-tools (setup.py)
     #   threadlocal-aws
-botocore==1.29.95
+botocore==1.29.99
     # via
     #   boto3
     #   s3transfer
