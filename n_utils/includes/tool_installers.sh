@@ -95,9 +95,9 @@ install_cftools() {
   else
     wget -O - https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz | tar -xzvf -
   fi
-  cd aws-cfn-bootstrap-*
+  pushd aws-cfn-bootstrap-*
   pip install --disable-pip-version-check .
-  cd ..
+  popd
 }
 
 install_maven() {
@@ -327,11 +327,15 @@ install_rust_toolchain() {
 }
 
 install_github_actions_runner() {
+  local URL
+  local FILE
   source $(n-include common_tools.sh)
   mkdir /opt/github-runner
-  safe_download https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz $GITHUB_RUNNER_CSUM actions-runner-linux-x64.tar.gz
-  tar -xzvf actions-runner-linux-x64.tar.gz -C /opt/github-runner
-  rm -f actions-runner-linux-x64.tar.gz
+  URL="https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz"
+  FILE="$(basename "$URL")"
+  safe_download "$URL" "$GITHUB_RUNNER_CSUM" "$FILE"
+  tar -xzvf "$FILE" -C /opt/github-runner
+  rm -f "$FILE"
   /opt/github-runner/bin/installdependencies.sh
 }
 
@@ -339,10 +343,10 @@ start_github_actions_runner() {
   local LOCAL_USER=$1
   local URL_TARGET=$2
   local TOKEN=$3
-  chown -R $LOCAL_USER /opt/github-runner
+  chown -R "$LOCAL_USER" /opt/github-runner
   pushd /opt/github-runner
-  sudo -u $LOCAL_USER bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
-  /opt/github-runner/svc.sh install $LOCAL_USER
+  sudo -u "$LOCAL_USER" bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
+  /opt/github-runner/svc.sh install "$LOCAL_USER"
   /opt/github-runner/svc.sh start
   popd
 }
@@ -353,10 +357,10 @@ start_github_actions_runner() {
 github_actions_get_create_token() {
   local PAT_TOKEN=$1
   local ORGANIZATION=$2
-  echo $(curl -sL \
+  curl -sL \
     -X POST \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $PAT_TOKEN" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token)
+    https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token
 }
