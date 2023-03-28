@@ -304,6 +304,17 @@ MARKER
   yes | flutter doctor --android-licenses
 }
 
+install_rust_toolchain() {
+  # https://rustup.rs/
+  curl https://sh.rustup.rs -sSf | sh -s -- -y
+  source "$HOME/.cargo/env"
+  "$HOME/.cargo/bin/rustup" --version
+  "$HOME/.cargo/bin/rustup" update
+  "$HOME/.cargo/bin/rustc" --version
+  "$HOME/.cargo/bin/rustup" component add rustfmt
+  "$HOME/.cargo/bin/rustup" component add clippy
+}
+
 install_github_actions_runner() {
   source $(n-include common_tools.sh)
   mkdir /opt/github-runner
