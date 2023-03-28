@@ -310,12 +310,12 @@ MARKER
 install_rust_toolchain() {
   # https://rustup.rs/
   # https://forge.rust-lang.org/infra/other-installation-methods.html#rustup
+  source $(n-include common_tools.sh)
   local URL
   local FILE
   URL="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init"
   FILE="$(basename "$URL")"
   safe_download "$URL" "$RUSTUP_INIT_CSUM" "$FILE"
-  file "$FILE"
   ./"$FILE" -y
   source "$HOME/.cargo/env"
   "$HOME/.cargo/bin/rustup" --version
@@ -327,10 +327,10 @@ install_rust_toolchain() {
 }
 
 install_github_actions_runner() {
-  local URL
-  local FILE
   source $(n-include common_tools.sh)
   mkdir /opt/github-runner
+  local URL
+  local FILE
   URL="https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz"
   FILE="$(basename "$URL")"
   safe_download "$URL" "$GITHUB_RUNNER_CSUM" "$FILE"
