@@ -95,10 +95,13 @@ allow_authorizedkeyscommand() {
 }
 
 safe_download() {
-  url="$1"
-  csum="$2"
-  out="$3"
-
+  if [ $# -ne 3 ]; then
+    echo "Error: safe_download takes three arguments: <url> <checksum> <output_file>"
+    exit 1
+  fi
+  local url="$1"
+  local csum="$2"
+  local out="$3"
   wget --no-verbose --output-document="$out" "$url"
   echo "$csum  $out" | sha256sum --check
 }

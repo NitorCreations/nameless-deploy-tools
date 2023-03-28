@@ -52,6 +52,9 @@ if [ -z "$GITHUB_RUNNER_VERSION" ]; then
   GITHUB_RUNNER_VERSION=2.303.0
   GITHUB_RUNNER_CSUM=e4a9fb7269c1a156eb5d5369232d0cd62e06bec2fd2b321600e85ac914a9cc73
 fi
+if [ -z "$RUSTUP_INIT_CSUM" ]; then
+  RUSTUP_INIT_CSUM=bb31eaf643926b2ee9f4d8d6fc0e2835e03c0a60f34d324048aa194f0b29a71c
+fi
 
 # Make sure we get logging
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null; then
@@ -307,15 +310,20 @@ MARKER
 install_rust_toolchain() {
   # https://rustup.rs/
   # https://forge.rust-lang.org/infra/other-installation-methods.html#rustup
-  curl -s "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init" -o rustup-init
-  ./rustup-init -y
+  local URL
+  local FILE
+  URL="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init"
+  FILE="$(basename "$URL")"
+  safe_download "$URL" "$RUSTUP_INIT_CSUM" "$FILE"
+  file "$FILE"
+  ./"$FILE" -y
   source "$HOME/.cargo/env"
   "$HOME/.cargo/bin/rustup" --version
   "$HOME/.cargo/bin/rustup" update
   "$HOME/.cargo/bin/rustc" --version
   "$HOME/.cargo/bin/rustup" component add rustfmt
   "$HOME/.cargo/bin/rustup" component add clippy
-  rm rustup-init
+  rm -f "$FILE"
 }
 
 install_github_actions_runner() {
