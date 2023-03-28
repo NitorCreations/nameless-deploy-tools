@@ -306,13 +306,16 @@ MARKER
 
 install_rust_toolchain() {
   # https://rustup.rs/
-  curl https://sh.rustup.rs -sSf | sh -s -- -y
+  # https://forge.rust-lang.org/infra/other-installation-methods.html#rustup
+  curl -s "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init" -o rustup-init
+  ./rustup-init -y
   source "$HOME/.cargo/env"
   "$HOME/.cargo/bin/rustup" --version
   "$HOME/.cargo/bin/rustup" update
   "$HOME/.cargo/bin/rustc" --version
   "$HOME/.cargo/bin/rustup" component add rustfmt
   "$HOME/.cargo/bin/rustup" component add clippy
+  rm rustup-init
 }
 
 install_github_actions_runner() {
