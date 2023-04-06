@@ -60,7 +60,7 @@ gpg_safe_download() {
   gpg --verify $DST.sig $DST
 }
 
-function install_awscliv2() {
+install_awscliv2() {
   AWS_CLI_INSTALL_DIR=$(mktemp -d)
   ZIP_DST="$AWS_CLI_INSTALL_DIR"/awscliv2.zip
   add_gpg_key A6310ACC4672475C

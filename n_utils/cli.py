@@ -1136,12 +1136,13 @@ def cli_list_components():
 
 
 def cli_upsert_codebuild_projects():
-    """Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
+    """
+    Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
 
-    Parameters are read from properties files as described in 'ndt load-parameters -h'. To check all job paramters you
-    can run 'ndt list-jobs -e -j -b [current-branch]'
-    The only mandatory parameter is CODEBUILD_SERVICE_ROLE, which defines the role that the codebuild project assumes
-    for building.
+    Parameters are read from properties files as described in 'ndt load-parameters -h'.
+    To check all job paramters you can run 'ndt list-jobs -e -j -b [current-branch]'
+    The only mandatory parameter is CODEBUILD_SERVICE_ROLE,
+    which defines the role that the codebuild project assumes for building.
     Other parameters that affect jobs are:
     * BUILD_JOB_NAME - name for the codebuild project
     * NDT_VERSION - version to use to run bakes and deployments.
@@ -1178,7 +1179,7 @@ def cli_upsert_codebuild_projects():
 
 
 def upsert_dns_record():
-    """Update a dns record in Route53"""
+    """Update a dns record in Route53."""
     parser = get_parser()
     parser.add_argument("name", help="The name of the record to create")
     parser.add_argument(
@@ -1207,7 +1208,7 @@ def upsert_dns_record():
 
 
 def azure_ensure_group():
-    """Ensures that an azure resource group exists"""
+    """Ensures that an azure resource group exists."""
     parser = get_parser()
     parser.add_argument(
         "-l",
@@ -1224,7 +1225,7 @@ def azure_ensure_group():
 
 
 def azure_ensure_management_group():
-    """Ensures that an azure resource group exists"""
+    """Ensures that an azure resource group exists."""
     parser = get_parser()
     parser.add_argument("name", help="The name of the resource group to make sure exists")
     argcomplete.autocomplete(parser)
