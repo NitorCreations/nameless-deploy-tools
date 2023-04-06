@@ -73,7 +73,7 @@ options:
 usage: ndt aws-config-to-json [-h]
 
 Prints aws config file contents as json for further parsing and use in other
-tools
+tools.
 
 options:
   -h, --help  show this help message and exit
@@ -84,7 +84,7 @@ options:
 ```bash
 usage: ndt azure-ensure-group [-h] [-l LOCATION] name
 
-Ensures that an azure resource group exists
+Ensures that an azure resource group exists.
 
 positional arguments:
   name                  The name of the resource group to make sure exists
@@ -103,7 +103,7 @@ options:
 ```bash
 usage: ndt azure-ensure-management-group [-h] name
 
-Ensures that an azure resource group exists
+Ensures that an azure resource group exists.
 
 positional arguments:
   name        The name of the resource group to make sure exists
@@ -613,7 +613,7 @@ options:
 usage: ndt enable-profile [-h] [-i | -a | -f | -l | -n | -s | -o] profile
 
 Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-
-role profiles are supported
+role profiles are supported.
 
 positional arguments:
   profile               The profile to enable
@@ -852,7 +852,7 @@ Load parameters from infra*.properties files in the order:
 
     See https://www.tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_03.html
     (arrays not supported)
-
+    
 
 positional arguments:
   component             Compenent to descend into
@@ -1425,12 +1425,12 @@ options:
 ```bash
 usage: ndt upsert-codebuild-projects [-h] [-d]
 
-Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
+    Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
 
-    Parameters are read from properties files as described in \'ndt load-parameters -h\'. To check all job paramters you
-    can run \'ndt list-jobs -e -j -b [current-branch]\'
-    The only mandatory parameter is CODEBUILD_SERVICE_ROLE, which defines the role that the codebuild project assumes
-    for building.
+    Parameters are read from properties files as described in \'ndt load-parameters -h\'.
+    To check all job paramters you can run \'ndt list-jobs -e -j -b [current-branch]\'
+    The only mandatory parameter is CODEBUILD_SERVICE_ROLE,
+    which defines the role that the codebuild project assumes for building.
     Other parameters that affect jobs are:
     * BUILD_JOB_NAME - name for the codebuild project
     * NDT_VERSION - version to use to run bakes and deployments.
@@ -1453,7 +1453,7 @@ Creates or updates codebuild projects to deploy or bake ndt subcomponents in the
         - Needed for bakes and for example serverless python dockerized dependencies
     * SKIP_BUILD_JOB - skip creating build jobs where this parameter is \'y\'
     * SKIP_IMAGE_JOB, SKIP_DOCKER_JOB, SKIP_SERVERLESS_JOB, SKIP_CDK_JOB, SKIP_TERRAFORM_JOB - skip creating jobs where these parameters are \'y\' and match the subcomponent type
-
+    
 
 options:
   -h, --help     show this help message and exit
@@ -1466,7 +1466,7 @@ options:
 ```bash
 usage: ndt upsert-dns-record [-h] [-t TYPE] [-l TTL] [-n] name value
 
-Update a dns record in Route53
+Update a dns record in Route53.
 
 positional arguments:
   name                  The name of the record to create
@@ -1814,3 +1814,4 @@ positional arguments
 optional arguments:
   -h, --help  show this help message and exit
 ```
+
