@@ -316,6 +316,7 @@ install_rust_toolchain() {
   URL="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init"
   FILE="$(basename "$URL")"
   safe_download "$URL" "$RUSTUP_INIT_CSUM" "$FILE"
+  chmod u+x ./"$FILE"
   ./"$FILE" -y
   source "$HOME/.cargo/env"
   "$HOME/.cargo/bin/rustup" --version
