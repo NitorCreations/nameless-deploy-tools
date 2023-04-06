@@ -63,7 +63,7 @@ pycryptodomex==3.17
     # via nameless-deploy-tools (setup.py)
 pygments==2.14.0
     # via nameless-deploy-tools (setup.py)
-pyopenssl==23.1.0
+pyopenssl==23.1.1
     # via nameless-deploy-tools (setup.py)
 pyotp==2.8.0
     # via nameless-deploy-tools (setup.py)
