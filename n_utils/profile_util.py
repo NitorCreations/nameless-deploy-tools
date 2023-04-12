@@ -528,7 +528,10 @@ def enable_profile(profile_type, profile):
                     bw_prefix += "LASTPASS_DEFAULT_OTP='" + mfa_generate_code(profile_data["ndt_mfa_token"]) + "' "
                 print(bw_prefix + "lastpass-aws-login --profile " + profile + " --no-prompt")
             elif profile_type == "sso":
-                print("aws sso login --profile " + profile + ";")
+                command = "aws sso login --profile"
+                if "NDT_AWS_SSO_COMMAND" in os.environ:
+                    command = os.environ["NDT_AWS_SSO_COMMAND"]
+                print(f"{command} {profile};")
                 print('eval "$(ndt update-sso-profile)"')
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
             expiry = read_profile_expiry_epoc(profile, profile_type=profile_type)
