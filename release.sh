@@ -114,6 +114,7 @@ print_magenta "Updating command list..."
 print_magenta "Version tagging release..."
 git commit -m "$MESSAGE" setup.cfg pyproject.toml README.md docker/Dockerfile docs/commands.md n_utils/__init__.py
 git tag "$NEW_VERSION" -m "$MESSAGE"
+run_command git push
 run_command git push origin "$NEW_VERSION"
 
 check_and_set_python
