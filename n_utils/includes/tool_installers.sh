@@ -329,26 +329,29 @@ install_rust_toolchain() {
 
 install_github_actions_runner() {
   source $(n-include common_tools.sh)
-  mkdir /opt/github-runner
+  local INSTALL_PATH=$1
+  mkdir $INSTALL_PATH
   local URL
   local FILE
   URL="https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz"
   FILE="$(basename "$URL")"
   safe_download "$URL" "$GITHUB_RUNNER_CSUM" "$FILE"
-  tar -xzvf "$FILE" -C /opt/github-runner
+  tar -xzvf "$FILE" -C $INSTALL_PATH
   rm -f "$FILE"
-  /opt/github-runner/bin/installdependencies.sh
+  $INSTALL_PATH/bin/installdependencies.sh
 }
 
 start_github_actions_runner() {
   local LOCAL_USER=$1
   local URL_TARGET=$2
   local TOKEN=$3
-  chown -R "$LOCAL_USER" /opt/github-runner
-  pushd /opt/github-runner
-  sudo -u "$LOCAL_USER" bash -c "./config.sh --unattended --url $URL_TARGET --token $TOKEN --replace"
-  /opt/github-runner/svc.sh install "$LOCAL_USER"
-  /opt/github-runner/svc.sh start
+  local INSTALL_PATH=$4
+  local RUNNER_NAME=basename $INSTALL_PATH
+  chown -R "$LOCAL_USER" $INSTALL_PATH
+  pushd $INSTALL_PATH
+  sudo -u "$LOCAL_USER" bash -c "./config.sh --unattended --url $URL_TARGET --name $RUNNER_NAME --token $TOKEN--replace"
+  ./svc.sh install "$LOCAL_USER"
+  ./svc.sh start
   popd
 }
 
