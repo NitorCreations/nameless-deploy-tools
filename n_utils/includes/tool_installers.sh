@@ -329,12 +329,13 @@ install_rust_toolchain() {
 
 install_github_actions_runner() {
   source $(n-include common_tools.sh)
-  mkdir /opt/github-runner
+  mkdir -p /opt/github-runner
   local URL
   local FILE
   URL="https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz"
   FILE="/opt/github-runner/actions-runner.tar.gz"
   safe_download "$URL" "$GITHUB_RUNNER_CSUM" "$FILE"
+  mkdir -p /opt/github-runner/tmp
   tar xf "$FILE" -C /opt/github-runner/tmp
   /opt/github-runner/tmp/bin/installdependencies.sh
   rm -rf /opt/github-runner/tmp
@@ -345,8 +346,9 @@ start_github_actions_runner() {
   local URL_TARGET=$2
   local TOKEN=$3
   local RUNNER_NAME=$4
-  pushd /opt/github-runner/
-  tar xf "actions-runner.tar.gz" -C $RUNNER_NAME
+  mkdir -p /opt/github-runner/$RUNNER_NAME
+  pushd /opt/github-runner/$RUNNER_NAME
+  tar xf "/opt/github-runner/actions-runner.tar.gz"
   chown -R "$LOCAL_USER" /opt/github-runner/
   sudo -u "$LOCAL_USER" bash -c "./config.sh --unattended --url $URL_TARGET --name $RUNNER_NAME --token $TOKEN --replace"
   ./svc.sh install "$LOCAL_USER"
