@@ -329,7 +329,7 @@ install_rust_toolchain() {
 
 install_github_actions_runner() {
   source $(n-include common_tools.sh)
-  mkdir -p /opt/github-runner
+  mkdir -p /opt/github-runner/runners
   local URL
   local FILE
   URL="https://github.com/actions/runner/releases/download/v$GITHUB_RUNNER_VERSION/actions-runner-linux-x64-$GITHUB_RUNNER_VERSION.tar.gz"
@@ -346,8 +346,8 @@ start_github_actions_runner() {
   local URL_TARGET=$2
   local TOKEN=$3
   local RUNNER_NAME=$4
-  mkdir -p /opt/github-runner/$RUNNER_NAME
-  pushd /opt/github-runner/$RUNNER_NAME
+  mkdir -p /opt/github-runner/runners/$RUNNER_NAME
+  pushd /opt/github-runner/runners/$RUNNER_NAME
   tar xf "/opt/github-runner/actions-runner.tar.gz"
   chown -R "$LOCAL_USER" /opt/github-runner/
   sudo -u "$LOCAL_USER" bash -c "./config.sh --unattended --url $URL_TARGET --name $RUNNER_NAME --token $TOKEN --replace"
