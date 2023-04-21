@@ -131,6 +131,9 @@
     - dnf:
         name: ["python39-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python39-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "8"
+    - dnf:
+        name: ["python3-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python3-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+      when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "9"
     - alternatives:
         name: python
         path: /usr/bin/python3.9
