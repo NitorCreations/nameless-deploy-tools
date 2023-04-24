@@ -155,9 +155,10 @@ LimitNOFILE=65536
 ExecStart=/opt/nexus/current/bin/nexus run
 
 [Install]
-Alias=nexus
-WantedBy=default.target
+Alias=nexus.service
+WantedBy=multi-user.target
 MARKER
+  chcon -u system_u /usr/lib/systemd/system/nexus.service
 }
 
 install_nexus3_cargo_plugin() {
