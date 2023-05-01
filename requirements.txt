@@ -95,7 +95,7 @@ six==1.16.0
     # via
     #   nameless-deploy-tools (setup.py)
     #   python-dateutil
-termcolor==2.2.0
+termcolor==2.3.0
     # via
     #   ec2-utils
     #   nameless-deploy-tools (setup.py)
