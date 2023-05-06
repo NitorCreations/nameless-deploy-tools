@@ -53,7 +53,7 @@ if [ -z "$GITHUB_RUNNER_VERSION" ]; then
   GITHUB_RUNNER_CSUM=e4a9fb7269c1a156eb5d5369232d0cd62e06bec2fd2b321600e85ac914a9cc73
 fi
 if [ -z "$RUSTUP_INIT_CSUM" ]; then
-  RUSTUP_INIT_CSUM=bb31eaf643926b2ee9f4d8d6fc0e2835e03c0a60f34d324048aa194f0b29a71c
+  RUSTUP_INIT_CSUM=0b2f6c8f85a3d02fde2efc0ced4657869d73fccfce59defb4e8d29233116e6db
 fi
 
 # Make sure we get logging
