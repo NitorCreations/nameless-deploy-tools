@@ -7,17 +7,16 @@ The format is based on
 
 
 ## [Unreleased]
-
+### Added
+* Update rustup-init checksum
 
 ## [1.299] - 2023-04-24
 ### Fixed
 * Fix nexus systemd unit file
 
-
 ## [1.298] - 2023-04-21
 ### Added
 * Add rocky 9 packages
-
 
 ## [1.297] - 2023-04-15
 ### Added
