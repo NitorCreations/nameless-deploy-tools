@@ -9,6 +9,7 @@ from os.path import exists, expanduser, isdir, isfile, join
 import argcomplete
 from argcomplete.completers import ChoicesCompleter
 from dateutil.parser import parse
+from dateutil.parser._parser import ParserError
 from dateutil.tz import tzutc
 from threadlocal_aws.clients import sso
 
@@ -105,17 +106,20 @@ def read_profile_expiry(profile, profile_type=None):
             with open(credentials) as credfile:
                 parser.read_file(credfile)
                 if parser.has_option(profile, "aws_expiration"):
-                    return parser.get(profile, "aws_expiration")
+                    return parse(parser.get(profile, "aws_expiration"))
                 elif parser.has_option(profile, "aws_session_expiration"):
-                    return parser.get(profile, "aws_session_expiration")
+                    return parse(parser.get(profile, "aws_session_expiration"))
     return read_sso_profile_expiry(profile)
 
 
 def read_sso_profile_expiry(profile):
     profile_data = read_sso_profile(profile)
     if profile_data:
-        return profile_data.get("expiresAt", "1970-01-01T00:00:00Z")[:-1] + ".000Z"
-    return "1970-01-01T00:00:00.000Z"
+        try:
+            return parse(profile_data.get("expiresAt", "1970-01-01T00:00:00Z")[:-1] + ".000Z")
+        except ParserError:
+            return parse(profile_data.get("expiresAt", "1970-01-01T00:00:00.000Z"))
+    return parse("1970-01-01T00:00:00.000Z")
 
 
 def read_sso_profile(profile):
@@ -139,7 +143,7 @@ def read_sso_profile(profile):
 
 
 def read_profile_expiry_epoc(profile, profile_type=None):
-    return _epoc_secs(parse(read_profile_expiry(profile, profile_type=profile_type)).replace(tzinfo=tzutc()))
+    return _epoc_secs(read_profile_expiry(profile, profile_type=profile_type).replace(tzinfo=tzutc()))
 
 
 def check_profile_expired(profile, profile_type=None):
@@ -250,7 +254,7 @@ def print_profile_expiry(profile, expiry_epoc=None):
         expiry = _epoc_to_str(epoc)
     else:
         expiry = read_profile_expiry(profile)
-        epoc = _epoc_secs(parse(expiry).replace(tzinfo=tzutc()))
+        epoc = _epoc_secs(expiry.replace(tzinfo=tzutc()))
     print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=" + str(epoc))
     print("AWS_SESSION_EXPIRATION_" + safe_profile + "=" + expiry)
     print("export AWS_SESSION_EXPIRATION_" + safe_profile + " AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
@@ -268,7 +272,7 @@ def cli_read_profile_expiry():
     )
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    print(read_profile_expiry(args.profile))
+    print(read_profile_expiry(args.profile).isoformat())
 
 
 def cli_update_sso_profile():
