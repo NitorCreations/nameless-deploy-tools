@@ -79,7 +79,7 @@ pyyaml==6.0
     #   cloudformation-utils
     #   nameless-deploy-tools (setup.py)
     #   pyaml
-requests==2.28.2
+requests==2.31.0
     # via
     #   ec2-utils
     #   nameless-deploy-tools (setup.py)
