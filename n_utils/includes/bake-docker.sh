@@ -109,6 +109,7 @@ fi
 eval "$(ndt ecr-ensure-repo "$DOCKER_NAME")"
 if [ -z "$PLATFORM" ]; then
   PLATFORM="linux/amd64"
+  export DOCKER_DEFAULT_PLATFORM=$PLATFORM
   docker build $PULL --tag "$DOCKER_NAME" --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
 
   docker tag $DOCKER_NAME:latest $DOCKER_NAME:$BUILD_NUMBER
