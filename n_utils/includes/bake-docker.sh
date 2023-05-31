@@ -48,6 +48,7 @@ usage() {
   echo "optional arguments:" >&2
   echo "  -h, --help  show this help message and exit" >&2
   echo "  -i, --imagedefinitions  create imagedefinitions.json for AWS CodePipeline" >&2
+  echo "  -d, --dry-run  build image without pushing to ECR-repo" >&2
   if "$@"; then
     echo "" >&2
     echo "$@" >&2
@@ -62,7 +63,21 @@ die() {
   usage
 }
 set -xe
-
+while true; do
+  case $1 in
+    -d|--dry-run)
+    DRY_RUN=1
+    shift
+    ;;
+    -i|--imagedefinitions)
+    OUTPUT_DEFINITION=1
+    shift
+    ;;
+    *)
+    break
+    ;;
+  esac
+done
 if [ "$1" = "--imagedefinitions" -o "$1" = "-i" ]; then
   shift
   OUTPUT_DEFINITION=1
@@ -115,8 +130,10 @@ if [ -z "$PLATFORM" ]; then
   docker tag $DOCKER_NAME:latest $DOCKER_NAME:$BUILD_NUMBER
   docker tag $DOCKER_NAME:latest $REPO:latest
   docker tag $DOCKER_NAME:$BUILD_NUMBER $REPO:$BUILD_NUMBER
+  if [ -z "$DRY_RUN" ]; then
   docker push $REPO:latest
   docker push $REPO:$BUILD_NUMBER
+  fi
 else
   for N_PLATFORM in ${PLATFORM/,/ }; do
     N_PLATFORM_SAFE=${N_PLATFORM/\//_}
@@ -127,7 +144,9 @@ else
     fi
     docker buildx build $PULL --tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" --platform $N_PLATFORM --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
     docker tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
+    if [ -z "$DRY_RUN" ]; then
     docker push $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
+    fi
   done
 
   MANIFEST_COMMAND_L="$REPO:latest"
@@ -145,8 +164,10 @@ else
     docker manifest annotate --arch ${N_PLATFORM#linux/} $REPO:latest $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
     docker manifest annotate --arch ${N_PLATFORM#linux/} $REPO:$BUILD_NUMBER $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
   done
-  docker manifest push $REPO:latest
-  docker manifest push $REPO:$BUILD_NUMBER
+  if [ -z "$DRY_RUN" ]; then
+    docker manifest push $REPO:latest
+    docker manifest push $REPO:$BUILD_NUMBER
+  fi
 fi
 
 if [ -n "$OUTPUT_DEFINITION" ]; then
