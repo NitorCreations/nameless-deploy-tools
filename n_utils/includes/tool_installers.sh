@@ -266,13 +266,9 @@ install_dynatrace_activegate() {
 }
 
 enable_systemd_portforward() {
-  local SOURCE=$(n-include systemd-portforward.te)
-  local BASE=${SOURCE%.te}
-  local MODULE=$BASE.mod
-  local PACKAGE=$BASE.pp
-  checkmodule -M -m -o $MODULE $SOURCE
-  semodule_package -o $PACKAGE -m $MODULE
-  semodule -i $PACKAGE
+  setsebool -P nis_enabled=on
+  setsebool -P systemd_socket_proxyd_bind_any=on
+  setsebool -P systemd_socket_proxyd_connect_any=on
 }
 
 install_androidsdk() {
