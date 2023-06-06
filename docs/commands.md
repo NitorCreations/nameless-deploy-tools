@@ -156,6 +156,7 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
   -i, --imagedefinitions  create imagedefinitions.json for AWS CodePipeline
+  -d, --dry-run  build image without pushing to ECR-repo
 ```
 
 ## `ndt bake-image`
