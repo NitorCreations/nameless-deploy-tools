@@ -265,13 +265,6 @@ else
   extra_args[${#extra_args[@]}]=-e
   extra_args[${#extra_args[@]}]=instance_type=t2.medium
 fi
-if [ -n "$BAKE_TIMEOUT" ]; then
-  extra_args[${#extra_args[@]}]=-e
-  extra_args[${#extra_args[@]}]=timeout_min=$BAKE_TIMEOUT
-else
-  extra_args[${#extra_args[@]}]=-e
-  extra_args[${#extra_args[@]}]=timeout_min=55
-fi
 
 JOB=$(echo $JOB_NAME | sed 's/[^[:alnum:]_]/_/g' | tr '[:upper:]' '[:lower:]')
 NAME="${JOB}_$BUILD_NUMBER"
