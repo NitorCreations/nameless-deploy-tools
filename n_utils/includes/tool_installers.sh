@@ -127,8 +127,8 @@ ExecReload=/opt/nexus/current/bin/nexus restart
 ExecStop=/opt/nexus/current/bin/nexus stop
 
 [Install]
-Alias=nexus
-WantedBy=default.target
+Alias=nexus.service
+WantedBy=multi-user.target
 MARKER
   sed -i 's/nexus-webapp-context-path=.*/nexus-webapp-context-path=\//' /opt/nexus/current/conf/nexus.properties
 }
