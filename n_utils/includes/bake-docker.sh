@@ -160,7 +160,7 @@ else
   docker manifest create $MANIFEST_COMMAND_L
   docker manifest create $MANIFEST_COMMAND_V
   for N_PLATFORM in ${PLATFORM/,/ }; do
-    N_PLATFORM_SAFE=${N_PLATFORM/\//_}
+    N_PLATFORM_SAFE=${N_PLATFORM//\//_}
     docker manifest annotate --arch ${N_PLATFORM#linux/} $REPO:latest $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
     docker manifest annotate --arch ${N_PLATFORM#linux/} $REPO:$BUILD_NUMBER $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
   done
