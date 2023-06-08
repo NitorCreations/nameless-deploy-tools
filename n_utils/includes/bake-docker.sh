@@ -161,8 +161,14 @@ else
   docker manifest create $MANIFEST_COMMAND_V
   for N_PLATFORM in ${PLATFORM/,/ }; do
     N_PLATFORM_SAFE=${N_PLATFORM//\//_}
-    docker manifest annotate --arch ${N_PLATFORM#linux/} $REPO:latest $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
-    docker manifest annotate --arch ${N_PLATFORM#linux/} $REPO:$BUILD_NUMBER $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
+    N_PLAFORM_ARR=(${N_PLATFORM//\// })
+    OS=${N_PLAFORM_ARR[0]}
+    ARCH=${N_PLAFORM_ARR[1]}
+    if [ -n "${N_PLAFORM_ARR[2]}" ]; then
+      VARIANT="--variant ${N_PLAFORM_ARR[2]}"
+    fi
+    docker manifest annotate --os $OS --arch ${ARCH} $VARIANT $REPO:latest $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
+    docker manifest annotate --os $OS --arch ${ARCH} $VARIANT $REPO:$BUILD_NUMBER $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
   done
   if [ -z "$DRY_RUN" ]; then
     docker manifest push $REPO:latest
