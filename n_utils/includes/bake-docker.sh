@@ -136,7 +136,7 @@ if [ -z "$PLATFORM" ]; then
   fi
 else
   for N_PLATFORM in ${PLATFORM/,/ }; do
-    N_PLATFORM_SAFE=${N_PLATFORM/\//_}
+    N_PLATFORM_SAFE=${N_PLATFORM//\//_}
     if [ -x "$component/docker-$ORIG_DOCKER_NAME/pre_build_${N_PLATFORM_SAFE}.sh" ]; then
       cd "$component/docker-$ORIG_DOCKER_NAME"
       "./pre_build_${N_PLATFORM_SAFE}.sh"
