@@ -308,7 +308,8 @@ install_poetry() {
   # https://python-poetry.org/docs/
   # https://python-poetry.org/docs/#ci-recommendations
   export POETRY_HOME=/opt/poetry
-  python3 -m venv $POETRY_HOME
+  sudo python3 -m venv $POETRY_HOME
+  sudo chmod -R a+rwx /opt/poetry  # chmod 777
   $POETRY_HOME/bin/pip install poetry==1.5.1
   $POETRY_HOME/bin/poetry --version
   # ensure poetry is found in path without needing to modify PATH variable
