@@ -38,7 +38,6 @@ if [ "$OS_TYPE" = "ubuntu" ]; then
   echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 fi
 
-
 add_gpg_key() {
   local key=$1
     gpg --batch --keyserver hkps://keyserver.ubuntu.com:443 --recv-keys "$key" ||
