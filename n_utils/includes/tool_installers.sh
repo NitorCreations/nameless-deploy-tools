@@ -227,7 +227,7 @@ update_aws_utils() {
 
 install_dynatrace_oneagent() {
   # Requires secrets dynatrace.apikey and dt-root.cert.pem (from dynatrace web installation instructions) to be stored in secrets storage
-  wget -O Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh \
+  wget -O "Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh" \
     "https://bmq38893.live.dynatrace.com/api/v1/deployment/installer/agent/unix/default/latest?arch=x86&flavor=default" \
     --header="Authorization: Api-Token $(fetch-secrets.sh show dynatrace.apikey)"
 
@@ -237,12 +237,12 @@ install_dynatrace_oneagent() {
     echo
     echo
     echo '----SIGNED-INSTALLER'
-    cat Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
+    cat "Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh"
   ) | openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
   rm -f dt-root.cert.pem
 
-  /bin/sh Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
-  rm -f Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh
+  /bin/sh "Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh"
+  rm -f "Dynatrace-OneAgent-Linux-$ONEAGENT_VERSION.sh"
 }
 
 install_dynatrace_activegate() {
@@ -356,8 +356,8 @@ start_github_actions_runner() {
   local URL_TARGET=$2
   local TOKEN=$3
   local RUNNER_NAME=$4
-  mkdir -p /opt/github-runner/runners/$RUNNER_NAME
-  pushd /opt/github-runner/runners/$RUNNER_NAME
+  mkdir -p "/opt/github-runner/runners/$RUNNER_NAME"
+  pushd "/opt/github-runner/runners/$RUNNER_NAME"
   tar xf "/opt/github-runner/actions-runner.tar.gz"
   chown -R "$LOCAL_USER" /opt/github-runner/
   sudo -u "$LOCAL_USER" bash -c "./config.sh --unattended --url $URL_TARGET --name $RUNNER_NAME --token $TOKEN --replace"
