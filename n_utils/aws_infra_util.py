@@ -631,7 +631,7 @@ def json_save_small(data):
 
 ############################################################################
 # import_scripts
-gotImportErrors = False
+GOT_IMPORT_ERRORS = False
 
 
 def resolve_file(filename, basefile):
@@ -761,7 +761,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
         return templateParams.update(_get_params(root, basefile))
 
     param_refresh_callback()
-    global gotImportErrors
+    global GOT_IMPORT_ERRORS
     if isinstance(data, OrderedDict):
         if "Fn::ImportFile" in data:
             val = data["Fn::ImportFile"]
@@ -782,7 +782,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                     + '" - file not found on include paths or relative to '
                     + basefile
                 )
-                gotImportErrors = True
+                GOT_IMPORT_ERRORS = True
         elif "Fn::ImportYaml" in data:
             val = data["Fn::ImportYaml"]
             jmespath = None
@@ -831,7 +831,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                         + " a list in file "
                         + basefile
                     )
-                    gotImportErrors = True
+                    GOT_IMPORT_ERRORS = True
                 if jmespath:
                     data = search(jmespath, data)
             else:
@@ -844,7 +844,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                         + '" - file not found on include paths or relative to '
                         + basefile
                     )
-                    gotImportErrors = True
+                    GOT_IMPORT_ERRORS = True
                 else:
                     for k in list(data):
                         del data[k]
@@ -857,7 +857,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             data["Fn::Merge"] = OrderedDict([("Source", merge_list), ("Result", result)])
             if not isinstance(merge_list, list):
                 print("ERROR: " + path + ": Fn::Merge must associate to a list in file " + basefile)
-                gotImportErrors = True
+                GOT_IMPORT_ERRORS = True
                 return data
             merge = _preprocess_template(
                 expand_vars(merge_list.pop(0), templateParams, None, []),
@@ -881,14 +881,14 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                     + "\nIn file "
                     + basefile
                 )
-                gotImportErrors = True
+                GOT_IMPORT_ERRORS = True
             elif isinstance(merge, OrderedDict):
                 result.update(merge)
             elif isinstance(merge, list):
                 result.extend(merge)
             else:
                 print("ERROR: " + path + ": Unsupported " + str(type(merge)))
-                gotImportErrors = True
+                GOT_IMPORT_ERRORS = True
             param_refresh_callback()
             while True:
                 expanded_result = expand_vars(result, templateParams, None, [])
@@ -1008,7 +1008,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
 
 
 def _check_refs(data, templateFile, path, templateParams, resolveRefs):
-    global gotImportErrors
+    global GOT_IMPORT_ERRORS
     if isinstance(data, OrderedDict):
         if "Ref" in data:
             var_name = data["Ref"]
@@ -1039,7 +1039,7 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
                         + " not declared in template parameters in "
                         + templateFile
                     )
-                    gotImportErrors = True
+                    GOT_IMPORT_ERRORS = True
             else:
                 if resolveRefs:
                     data = templateParams[var_name]
@@ -1054,7 +1054,7 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
                             + " is resolved later by AWS; cannot resolve its"
                             + " value now"
                         )
-                        gotImportErrors = True
+                        GOT_IMPORT_ERRORS = True
             if "__optional" in data:
                 del data["__optional"]
             if "__default" in data:
@@ -1069,8 +1069,8 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
 
 
 def import_scripts(data, basefile, extra_parameters={}):
-    global gotImportErrors
-    gotImportErrors = False
+    global GOT_IMPORT_ERRORS
+    GOT_IMPORT_ERRORS = False
     params = _get_params(data, basefile)
     params.update(extra_parameters)
     data = expand_vars(data, params, None, [])
@@ -1080,7 +1080,7 @@ def import_scripts(data, basefile, extra_parameters={}):
     params = _get_params(data, basefile)
     params.update(extra_parameters)
     data = _check_refs(data, basefile, "", params, False)
-    if gotImportErrors:
+    if GOT_IMPORT_ERRORS:
         sys.exit(1)
     return data
 
