@@ -106,6 +106,22 @@ target-version = ['py37']
 include = '\.pyi?$'
 extend-exclude = '''venv*'''
 
+[tool.isort]
+# https://pycqa.github.io/isort/docs/configuration/options.html
+# profile = "black"
+# manually specifying black compatibility to override line length
+combine_as_imports = true
+ensure_newline_before_comments = true
+extend_skip = [".idea", ".vscode", ".venv", "venv"]
+extend_skip_glob = ["venv*"]
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 120
+multi_line_output = 3
+py_version = 37
+sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
+use_parentheses = true
+
 [tool.ruff]
 # https://github.com/charliermarsh/ruff#configuration
 target-version = "py37"
@@ -202,19 +218,3 @@ section-order = [
     "first-party",
     "local-folder",
 ]
-
-[tool.isort]
-# https://pycqa.github.io/isort/docs/configuration/options.html
-# profile = "black"
-# manually specifying black compatibility to override line length
-combine_as_imports = true
-ensure_newline_before_comments = true
-extend_skip = [".idea", ".vscode", ".venv", "venv"]
-extend_skip_glob = ["venv*"]
-force_grid_wrap = 0
-include_trailing_comma = true
-line_length = 120
-multi_line_output = 3
-py_version = 37
-sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
-use_parentheses = true
