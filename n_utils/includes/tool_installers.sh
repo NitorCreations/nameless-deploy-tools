@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2016-2017 Nitor Creations Oy
+# Copyright 2016-2023 Nitor Creations Oy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -302,6 +302,19 @@ MARKER
   source /etc/profile.d/flutter.sh
   flutter precache
   yes | flutter doctor --android-licenses
+}
+
+install_poetry() {
+  # https://python-poetry.org/docs/
+  # https://python-poetry.org/docs/#ci-recommendations
+  export POETRY_HOME=/opt/poetry
+  python3 -m venv $POETRY_HOME
+  $POETRY_HOME/bin/pip install poetry==1.5.1
+  $POETRY_HOME/bin/poetry --version
+  # ensure poetry is found in path without needing to modify PATH variable
+  sudo ln -s "$POETRY_HOME/bin/poetry" "/usr/local/bin/poetry"
+  which poetry
+  poetry about
 }
 
 install_rust_toolchain() {
