@@ -104,3 +104,4 @@ ENV/
 azuredeploy.bicep
 azuredeploy.json
 variables.json
+/cmake-build*
