@@ -314,6 +314,7 @@ install_poetry() {
   $POETRY_HOME/bin/poetry --version
   # ensure poetry is found in path without needing to modify PATH variable
   sudo ln -s "$POETRY_HOME/bin/poetry" "/usr/local/bin/poetry"
+  # check command is found and works
   which poetry
   poetry about
 }
