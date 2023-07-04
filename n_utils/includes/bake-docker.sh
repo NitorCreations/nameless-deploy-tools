@@ -65,17 +65,17 @@ die() {
 set -xe
 while true; do
   case $1 in
-    -d|--dry-run)
-    DRY_RUN=1
-    shift
-    ;;
-    -i|--imagedefinitions)
-    OUTPUT_DEFINITION=1
-    shift
-    ;;
+    -d | --dry-run)
+      DRY_RUN=1
+      shift
+      ;;
+    -i | --imagedefinitions)
+      OUTPUT_DEFINITION=1
+      shift
+      ;;
     *)
-    break
-    ;;
+      break
+      ;;
   esac
 done
 if [ "$1" = "--imagedefinitions" -o "$1" = "-i" ]; then
@@ -131,8 +131,8 @@ if [ -z "$PLATFORM" ]; then
   docker tag $DOCKER_NAME:latest $REPO:latest
   docker tag $DOCKER_NAME:$BUILD_NUMBER $REPO:$BUILD_NUMBER
   if [ -z "$DRY_RUN" ]; then
-  docker push $REPO:latest
-  docker push $REPO:$BUILD_NUMBER
+    docker push $REPO:latest
+    docker push $REPO:$BUILD_NUMBER
   fi
 else
   for N_PLATFORM in ${PLATFORM/,/ }; do
@@ -145,7 +145,7 @@ else
     docker buildx build $PULL --tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" --platform $N_PLATFORM --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --build-arg "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" "$component/docker-$ORIG_DOCKER_NAME"
     docker tag "${DOCKER_NAME}:${N_PLATFORM_SAFE}" $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
     if [ -z "$DRY_RUN" ]; then
-    docker push $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
+      docker push $REPO:${BUILD_NUMBER}-${N_PLATFORM_SAFE}
     fi
   done
 
