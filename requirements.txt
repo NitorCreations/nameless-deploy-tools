@@ -9,7 +9,7 @@ argcomplete==3.0.8
     #   ec2-utils
     #   nameless-deploy-tools (setup.py)
     #   nitor-vault
-boto3==1.26.111
+boto3==1.28.12
     # via
     #   nameless-deploy-tools (setup.py)
     #   threadlocal-aws
