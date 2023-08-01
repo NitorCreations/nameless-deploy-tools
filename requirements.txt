@@ -55,7 +55,7 @@ nitor-vault==0.54
     # via nameless-deploy-tools (setup.py)
 py==1.11.0
     # via retry
-pyaml==21.10.1
+pyaml==23.7.0
     # via nameless-deploy-tools (setup.py)
 pycparser==2.21
     # via cffi
