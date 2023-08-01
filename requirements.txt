@@ -65,7 +65,7 @@ pygments==2.15.1
     # via nameless-deploy-tools (setup.py)
 pyopenssl==23.2.0
     # via nameless-deploy-tools (setup.py)
-pyotp==2.8.0
+pyotp==2.9.0
     # via nameless-deploy-tools (setup.py)
 pyqrcode==1.2.1
     # via nameless-deploy-tools (setup.py)
