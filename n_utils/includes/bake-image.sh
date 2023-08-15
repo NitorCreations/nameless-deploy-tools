@@ -165,6 +165,22 @@ cleanup() {
   fi
 }
 trap cleanup EXIT
+
+generate_random_password() {
+  PASSWORD=""
+
+  while true; do
+    PASSWORD=$(tr -cd '[:alnum:]' < /dev/urandom | head -c20)
+    # Regenerate if we got one without digits (otherwise it'll fail default 
+    # Windows Server password requirements)
+    if [[ $PASSWORD =~ [0-9] ]]; then
+      break
+    fi
+  done
+
+  echo $PASSWORD
+}
+
 if [ "$IMAGETYPE" != "windows" ]; then
   eval $(ssh-agent)
   if ! [ -e $HOME/.ssh/$AWS_KEY_NAME -o -e $HOME/.ssh/$AWS_KEY_NAME.pem \
@@ -185,7 +201,7 @@ if [ "$IMAGETYPE" != "windows" ]; then
   extra_args[${#extra_args[@]}]="prepare_script=$(n-include prepare.sh)"
   [ "$VOLUME_SIZE" ] || VOLUME_SIZE=8
 else
-  WIN_PASSWD="$(tr -cd '[:alnum:]' < /dev/urandom | head -c16)"
+  WIN_PASSWD="$(generate_random_password)"
   PASSWD_ARG="{\"ansible_password\": \"$WIN_PASSWD\","
   PASSWD_ARG="$PASSWD_ARG \"ansible_winrm_operation_timeout_sec\": 60,"
   PASSWD_ARG="$PASSWD_ARG \"ansible_winrm_read_timeout_sec\": 70,"
