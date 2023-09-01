@@ -74,7 +74,7 @@ python-dateutil==2.8.2
     #   botocore
     #   ec2-utils
     #   nameless-deploy-tools (setup.py)
-pyyaml==6.0
+pyyaml==6.0.1
     # via
     #   cloudformation-utils
     #   nameless-deploy-tools (setup.py)
