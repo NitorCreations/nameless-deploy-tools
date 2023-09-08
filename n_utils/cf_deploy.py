@@ -259,6 +259,9 @@ def deploy(stack_name, yaml_template, regn, dry_run=False, session=None, disable
         template_doc["Parameters"] = {}
 
     template_parameters = template_doc["Parameters"]
+    # remove - from parameter values as only alphanumeric are supported
+    for key in list(template_parameters.keys()):
+        template_parameters[key.replace("-", "")] = template_parameters.pop(key)
     tags = []
     if "Tags" in template_doc:
         tags = template_doc["Tags"]
