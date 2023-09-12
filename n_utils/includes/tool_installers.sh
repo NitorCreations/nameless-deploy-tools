@@ -55,6 +55,9 @@ fi
 if [ -z "$RUSTUP_INIT_CSUM" ]; then
   RUSTUP_INIT_CSUM=0b2f6c8f85a3d02fde2efc0ced4657869d73fccfce59defb4e8d29233116e6db
 fi
+if [ -z "$RUSTUP_DOWNLOAD_URL" ]; then
+  RUSTUP_DOWNLOAD_URL=https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
+fi
 
 # Make sure we get logging
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null; then
@@ -323,11 +326,9 @@ install_rust_toolchain() {
   # https://rustup.rs/
   # https://forge.rust-lang.org/infra/other-installation-methods.html#rustup
   source $(n-include common_tools.sh)
-  local URL
   local FILE
-  URL="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init"
-  FILE="$(basename "$URL")"
-  safe_download "$URL" "$RUSTUP_INIT_CSUM" "$FILE"
+  FILE="$(basename "$RUSTUP_DOWNLOAD_URL")"
+  safe_download "$RUSTUP_DOWNLOAD_URL" "$RUSTUP_INIT_CSUM" "$FILE"
   chmod u+x ./"$FILE"
   ./"$FILE" -y
   source "$HOME/.cargo/env"
