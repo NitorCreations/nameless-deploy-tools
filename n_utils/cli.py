@@ -481,7 +481,7 @@ def setup_cli():
 
 
 def show_stack_params_and_outputs():
-    """Show stack parameters and outputs as a single json documents"""
+    """Show stack parameters and outputs as a single json document"""
     parser = get_parser()
     parser.add_argument(
         "-r", "--region", help="Region for the stack to show", default=region()
