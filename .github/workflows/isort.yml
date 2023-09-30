@@ -7,13 +7,8 @@ on:
       - master
       - main
     paths:
-      - '**.py'
+      - "**.py"
   pull_request:
-    branches:
-      - master
-      - main
-    paths:
-      - '**.py'
 
 # https://github.com/marketplace/actions/python-isort
 jobs:
@@ -26,9 +21,9 @@ jobs:
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: isort
         uses: isort/isort-action@v1.1.0
         with:
-            requirementsFiles: "requirements.txt"
+          requirementsFiles: "requirements.txt"

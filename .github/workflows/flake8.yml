@@ -7,13 +7,8 @@ on:
       - master
       - main
     paths:
-      - '**.py'
+      - "**.py"
   pull_request:
-    branches:
-      - master
-      - main
-    paths:
-      - '**.py'
 
 jobs:
   flake8-lint:
@@ -26,7 +21,7 @@ jobs:
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: flake8 lint
         uses: py-actions/flake8@v2

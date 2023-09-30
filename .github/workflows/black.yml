@@ -7,13 +7,8 @@ on:
       - master
       - main
     paths:
-      - '**.py'
+      - "**.py"
   pull_request:
-    branches:
-      - master
-      - main
-    paths:
-      - '**.py'
 
 jobs:
   format:
@@ -25,7 +20,7 @@ jobs:
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Black format
         uses: psf/black-pre-commit-mirror@stable
