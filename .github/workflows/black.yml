@@ -23,6 +23,6 @@ jobs:
           python-version: "3.11"
 
       - name: Black format
-        uses: psf/black-pre-commit-mirror@stable
+        uses: psf/black@stable
         with:
           options: "--check --verbose --diff --color"
