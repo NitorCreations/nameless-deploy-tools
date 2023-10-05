@@ -15,8 +15,10 @@ repos:
         args: [--unsafe]
       - id: debug-statements
       - id: end-of-file-fixer
+        exclude: ^docs/commands\.md$
       - id: mixed-line-ending
       - id: trailing-whitespace
+        exclude: ^docs/commands\.md$
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: "v0.0.292"
@@ -24,6 +26,12 @@ repos:
       - id: ruff
         name: python ruff
         args: [--fix, --exit-non-zero-on-fix]
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.14.0
+    hooks:
+      - id: pyupgrade
+        args: [--py37-plus]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 23.9.1
@@ -35,9 +43,3 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.14.0
-    hooks:
-      - id: pyupgrade
-        args: [--py37-plus]
