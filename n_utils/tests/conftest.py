@@ -90,9 +90,7 @@ def s3(mocker, request):
 
 @pytest.fixture(scope="function")
 def stack_params_and_outputs_and_stack(mocker, request):
-    target = "{}.{}.stack_params_and_outputs_and_stack".format(
-        BASE_MODULE_NAME, get_test_target_module(request.module.__name__)
-    )
+    target = f"{BASE_MODULE_NAME}.{get_test_target_module(request.module.__name__)}.stack_params_and_outputs_and_stack"
     if load_class(target):
         print(f"Mocking {target}")
         client_func = mocker.patch(target)

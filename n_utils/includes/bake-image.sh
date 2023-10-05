@@ -171,7 +171,7 @@ generate_random_password() {
 
   while true; do
     PASSWORD=$(tr -cd '[:alnum:]' < /dev/urandom | head -c20)
-    # Regenerate if we got one without digits (otherwise it'll fail default 
+    # Regenerate if we got one without digits (otherwise it'll fail default
     # Windows Server password requirements)
     if [[ $PASSWORD =~ [0-9] ]]; then
       break
