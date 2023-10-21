@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - "**.py"
+      - ".github/workflows/flake8.yml"
   pull_request:
 
 jobs:

@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - "**.py"
+      - ".github/workflows/isort.yml"
   pull_request:
 
 # https://github.com/marketplace/actions/python-isort

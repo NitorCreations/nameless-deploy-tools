@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - "**.py"
+      - ".github/workflows/black.yml"
   pull_request:
 
 jobs:
