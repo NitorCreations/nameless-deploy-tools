@@ -111,7 +111,7 @@ if [ -n "$DRYRUN" ]; then
 fi
 
 set -e
-cdk deploy
+cdk deploy --ci --require-approval never
 
 if [ -x "./post_deploy.sh" ]; then
   "./post_deploy.sh"
