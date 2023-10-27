@@ -1222,7 +1222,7 @@ options:
 usage: ndt show-stack-params-and-outputs [-h] [-r REGION] [-p PARAMETER]
                                          stack_name
 
-Show stack parameters and outputs as a single json documents
+Show stack parameters and outputs as a single json document
 
 positional arguments:
   stack_name            The stack name to show
