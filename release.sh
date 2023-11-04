@@ -124,7 +124,3 @@ rm -rf dist/*
 # https://pypa-build.readthedocs.io/en/stable/
 $PYTHON -m build
 run_command twine upload dist/*
-run_command sleep 30
-
-print_magenta "Building Docker image..."
-run_command ./build-docker.sh "$NEW_VERSION"
