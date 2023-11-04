@@ -381,9 +381,9 @@ install_components() {
   fi
 
   check_awscli_install_dir
-  if uname -a | grep -e "x86_64" -e "amd64"; then
+  if [[ "$(uname -m)" == "x86_64" ]]; then
     download_awscli_zipfile "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
-  elif uname -a | grep "aarch64"; then
+  elif [[ "$(uname -m)" == "aarch64" ]]; then
     download_awscli_zipfile "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
   else
     echo "***Failed: install_components processor type is unsupported." && exit 1

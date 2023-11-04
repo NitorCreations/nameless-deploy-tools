@@ -63,12 +63,12 @@ install_awscliv2() {
   AWS_CLI_INSTALL_DIR=$(mktemp -d)
   ZIP_DST="$AWS_CLI_INSTALL_DIR"/awscliv2.zip
   add_gpg_key A6310ACC4672475C
-  if uname -a | grep -e "x86_64" -e "amd64" > /dev/null; then
+  if [[ "$(uname -m)" == "x86_64" ]]; then
     if ! gpg_safe_download "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" "$ZIP_DST"; then
       rm -rf "$AWS_CLI_INSTALL_DIR"
       echo "ERROR: failed to download of awscliv2.zip" && return 1
     fi
-  elif uname -a | grep "aarch64" > /dev/null; then
+  elif [[ "$(uname -m)" == "aarch64" ]]; then
     if ! gpg_safe_download "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" "$ZIP_DST"; then
       rm -rf "$AWS_CLI_INSTALL_DIR"
       echo "ERROR: failed to download of awscliv2.zip" && return 1
