@@ -111,6 +111,15 @@ def share_to_another_region(ami_id, regn, ami_name, account_ids, timeout_sec=900
             status = images_resp["Images"][0]["State"]
         except ClientError:
             print("Did not find image " + ami_id)
+    ec2(region=regn).create_tags(
+        Resources=[ami_id],
+        Tags=[
+            {
+                "Key": "Name",
+                "Value": ami_name,
+            },
+        ],
+    )
     perms = {"Add": []}
     my_acco = resolve_account()
     for acco in account_ids:
