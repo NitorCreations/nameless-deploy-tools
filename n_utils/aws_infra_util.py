@@ -263,19 +263,20 @@ def _process_value(value, used_params):
         #   a) resolving base variables like REGION and paramEnvId
         #   b) resolving basic variables used in terraform backend configuration
         if "DO_NOT_RESOLVE_EXTERNAL_REFS" not in os.environ and "TF_INIT_OUTPUT" not in os.environ:
-            if "StackRef" in value:
+            if "StackRef" in value and isinstance(value, dict):
                 stack_value = _resolve_stackref_from_dict(value["StackRef"])
                 if stack_value:
                     value = stack_value
-            if "TFRef" in value:
+            if "TFRef" in value and isinstance(value, dict):
                 tf_value = _resolve_tfref_from_dict(value["TFRef"])
                 if tf_value:
                     value = tf_value
-            if "AzRef" in value:
+            if "AzRef" in value and isinstance(value, dict):
                 az_value = _resolve_azref_from_dict(value["AzRef"])
                 if az_value:
                     value = az_value
-            if "Encrypt" in value:
+            if "Encrypt" in value and isinstance(value, dict):
+                print(f"{value}")
                 enc_conf = value["Encrypt"]
                 if isinstance(enc_conf, OrderedDict):
                     to_encrypt = yaml_save(enc_conf["value"])
@@ -285,31 +286,31 @@ def _process_value(value, used_params):
                 del enc_conf["value"]
                 vault = Vault(**enc_conf)
                 value = b64encode(vault.direct_encrypt(value))
-            if "YamlRef" in value:
+            if "YamlRef" in value and isinstance(value, dict):
                 if "file" in value["YamlRef"] and "jmespath" in value["YamlRef"]:
                     yaml_file = value["YamlRef"]["file"]
                     contents = yaml_load(open(yaml_file))
                     value = search(value["YamlRef"]["jmespath"], contents)
                     if value:
                         return _process_value(value, used_params)
-            if "SsmRef" in value:
+            if "SsmRef" in value and isinstance(value, dict):
                 ssm_key = value["SsmRef"]
                 ssm_value = _resolve_ssm_parameter(ssm_key, region=region)
                 if ssm_value:
                     value = ssm_value
-            if "ProductAmi" in value:
+            if "ProductAmi" in value and isinstance(value, dict):
                 product_code = value["ProductAmi"]
                 product_ami = _resolve_product_ami(product_code, region=region)
                 if product_ami:
                     value = product_ami
-            if "OwnerNamedAmi" in value:
+            if "OwnerNamedAmi" in value and isinstance(value, dict):
                 if "owner" in value["OwnerNamedAmi"] and "name" in value["OwnerNamedAmi"]:
                     owner = value["OwnerNamedAmi"]["owner"]
                     name = value["OwnerNamedAmi"]["name"]
                     owner_ami = _resolve_onwer_named_ami(owner, name, region=region)
                     if owner_ami:
                         value = owner_ami
-            if "FlowRef" in value:
+            if "FlowRef" in value and isinstance(value, dict):
                 flow_value = _resolve_flowref(value["FlowRef"])
                 if flow_value:
                     value = flow_value
