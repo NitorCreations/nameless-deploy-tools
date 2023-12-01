@@ -61,7 +61,7 @@ pycparser==2.21
     # via cffi
 pycryptodomex==3.19.0
     # via nameless-deploy-tools (setup.py)
-pygments==2.16.1
+pygments==2.17.2
     # via nameless-deploy-tools (setup.py)
 pyopenssl==23.3.0
     # via nameless-deploy-tools (setup.py)
