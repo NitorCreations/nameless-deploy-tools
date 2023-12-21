@@ -1330,9 +1330,9 @@ def export_connect_contact_flow():
         help="the name of the connect subcomponent directory that has the contact flow template",
     ).completer = SubCCompleter("connect")
     instance_sel = parser.add_mutually_exclusive_group()
-    instance_sel.add_argument(
-        "-i", "--instanceid", help="id of the connect instance to export from"
-    ).completer = lambda **kwargs: connect.get_instance_ids()
+    instance_sel.add_argument("-i", "--instanceid", help="id of the connect instance to export from").completer = (
+        lambda **kwargs: connect.get_instance_ids()
+    )
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
     ).completer = lambda **kwargs: connect.get_instance_aliases()
@@ -1364,9 +1364,9 @@ def list_connect_contact_flows():
         help="the name of the connect subcomponent directory that has the contact flow template",
     ).completer = SubCCompleter("connect")
     instance_sel = parser.add_mutually_exclusive_group()
-    instance_sel.add_argument(
-        "-i", "--instanceid", help="id of the connect instance to export from"
-    ).completer = lambda **kwargs: connect.get_instance_ids()
+    instance_sel.add_argument("-i", "--instanceid", help="id of the connect instance to export from").completer = (
+        lambda **kwargs: connect.get_instance_ids()
+    )
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
     ).completer = lambda **kwargs: connect.get_instance_aliases()
