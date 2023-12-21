@@ -66,6 +66,7 @@ NDT_ONLY = [
     "ec2-wait-for-metadata=ec2_utils.cli:wait_for_metadata",
     "ecr-ensure-repo=n_utils.cli:cli_ecr_ensure_repo",
     "ecr-repo-uri=n_utils.cli:cli_ecr_repo_uri",
+    "ecs-ls=n_utils.cli:cli_ecs_ls",
     "enable-profile=n_utils.profile_util:cli_enable_profile",
     "get-images=n_utils.cli:cli_get_images",
     "interpolate-file=n_utils.cli:cli_interpolate_file",
