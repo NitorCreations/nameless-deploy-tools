@@ -43,6 +43,7 @@ from n_utils.aws_infra_util import json_load, json_save_small, load_parameters, 
 from n_utils.az_util import ensure_group, ensure_management_group, fetch_properties
 from n_utils.cloudfront_utils import distribution_comments, distributions, upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
+from n_utils.ecs_utils import ecs_describe_services, ecs_describe_clusters, ecs_describe_tasks, ecs_execute_command
 from n_utils.git_utils import Git
 from n_utils.log_events import CloudFormationEvents
 from n_utils.maven_utils import add_server
@@ -662,6 +663,70 @@ def cli_ecr_repo_uri():
         parser.error("Did not find uri for repo '" + args.name + "'")
     else:
         print(uri)
+
+
+def cli_ecs_ls():
+    """List ECS clusters or if a cluster is given, list services in that cluster. If a service is given, list tasks in that service"""  # noqa: E501
+    parser = get_parser()
+    parser.add_argument(
+        "cluster",
+        help="The cluster to list services for. If not specified, all clusters are listed",
+        nargs="?",
+    )
+    parser.add_argument(
+        "service",
+        help="The service to list tasks for. If not specified, all services are listed",
+        nargs="?",
+    )
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    if args.cluster:
+        if args.service:
+            print(f"Tasks for service {args.service} in {args.cluster}:")
+            for task in ecs_describe_tasks(args.cluster, args.service):
+                # print nice info about the task
+                print(
+                    f"{task['taskArn'].split('/')[-1]}: {task['lastStatus']} {task['taskDefinitionArn'].split('/')[-1]} {task['memory']} MB {task['cpu']} vCPU"  # noqa: E501
+                )  # noqa: E501
+        else:
+            for service in ecs_describe_services(args.cluster):
+                print(
+                    f"{service['serviceName']} tasks: {service['desiredCount']} desired, {service['runningCount']} running, {service['pendingCount']} pending"  # noqa: E501
+                )
+    else:
+        for cluster in ecs_describe_clusters():
+            if cluster["status"] == "ACTIVE":
+                print(
+                    f"{cluster['clusterName']}: {cluster['activeServicesCount']} services ({cluster['runningTasksCount']} task{'s' if cluster['runningTasksCount']!=1 else ''} running, {cluster['pendingTasksCount']} pending)"  # noqa: E501
+                )
+
+
+def cli_ecs_execute_command():
+    """Execute a command in a running ECS task using ECS Exec"""
+    parser = get_parser()
+    parser.add_argument("cluster", help="The cluster to execute the command in")
+    parser.add_argument("service", help="The service to execute the command in")
+    parser.add_argument("command", help="The command to execute")
+    # optional task argument
+    parser.add_argument(
+        "-t",
+        "--task",
+        help="The task to execute the command in. If not specified, a task will be selected at random",
+        required=False,
+    )
+    # optional non-interactive argument
+    parser.add_argument(
+        "--non-interactive",
+        help="Run the command non-interactively. Default is to run interactively",
+        action="store_true",
+        required=False,
+    )
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    interactive = True
+    if args.non_interactive is not None:
+        interactive = not args.non_interactive
+    ecs_execute_command(args.cluster, args.service, args.command, args.task, interactive)
 
 
 def cli_upsert_cloudfront_records():
