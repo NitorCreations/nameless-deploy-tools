@@ -54,7 +54,7 @@ applications. All of the above can also be deployed using _[Terraform](https://w
 pip install nameless-deploy-tools
 ```
 
-Requires Python 3.7 or newer.
+Requires Python 3.8 or newer.
 
 ## Getting started
 
