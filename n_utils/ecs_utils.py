@@ -16,10 +16,11 @@
 # limitations under the License.
 
 import time
+from subprocess import Popen
+from typing import Union
+
 from botocore.exceptions import ClientError
 from threadlocal_aws.clients import ecs
-from typing import Union
-from subprocess import Popen
 
 from n_utils.iam_utils import check_role_permissions
 

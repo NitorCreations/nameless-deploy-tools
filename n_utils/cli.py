@@ -43,7 +43,7 @@ from n_utils.aws_infra_util import json_load, json_save_small, load_parameters, 
 from n_utils.az_util import ensure_group, ensure_management_group, fetch_properties
 from n_utils.cloudfront_utils import distribution_comments, distributions, upsert_cloudfront_records
 from n_utils.ecr_utils import ensure_repo, repo_uri
-from n_utils.ecs_utils import ecs_describe_services, ecs_describe_clusters, ecs_describe_tasks, ecs_execute_command
+from n_utils.ecs_utils import ecs_describe_clusters, ecs_describe_services, ecs_describe_tasks, ecs_execute_command
 from n_utils.git_utils import Git
 from n_utils.log_events import CloudFormationEvents
 from n_utils.maven_utils import add_server
@@ -1395,9 +1395,9 @@ def export_connect_contact_flow():
         help="the name of the connect subcomponent directory that has the contact flow template",
     ).completer = SubCCompleter("connect")
     instance_sel = parser.add_mutually_exclusive_group()
-    instance_sel.add_argument("-i", "--instanceid", help="id of the connect instance to export from").completer = (
-        lambda **kwargs: connect.get_instance_ids()
-    )
+    instance_sel.add_argument(
+        "-i", "--instanceid", help="id of the connect instance to export from"
+    ).completer = lambda **kwargs: connect.get_instance_ids()
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
     ).completer = lambda **kwargs: connect.get_instance_aliases()
@@ -1429,9 +1429,9 @@ def list_connect_contact_flows():
         help="the name of the connect subcomponent directory that has the contact flow template",
     ).completer = SubCCompleter("connect")
     instance_sel = parser.add_mutually_exclusive_group()
-    instance_sel.add_argument("-i", "--instanceid", help="id of the connect instance to export from").completer = (
-        lambda **kwargs: connect.get_instance_ids()
-    )
+    instance_sel.add_argument(
+        "-i", "--instanceid", help="id of the connect instance to export from"
+    ).completer = lambda **kwargs: connect.get_instance_ids()
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
     ).completer = lambda **kwargs: connect.get_instance_aliases()
