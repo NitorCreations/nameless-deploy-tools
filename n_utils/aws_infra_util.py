@@ -878,7 +878,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                     + "were of type "
                     + str(type(result))
                     + ", but the following entry was not: \n"
-                    + json.dumps(merge, indent=2)
+                    + json.dumps(merge, indent=2, default=str)
                     + "\nIn file "
                     + basefile
                 )
