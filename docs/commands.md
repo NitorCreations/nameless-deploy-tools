@@ -608,6 +608,44 @@ options:
   -h, --help  show this help message and exit
 ```
 
+## `ndt ecs-exec`
+
+```bash
+usage: ndt ecs-exec [-h] [-t TASK] [--non-interactive] cluster service command
+
+Execute a command in a running ECS task using ECS Exec
+
+positional arguments:
+  cluster               The cluster to execute the command in
+  service               The service to execute the command in
+  command               The command to execute
+
+options:
+  -h, --help            show this help message and exit
+  -t TASK, --task TASK  The task to execute the command in. If not specified,
+                        a task will be selected at random
+  --non-interactive     Run the command non-interactively. Default is to run
+                        interactively
+```
+
+## `ndt ecs-ls`
+
+```bash
+usage: ndt ecs-ls [-h] [cluster] [service]
+
+List ECS clusters or if a cluster is given, list services in that cluster. If
+a service is given, list tasks in that service
+
+positional arguments:
+  cluster     The cluster to list services for. If not specified, all clusters
+              are listed
+  service     The service to list tasks for. If not specified, all services
+              are listed
+
+options:
+  -h, --help  show this help message and exit
+```
+
 ## `ndt enable-profile`
 
 ```bash
