@@ -58,7 +58,12 @@ fi
 if [ -z "$RUSTUP_DOWNLOAD_URL" ]; then
   RUSTUP_DOWNLOAD_URL=https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
 fi
-
+if [ -z "$SOCI_SNAPSHOTTER_URL" ]; then
+  SOCI_SNAPSHOTTER_URL=https://github.com/awslabs/soci-snapshotter/releases/download/v0.4.1/soci-snapshotter-0.4.1-linux-amd64-static.tar.gz
+fi
+if [ -z "$SOCI_SNAPSHOTTER_CSUM" ]; then
+  SOCI_SNAPSHOTTER_CSUM=00474043ffed48a70ef88e80737722cf39c029a9744cab1071edfbebf403e93e
+fi
 # Make sure we get logging
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null; then
   echo "output: {all: '| tee -a /var/log/cloud-init-output.log'}" >> /etc/cloud/cloud.cfg.d/05_logging.cfg
@@ -381,4 +386,65 @@ github_actions_get_create_token() {
     -H "Authorization: Bearer $PAT_TOKEN" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token
+}
+
+install_soci_snapshotter(){
+  source $(n-include common_tools.sh)
+
+  safe_download "$SOCI_SNAPSHOTTER_URL" "$SOCI_SNAPSHOTTER_CSUM" "soci-snapshotter.tar.gz"
+  tar xzf soci-snapshotter.tar.gz --strip-components=6 --directory=/usr/bin/
+  rm -f soci-snapshotter.tar.gz
+  soci-snapshotter-grpc --version
+  cat > /etc/systemd/system/soci-snapshotter.service << MARKER
+# Copyright The Soci Snapshotter Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Copyright The containerd Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+[Unit]
+Description=soci snapshotter containerd plugin
+Documentation=https://github.com/awslabs/soci-snapshotter
+After=network.target
+Before=containerd.service
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/soci-snapshotter-grpc
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+MARKER
+  systemctl daemon-reload
+  systemctl enable soci-snapshotter --now
+  cat >> /etc/containerd/config.toml << MARKER
+[proxy_plugins.soci]
+    type = "snapshot"
+    address = "/run/soci-snapshotter-grpc/soci-snapshotter-grpc.sock"
+MARKER
+  systemctl restart containerd
 }
