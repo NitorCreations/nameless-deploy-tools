@@ -209,7 +209,6 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "n_utils/nameless-dt-enable-profile.py" = ["N999"]
 "n_utils/nameless-dt-load-project-env.py" = ["N999"]
 
-
 [tool.ruff.isort]
 # https://beta.ruff.rs/docs/settings/#isort
 combine-as-imports = true
