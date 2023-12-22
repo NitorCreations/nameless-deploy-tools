@@ -1,4 +1,4 @@
-name: isort
+name: Python isort
 
 # Run either when pushing directly to main/master or in a PR targeting main/master
 on:
@@ -13,8 +13,8 @@ on:
 
 # https://github.com/marketplace/actions/python-isort
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  format:
+    runs-on: self-hosted
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4

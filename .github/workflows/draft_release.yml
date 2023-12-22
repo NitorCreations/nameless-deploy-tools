@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'The version number (e.g. 1.2.3) OR one of: patch|minor|major|prepatch|preminor|premajor|prerelease'
+        description: "The version number (e.g. 1.2.3) OR one of: patch|minor|major|prepatch|preminor|premajor|prerelease"
         required: true
-        default: 'patch'
+        default: "patch"
 
 jobs:
   draft-release:
@@ -35,8 +35,8 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
-          add: 'CHANGELOG.md pyproject.toml'
-          message: 'Release ${{ steps.updated_version.outputs.version }}'
+          add: "CHANGELOG.md pyproject.toml"
+          message: "Release ${{ steps.updated_version.outputs.version }}"
       - name: Create tag
         run: |
           git tag ${{ steps.updated_version.outputs.version }}

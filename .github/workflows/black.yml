@@ -1,4 +1,4 @@
-name: Black
+name: Python Black
 
 # Run either when pushing directly to main/master or in a PR targeting main/master
 on:
@@ -11,9 +11,10 @@ on:
       - ".github/workflows/black.yml"
   pull_request:
 
+# https://black.readthedocs.io/en/stable/integrations/github_actions.html
 jobs:
   format:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
