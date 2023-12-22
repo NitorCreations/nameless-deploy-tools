@@ -14,7 +14,7 @@ on:
 # https://black.readthedocs.io/en/stable/integrations/github_actions.html
 jobs:
   format:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v4

@@ -14,7 +14,7 @@ on:
 # https://github.com/chartboost/ruff-action
 jobs:
   lint:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: ruff
     steps:
       - name: Check out source repository
