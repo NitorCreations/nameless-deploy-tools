@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ElementTree
 from subprocess import Popen
 
 import pytest
@@ -16,7 +16,7 @@ def cleanup():
 def test_add_server():
     pomfile = "n_utils/tests/pom.xml"
     add_server(pomfile, "deploy", "deployer")
-    tree = ET.parse(pomfile)
+    tree = ElementTree.parse(pomfile)
     settings = tree.getroot()
     servers = settings.find("./servers")
     deployer_server = servers.find("./server[id='deploy']")

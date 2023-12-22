@@ -64,7 +64,7 @@ class Git:
             if not exported:
                 export_branch = self._resolve_branch(branch)
                 if not export_branch:
-                    raise CheckoutException("Failed to resolve branch " + branch + " for export")
+                    raise CheckoutError("Failed to resolve branch " + branch + " for export")
                 proc = Popen(
                     ["git", "archive", "--format", "tar", export_branch],
                     stdout=PIPE,
@@ -73,7 +73,7 @@ class Git:
                 tar = tar_open(mode="r|", fileobj=proc.stdout)
                 tar.extractall(path=checkout_dir)
         except TarReadError:
-            raise CheckoutException("Failed to export branch " + branch)
+            raise CheckoutError("Failed to export branch " + branch)
         return checkout_dir
 
     def get_git_root(self):
@@ -128,5 +128,5 @@ class Git:
         return self.current_branch
 
 
-class CheckoutException(Exception):
+class CheckoutError(Exception):
     pass
