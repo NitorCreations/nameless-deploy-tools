@@ -173,13 +173,13 @@ def get_az_command(command, parameters):
     ret = ["az", "deployment", command, "--name", name]
     if scope == "group":
         if "AZURE_GROUP" not in parameters:
-            raise MissingAzureGroup
+            raise MissingAzureGroupError
         ret.insert(2, "group")
         ret.append("--resource-group")
         ret.append(parameters["AZURE_GROUP"])
     elif scope == "management-group":
         if "AZURE_MANAGEMENT_GROUP" not in parameters:
-            raise MissingAzureManagementGroup
+            raise MissingAzureManagementGroupError
         ret.insert(2, "mg")
         ret.append("--management-group-id")
         ret.append(parameters["AZURE_MANAGEMENT_GROUP"])
@@ -188,17 +188,17 @@ def get_az_command(command, parameters):
     elif scope == "tenant":
         ret.insert(2, "tenant")
     else:
-        raise UnknownAzureGroupException
+        raise UnknownAzureGroupError
     return ret
 
 
-class UnknownAzureGroupException(Exception):
+class UnknownAzureGroupError(Exception):
     pass
 
 
-class MissingAzureGroup(Exception):
+class MissingAzureGroupError(Exception):
     pass
 
 
-class MissingAzureManagementGroup(Exception):
+class MissingAzureManagementGroupError(Exception):
     pass

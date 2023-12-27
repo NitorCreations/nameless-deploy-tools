@@ -123,22 +123,26 @@ def ecs_execute_command(cluster: str, service: str, command: str, task_str: Unio
             + (f" and task {task_str}" if task_str is not None else "")
         )
         return
+
     task = task_list[0]
     if task["launchType"] == "EC2":
         task_definition = ecs().describe_task_definition(taskDefinition=task["taskDefinitionArn"])["taskDefinition"]
         if not _check_ssm_messages_permissions(task_definition["taskRoleArn"].split("/")[-1]):
-            print(f"Error task {task['taskArn'].split('/')[-1]} does not have required SSM permissions")
             print(
-                "See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html#ecs-exec-required-iam-permissions"
+                f"Error task {task['taskArn'].split('/')[-1]} does not have required SSM permissions.\n"
+                "See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html#ecs-exec-required-iam-permissions"  # noqa: E501
             )
             return
+
     if not task["enableExecuteCommand"]:
         print(f"Error: Task {task['taskArn']} does not have execute command enabled")
         if task["launchType"] == "EC2" and not ecs_cluster_has_exec_capability(cluster):
             print(
-                f"Error: Cluster {cluster} does not have ecs.capability.execute-command capability, please make sure that your cluster has a container instance with this capability"
+                f"Error: Cluster {cluster} does not have ecs.capability.execute-command capability, "
+                "please make sure that your cluster has a container instance with this capability"
             )
             return
+
         if input("Do you want to enable it? This will make a redeployment (y/N)") == "y":
             ecs().update_service(cluster=cluster, service=service, enableExecuteCommand=True, forceNewDeployment=True)
             print("Service updated, waiting for deployment to finish")
@@ -156,6 +160,7 @@ def ecs_execute_command(cluster: str, service: str, command: str, task_str: Unio
                 return
         else:
             return
+
     print(f"Executing command {command} on task {task['taskArn'].split('/')[-1]}")
     command = [
         "aws",
@@ -170,4 +175,5 @@ def ecs_execute_command(cluster: str, service: str, command: str, task_str: Unio
     ]
     if interactive:
         command.append("--interactive")
+
     Popen(command).communicate()

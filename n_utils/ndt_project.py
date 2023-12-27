@@ -322,7 +322,7 @@ phases:
         commands:
             - echo $CODEBUILD_SOURCE_VERSION
             - ndt ${command} ${component} ${subcomponent}
-"""
+"""  # noqa: N806
     template = """{
     "name": "",
     "source": {

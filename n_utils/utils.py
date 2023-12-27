@@ -214,10 +214,10 @@ SIMPLE_PARAM_RE = re.compile(r"\$([a-zA-Z0-9_]*)", re.M)
 DOUBLE_PARANTHESIS_RE = re.compile(r"\(\(([^)]+)\)\)", re.M)
 
 
-def _apply_simple_regex(RE, line, params, vault, vault_keys):
+def _apply_simple_regex(re, line, params, vault, vault_keys):
     ret = line
     next_start = 0
-    match = RE.search(line)
+    match = re.search(line)
     while match is not None:
         param_value = None
         param_name = match.group(1)
@@ -232,7 +232,7 @@ def _apply_simple_regex(RE, line, params, vault, vault_keys):
                 return param_value
             else:
                 ret = ret[: match.start()] + str(param_value) + ret[match.end() :]
-        match = RE.search(ret, next_start)
+        match = re.search(ret, next_start)
     return ret
 
 

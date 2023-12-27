@@ -19,7 +19,7 @@ from n_utils.lp_util import get_lpentry
 from n_utils.mfa_utils import mfa_generate_code
 
 
-def ConfigParser():
+def ConfigParser():  # noqa: N802
     import configparser
 
     return configparser.ConfigParser()

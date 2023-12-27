@@ -2,7 +2,8 @@
 
 [![Build Status](https://api.travis-ci.com/NitorCreations/nameless-deploy-tools.svg?branch=master)](https://app.travis-ci.com/github/NitorCreations/nameless-deploy-tools/)
 [![Coverage Status](https://coveralls.io/repos/github/NitorCreations/nameless-deploy-tools/badge.svg?branch=master)](https://coveralls.io/github/NitorCreations/nameless-deploy-tools?branch=master)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 ## Released version 1.314
 
@@ -53,7 +54,7 @@ applications. All of the above can also be deployed using _[Terraform](https://w
 pip install nameless-deploy-tools
 ```
 
-Requires Python 3.7 or newer.
+Requires Python 3.8 or newer.
 
 ## Getting started
 
@@ -110,7 +111,7 @@ pip-compile setup.py
 ## Code formatting and linting
 
 This project uses [Black](https://github.com/psf/black) together with [isort](https://github.com/PyCQA/isort) for Python code formatting,
-and [flake8](https://github.com/PyCQA/flake8) for linting.
+and [ruff](https://github.com/astral-sh/ruff) for linting.
 They are configured with a custom line length limit of 120.
 
 Usage:
@@ -119,14 +120,14 @@ Usage:
 pip install --upgrade black isort flake8
 black .
 isort .
-flake8 .
+ruff --fix .
 ```
 
 These can also be integrated to IDEs / editors or run as a pre-commit hook.
 See the documentation for example for Black [here](https://black.readthedocs.io/en/stable/integrations/editors.html).
 VS Code has built-in support for [Black](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter),
 [isort](https://marketplace.visualstudio.com/items?itemName=ms-python.isort),
-and [flake8](https://marketplace.visualstudio.com/items?itemName=ms-python.flake8) through official plugins.
+and [ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) through official plugins.
 
 Using with [pre-commit](https://pre-commit.com/):
 

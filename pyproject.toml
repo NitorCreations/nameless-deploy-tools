@@ -20,7 +20,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nameless-deploy-tools"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 description = "Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow"
 license = { text = "Apache 2.0" }
 authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
@@ -76,7 +76,7 @@ signal-cf-status = "ec2_utils.cli:cf_signal_status"
 
 [project.optional-dependencies]
 testing = ["coverage", "mock", "pytest-cov", "pytest-mock", "pytest"]
-dev = ["black", "flake8", "isort", "pip-tools", "pyupgrade", "ruff"]
+dev = ["black", "isort", "pip-tools", "ruff"]
 
 [tool.setuptools]
 packages = ["n_utils"]
@@ -102,7 +102,7 @@ addopts = "--cov-config=.coveragerc --cov=n_utils/ --capture=sys"
 [tool.black]
 # https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
 line-length = 120
-target-version = ['py37']
+target-version = ['py38']
 include = '\.pyi?$'
 extend-exclude = '''venv*'''
 
@@ -118,13 +118,13 @@ force_grid_wrap = 0
 include_trailing_comma = true
 line_length = 120
 multi_line_output = 3
-py_version = 37
+py_version = 38
 sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
 use_parentheses = true
 
 [tool.ruff]
 # https://github.com/charliermarsh/ruff#configuration
-target-version = "py37"
+target-version = "py38"
 line-length = 120
 select = ["E", "F", "W", "N", "UP"] # "I"
 ignore = []
@@ -206,6 +206,8 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.per-file-ignores]
 "n_utils/yuuuu3332111i1l1i.py" = ["F821", "N802", "N806"]
+"n_utils/nameless-dt-enable-profile.py" = ["N999"]
+"n_utils/nameless-dt-load-project-env.py" = ["N999"]
 
 [tool.ruff.isort]
 # https://beta.ruff.rs/docs/settings/#isort

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import os
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ElementTree
 
 
 def indent(elem, level=0):
@@ -33,21 +33,21 @@ def indent(elem, level=0):
 
 
 def add_server(pomfile, server_id, username):
-    tree = ET.parse(pomfile)
+    tree = ElementTree.parse(pomfile)
     settings = tree.getroot()
     servers = settings.find("./servers")
     if servers is None:
-        servers = ET.SubElement(settings, "servers")
+        servers = ElementTree.SubElement(settings, "servers")
     deployer_server = servers.find("./server[id='" + server_id + "']")
     if deployer_server is None:
-        deployer_server = ET.SubElement(servers, "server")
-        ET.SubElement(deployer_server, "id").text = server_id
-        ET.SubElement(deployer_server, "username")
+        deployer_server = ElementTree.SubElement(servers, "server")
+        ElementTree.SubElement(deployer_server, "id").text = server_id
+        ElementTree.SubElement(deployer_server, "username")
     password = deployer_server.find("./password")
     username_el = deployer_server.find("./username")
     username_el.text = username
     if password is None:
-        password = ET.SubElement(deployer_server, "password")
+        password = ElementTree.SubElement(deployer_server, "password")
     password.text = os.getenv("DEPLOYER_PASSWORD", "password")
     indent(settings)
     tree.write(pomfile, encoding="utf-8")

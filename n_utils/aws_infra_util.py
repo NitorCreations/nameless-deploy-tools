@@ -757,19 +757,19 @@ def apply_source(data, filename, optional, default):
 # returns new data
 
 
-def _preprocess_template(data, root, basefile, path, templateParams):
+def _preprocess_template(data, root, basefile, path, template_params):
     def param_refresh_callback():
-        return templateParams.update(_get_params(root, basefile))
+        return template_params.update(_get_params(root, basefile))
 
     param_refresh_callback()
     global GOT_IMPORT_ERRORS
     if isinstance(data, OrderedDict):
         if "Fn::ImportFile" in data:
             val = data["Fn::ImportFile"]
-            file = expand_vars(val, templateParams, None, [])
+            file = expand_vars(val, template_params, None, [])
             script_import = resolve_file(file, basefile)
             if script_import:
-                params = OrderedDict(list(templateParams.items()))
+                params = OrderedDict(list(template_params.items()))
                 params.update(data)
                 data.clear()
                 contents = expand_only_double_paranthesis_params(import_script(script_import), params, None, [])
@@ -789,19 +789,19 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             jmespath = None
             if "jmespath" in data and data["jmespath"]:
                 jmespath = data["jmespath"]
-            file = expand_vars(val, templateParams, None, [])
+            file = expand_vars(val, template_params, None, [])
             yaml_file = resolve_file(file, basefile)
             del data["Fn::ImportYaml"]
             if yaml_file:
                 contents = yaml_load(open(yaml_file))
-                params = OrderedDict(list(templateParams.items()))
+                params = OrderedDict(list(template_params.items()))
                 params.update(data)
                 contents = expand_vars(contents, params, None, [])
                 data["Fn::ImportYaml"] = OrderedDict()
                 data["Fn::ImportYaml"]["Result"] = contents
                 param_refresh_callback()
                 while True:
-                    expanded_result = expand_vars(contents, templateParams, None, [])
+                    expanded_result = expand_vars(contents, template_params, None, [])
                     if expanded_result == contents:
                         break
                     else:
@@ -811,7 +811,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 data.clear()
                 if isinstance(contents, OrderedDict):
                     for k, val in list(contents.items()):
-                        data[k] = _preprocess_template(val, root, yaml_file, path + k + "_", templateParams)
+                        data[k] = _preprocess_template(val, root, yaml_file, path + k + "_", template_params)
                 elif isinstance(contents, list):
                     data = contents
                     for i in range(0, len(data)):
@@ -820,7 +820,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                             root,
                             yaml_file,
                             path + str(i) + "_",
-                            templateParams,
+                            template_params,
                         )
                 else:
                     print(
@@ -851,7 +851,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                         del data[k]
             if data and "optional" in data:
                 del data["optional"]
-            data = _preprocess_template(data, root, yaml_file, path, templateParams)
+            data = _preprocess_template(data, root, yaml_file, path, template_params)
         elif "Fn::Merge" in data:
             merge_list = data["Fn::Merge"]["Source"] if "Source" in data["Fn::Merge"] else data["Fn::Merge"]
             result = data["Fn::Merge"]["Result"] if "Result" in data["Fn::Merge"] else OrderedDict()
@@ -861,11 +861,11 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 GOT_IMPORT_ERRORS = True
                 return data
             merge = _preprocess_template(
-                expand_vars(merge_list.pop(0), templateParams, None, []),
+                expand_vars(merge_list.pop(0), template_params, None, []),
                 root,
                 basefile,
                 path + "/",
-                templateParams,
+                template_params,
             )
             if not result:
                 result = merge
@@ -892,7 +892,7 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 GOT_IMPORT_ERRORS = True
             param_refresh_callback()
             while True:
-                expanded_result = expand_vars(result, templateParams, None, [])
+                expanded_result = expand_vars(result, template_params, None, [])
                 if expanded_result == result:
                     break
                 else:
@@ -903,14 +903,14 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                 del data["Fn::Merge"]
                 return result
             else:
-                return _preprocess_template(data, root, basefile, path + "/", templateParams)
+                return _preprocess_template(data, root, basefile, path + "/", template_params)
         elif "StackRef" in data:
-            stack_var = expand_vars(data["StackRef"], templateParams, None, [])
-            stack_var = _check_refs(stack_var, basefile, path + "StackRef_", templateParams, True)
+            stack_var = expand_vars(data["StackRef"], template_params, None, [])
+            stack_var = _check_refs(stack_var, basefile, path + "StackRef_", template_params, True)
             data.clear()
             stack_value = _resolve_stackref_from_dict(stack_var)
             if not stack_value:
-                raise StackRefUnresolved(
+                raise StackRefUnresolvedError(
                     "Did not find value for: "
                     + stack_var["paramName"]
                     + " in stack "
@@ -921,13 +921,13 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             param_refresh_callback()
             return stack_value
         elif "TFRef" in data:
-            tf_var = expand_vars(data["TFRef"], templateParams, None, [])
-            tf_var = _check_refs(tf_var, basefile, path + "TFRef_", templateParams, True)
+            tf_var = expand_vars(data["TFRef"], template_params, None, [])
+            tf_var = _check_refs(tf_var, basefile, path + "TFRef_", template_params, True)
             data.clear()
             tf_value = _resolve_tfref_from_dict(tf_var)
             if not tf_value:
                 ref = stack_var["paramName"] if "paramName" in stack_var else stack_var["jmespath"]
-                raise TFRefUnresolved(
+                raise TFRefUnresolvedError(
                     "Did not find value for: "
                     + ref
                     + " in terraform compnent "
@@ -938,12 +938,12 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             param_refresh_callback()
             return tf_value
         elif "AzRef" in data:
-            az_var = expand_vars(data["AzRef"], templateParams, None, [])
-            az_var = _check_refs(az_var, basefile, path + "AzRef_", templateParams, True)
+            az_var = expand_vars(data["AzRef"], template_params, None, [])
+            az_var = _check_refs(az_var, basefile, path + "AzRef_", template_params, True)
             data.clear()
             az_value = _resolve_azref_from_dict(az_var)
             if not az_value:
-                raise AzRefUnresolved(
+                raise AzRefUnresolvedError(
                     "Did not find value for: "
                     + stack_var["paramName"]
                     + " in azure compnent "
@@ -958,27 +958,27 @@ def _preprocess_template(data, root, basefile, path, templateParams):
             enc_conf = data["Encrypt"]
             del enc_conf["value"]
             vault = Vault(**enc_conf)
-            resolved_value = _preprocess_template(to_encrypt, root, basefile, path + "Encrypt_", templateParams)
+            resolved_value = _preprocess_template(to_encrypt, root, basefile, path + "Encrypt_", template_params)
             if not isinstance(resolved_value, str):
-                raise EncryptException("Encrypted value needs to be a string")
+                raise EncryptError("Encrypted value needs to be a string")
             return b64encode(vault.direct_encrypt(resolved_value))
         elif "Ref" in data:
             data["__source"] = basefile
         elif "VaultRef" in data:
-            vault_key = expand_vars(data["VaultRef"], templateParams, None, [])
+            vault_key = expand_vars(data["VaultRef"], template_params, None, [])
             return _resolve_vault_parameter(vault_key)
         elif "SsmRef" in data:
-            ssm_key = expand_vars(data["SsmRef"], templateParams, None, [])
+            ssm_key = expand_vars(data["SsmRef"], template_params, None, [])
             return _resolve_ssm_parameter(ssm_key)
         elif "ProductAmi" in data:
-            product_code = expand_vars(data["ProductAmi"], templateParams, None, [])
+            product_code = expand_vars(data["ProductAmi"], template_params, None, [])
             return _resolve_product_ami(product_code)
         elif "OwnerNamedAmi" in data:
-            owner_named = expand_vars(data["OwnerNamedAmi"], templateParams, None, [])
+            owner_named = expand_vars(data["OwnerNamedAmi"], template_params, None, [])
             if "owner" in owner_named and "name" in owner_named:
                 return _resolve_onwer_named_ami(owner_named["owner"], owner_named["name"])
         elif "FlowRef" in data:
-            flow_name = expand_vars(data["FlowRef"], templateParams, None, [])
+            flow_name = expand_vars(data["FlowRef"], template_params, None, [])
             if flow_name:
                 return _resolve_flowref(flow_name)
         else:
@@ -988,27 +988,27 @@ def _preprocess_template(data, root, basefile, path, templateParams):
                     root,
                     basefile,
                     path + "Parameters_",
-                    templateParams,
+                    template_params,
                 )
                 param_refresh_callback()
             for k, val in list(data.items()):
                 if k != "Parameters":
                     data[k] = expand_vars(
-                        _preprocess_template(val, root, basefile, path + _to_str(k) + "_", templateParams),
-                        templateParams,
+                        _preprocess_template(val, root, basefile, path + _to_str(k) + "_", template_params),
+                        template_params,
                         None,
                         [],
                     )
     elif isinstance(data, list):
         for i in range(0, len(data)):
-            data[i] = _preprocess_template(data[i], root, basefile, path + str(i) + "_", templateParams)
+            data[i] = _preprocess_template(data[i], root, basefile, path + str(i) + "_", template_params)
     return data
 
 
 # returns new data
 
 
-def _check_refs(data, templateFile, path, templateParams, resolveRefs):
+def _check_refs(data, template_file, path, template_params, resolve_refs):
     global GOT_IMPORT_ERRORS
     if isinstance(data, OrderedDict):
         if "Ref" in data:
@@ -1024,7 +1024,7 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
             else:
                 file_line = 0
             # Ignore serverless framework default rest api resource that is secretly created by the framework
-            if var_name not in templateParams and var_name != "ApiGatewayRestApi":
+            if var_name not in template_params and var_name != "ApiGatewayRestApi":
                 if "__optional" in data:
                     data = data["__default"]
                 else:
@@ -1038,12 +1038,12 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
                         + ":"
                         + str(file_line)
                         + " not declared in template parameters in "
-                        + templateFile
+                        + template_file
                     )
                     GOT_IMPORT_ERRORS = True
             else:
-                if resolveRefs:
-                    data = templateParams[var_name]
+                if resolve_refs:
+                    data = template_params[var_name]
                     if data == PARAM_NOT_AVAILABLE:
                         print(
                             "ERROR: "
@@ -1062,10 +1062,10 @@ def _check_refs(data, templateFile, path, templateParams, resolveRefs):
                 del data["__default"]
         else:
             for k, val in list(data.items()):
-                data[k] = _check_refs(val, templateFile, f"{path}{k}_", templateParams, resolveRefs)
+                data[k] = _check_refs(val, template_file, f"{path}{k}_", template_params, resolve_refs)
     elif isinstance(data, list):
         for i in range(0, len(data)):
-            data[i] = _check_refs(data[i], templateFile, path + str(i) + "_", templateParams, resolveRefs)
+            data[i] = _check_refs(data[i], template_file, path + str(i) + "_", template_params, resolve_refs)
     return data
 
 
@@ -1276,17 +1276,17 @@ def _patch_launchconf(data):
             lc_userdata.append("\n")
 
 
-class StackRefUnresolved(Exception):
+class StackRefUnresolvedError(Exception):
     pass
 
 
-class TFRefUnresolved(Exception):
+class TFRefUnresolvedError(Exception):
     pass
 
 
-class AzRefUnresolved(Exception):
+class AzRefUnresolvedError(Exception):
     pass
 
 
-class EncryptException(Exception):
+class EncryptError(Exception):
     pass
