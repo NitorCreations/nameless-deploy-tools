@@ -59,7 +59,7 @@ pyaml==23.9.7
     # via nameless-deploy-tools (setup.py)
 pycparser==2.21
     # via cffi
-pycryptodomex==3.19.0
+pycryptodomex==3.19.1
     # via nameless-deploy-tools (setup.py)
 pygments==2.17.2
     # via nameless-deploy-tools (setup.py)
