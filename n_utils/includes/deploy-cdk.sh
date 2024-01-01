@@ -102,8 +102,9 @@ if [ -x "./pre_deploy.sh" ]; then
   "./pre_deploy.sh"
 fi
 
-cdk synth
-cdk diff || :
+
+npx cdk synth
+npx cdk diff || :
 
 if [ -n "$DRYRUN" ]; then
   echo "Dry run - quitting"
@@ -111,7 +112,7 @@ if [ -n "$DRYRUN" ]; then
 fi
 
 set -e
-cdk deploy --ci --require-approval never
+npx cdk deploy --ci --require-approval never
 
 if [ -x "./post_deploy.sh" ]; then
   "./post_deploy.sh"
