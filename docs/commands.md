@@ -350,6 +350,8 @@ Exports ndt parameters into component/azure-name/variables.json
 and deploys template.yaml or template.bicep with the azure cli referencing the parameter file
 If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
 they will be executed before and after the deployment, respectively.
+Similarly, if a readable pre_deploy_source.sh exists in the subcompoent directory,
+it will be sourced before the deployment to enable things like activating a python venv.
 
 positional arguments:
   component   the component directory where the azure directory is
@@ -372,6 +374,8 @@ Exports ndt parameters into component/cdk-name/variables.json, runs pre_deploy.s
 cdk project and runs cdk diff; cdk deploy for the same
 If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
 they will be executed before and after the deployment, respectively.
+Similarly if a readable pre_deploy_source.sh exists in the subcompoent directory,
+it will be sourced before the deployment to enable things like activating a python venv.
 
 positional arguments:
   component   the component directory where the cdk directory is
@@ -412,6 +416,8 @@ Exports ndt parameters into component/serverless-name/variables.yml, runs npm ci
 serverless project and runs sls deploy -s $paramEnvId for the same
 If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
 they will be executed before and after the deployment, respectively.
+Similarly, if a readable pre_deploy_source.sh exists in the subcompoent directory,
+it will be sourced before the deployment to enable things like activating a python venv.
 
 positional arguments:
   component   the component directory where the serverless directory is
@@ -435,6 +441,8 @@ usage: ndt deploy-stack [-d] [-r] [-h] component stack-name ami-id bake-job
 Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it.
 If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
 they will be executed before and after the deployment, respectively.
+Similarly, if a readable pre_deploy_source.sh exists in the subcompoent directory,
+it will be sourced before the deployment to enable things like activating a python venv.
 
 positional arguments:
   component   the component directory where the stack template is
@@ -461,6 +469,8 @@ If TF_BACKEND_CONF is defined and points to a readable file relative to the ndt 
 that file will get interpolated to $component/terraform-$terraform_name/backend.tf
 If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
 they will be executed before and after the deployment, respectively.
+Similarly, if a readable pre_deploy_source.sh exists in the subcompoent directory,
+it will be sourced before the deployment to enable things like activating a python venv.
 
 positional arguments:
   component   the component directory where the terraform directory is
@@ -603,6 +613,44 @@ Get the repo uri for a named docker
 
 positional arguments:
   name        The name of the ecr repository
+
+options:
+  -h, --help  show this help message and exit
+```
+
+## `ndt ecs-exec`
+
+```bash
+usage: ndt ecs-exec [-h] [-t TASK] [--non-interactive] cluster service command
+
+Execute a command in a running ECS task using ECS Exec
+
+positional arguments:
+  cluster               The cluster to execute the command in
+  service               The service to execute the command in
+  command               The command to execute
+
+options:
+  -h, --help            show this help message and exit
+  -t TASK, --task TASK  The task to execute the command in. If not specified,
+                        a task will be selected at random
+  --non-interactive     Run the command non-interactively. Default is to run
+                        interactively
+```
+
+## `ndt ecs-ls`
+
+```bash
+usage: ndt ecs-ls [-h] [cluster] [service]
+
+List ECS clusters or if a cluster is given, list services in that cluster. If
+a service is given, list tasks in that service
+
+positional arguments:
+  cluster     The cluster to list services for. If not specified, all clusters
+              are listed
+  service     The service to list tasks for. If not specified, all services
+              are listed
 
 options:
   -h, --help  show this help message and exit
