@@ -62,6 +62,8 @@ usage() {
   echo "Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it." >&2
   echo "If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory," >&2
   echo "they will be executed before and after the deployment, respectively." >&2
+  echo "Similarly, if a readable pre_deploy_source.sh exists in the subcompoent directory," >&2
+  echo "it will be sourced before the deployment to enable things like activating a python venv." >&2
   echo "" >&2
   echo "positional arguments:" >&2
   echo "  component   the component directory where the stack template is" >&2
@@ -141,6 +143,11 @@ cd ${component}/stack-${ORIG_STACK_NAME}
 if [ -x "./pre_deploy.sh" ]; then
   "./pre_deploy.sh"
 fi
+
+if [ -r "./pre_deploy_source.sh" ]; then
+  source "./pre_deploy_source.sh"
+fi
+
 cd ../..
 
 set -e
