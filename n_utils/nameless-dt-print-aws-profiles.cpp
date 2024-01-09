@@ -35,10 +35,10 @@ int main(const int argc, const char* argv[]) {
         }
     };
 
-    const std::filesystem::path credentials_path = std::filesystem::path(home) / ".aws" / "credentials";
+    const auto credentials_path = std::filesystem::path(home) / ".aws" / "credentials";
     get_aws_profiles(credentials_path, 1, 2);
 
-    const std::filesystem::path config_path = std::filesystem::path(home) / ".aws" / "config";
+    const auto config_path = std::filesystem::path(home) / ".aws" / "config";
     get_aws_profiles(config_path, 9, 10);
 
     for (const auto& profile : profiles) {
