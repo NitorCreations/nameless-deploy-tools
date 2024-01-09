@@ -70,8 +70,7 @@ else
 fi
 
 if [ -z "$(command -v "$COMPILER")" ]; then
-  echo "Compiler not found: $COMPILER"
-  exit 1
+  print_error_and_exit "Compiler not found: $COMPILER"
 fi
 
 $COMPILER --version
