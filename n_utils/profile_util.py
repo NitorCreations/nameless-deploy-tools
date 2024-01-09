@@ -159,7 +159,7 @@ def check_profile_expired(profile, profile_type=None):
 def print_aws_profiles():
     """
     Prints profile names from the credentials file (~/.aws/credentials),
-    and the confing file (~/.aws/config) for autocomplete tools.
+    and the config file (~/.aws/config) for autocomplete tools.
     """
     parser = argparse.ArgumentParser(description=print_aws_profiles.__doc__)
     if "_ARGCOMPLETE" in os.environ:
