@@ -40,7 +40,8 @@ def read_expiring_profiles():
 
 
 def read_profiles(prefix=""):
-    ret = []
+    """Return a list of all unique AWS profile names found from config."""
+    ret = set()
     home = expanduser("~")
     credentials = join(home, ".aws", "credentials")
     if isfile(credentials) and access(credentials, R_OK):
@@ -48,17 +49,19 @@ def read_profiles(prefix=""):
         with open(credentials) as credfile:
             parser.read_file(credfile)
             for profile in parser.sections():
-                if profile.startswith(prefix):
-                    ret.append(profile)
+                if profile and profile.startswith(prefix):
+                    ret.add(profile)
+
     config = join(home, ".aws", "config")
     if isfile(config) and access(config, R_OK):
         parser = ConfigParser()
         with open(config) as configfile:
             parser.read_file(configfile)
             for profile in parser.sections():
-                if profile.startswith("profile ") and profile[8:] not in ret and profile[8:].startswith(prefix):
-                    ret.append(profile[8:])
-    return ret
+                if profile and profile.startswith("profile ") and profile[8:].startswith(prefix):
+                    ret.add(profile[8:])
+
+    return sorted(ret)
 
 
 PROFILES = {}
@@ -83,6 +86,7 @@ def get_profile(profile, include_creds=True):
             if profile_section in parser.sections():
                 for option in parser.options(profile_section):
                     ret[option] = parser.get(profile_section, option)
+
     if include_creds:
         credentials = join(home, ".aws", "credentials")
         if isfile(credentials) and access(credentials, R_OK):
@@ -92,7 +96,9 @@ def get_profile(profile, include_creds=True):
                 if profile in parser.sections():
                     for option in parser.options(profile):
                         ret[option] = parser.get(profile, option)
+
         PROFILES_WITH_CREDS[profile] = ret
+
     PROFILES[profile] = ret
     return ret
 
@@ -152,8 +158,8 @@ def check_profile_expired(profile, profile_type=None):
 
 def print_aws_profiles():
     """
-    Prints profile names from credentials file (~/.aws/credentials),
-    and the conf file (~/.aws/conf) for autocomplete tools.
+    Prints profile names from the credentials file (~/.aws/credentials),
+    and the confing file (~/.aws/config) for autocomplete tools.
     """
     parser = argparse.ArgumentParser(description=print_aws_profiles.__doc__)
     if "_ARGCOMPLETE" in os.environ:
@@ -163,6 +169,7 @@ def print_aws_profiles():
         argcomplete.autocomplete(parser)
     else:
         parser.add_argument("prefix", help="Prefix of profiles to print", default="", nargs="?")
+
     args = parser.parse_args()
     print(" ".join(read_profiles(prefix=args.prefix)))
 
