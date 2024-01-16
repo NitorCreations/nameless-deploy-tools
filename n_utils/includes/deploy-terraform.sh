@@ -122,14 +122,14 @@ if ! terraform init; then
   terraform init
 fi
 
-terraform plan
+terraform plan -compact-warnings
 
 if [ -n "$DRYRUN" ]; then
   exit 0
 fi
 
 set -e
-terraform apply -auto-approve
+terraform apply -auto-approve -compact-warnings
 
 if [ -x "./post_deploy.sh" ]; then
   "./post_deploy.sh"
