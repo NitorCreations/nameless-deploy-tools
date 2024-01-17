@@ -18,20 +18,32 @@ if [ "$_ARGCOMPLETE" ]; then
   # Handle command completion executions
   unset _ARGCOMPLETE
   source $(n-include autocomplete-helpers.sh)
-  case $COMP_CWORD in
-    2)
-      if [ "$COMP_INDEX" = "$COMP_CWORD" ]; then
-        DRY="-d "
+  COMP_WORDS=( $COMP_LINE )
+
+  DRY="-d --dry-run "
+  HELP="-h --help "
+  STACK_DIRS="$(get_stack_dirs) "
+  FOUND_STACK_DIR=""
+  for i in "${!COMP_WORDS[@]}"; do
+    if [ "$i" -lt 2 ]; then
+      continue
+    fi
+    word="${COMP_WORDS[$i]}"
+    if [ "$word" = "-d" -o "$word" = "--dry-run" ]; then
+      DRY=""
+    elif [ "$word" = "-h" -o "$word" = "--help" ]; then
+      HELP=""
+    elif [ -z "$FOUND_STACK_DIR" ]; then
+      if [ -d "$word" ]; then
+        FOUND_STACK_DIR="$word"
+        STACK_DIRS=""
+        SUBMODULES="$(get_serverless $FOUND_STACK_DIR)"
       fi
-      compgen -W "$DRY-v -h $(get_stack_dirs)" -- $COMP_CUR
-      ;;
-    3)
-      compgen -W "$(get_serverless $COMP_PREV)" -- $COMP_CUR
-      ;;
-    *)
-      exit 1
-      ;;
-  esac
+    else
+      SUBMODULES="$(get_serverless $FOUND_STACK_DIR)"
+    fi
+  done
+  compgen -W "${DRY}${HELP}${STACK_DIRS}${SUBMODULES}" -- $COMP_CUR
   exit 0
 fi
 
@@ -59,32 +71,50 @@ usage() {
     echo "" >&2
     echo "$@" >&2
   fi
-  exit 1
 }
-if [ "$1" = "--help" -o "$1" = "-h" ]; then
-  usage
-fi
-while [ "$1" = "-d" -o "$1" = "--dryrun" -o "$1" = "-v" -o "$1" = "--verbose" ]; do
-  if [ "$1" = "-d" -o "$1" = "--dryrun" ]; then
-    DRYRUN=1
-    shift
-  elif [ "$1" = "-v" -o "$1" = "--verbose" ]; then
-    VERBOSE="-v"
-    shift
-  fi
-done
+
 die() {
+  set +x
   echo "$1" >&2
   usage
+  exit 1
 }
-set -xe
 
-component="$1"
-shift
-[ "${component}" ] || die "You must give the component name as argument"
-serverless="$1"
-shift
-[ "${serverless}" ] || die "You must give the serverless name as argument"
+DRYRUN=0
+HELP=0
+ARGS=()
+
+# Iterate over all arguments
+while (( "$#" )); do
+  case "$1" in
+    -h|--help)
+      HELP=1
+      shift
+      ;;
+    -d|--dry-run)
+      DRYRUN=1
+      shift
+      ;;
+    *) # Preserve other arguments
+      ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+# If help is requested, show usage
+if [ "$HELP" -eq 1 ]; then
+  usage
+  exit 0
+fi
+
+# Process the remaining arguments
+if [ ${#ARGS[@]} -lt 2 ]; then
+  die "You must specify both the component and the serverless name."
+fi
+set -xe
+component="${ARGS[0]}"
+serverless="${ARGS[1]}"
 
 TSTAMP=$(date +%Y%m%d%H%M%S)
 if [ -z "$BUILD_NUMBER" ]; then

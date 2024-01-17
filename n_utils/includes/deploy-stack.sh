@@ -19,7 +19,7 @@ if [ "$_ARGCOMPLETE" ]; then
   source $(n-include autocomplete-helpers.sh)
   # Handle command completion executions
   COMP_WORDS=($COMP_LINE)
-  if [ "${COMP_WORDS[2]}" = "-d" ]; then
+  if [ "${COMP_WORDS[2]}" = "-d" -o "${COMP_WORDS[2]}" = "--dry-run"]; then
     COMP_INDEX=$(($COMP_CWORD - 1))
     IMAGE_DIR=${COMP_WORDS[3]}
     STACK=${COMP_WORDS[4]}
@@ -32,7 +32,7 @@ if [ "$_ARGCOMPLETE" ]; then
   case $COMP_INDEX in
     2)
       if [ "$COMP_INDEX" = "$COMP_CWORD" ]; then
-        DRY="-d "
+        DRY="-d --dry-run "
       fi
       compgen -W "-h $DRY$(get_stack_dirs)" -- $COMP_CUR
       ;;
@@ -91,7 +91,7 @@ POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    -d | --dryrun)
+    -d | --dry-run)
       DRY_RUN="--dry-run"
       shift
       ;;
