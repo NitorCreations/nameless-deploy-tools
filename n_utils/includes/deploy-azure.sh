@@ -186,7 +186,7 @@ case "$AZURE_SCOPE" in
     ;;
 esac
 
-if [ -n "$DRYRUN" ]; then
+if [ "$DRYRUN" -eq 1 ]; then
   WHATIF_ARG="--confirm-with-what-if"
 fi
 

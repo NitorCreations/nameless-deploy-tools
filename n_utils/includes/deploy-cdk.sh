@@ -146,7 +146,7 @@ fi
 npx cdk synth
 npx cdk diff || :
 
-if [ -n "$DRYRUN" ]; then
+if [ "$DRYRUN" -eq 1 ]; then
   echo "Dry run - quitting"
   exit 0
 fi

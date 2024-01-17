@@ -158,8 +158,7 @@ if ! terraform init; then
 fi
 
 terraform plan -compact-warnings
-
-if [ -n "$DRYRUN" ]; then
+if [ "$DRYRUN" -eq 1 ]; then
   exit 0
 fi
 

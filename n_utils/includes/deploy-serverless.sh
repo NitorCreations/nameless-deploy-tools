@@ -153,7 +153,7 @@ if [ -z "$SKIP_NPM" -o "$SKIP_NPM" = "n" ]; then
   npm ci --no-update-notifier --no-fund --no-audit $UNSAFE
 fi
 
-if [ -n "$DRYRUN" ]; then
+if [ "$DRYRUN" -eq 1 ]; then
   npx serverless package $VERBOSE -s $paramEnvId
   exit 0
 fi
