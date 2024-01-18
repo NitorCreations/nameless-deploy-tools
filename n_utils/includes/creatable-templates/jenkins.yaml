@@ -9,113 +9,126 @@ Files:
 Description: NDT template project jenkins
 Parameters:
   'Fn::Merge':
-  - { 'Fn::ImportYaml': ../../common/network.yaml }
-  - { 'Fn::ImportYaml': ../../common/route53.yaml }
-  - paramSshKeyName:
-      Description: SSH key for AMIBakery
-      Type: String
-      Default: ndt-instance
-    paramDnsName:
-      Description: DNS name for AMIBakery
-      Type: String
-      Default: !Sub "jenkins.${paramHostedZoneDomain}"
-    paramEip:
-      Description: Elastic IP address for AMIBakery
-      Type: String
-      Default: 1.1.1.1
-    paramAdditionalFiles:
-      Description: Whitespace-separated list of additional files needed on the server.
-      Type: String
-      Default: !Sub "/var/lib/jenkins/jenkins-home/.ssh/${paramSshKeyName}.pem"
-      AllowedPattern: "(/\\S+(\\s+/\\S+)*)?"
-    paramEBSTag:
-      Description: Tag for jenkins home EBS volume snapshots
-      Type: String
-      Default: !Join ["-", !Split [".", !Sub "${paramDnsName}-home"]]
-    paramEBSSize:
-      Description: Size for the jenkins home EBS volume
-      Type: String
-      Default: 32
-    paramDockerEBSTag:
-      Description: Tag for jenkins home EBS volume snapshots
-      Type: String
-      Default: !Join ["-", !Split [".", !Sub "${paramDnsName}-docker"]]
-    paramDockerEBSSize:
-      Description: Size for the jenkins home EBS volume
-      Type: String
-      Default: 16
-    paramBakeRoleStack:
-      Description: Stack name that is the source of baking Roles
-      Type: String
-      Default: "bakery-roles"
-    paramJenkinsStartTimeOut:
-      Description: Timeout for jenkins startup
-      Type: String
-      Default: 300
+    - { 'Fn::ImportYaml': ../../common/network.yaml }
+    - { 'Fn::ImportYaml': ../../common/route53.yaml }
+    - paramSshKeyName:
+        Description: SSH key for AMIBakery
+        Type: String
+        Default: ndt-instance
+      paramDnsName:
+        Description: DNS name for AMIBakery
+        Type: String
+        Default: !Sub 'jenkins.${paramHostedZoneDomain}'
+      paramEip:
+        Description: Elastic IP address for AMIBakery
+        Type: String
+        Default: 1.1.1.1
+      paramAdditionalFiles:
+        Description: Whitespace-separated list of additional files needed on the server.
+        Type: String
+        Default: !Sub '/var/lib/jenkins/jenkins-home/.ssh/${paramSshKeyName}.pem'
+        AllowedPattern: "(/\\S+(\\s+/\\S+)*)?"
+      paramEBSTag:
+        Description: Tag for jenkins home EBS volume snapshots
+        Type: String
+        Default: !Join ['-', !Split ['.', !Sub '${paramDnsName}-home']]
+      paramEBSSize:
+        Description: Size for the jenkins home EBS volume
+        Type: String
+        Default: 32
+      paramDockerEBSTag:
+        Description: Tag for jenkins home EBS volume snapshots
+        Type: String
+        Default: !Join ['-', !Split ['.', !Sub '${paramDnsName}-docker']]
+      paramDockerEBSSize:
+        Description: Size for the jenkins home EBS volume
+        Type: String
+        Default: 16
+      paramBakeRoleStack:
+        Description: Stack name that is the source of baking Roles
+        Type: String
+        Default: 'bakery-roles'
+      paramJenkinsStartTimeOut:
+        Description: Timeout for jenkins startup
+        Type: String
+        Default: 300
 Resources:
   'Fn::Merge':
-  - resourceDns: {'Fn::ImportYaml': (( includes ))/template-snippets/route53.yaml, type: A, rec: {Ref: paramEip} }
-    resourceAsg:
-      Type: AWS::AutoScaling::AutoScalingGroup
-      Properties:
-        AvailabilityZones: []
-        Cooldown: '300'
-        DesiredCapacity: '1'
-        HealthCheckGracePeriod: '300'
-        HealthCheckType: EC2
-        MaxSize: '2'
-        MinSize: '1'
-        VPCZoneIdentifier: []
-        LaunchConfigurationName: {Ref: resourceLc}
-        Tags:
-        - {Key: Name, Value: {Ref: 'AWS::StackName'}, PropagateAtLaunch: 'true'}
-        TerminationPolicies: [Default]
-      CreationPolicy:
-        ResourceSignal:
-          Count: '1'
-          Timeout: PT20M
-      UpdatePolicy:
-        AutoScalingRollingUpdate:
-          MinInstancesInService: '0'
-          MaxBatchSize: '1'
-          WaitOnResourceSignals: 'true'
-          PauseTime: PT20M
-    resourceLc:
-      Type: AWS::AutoScaling::LaunchConfiguration
-      Properties:
-        AssociatePublicIpAddress: 'true'
-        ImageId: {Ref: paramAmi}
-        InstanceType: {Ref: paramInstanceType}
-        KeyName: {Ref: paramSshKeyName}
-        IamInstanceProfile: {Ref: instanceprofileResource}
-        SpotPrice: '0.2'
-        SecurityGroups:
-        - {Ref: resourceSg}
-        BlockDeviceMappings:
-        - DeviceName: /dev/sda1
-          Ebs: {VolumeSize: 8, VolumeType: gp3}
-        UserData:
-          Fn::Base64: {'Fn::ImportFile': userdata.sh }
-      Metadata:
-        AWS::CloudFormation::Init:
-          config:
-            files:
-              /usr/bin/assume-deploy-role.sh:
-                content: {'Fn::ImportFile': (( includes ))/template-snippets/assume-deploy-role.sh}
-                mode: '000755'
-                owner: root
-                group: root
-    resourceSg: {'Fn::ImportYaml': (( includes ))/template-snippets/apache-sg.yaml}
-    instanceprofileResource:
-      Type: AWS::IAM::InstanceProfile
-      Properties:
-        Path: /
-        Roles:
-        - StackRef:
-            region: {Ref: 'AWS::Region'}
-            stackName: {Ref: paramBakeRoleStack}
-            paramName: bakeryRole
+    - resourceDns:
+        {
+          'Fn::ImportYaml': (( includes ))/template-snippets/route53.yaml,
+          type: A,
+          rec: { Ref: paramEip },
+        }
+      resourceAsg:
+        Type: AWS::AutoScaling::AutoScalingGroup
+        Properties:
+          AvailabilityZones: []
+          Cooldown: '300'
+          DesiredCapacity: '1'
+          HealthCheckGracePeriod: '300'
+          HealthCheckType: EC2
+          MaxSize: '2'
+          MinSize: '1'
+          VPCZoneIdentifier: []
+          LaunchConfigurationName: { Ref: resourceLc }
+          Tags:
+            - {
+                Key: Name,
+                Value: { Ref: 'AWS::StackName' },
+                PropagateAtLaunch: 'true',
+              }
+          TerminationPolicies: [Default]
+        CreationPolicy:
+          ResourceSignal:
+            Count: '1'
+            Timeout: PT20M
+        UpdatePolicy:
+          AutoScalingRollingUpdate:
+            MinInstancesInService: '0'
+            MaxBatchSize: '1'
+            WaitOnResourceSignals: 'true'
+            PauseTime: PT20M
+      resourceLc:
+        Type: AWS::AutoScaling::LaunchConfiguration
+        Properties:
+          AssociatePublicIpAddress: 'true'
+          ImageId: { Ref: paramAmi }
+          InstanceType: { Ref: paramInstanceType }
+          KeyName: { Ref: paramSshKeyName }
+          IamInstanceProfile: { Ref: instanceprofileResource }
+          SpotPrice: '0.2'
+          SecurityGroups:
+            - { Ref: resourceSg }
+          BlockDeviceMappings:
+            - DeviceName: /dev/sda1
+              Ebs: { VolumeSize: 8, VolumeType: gp3 }
+          UserData:
+            Fn::Base64: { 'Fn::ImportFile': userdata.sh }
+        Metadata:
+          AWS::CloudFormation::Init:
+            config:
+              files:
+                /usr/bin/assume-deploy-role.sh:
+                  content:
+                    {
+                      'Fn::ImportFile': (( includes ))/template-snippets/assume-deploy-role.sh,
+                    }
+                  mode: '000755'
+                  owner: root
+                  group: root
+      resourceSg:
+        { 'Fn::ImportYaml': (( includes ))/template-snippets/apache-sg.yaml }
+      instanceprofileResource:
+        Type: AWS::IAM::InstanceProfile
+        Properties:
+          Path: /
+          Roles:
+            - StackRef:
+                region: { Ref: 'AWS::Region' }
+                stackName: { Ref: paramBakeRoleStack }
+                paramName: bakeryRole
 Outputs:
   JenkinsPublicIP:
     Description: ''
-    Value: {Ref: paramEip}
+    Value: { Ref: paramEip }

@@ -16,11 +16,21 @@ resoureInvokeLambdaPolicy:
   Type: AWS::IAM::Policy
   Properties:
     PolicyName: allowInvokeLambda
-    Roles: [ { StackRef: { region: ((region)), stackName: ((stack)), paramName: ((parameter)) }}]
+    Roles:
+      [
+        {
+          StackRef:
+            {
+              region: ((region)),
+              stackName: ((stack)),
+              paramName: ((parameter)),
+            },
+        },
+      ]
     PolicyDocument:
       Version: '2012-10-17'
       Statement:
-      - Effect: Allow
-        Resource: {'Fn::GetAtt': [ resourceDeleteSnapshotsLambda, Arn]}
-        Action:
-        - 'lambda:InvokeFunction'
+        - Effect: Allow
+          Resource: { 'Fn::GetAtt': [resourceDeleteSnapshotsLambda, Arn] }
+          Action:
+            - 'lambda:InvokeFunction'

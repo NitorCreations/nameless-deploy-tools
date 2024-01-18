@@ -16,7 +16,7 @@
 
 set -xe
 
-if [ -z "$1" -o "$1" = "latest" -o "$1" = "alpha" ]; then
+if [ -z "$1" ] && [ "$1" = "latest" ] && [ "$1" = "alpha" ]; then
   DEPLOYTOOLS_VERSION=""
 else
   DEPLOYTOOLS_VERSION="==$1"
@@ -29,7 +29,7 @@ OS_TYPE=$(
 )
 OS_VERSION=$(
   source /etc/os-release
-  echo ${VERSION_ID}
+  echo "$VERSION_ID"
 )
 if [ "$OS_TYPE" = "ubuntu" ]; then
   export LC_ALL="en_US.UTF-8"
@@ -94,7 +94,7 @@ install_awscliv2() {
 python -m pip install --disable-pip-version-check -U pip wheel --ignore-installed
 install_awscliv2
 # Setuptools installed with pip breaks the platform python setup on CentOS 8
-if [ "$OS_TYPE" = "centos" -a "$OS_VERSION" = "8" ]; then
+if [ "$OS_TYPE" = "centos" ] && [ "$OS_VERSION" = "8" ]; then
   pip install --disable-pip-version-check -U boto3
 else
   pip install --disable-pip-version-check -U boto3 setuptools

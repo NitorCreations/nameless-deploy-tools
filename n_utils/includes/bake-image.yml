@@ -13,51 +13,50 @@
 # limitations under the License.
 
 ---
-
 - name: Terminate any old instance(s)
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
-  - amazon.aws.ec2_instance:
-      state: terminated
-      region: "{{ aws_region }}"
-      filters:
-        "tag:environment": "nameless"
-        "tag:Name": "{{ job_name }} prototype"
-        subnet-id: "{{ subnet_id }}"
-        instance.group-id: "{{ sg_id }}"
-        instance-type: "{{ instance_type }}"
-        image-id: "{{ root_ami }}"
+    - amazon.aws.ec2_instance:
+        state: terminated
+        region: '{{ aws_region }}'
+        filters:
+          'tag:environment': 'nameless'
+          'tag:Name': '{{ job_name }} prototype'
+          subnet-id: '{{ subnet_id }}'
+          instance.group-id: '{{ sg_id }}'
+          instance-type: '{{ instance_type }}'
+          image-id: '{{ root_ami }}'
 
-- name: "create instance"
+- name: 'create instance'
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
     - amazon.aws.ec2_instance:
         state: started
-        name: "{{ job_name }} prototype"
-        region: "{{ aws_region }}"
-        tags: "{{ bake_tags }}"
-        instance_type: "{{ instance_type }}"
-        image_id: "{{ root_ami }}"
-        instance_role: "{{ amibake_instanceprofile }}"
-        security_group: "{{ sg_id }}"
-        vpc_subnet_id: "{{ subnet_id }}"
+        name: '{{ job_name }} prototype'
+        region: '{{ aws_region }}'
+        tags: '{{ bake_tags }}'
+        instance_type: '{{ instance_type }}'
+        image_id: '{{ root_ami }}'
+        instance_role: '{{ amibake_instanceprofile }}'
+        security_group: '{{ sg_id }}'
+        vpc_subnet_id: '{{ subnet_id }}'
         network:
           assign_public_ip: yes
         detailed_monitoring: no
-        key_name: "{{ aws_key_name }}"
+        key_name: '{{ aws_key_name }}'
         volumes:
           - device_name: /dev/sda1
             ebs:
-              volume_size: "{{ volume_size }}"
+              volume_size: '{{ volume_size }}'
               delete_on_termination: true
         wait: yes
       register: ec2_prototype_instance
     - set_fact:
-        ec2_prototype_instance: "{{ ec2_prototype_instance }}"
+        ec2_prototype_instance: '{{ ec2_prototype_instance }}'
 
 - name: Add new instance to host group {{ job_name }}_ami_instance
   hosts: localhost
@@ -65,57 +64,69 @@
   gather_facts: no
   tasks:
     - add_host: hostname={{ item.public_ip_address }} groupname={{ job_name }}_ami_instance
-      with_items: "{{ ec2_prototype_instance.instances }}"
+      with_items: '{{ ec2_prototype_instance.instances }}'
       when: private_subnet == "no"
 
     - wait_for: host={{ item.public_ip_address }} port=22 delay=60 timeout=320 state=started search_regex=OpenSSH
-      with_items: "{{ ec2_prototype_instance.instances }}"
+      with_items: '{{ ec2_prototype_instance.instances }}'
       when: private_subnet == "no"
 
     - add_host: hostname={{ item.private_ip_address }} groupname={{ job_name }}_ami_instance
-      with_items: "{{ ec2_prototype_instance.instances }}"
+      with_items: '{{ ec2_prototype_instance.instances }}'
       when: private_subnet == "yes"
 
     - wait_for: host={{ item.private_ip_address }} port=22 delay=60 timeout=320 state=started search_regex=OpenSSH
-      with_items: "{{ ec2_prototype_instance.instances }}"
+      with_items: '{{ ec2_prototype_instance.instances }}'
       when: private_subnet == "yes"
 
-
 - name: Prepare AMI instance - run pre_install, install/update packages and finally post_install
-  hosts: "{{ job_name }}_ami_instance"
+  hosts: '{{ job_name }}_ami_instance'
   become: yes
   tasks:
-    - script: "{{ prepare_script }}"
+    - script: '{{ prepare_script }}'
     - user:
-        name: "{{ app_user }}"
+        name: '{{ app_user }}'
         system: yes
         shell: /sbin/nologin
-        home: "{{ app_home }}"
+        home: '{{ app_home }}'
         createhome: yes
     - file:
         path: /opt/nameless
         state: directory
         mode: 0755
     - copy:
-        src: "{{ imagedir }}/bake-credentials"
+        src: '{{ imagedir }}/bake-credentials'
         dest: /opt/nameless/
         owner: root
         group: root
         mode: 0644
     - copy:
-        src: "{{ imagedir }}/{{ item }}"
+        src: '{{ imagedir }}/{{ item }}'
         dest: /opt/nameless/
         owner: root
         group: root
         mode: 0644
-      with_items: "{{ files }}"
+      with_items: '{{ files }}'
     - apt_repository: repo="{{ item }}"
-      with_items: "{{ repos }}"
+      with_items: '{{ repos }}'
       when: ansible_os_family == "Debian"
     - apt: update_cache=yes upgrade=dist
       when: ansible_os_family == "Debian"
     - apt:
-        name: ["python-pip", "git", "build-essential", "gcc", "libpython2.7-dev", "libffi-dev", "libssl-dev", "jq", "nvme-cli", "checkpolicy", "semodule-utils"]
+        name:
+          [
+            'python-pip',
+            'git',
+            'build-essential',
+            'gcc',
+            'libpython2.7-dev',
+            'libffi-dev',
+            'libssl-dev',
+            'jq',
+            'nvme-cli',
+            'checkpolicy',
+            'semodule-utils',
+          ]
       when: ansible_os_family == "Debian"
     - yum:
         name: epel-release
@@ -125,13 +136,62 @@
         state: latest
       when: ansible_os_family == "RedHat" or ansible_os_family == "Rocky"
     - yum:
-        name: ["python-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python-crypto", "python-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+        name:
+          [
+            'python-pip',
+            'wget',
+            'rxvt-unicode',
+            'lsof',
+            'psmisc',
+            'cryptsetup',
+            'git',
+            'gcc',
+            'unzip',
+            'python-crypto',
+            'python-devel',
+            'libffi-devel',
+            'openssl-devel',
+            'jq',
+            'nvme-cli',
+          ]
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
     - dnf:
-        name: ["python39-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python39-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+        name:
+          [
+            'python39-pip',
+            'wget',
+            'rxvt-unicode',
+            'lsof',
+            'psmisc',
+            'cryptsetup',
+            'git',
+            'gcc',
+            'unzip',
+            'python39-devel',
+            'libffi-devel',
+            'openssl-devel',
+            'jq',
+            'nvme-cli',
+          ]
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "8"
     - dnf:
-        name: ["python3-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python3-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+        name:
+          [
+            'python3-pip',
+            'wget',
+            'rxvt-unicode',
+            'lsof',
+            'psmisc',
+            'cryptsetup',
+            'git',
+            'gcc',
+            'unzip',
+            'python3-devel',
+            'libffi-devel',
+            'openssl-devel',
+            'jq',
+            'nvme-cli',
+          ]
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "9"
     - alternatives:
         name: python
@@ -152,20 +212,20 @@
         path: /usr/bin/pip3.9
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "8"
     - script: install_tools.sh {{ tools_version }}
-    - script: "{{ imagedir }}/pre_install.sh"
+    - script: '{{ imagedir }}/pre_install.sh'
     - apt_key: url="{{ item }}" state=present
-      with_items: "{{ keys }}"
+      with_items: '{{ keys }}'
       when: ansible_os_family == "Debian"
     - apt:
-        name: "{{ packages }}"
+        name: '{{ packages }}'
       when: ansible_os_family == "Debian"
     - yum:
-        name: "{{ packages }}"
+        name: '{{ packages }}'
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
     - dnf:
-        name: "{{ packages }}"
+        name: '{{ packages }}'
       when: ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_distribution_major_version == "8"
-    - script: "{{ imagedir }}/post_install.sh"
+    - script: '{{ imagedir }}/post_install.sh'
 
 - name: Create AMI from deployed instance
   hosts: localhost
@@ -174,37 +234,37 @@
   tasks:
     - debug: var=ec2_prototype_instance
 
-    - name: "Create AMI from deployed server {{ ec2_prototype_instance.instances[0].instance_id }}"
+    - name: 'Create AMI from deployed server {{ ec2_prototype_instance.instances[0].instance_id }}'
       amazon.aws.ec2_ami:
-        instance_id: "{{ ec2_prototype_instance.instances[0].instance_id }}"
+        instance_id: '{{ ec2_prototype_instance.instances[0].instance_id }}'
         wait: yes
-        name: "{{ job_name }}_{{ build_number }}"
-        region: "{{ aws_region }}"
-        wait_timeout: "{{ image_wait }}"
+        name: '{{ job_name }}_{{ build_number }}'
+        region: '{{ aws_region }}'
+        wait_timeout: '{{ image_wait }}'
         tags:
-          Name: "{{ job_name }}_{{ build_number }}"
-          Tstamp: "{{ tstamp }}"
+          Name: '{{ job_name }}_{{ build_number }}'
+          Tstamp: '{{ tstamp }}'
       register: base_ami
 
     - set_fact:
-        ami_id_to_deploy: "{{ base_ami.image_id }}"
+        ami_id_to_deploy: '{{ base_ami.image_id }}'
 
 - name: Terminate instance(s) used for creating AMI
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
-  - amazon.aws.ec2_instance:
-      state: terminated
-      region: "{{ aws_region }}"
-      filters:
-        "tag:environment": "nameless"
-        "tag:Name": "{{ job_name }} prototype"
-        subnet-id: "{{ subnet_id }}"
-        instance.group-id: "{{ sg_id }}"
-        instance-type: "{{ instance_type }}"
-        image-id: "{{ root_ami }}"
-    register: ec2_prototype_instance
+    - amazon.aws.ec2_instance:
+        state: terminated
+        region: '{{ aws_region }}'
+        filters:
+          'tag:environment': 'nameless'
+          'tag:Name': '{{ job_name }} prototype'
+          subnet-id: '{{ subnet_id }}'
+          instance.group-id: '{{ sg_id }}'
+          instance-type: '{{ instance_type }}'
+          image-id: '{{ root_ami }}'
+      register: ec2_prototype_instance
 
 - name: Clean up old AMIs, keep the latest 5 excluding images with running instances or launch configurations
   hosts: localhost
@@ -212,13 +272,13 @@
   gather_facts: no
   tasks:
     - amazon.aws.ec2_instance_info:
-        region: "{{ aws_region }}"
+        region: '{{ aws_region }}'
         filters:
           instance-state-name: [running, pending]
       register: running_instances
 
     - community.aws.ec2_lc_info:
-        region: "{{ aws_region }}"
+        region: '{{ aws_region }}'
         sort: created_time
         sort_order: descending
       register: launch_configurations
@@ -228,14 +288,14 @@
     - set_fact: images_in_use="{{ running_image_ids + lc_image_ids | unique | list }}"
 
     - amazon.aws.ec2_ami_info:
-        region: "{{ aws_region }}"
+        region: '{{ aws_region }}'
         owners: self
         filters:
-          name: "{{ job_name }}_??????????????"
+          name: '{{ job_name }}_??????????????'
       register: old_ami_result
 
     - amazon.aws.ec2_ami_info:
-        region: "{{ aws_region }}"
+        region: '{{ aws_region }}'
         image_ids: "{{ old_ami_result.images | map(attribute='image_id') | difference(images_in_use) | list }}"
       register: non_running_images
 
@@ -250,11 +310,11 @@
         msg: "To delete: {{ after_fifth | map(attribute='name') | list | to_yaml }}"
 
     - amazon.aws.ec2_ami:
-        region: "{{ aws_region }}"
-        image_id: "{{ item.image_id }}"
+        region: '{{ aws_region }}'
+        image_id: '{{ item.image_id }}'
         delete_snapshot: yes
         state: absent
-      with_items: "{{ after_fifth }}"
+      with_items: '{{ after_fifth }}'
       ignore_errors: yes
 
 - name: Write new AMI id to file {{ ami_id_file }}

@@ -18,4 +18,8 @@ Properties:
   AssumeRolePolicyDocument: { 'Fn::ImportYaml': policydoc_assumerole.yaml }
   Path: /
   Policies:
-  - { 'Fn::ImportYaml': policy_s3_secure_download.yaml, bucket: {Ref: paramSecretsBucket}, file: '*' }
+    - {
+        'Fn::ImportYaml': policy_s3_secure_download.yaml,
+        bucket: { Ref: paramSecretsBucket },
+        file: '*',
+      }

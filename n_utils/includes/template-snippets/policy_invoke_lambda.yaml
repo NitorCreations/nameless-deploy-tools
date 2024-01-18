@@ -17,7 +17,7 @@ PolicyName: allowInvokeLambda
 PolicyDocument:
   Version: '2012-10-17'
   Statement:
-  - Effect: Allow
-    Resource: {'Fn::GetAtt': [((function)), Arn]}
-    Action:
-    - 'lambda:InvokeFunction'
+    - Effect: Allow
+      Resource: { 'Fn::GetAtt': [((function)), Arn] }
+      Action:
+        - 'lambda:InvokeFunction'

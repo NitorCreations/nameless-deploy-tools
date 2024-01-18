@@ -18,9 +18,10 @@ PolicyName: allowS3SecureDownload
 PolicyDocument:
   Version: '2012-10-17'
   Statement:
-  - Effect: Allow
-    Resource: {'Fn::Join': [ "", ['arn:aws:s3:::', '((bucket))', '/', '((file))']]}
-    Action:
-    - 's3:Get*'
-    - 's3:Head*'
-    - 's3:List*'
+    - Effect: Allow
+      Resource:
+        { 'Fn::Join': ['', ['arn:aws:s3:::', '((bucket))', '/', '((file))']] }
+      Action:
+        - 's3:Get*'
+        - 's3:Head*'
+        - 's3:List*'

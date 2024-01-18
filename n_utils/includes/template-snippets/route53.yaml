@@ -18,14 +18,14 @@
 # Ref: paramDnsName
 Type: AWS::Route53::RecordSetGroup
 Properties:
-  HostedZoneName: {Ref: paramHostedZoneName}
+  HostedZoneName: { Ref: paramHostedZoneName }
   RecordSets:
-  - Name:
-      Fn::Join:
-      - ''
-      - - {Ref: paramDnsName}
-        - .
-    Type: '((type))'
-    TTL: '300'
-    ResourceRecords:
-    - '((rec))'
+    - Name:
+        Fn::Join:
+          - ''
+          - - { Ref: paramDnsName }
+            - .
+      Type: '((type))'
+      TTL: '300'
+      ResourceRecords:
+        - '((rec))'

@@ -18,46 +18,46 @@
   connection: local
   gather_facts: no
   tasks:
-  - amazon.aws.ec2_instance:
-      state: terminated
-      region: "{{ aws_region }}"
-      filters:
-        "tag:environment": "nameless"
-        "tag:Name": "{{ job_name }} prototype"
-        subnet-id: "{{ subnet_id }}"
-        instance.group-id: "{{ sg_id }}"
-        instance-type: "{{ instance_type }}"
-        image-id: "{{ root_ami }}"
+    - amazon.aws.ec2_instance:
+        state: terminated
+        region: '{{ aws_region }}'
+        filters:
+          'tag:environment': 'nameless'
+          'tag:Name': '{{ job_name }} prototype'
+          subnet-id: '{{ subnet_id }}'
+          instance.group-id: '{{ sg_id }}'
+          instance-type: '{{ instance_type }}'
+          image-id: '{{ root_ami }}'
 
-- name: "create instance"
+- name: 'create instance'
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
     - amazon.aws.ec2_instance:
         state: started
-        name: "{{ job_name }} prototype"
-        region: "{{ aws_region }}"
-        tags: "{{ bake_tags }}"
-        instance_type: "{{ instance_type }}"
-        image_id: "{{ root_ami }}"
-        instance_role: "{{ amibake_instanceprofile }}"
-        security_group: "{{ sg_id }}"
-        vpc_subnet_id: "{{ subnet_id }}"
+        name: '{{ job_name }} prototype'
+        region: '{{ aws_region }}'
+        tags: '{{ bake_tags }}'
+        instance_type: '{{ instance_type }}'
+        image_id: '{{ root_ami }}'
+        instance_role: '{{ amibake_instanceprofile }}'
+        security_group: '{{ sg_id }}'
+        vpc_subnet_id: '{{ subnet_id }}'
         user_data: "{{ lookup('template', bake_userdata ) }}"
         network:
           assign_public_ip: yes
         detailed_monitoring: no
-        key_name: "{{ aws_key_name }}"
+        key_name: '{{ aws_key_name }}'
         volumes:
           - device_name: /dev/sda1
             ebs:
-              volume_size: "{{ volume_size }}"
+              volume_size: '{{ volume_size }}'
               delete_on_termination: true
         wait: yes
       register: ec2_prototype_instance
     - set_fact:
-        ec2_prototype_instance: "{{ ec2_prototype_instance }}"
+        ec2_prototype_instance: '{{ ec2_prototype_instance }}'
 
 - name: Add new instance to host group {{ job_name }}_ami_instance
   hosts: localhost
@@ -65,83 +65,83 @@
   gather_facts: no
   tasks:
     - add_host: hostname={{ item.public_ip_address }} groupname={{ job_name }}_ami_instance
-      with_items: "{{ ec2_prototype_instance.instances }}"
+      with_items: '{{ ec2_prototype_instance.instances }}'
       when: private_subnet == "no"
 
     - wait_for: host={{ item.public_ip_address }} port=5986 delay=60 timeout=320 state=started
-      with_items: "{{ ec2_prototype_instance.instances }}"
+      with_items: '{{ ec2_prototype_instance.instances }}'
       when: private_subnet == "no"
 
     - add_host: hostname={{ item.private_ip_address }} groupname={{ job_name }}_ami_instance
-      with_items: "{{ ec2_prototype_instance.instances }}"
+      with_items: '{{ ec2_prototype_instance.instances }}'
       when: private_subnet == "yes"
 
     - wait_for: host={{ item.private_ip_address }} port=5986 delay=60 timeout=320 state=started
-      with_items: "{{ ec2_prototype_instance.instances }}"
+      with_items: '{{ ec2_prototype_instance.instances }}'
       when: private_subnet == "yes"
 
     - name: Pause for a bit to work around startup related WinRM problem
-      pause: "seconds={{ pause_seconds }}"
+      pause: 'seconds={{ pause_seconds }}'
 
 - name: Prepare AMI instance - run pre_install, install/update packages and finally post_install
-  hosts: "{{ job_name }}_ami_instance"
+  hosts: '{{ job_name }}_ami_instance'
   vars:
     ansible_connection: winrm
     ansible_port: 5986
     ansible_winrm_server_cert_validation: ignore
   tasks:
-  - name: Wait for system to become reachable
-    wait_for_connection:
-      delay: 30
-      timeout: 600
-  - win_file: path="C:\\nameless" state=directory
-    when: base_ami_id == "clean"
-  - win_copy: src="{{ prepare_script }}" dest="C:\\nameless\\prepare.ps1"
-    when: base_ami_id == "clean"
-  - win_copy: src="{{ imagedir }}/pre_install.ps1" dest="C:\\nameless\\pre_install.ps1"
-  - win_copy: src="{{ imagedir }}/post_install.ps1" dest="C:\\nameless\\post_install.ps1"
-  - win_copy: src="{{ imagedir }}/bake-credentials" dest="C:\\nameless\\bake-credentials"
-  - win_copy:
-      src: "{{ imagedir }}/{{ item }}"
-      dest: "C:\\nameless\\"
-    with_items: "{{ files }}"
-  - win_chocolatey:
-      state: latest
-      name: [ "python" ]
-      version: "{{ win_python_version }}"
-  - win_chocolatey:
-      name: [ "sync" ]
-      ignore_checksums: yes
-    when: base_ami_id == "clean"
-  - win_chocolatey:
-      name: [ "awscli" ]
-    when: base_ami_id == "clean"
-  - win_shell: "C:\\nameless\\prepare.ps1"
-    args:
-      chdir: "C:\\"
-    when: base_ami_id == "clean"
-  - win_shell: "C:\\nameless\\pre_install.ps1"
-    args:
-      chdir: "C:\\"
-  - win_updates:
-      category_names:
-      - SecurityUpdates
-      - CriticalUpdates
-      - UpdateRollups
-      - Updates
-      - ServicePacks
-    register: update_result
-    when: base_ami_id == "clean"
-  - win_reboot:
-      reboot_timeout: 1800
-    when:
-      - "'skipped' not in update_result"
-      - update_result["reboot_required"]
-  - win_chocolatey:
-      name: "{{ packages }}"
-  - win_shell: "C:\\nameless\\post_install.ps1"
-    args:
-      chdir: "C:\\"
+    - name: Wait for system to become reachable
+      wait_for_connection:
+        delay: 30
+        timeout: 600
+    - win_file: path="C:\\nameless" state=directory
+      when: base_ami_id == "clean"
+    - win_copy: src="{{ prepare_script }}" dest="C:\\nameless\\prepare.ps1"
+      when: base_ami_id == "clean"
+    - win_copy: src="{{ imagedir }}/pre_install.ps1" dest="C:\\nameless\\pre_install.ps1"
+    - win_copy: src="{{ imagedir }}/post_install.ps1" dest="C:\\nameless\\post_install.ps1"
+    - win_copy: src="{{ imagedir }}/bake-credentials" dest="C:\\nameless\\bake-credentials"
+    - win_copy:
+        src: '{{ imagedir }}/{{ item }}'
+        dest: "C:\\nameless\\"
+      with_items: '{{ files }}'
+    - win_chocolatey:
+        state: latest
+        name: ['python']
+        version: '{{ win_python_version }}'
+    - win_chocolatey:
+        name: ['sync']
+        ignore_checksums: yes
+      when: base_ami_id == "clean"
+    - win_chocolatey:
+        name: ['awscli']
+      when: base_ami_id == "clean"
+    - win_shell: "C:\\nameless\\prepare.ps1"
+      args:
+        chdir: "C:\\"
+      when: base_ami_id == "clean"
+    - win_shell: "C:\\nameless\\pre_install.ps1"
+      args:
+        chdir: "C:\\"
+    - win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
+          - Updates
+          - ServicePacks
+      register: update_result
+      when: base_ami_id == "clean"
+    - win_reboot:
+        reboot_timeout: 1800
+      when:
+        - "'skipped' not in update_result"
+        - update_result["reboot_required"]
+    - win_chocolatey:
+        name: '{{ packages }}'
+    - win_shell: "C:\\nameless\\post_install.ps1"
+      args:
+        chdir: "C:\\"
 
 - name: Create AMI from deployed instance
   hosts: localhost
@@ -150,37 +150,37 @@
   tasks:
     - debug: var=ec2_prototype_instance
 
-    - name: "Create AMI from deployed server {{ ec2_prototype_instance.instances[0].instance_id }}"
+    - name: 'Create AMI from deployed server {{ ec2_prototype_instance.instances[0].instance_id }}'
       amazon.aws.ec2_ami:
-        instance_id: "{{ ec2_prototype_instance.instances[0].instance_id }}"
+        instance_id: '{{ ec2_prototype_instance.instances[0].instance_id }}'
         wait: yes
-        name: "{{ job_name }}_{{ build_number }}"
-        region: "{{ aws_region }}"
-        wait_timeout: "{{ image_wait }}"
+        name: '{{ job_name }}_{{ build_number }}'
+        region: '{{ aws_region }}'
+        wait_timeout: '{{ image_wait }}'
         tags:
-          Name: "{{ job_name }}_{{ build_number }}"
-          Tstamp: "{{ tstamp }}"
+          Name: '{{ job_name }}_{{ build_number }}'
+          Tstamp: '{{ tstamp }}'
       register: base_ami
 
     - set_fact:
-        ami_id_to_deploy: "{{ base_ami.image_id }}"
+        ami_id_to_deploy: '{{ base_ami.image_id }}'
 
 - name: Terminate instance(s) used for creating AMI
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
-  - amazon.aws.ec2_instance:
-      state: terminated
-      region: "{{ aws_region }}"
-      filters:
-        "tag:environment": "nameless"
-        "tag:Name": "{{ job_name }} prototype"
-        subnet-id: "{{ subnet_id }}"
-        instance.group-id: "{{ sg_id }}"
-        instance-type: "{{ instance_type }}"
-        image-id: "{{ root_ami }}"
-    register: ec2_prototype_instance
+    - amazon.aws.ec2_instance:
+        state: terminated
+        region: '{{ aws_region }}'
+        filters:
+          'tag:environment': 'nameless'
+          'tag:Name': '{{ job_name }} prototype'
+          subnet-id: '{{ subnet_id }}'
+          instance.group-id: '{{ sg_id }}'
+          instance-type: '{{ instance_type }}'
+          image-id: '{{ root_ami }}'
+      register: ec2_prototype_instance
 
 - name: Clean up old AMIs, keep the latest 5 excluding images with running instances or launch configurations
   hosts: localhost
@@ -188,13 +188,13 @@
   gather_facts: no
   tasks:
     - amazon.aws.ec2_instance_info:
-        region: "{{ aws_region }}"
+        region: '{{ aws_region }}'
         filters:
           instance-state-name: [running, pending]
       register: running_instances
 
     - community.aws.ec2_lc_info:
-        region: "{{ aws_region }}"
+        region: '{{ aws_region }}'
         sort: created_time
         sort_order: descending
       register: launch_configurations
@@ -204,14 +204,14 @@
     - set_fact: images_in_use="{{ running_image_ids + lc_image_ids | unique | list }}"
 
     - amazon.aws.ec2_ami_info:
-        region: "{{ aws_region }}"
+        region: '{{ aws_region }}'
         owners: self
         filters:
-          name: "{{ job_name }}_??????????????"
+          name: '{{ job_name }}_??????????????'
       register: old_ami_result
 
     - amazon.aws.ec2_ami_info:
-        region: "{{ aws_region }}"
+        region: '{{ aws_region }}'
         image_ids: "{{ old_ami_result.images | map(attribute='image_id') | difference(images_in_use) | list }}"
       register: non_running_images
 
@@ -226,11 +226,11 @@
         msg: "To delete: {{ after_fifth | map(attribute='name') | list | to_yaml }}"
 
     - amazon.aws.ec2_ami:
-        region: "{{ aws_region }}"
-        image_id: "{{ item.image_id }}"
+        region: '{{ aws_region }}'
+        image_id: '{{ item.image_id }}'
         delete_snapshot: yes
         state: absent
-      with_items: "{{ after_fifth }}"
+      with_items: '{{ after_fifth }}'
       ignore_errors: yes
 
 - name: Write new AMI id to file {{ ami_id_file }}

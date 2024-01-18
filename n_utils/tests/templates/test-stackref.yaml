@@ -4,47 +4,56 @@ Description: Infrastructure to expose S3 bucket prefixes as websites
 
 Parameters:
   'Fn::Merge':
-  - paramContainerPort:
-      Type: Number
-      Default: 8088
-      Description: What port number the application inside the docker container is binding to
-    paramContainerCpu:
-      Type: Number
-      Default: 1024
-      Description: How much CPU to give the container. 1024 is 1 CPU
-    paramContainerMemory:
-      Type: Number
-      Default: 2048
-      Description: How much memory in megabytes to give the container
-    paramDesiredCount:
-      Type: Number
-      Default: 2
-      Description: How many copies of the service task to run
-    paramDockerTagToDeploy:
-      Type: String
-      Default: latest
-      Description: Docker image tag to use for deployment
-    paramServiceName:
-      Type: String
-      Default: Namless-Backend-S3-Sites-Proxy
-      Description: Container service name
-    paramSitesBucketArn:
-      Description: Sites Bucket ARN
-      Type: String
-      Default:
-        StackRef: {region: {Ref: 'AWS::Region'}, stackName: "${paramEnvId}-sitesbucket", paramName: BucketArn}
-    paramSitesBucketName:
-      Description: Sites Bucket Name
-      Type: String
-      Default:
-        StackRef: {region: {Ref: 'AWS::Region'}, stackName: "${paramEnvId}-sitesbucket", paramName: BucketName}
-    paramDockerUribackend:
-      Description: Backend docker image uri
-      Type: String
-      Default: ""
+    - paramContainerPort:
+        Type: Number
+        Default: 8088
+        Description: What port number the application inside the docker container is binding to
+      paramContainerCpu:
+        Type: Number
+        Default: 1024
+        Description: How much CPU to give the container. 1024 is 1 CPU
+      paramContainerMemory:
+        Type: Number
+        Default: 2048
+        Description: How much memory in megabytes to give the container
+      paramDesiredCount:
+        Type: Number
+        Default: 2
+        Description: How many copies of the service task to run
+      paramDockerTagToDeploy:
+        Type: String
+        Default: latest
+        Description: Docker image tag to use for deployment
+      paramServiceName:
+        Type: String
+        Default: Namless-Backend-S3-Sites-Proxy
+        Description: Container service name
+      paramSitesBucketArn:
+        Description: Sites Bucket ARN
+        Type: String
+        Default:
+          StackRef:
+            {
+              region: { Ref: 'AWS::Region' },
+              stackName: '${paramEnvId}-sitesbucket',
+              paramName: BucketArn,
+            }
+      paramSitesBucketName:
+        Description: Sites Bucket Name
+        Type: String
+        Default:
+          StackRef:
+            {
+              region: { Ref: 'AWS::Region' },
+              stackName: '${paramEnvId}-sitesbucket',
+              paramName: BucketName,
+            }
+      paramDockerUribackend:
+        Description: Backend docker image uri
+        Type: String
+        Default: ''
 
 Resources:
-
   resTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -55,14 +64,13 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       ExecutionRoleArn:
-        Fn::ImportValue:
-          !Sub "${paramEnvId}-ecscluster:TaskExecutionRole"
+        Fn::ImportValue: !Sub '${paramEnvId}-ecscluster:TaskExecutionRole'
       TaskRoleArn: !Ref resBackendRole
       ContainerDefinitions:
         - Name: !Ref paramServiceName
           Cpu: !Ref paramContainerCpu
           Memory: !Ref paramContainerMemory
-          Image: !Sub "nitor/nitor-backend:latest"
+          Image: !Sub 'nitor/nitor-backend:latest'
           Environment:
             - Name: CONFIG
               Value: |
@@ -79,9 +87,9 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-               awslogs-group: !Ref resBackendLogGroup
-               awslogs-region: !Ref AWS::Region
-               awslogs-stream-prefix: "proxycontainer"
+              awslogs-group: !Ref resBackendLogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: 'proxycontainer'
 
   resService:
     Type: AWS::ECS::Service
@@ -89,8 +97,7 @@ Resources:
     Properties:
       ServiceName: !Ref paramServiceName
       Cluster:
-        Fn::ImportValue:
-          !Sub "${paramEnvId}-ecscluster:Cluster"
+        Fn::ImportValue: !Sub '${paramEnvId}-ecscluster:Cluster'
       LaunchType: FARGATE
       DeploymentConfiguration:
         MaximumPercent: 200
@@ -134,35 +141,32 @@ Resources:
           Values:
             - '*.nitor.zone'
       ListenerArn:
-        Fn::ImportValue:
-          !Sub "${paramEnvId}-albnitorzone:Listener443"
+        Fn::ImportValue: !Sub '${paramEnvId}-albnitorzone:Listener443'
       Priority: 50000
 
   resBackendRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          -
-            Effect: "Allow"
+          - Effect: 'Allow'
             Principal:
               Service:
-                - "ecs-tasks.amazonaws.com"
+                - 'ecs-tasks.amazonaws.com'
             Action:
-              - "sts:AssumeRole"
+              - 'sts:AssumeRole'
       Policies:
-        -
-          PolicyName: "AllowS3BucketRead"
+        - PolicyName: 'AllowS3BucketRead'
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
-              - Effect: "Allow"
-                Action: "s3:ListBucket"
+              - Effect: 'Allow'
+                Action: 's3:ListBucket'
                 Resource: !Ref paramSitesBucketArn
-              - Effect: "Allow"
-                Action: "s3:GetObject"
-                Resource: "${paramSitesBucketArn}/"
+              - Effect: 'Allow'
+                Action: 's3:GetObject'
+                Resource: '${paramSitesBucketArn}/'
 
   resBackendLogGroup:
     Type: AWS::Logs::LogGroup

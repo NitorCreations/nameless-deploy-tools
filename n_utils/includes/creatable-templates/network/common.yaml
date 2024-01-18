@@ -8,45 +8,45 @@ paramVPCCidr:
   Default:
     StackRef:
       paramName: VPCCIDR
-      region: {Ref: 'AWS::Region'}
-      stackName: {Ref: paramNetwork}
+      region: { Ref: 'AWS::Region' }
+      stackName: { Ref: paramNetwork }
 paramVPCId:
   Type: AWS::EC2::VPC::Id
   Description: Infra VPC
   Default:
     StackRef:
       paramName: VPC
-      region: {Ref: 'AWS::Region'}
-      stackName: {Ref: paramNetwork}
+      region: { Ref: 'AWS::Region' }
+      stackName: { Ref: paramNetwork }
 paramSubnetA:
   Type: AWS::EC2::Subnet::Id
   Description: Public subnet A
   Default:
     StackRef:
       paramName: subnetA
-      region: {Ref: 'AWS::Region'}
-      stackName: {Ref: paramNetwork}
+      region: { Ref: 'AWS::Region' }
+      stackName: { Ref: paramNetwork }
 paramSubnetPrivA:
   Type: AWS::EC2::Subnet::Id
   Description: Private subnet A
   Default:
     StackRef:
       paramName: subnetPrivA
-      region: {Ref: 'AWS::Region'}
-      stackName: {Ref: paramNetwork}
+      region: { Ref: 'AWS::Region' }
+      stackName: { Ref: paramNetwork }
 paramPublicSubnetGroup:
   Description: Public subnet group
   Type: String
   Default:
     StackRef:
       paramName: publicSubnetGroup
-      region: {Ref: 'AWS::Region'}
-      stackName: {Ref: paramNetwork}
+      region: { Ref: 'AWS::Region' }
+      stackName: { Ref: paramNetwork }
 paramPrivateSubnetGroup:
   Description: Private subnet group
   Type: String
   Default:
     StackRef:
       paramName: privateSubnetGroup
-      region: {Ref: 'AWS::Region'}
-      stackName: {Ref: paramNetwork}
+      region: { Ref: 'AWS::Region' }
+      stackName: { Ref: paramNetwork }
