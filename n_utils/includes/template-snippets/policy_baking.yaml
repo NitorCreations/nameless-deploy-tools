@@ -15,10 +15,10 @@
 # Ref: resourceBakeRole
 PolicyName: allowBaking
 PolicyDocument:
-  Version: '2012-10-17'
+  Version: "2012-10-17"
   Statement:
     - Effect: Allow
-      Resource: '*'
+      Resource: "*"
       Action:
         - cloudformation:DescribeStacks
         - ec2:AuthorizeSecurityGroupEgress

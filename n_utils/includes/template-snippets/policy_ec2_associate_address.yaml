@@ -14,11 +14,11 @@
 
 PolicyName: allowAssociateEIP
 PolicyDocument:
-  Version: '2012-10-17'
+  Version: "2012-10-17"
   Statement:
     - Effect: Allow
-      Resource: '*'
+      Resource: "*"
       Action:
-        - 'ec2:AssociateAddress'
-        - 'ec2:DescribeAddresses'
+        - "ec2:AssociateAddress"
+        - "ec2:DescribeAddresses"
 # ec2:DescribeAddresses needed to resolve association-id from public-ip

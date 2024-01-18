@@ -18,9 +18,9 @@ resoureInvokeLambdaPolicy:
     PolicyName: allowInvokeLambda
     Roles: [{ Ref: ((role)) }]
     PolicyDocument:
-      Version: '2012-10-17'
+      Version: "2012-10-17"
       Statement:
         - Effect: Allow
-          Resource: { 'Fn::GetAtt': [resourceDeleteSnapshotsLambda, Arn] }
+          Resource: { "Fn::GetAtt": [resourceDeleteSnapshotsLambda, Arn] }
           Action:
-            - 'lambda:InvokeFunction'
+            - "lambda:InvokeFunction"

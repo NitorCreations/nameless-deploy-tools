@@ -1,9 +1,9 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 
 Description: Infrastructure to expose S3 bucket prefixes as websites
 
 Parameters:
-  'Fn::Merge':
+  "Fn::Merge":
     - paramContainerPort:
         Type: Number
         Default: 8088
@@ -34,8 +34,8 @@ Parameters:
         Default:
           StackRef:
             {
-              region: { Ref: 'AWS::Region' },
-              stackName: '${paramEnvId}-sitesbucket',
+              region: { Ref: "AWS::Region" },
+              stackName: "${paramEnvId}-sitesbucket",
               paramName: BucketArn,
             }
       paramSitesBucketName:
@@ -44,14 +44,14 @@ Parameters:
         Default:
           StackRef:
             {
-              region: { Ref: 'AWS::Region' },
-              stackName: '${paramEnvId}-sitesbucket',
+              region: { Ref: "AWS::Region" },
+              stackName: "${paramEnvId}-sitesbucket",
               paramName: BucketName,
             }
       paramDockerUribackend:
         Description: Backend docker image uri
         Type: String
-        Default: ''
+        Default: ""
 
 Resources:
   resTaskDefinition:
@@ -64,13 +64,13 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       ExecutionRoleArn:
-        Fn::ImportValue: !Sub '${paramEnvId}-ecscluster:TaskExecutionRole'
+        Fn::ImportValue: !Sub "${paramEnvId}-ecscluster:TaskExecutionRole"
       TaskRoleArn: !Ref resBackendRole
       ContainerDefinitions:
         - Name: !Ref paramServiceName
           Cpu: !Ref paramContainerCpu
           Memory: !Ref paramContainerMemory
-          Image: !Sub 'nitor/nitor-backend:latest'
+          Image: !Sub "nitor/nitor-backend:latest"
           Environment:
             - Name: CONFIG
               Value: |
@@ -89,7 +89,7 @@ Resources:
             Options:
               awslogs-group: !Ref resBackendLogGroup
               awslogs-region: !Ref AWS::Region
-              awslogs-stream-prefix: 'proxycontainer'
+              awslogs-stream-prefix: "proxycontainer"
 
   resService:
     Type: AWS::ECS::Service
@@ -97,7 +97,7 @@ Resources:
     Properties:
       ServiceName: !Ref paramServiceName
       Cluster:
-        Fn::ImportValue: !Sub '${paramEnvId}-ecscluster:Cluster'
+        Fn::ImportValue: !Sub "${paramEnvId}-ecscluster:Cluster"
       LaunchType: FARGATE
       DeploymentConfiguration:
         MaximumPercent: 200
@@ -139,34 +139,34 @@ Resources:
       Conditions:
         - Field: host-header
           Values:
-            - '*.nitor.zone'
+            - "*.nitor.zone"
       ListenerArn:
-        Fn::ImportValue: !Sub '${paramEnvId}-albnitorzone:Listener443'
+        Fn::ImportValue: !Sub "${paramEnvId}-albnitorzone:Listener443"
       Priority: 50000
 
   resBackendRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
-          - Effect: 'Allow'
+          - Effect: "Allow"
             Principal:
               Service:
-                - 'ecs-tasks.amazonaws.com'
+                - "ecs-tasks.amazonaws.com"
             Action:
-              - 'sts:AssumeRole'
+              - "sts:AssumeRole"
       Policies:
-        - PolicyName: 'AllowS3BucketRead'
+        - PolicyName: "AllowS3BucketRead"
           PolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
-              - Effect: 'Allow'
-                Action: 's3:ListBucket'
+              - Effect: "Allow"
+                Action: "s3:ListBucket"
                 Resource: !Ref paramSitesBucketArn
-              - Effect: 'Allow'
-                Action: 's3:GetObject'
-                Resource: '${paramSitesBucketArn}/'
+              - Effect: "Allow"
+                Action: "s3:GetObject"
+                Resource: "${paramSitesBucketArn}/"
 
   resBackendLogGroup:
     Type: AWS::Logs::LogGroup
@@ -178,5 +178,5 @@ Resources:
     Type: AWS::S3::Bucket
 
   resInboxPolicy:
-    'Fn::ImportYaml': bucketpolicy.yaml
+    "Fn::ImportYaml": bucketpolicy.yaml
     bucket: myBucket

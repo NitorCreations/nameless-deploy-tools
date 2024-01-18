@@ -1,2 +1,2 @@
-environment: 'nameless'
-Name: '{{ job_name }} prototype'
+environment: "nameless"
+Name: "{{ job_name }} prototype"

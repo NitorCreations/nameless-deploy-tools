@@ -1,16 +1,16 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 ContextClass: n_utils.cf_bootstrap.Jenkins
 Files:
-  - 'creatable-templates/jenkins/generate_jobs.groovy': '../generate_jobs.groovy'
-  - 'creatable-templates/jenkins/packages.txt': 'image/packages.txt'
-  - 'creatable-templates/jenkins/post_install.sh': 'image/post_install.sh'
-  - 'creatable-templates/jenkins/pre_install.sh': 'image/pre_install.sh'
-  - 'creatable-templates/jenkins/userdata.sh': 'stack-%(stack_name)s/userdata.sh'
+  - "creatable-templates/jenkins/generate_jobs.groovy": "../generate_jobs.groovy"
+  - "creatable-templates/jenkins/packages.txt": "image/packages.txt"
+  - "creatable-templates/jenkins/post_install.sh": "image/post_install.sh"
+  - "creatable-templates/jenkins/pre_install.sh": "image/pre_install.sh"
+  - "creatable-templates/jenkins/userdata.sh": "stack-%(stack_name)s/userdata.sh"
 Description: NDT template project jenkins
 Parameters:
-  'Fn::Merge':
-    - { 'Fn::ImportYaml': ../../common/network.yaml }
-    - { 'Fn::ImportYaml': ../../common/route53.yaml }
+  "Fn::Merge":
+    - { "Fn::ImportYaml": ../../common/network.yaml }
+    - { "Fn::ImportYaml": ../../common/route53.yaml }
     - paramSshKeyName:
         Description: SSH key for AMIBakery
         Type: String
@@ -18,7 +18,7 @@ Parameters:
       paramDnsName:
         Description: DNS name for AMIBakery
         Type: String
-        Default: !Sub 'jenkins.${paramHostedZoneDomain}'
+        Default: !Sub "jenkins.${paramHostedZoneDomain}"
       paramEip:
         Description: Elastic IP address for AMIBakery
         Type: String
@@ -26,12 +26,12 @@ Parameters:
       paramAdditionalFiles:
         Description: Whitespace-separated list of additional files needed on the server.
         Type: String
-        Default: !Sub '/var/lib/jenkins/jenkins-home/.ssh/${paramSshKeyName}.pem'
+        Default: !Sub "/var/lib/jenkins/jenkins-home/.ssh/${paramSshKeyName}.pem"
         AllowedPattern: "(/\\S+(\\s+/\\S+)*)?"
       paramEBSTag:
         Description: Tag for jenkins home EBS volume snapshots
         Type: String
-        Default: !Join ['-', !Split ['.', !Sub '${paramDnsName}-home']]
+        Default: !Join ["-", !Split [".", !Sub "${paramDnsName}-home"]]
       paramEBSSize:
         Description: Size for the jenkins home EBS volume
         Type: String
@@ -39,7 +39,7 @@ Parameters:
       paramDockerEBSTag:
         Description: Tag for jenkins home EBS volume snapshots
         Type: String
-        Default: !Join ['-', !Split ['.', !Sub '${paramDnsName}-docker']]
+        Default: !Join ["-", !Split [".", !Sub "${paramDnsName}-docker"]]
       paramDockerEBSSize:
         Description: Size for the jenkins home EBS volume
         Type: String
@@ -47,16 +47,16 @@ Parameters:
       paramBakeRoleStack:
         Description: Stack name that is the source of baking Roles
         Type: String
-        Default: 'bakery-roles'
+        Default: "bakery-roles"
       paramJenkinsStartTimeOut:
         Description: Timeout for jenkins startup
         Type: String
         Default: 300
 Resources:
-  'Fn::Merge':
+  "Fn::Merge":
     - resourceDns:
         {
-          'Fn::ImportYaml': (( includes ))/template-snippets/route53.yaml,
+          "Fn::ImportYaml": (( includes ))/template-snippets/route53.yaml,
           type: A,
           rec: { Ref: paramEip },
         }
@@ -64,47 +64,47 @@ Resources:
         Type: AWS::AutoScaling::AutoScalingGroup
         Properties:
           AvailabilityZones: []
-          Cooldown: '300'
-          DesiredCapacity: '1'
-          HealthCheckGracePeriod: '300'
+          Cooldown: "300"
+          DesiredCapacity: "1"
+          HealthCheckGracePeriod: "300"
           HealthCheckType: EC2
-          MaxSize: '2'
-          MinSize: '1'
+          MaxSize: "2"
+          MinSize: "1"
           VPCZoneIdentifier: []
           LaunchConfigurationName: { Ref: resourceLc }
           Tags:
             - {
                 Key: Name,
-                Value: { Ref: 'AWS::StackName' },
-                PropagateAtLaunch: 'true',
+                Value: { Ref: "AWS::StackName" },
+                PropagateAtLaunch: "true",
               }
           TerminationPolicies: [Default]
         CreationPolicy:
           ResourceSignal:
-            Count: '1'
+            Count: "1"
             Timeout: PT20M
         UpdatePolicy:
           AutoScalingRollingUpdate:
-            MinInstancesInService: '0'
-            MaxBatchSize: '1'
-            WaitOnResourceSignals: 'true'
+            MinInstancesInService: "0"
+            MaxBatchSize: "1"
+            WaitOnResourceSignals: "true"
             PauseTime: PT20M
       resourceLc:
         Type: AWS::AutoScaling::LaunchConfiguration
         Properties:
-          AssociatePublicIpAddress: 'true'
+          AssociatePublicIpAddress: "true"
           ImageId: { Ref: paramAmi }
           InstanceType: { Ref: paramInstanceType }
           KeyName: { Ref: paramSshKeyName }
           IamInstanceProfile: { Ref: instanceprofileResource }
-          SpotPrice: '0.2'
+          SpotPrice: "0.2"
           SecurityGroups:
             - { Ref: resourceSg }
           BlockDeviceMappings:
             - DeviceName: /dev/sda1
               Ebs: { VolumeSize: 8, VolumeType: gp3 }
           UserData:
-            Fn::Base64: { 'Fn::ImportFile': userdata.sh }
+            Fn::Base64: { "Fn::ImportFile": userdata.sh }
         Metadata:
           AWS::CloudFormation::Init:
             config:
@@ -112,23 +112,23 @@ Resources:
                 /usr/bin/assume-deploy-role.sh:
                   content:
                     {
-                      'Fn::ImportFile': (( includes ))/template-snippets/assume-deploy-role.sh,
+                      "Fn::ImportFile": (( includes ))/template-snippets/assume-deploy-role.sh,
                     }
-                  mode: '000755'
+                  mode: "000755"
                   owner: root
                   group: root
       resourceSg:
-        { 'Fn::ImportYaml': (( includes ))/template-snippets/apache-sg.yaml }
+        { "Fn::ImportYaml": (( includes ))/template-snippets/apache-sg.yaml }
       instanceprofileResource:
         Type: AWS::IAM::InstanceProfile
         Properties:
           Path: /
           Roles:
             - StackRef:
-                region: { Ref: 'AWS::Region' }
+                region: { Ref: "AWS::Region" }
                 stackName: { Ref: paramBakeRoleStack }
                 paramName: bakeryRole
 Outputs:
   JenkinsPublicIP:
-    Description: ''
+    Description: ""
     Value: { Ref: paramEip }

@@ -1,6 +1,6 @@
 PolicyName: allow_ssm_management
 PolicyDocument:
-  Version: '2012-10-17'
+  Version: "2012-10-17"
   Statement:
     - Effect: Allow
       Action:
@@ -19,14 +19,14 @@ PolicyDocument:
         - ssm:UpdateAssociationStatus
         - ssm:UpdateInstanceAssociationStatus
         - ssm:UpdateInstanceInformation
-      Resource: '*'
+      Resource: "*"
     - Effect: Allow
       Action:
         - ssmmessages:CreateControlChannel
         - ssmmessages:CreateDataChannel
         - ssmmessages:OpenControlChannel
         - ssmmessages:OpenDataChannel
-      Resource: '*'
+      Resource: "*"
     - Effect: Allow
       Action:
         - ec2messages:AcknowledgeMessage
@@ -35,4 +35,4 @@ PolicyDocument:
         - ec2messages:GetEndpoint
         - ec2messages:GetMessages
         - ec2messages:SendReply
-      Resource: '*'
+      Resource: "*"

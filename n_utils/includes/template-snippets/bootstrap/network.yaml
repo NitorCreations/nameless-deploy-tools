@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
   paramInfraName:
     Description: Name of the infra account to initialize
@@ -22,21 +22,21 @@ Resources:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: { Ref: paramVPCCidr }
-      EnableDnsHostnames: 'true'
-      EnableDnsSupport: 'true'
+      EnableDnsHostnames: "true"
+      EnableDnsSupport: "true"
       Tags:
         - Key: Name
-          Value: { Ref: 'AWS::StackName' }
+          Value: { Ref: "AWS::StackName" }
   resourceDHCPOpts:
     Type: AWS::EC2::DHCPOptions
     Properties:
       DomainName:
-        'Fn::Join':
-          - ''
-          - - { Ref: 'AWS::Region' }
-            - '.'
+        "Fn::Join":
+          - ""
+          - - { Ref: "AWS::Region" }
+            - "."
             - { Ref: paramInfraName }
-            - '-compute.internal'
+            - "-compute.internal"
       DomainNameServers: [AmazonProvidedDNS]
   resourceDHCPAssoc:
     Type: AWS::EC2::VPCDHCPOptionsAssociation
@@ -48,7 +48,7 @@ Resources:
     Properties:
       Tags:
         - Key: Name
-          Value: { Ref: 'AWS::StackName' }
+          Value: { Ref: "AWS::StackName" }
   resourecAttachIGW:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
@@ -61,9 +61,9 @@ Resources:
         - Key: Name
           Value:
             Fn::Join:
-              - ''
-              - - { Ref: 'AWS::StackName' }
-                - ' public route table'
+              - ""
+              - - { Ref: "AWS::StackName" }
+                - " public route table"
       VpcId: { Ref: resourceVPC }
   resourcePubRoute:
     Type: AWS::EC2::Route
@@ -81,9 +81,9 @@ Resources:
         - Key: Name
           Value:
             Fn::Join:
-              - ''
-              - - { Ref: 'AWS::StackName' }
-                - ' public subnet '
+              - ""
+              - - { Ref: "AWS::StackName" }
+                - " public subnet "
       VpcId: { Ref: resourceVPC }
   resourcePubSubnetRouteTableAssocA:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -99,7 +99,7 @@ Resources:
       Tags:
         - Key: Name
           Value:
-            Fn::Join: ['', [{ Ref: 'AWS::StackName' }, ' public subnet group']]
+            Fn::Join: ["", [{ Ref: "AWS::StackName" }, " public subnet group"]]
   resourcePrivRouteTableA:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -107,9 +107,9 @@ Resources:
         - Key: Name
           Value:
             Fn::Join:
-              - ''
-              - - { Ref: 'AWS::StackName' }
-                - ' private route table A'
+              - ""
+              - - { Ref: "AWS::StackName" }
+                - " private route table A"
       VpcId: { Ref: resourceVPC }
   resourcePrivSubnetA:
     Properties:
@@ -119,9 +119,9 @@ Resources:
         - Key: Name
           Value:
             Fn::Join:
-              - ''
-              - - { Ref: 'AWS::StackName' }
-                - ' private subnet '
+              - ""
+              - - { Ref: "AWS::StackName" }
+                - " private subnet "
       VpcId: { Ref: resourceVPC }
     Type: AWS::EC2::Subnet
   resourcePrivSubnetRouteTableAssocA:
@@ -138,41 +138,41 @@ Resources:
       Tags:
         - Key: Name
           Value:
-            Fn::Join: ['', [{ Ref: 'AWS::StackName' }, ' private subnet group']]
+            Fn::Join: ["", [{ Ref: "AWS::StackName" }, " private subnet group"]]
 Outputs:
   VPCCIDR:
     Description: VPC CIDR Block
     Value: { Ref: paramVPCCidr }
     Export:
       Name:
-        Fn::Join: [':', [{ Ref: 'AWS::StackName' }, VPCCIDR]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, VPCCIDR]]
   VPC:
     Description: VPC ID
     Value: { Ref: resourceVPC }
     Export:
       Name:
-        Fn::Join: [':', [{ Ref: 'AWS::StackName' }, VPC]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, VPC]]
   subnetInfraA:
     Description: Public Subnet
     Value: { Ref: resourcePubSubnetA }
     Export:
       Name:
-        Fn::Join: [':', [{ Ref: 'AWS::StackName' }, publicSubnetA]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, publicSubnetA]]
   subnetPrivInfraA:
     Description: Private Subnet
     Value: { Ref: resourcePrivSubnetA }
     Export:
       Name:
-        Fn::Join: [':', [{ Ref: 'AWS::StackName' }, privateSubnetA]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, privateSubnetA]]
   publicSubnetGroup:
     Description: Public subnet group
     Value: { Ref: resourcePubSubnetGroup }
     Export:
       Name:
-        Fn::Join: [':', [{ Ref: 'AWS::StackName' }, publicSubnetGroup]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, publicSubnetGroup]]
   privateSubnetGroup:
     Description: Private subnet group
     Value: { Ref: resourcePrivSubnetGroup }
     Export:
       Name:
-        Fn::Join: [':', [{ Ref: 'AWS::StackName' }, privateSubnetGroup]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, privateSubnetGroup]]

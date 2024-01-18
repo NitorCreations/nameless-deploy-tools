@@ -22,10 +22,10 @@ Properties:
   RecordSets:
     - Name:
         Fn::Join:
-          - ''
+          - ""
           - - { Ref: paramDnsName }
             - .
-      Type: '((type))'
-      TTL: '300'
+      Type: "((type))"
+      TTL: "300"
       ResourceRecords:
-        - '((rec))'
+        - "((rec))"

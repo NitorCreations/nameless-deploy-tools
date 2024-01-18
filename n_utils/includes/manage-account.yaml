@@ -1,36 +1,36 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Description: NDT Manage account policy
 Parameters:
   paramManagedAccount:
     Description: Account to manage
     Type: String
-    Default: ''
+    Default: ""
   paramManageRole:
     Description: Role to assume in the target account
     Type: String
-    Default: ''
+    Default: ""
 Resources:
   AllowManagePolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      ManagedPolicyName: !Sub 'AllowAssumeManageRoleFor${paramManagedAccount}'
+      ManagedPolicyName: !Sub "AllowAssumeManageRoleFor${paramManagedAccount}"
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Sid: assumeManageRole
             Effect: Allow
             Action:
-              - 'sts:AssumeRole'
+              - "sts:AssumeRole"
             Resource:
-              - !Sub 'arn:aws:iam::${paramManagedAccount}:role/${paramManageRole}'
+              - !Sub "arn:aws:iam::${paramManagedAccount}:role/${paramManageRole}"
 Outputs:
   ManagePolicy:
     Value: !Ref AllowManagePolicy
     Export:
       Name:
-        Fn::Join: [':', [{ Ref: 'AWS::StackName' }, ManagePolicy]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, ManagePolicy]]
   ManageRole:
-    Value: !Sub 'arn:aws:iam::${paramManagedAccount}:role/${paramManageRole}'
+    Value: !Sub "arn:aws:iam::${paramManagedAccount}:role/${paramManageRole}"
     Export:
       Name:
-        Fn::Join: [':', [{ Ref: 'AWS::StackName' }, ManageRole]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, ManageRole]]
