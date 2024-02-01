@@ -104,9 +104,12 @@ Python dependencies are specified in [setup.cfg](./setup.cfg).
 To update the requirements, use the following commands:
 
 ```shell
-pip install --upgrade pip-tools
-pip-compile setup.py
+python -m pip install --upgrade pip-tools
+python -m piptools compile setup.py
 ```
+
+Note: pip-compile needs to run inside a virtual environment.
+Create and activate one before using it.
 
 ## Code formatting and linting
 
@@ -117,7 +120,7 @@ They are configured with a custom line length limit of 120.
 Usage:
 
 ```shell
-pip install --upgrade black isort flake8
+pip install --upgrade black isort ruff
 black .
 isort .
 ruff --fix .
