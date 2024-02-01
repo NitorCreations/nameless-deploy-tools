@@ -92,9 +92,9 @@ def list_file_to_json():
     a single element (name as argument) containg file rows as  list.
     """
     parser = get_parser()
-    parser.add_argument(
-        "arrayname", help="The name in the json object given" + "to the array"
-    ).completer = ChoicesCompleter(())
+    parser.add_argument("arrayname", help="The name in the json object given" + "to the array").completer = (
+        ChoicesCompleter(())
+    )
     parser.add_argument("file", help="The file to parse").completer = FilesCompleter()
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -484,9 +484,9 @@ def setup_cli():
 def show_stack_params_and_outputs():
     """Show stack parameters and outputs as a single json document"""
     parser = get_parser()
-    parser.add_argument(
-        "-r", "--region", help="Region for the stack to show", default=region()
-    ).completer = ChoicesCompleter(regions())
+    parser.add_argument("-r", "--region", help="Region for the stack to show", default=region()).completer = (
+        ChoicesCompleter(regions())
+    )
     parser.add_argument(
         "-p",
         "--parameter",
@@ -508,9 +508,9 @@ def show_stack_params_and_outputs():
 def show_terraform_params():
     """Show available parameters for a terraform subcomponent"""
     parser = get_parser()
-    parser.add_argument(
-        "component", help="The component containg the terraform subcomponet"
-    ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("terraform"))
+    parser.add_argument("component", help="The component containg the terraform subcomponet").completer = (
+        ChoicesCompleter(component_having_a_subcomponent_of_type("terraform"))
+    )
     parser.add_argument("terraform", help="The name of the terraform subcomponent").completer = SubCCompleter(
         "terraform"
     )
@@ -941,15 +941,15 @@ def cli_load_parameters():
         help="Also resolve subcomponent AMI IDs and docker repo urls",
     )
     subcomponent_group = parser.add_mutually_exclusive_group()
-    subcomponent_group.add_argument(
-        "--stack", "-s", help="CloudFormation subcomponent to descent into"
-    ).completer = SubCCompleter("stack")
-    subcomponent_group.add_argument(
-        "--serverless", "-l", help="Serverless subcomponent to descent into"
-    ).completer = SubCCompleter("serverless")
-    subcomponent_group.add_argument(
-        "--docker", "-d", help="Docker image subcomponent to descent into"
-    ).completer = SubCCompleter("docker")
+    subcomponent_group.add_argument("--stack", "-s", help="CloudFormation subcomponent to descent into").completer = (
+        SubCCompleter("stack")
+    )
+    subcomponent_group.add_argument("--serverless", "-l", help="Serverless subcomponent to descent into").completer = (
+        SubCCompleter("serverless")
+    )
+    subcomponent_group.add_argument("--docker", "-d", help="Docker image subcomponent to descent into").completer = (
+        SubCCompleter("docker")
+    )
     subcomponent_group.add_argument(
         "--image",
         "-i",
@@ -960,15 +960,15 @@ def cli_load_parameters():
     subcomponent_group.add_argument("--cdk", "-c", help="CDK subcomponent to descent into").completer = SubCCompleter(
         "cdk"
     )
-    subcomponent_group.add_argument(
-        "--terraform", "-t", help="Terraform subcomponent to descent into"
-    ).completer = SubCCompleter("terraform")
-    subcomponent_group.add_argument(
-        "--azure", "-a", help="Azure subcomponent to descent into"
-    ).completer = SubCCompleter("azure")
-    subcomponent_group.add_argument(
-        "--connect", "-n", help="Connect subcomponent to descent into"
-    ).completer = SubCCompleter("connect")
+    subcomponent_group.add_argument("--terraform", "-t", help="Terraform subcomponent to descent into").completer = (
+        SubCCompleter("terraform")
+    )
+    subcomponent_group.add_argument("--azure", "-a", help="Azure subcomponent to descent into").completer = (
+        SubCCompleter("azure")
+    )
+    subcomponent_group.add_argument("--connect", "-n", help="Connect subcomponent to descent into").completer = (
+        SubCCompleter("connect")
+    )
     format_group = parser.add_mutually_exclusive_group()
     format_group.add_argument("--json", "-j", action="store_true", help="JSON format output (default)")
     format_group.add_argument("--yaml", "-y", action="store_true", help="YAML format output")
@@ -1395,9 +1395,9 @@ def export_connect_contact_flow():
         help="the name of the connect subcomponent directory that has the contact flow template",
     ).completer = SubCCompleter("connect")
     instance_sel = parser.add_mutually_exclusive_group()
-    instance_sel.add_argument(
-        "-i", "--instanceid", help="id of the connect instance to export from"
-    ).completer = lambda **kwargs: connect.get_instance_ids()
+    instance_sel.add_argument("-i", "--instanceid", help="id of the connect instance to export from").completer = (
+        lambda **kwargs: connect.get_instance_ids()
+    )
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
     ).completer = lambda **kwargs: connect.get_instance_aliases()
@@ -1429,9 +1429,9 @@ def list_connect_contact_flows():
         help="the name of the connect subcomponent directory that has the contact flow template",
     ).completer = SubCCompleter("connect")
     instance_sel = parser.add_mutually_exclusive_group()
-    instance_sel.add_argument(
-        "-i", "--instanceid", help="id of the connect instance to export from"
-    ).completer = lambda **kwargs: connect.get_instance_ids()
+    instance_sel.add_argument("-i", "--instanceid", help="id of the connect instance to export from").completer = (
+        lambda **kwargs: connect.get_instance_ids()
+    )
     instance_sel.add_argument(
         "-a", "--instancealias", help="alias of the connect instance to export from"
     ).completer = lambda **kwargs: connect.get_instance_aliases()
