@@ -126,6 +126,8 @@ use_parentheses = true
 # https://github.com/charliermarsh/ruff#configuration
 target-version = "py38"
 line-length = 120
+
+[tool.ruff.lint]
 select = ["E", "F", "W", "N", "UP"] # "I"
 ignore = []
 
@@ -204,12 +206,12 @@ exclude = [
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "n_utils/yuuuu3332111i1l1i.py" = ["F821", "N802", "N806"]
 "n_utils/nameless-dt-enable-profile.py" = ["N999"]
 "n_utils/nameless-dt-load-project-env.py" = ["N999"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 # https://beta.ruff.rs/docs/settings/#isort
 combine-as-imports = true
 lines-between-types = 1
