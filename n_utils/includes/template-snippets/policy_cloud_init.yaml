@@ -14,19 +14,19 @@
 
 PolicyName: allow_cloud_init
 PolicyDocument:
-  Version: '2012-10-17'
+  Version: "2012-10-17"
   Statement:
-  - Effect: Allow
-    Resource: '*'
-    Action:
-    - 'cloudformation:DescribeStacks'
-    - 'cloudformation:DescribeResources'
-    - 'cloudformation:SignalResource'
-    - 'ec2:DescribeTags'
-  - Effect: Allow
-    Resource: 'arn:aws:logs:*:*:*'
-    Action:
-    - 'logs:CreateLogGroup'
-    - 'logs:CreateLogStream'
-    - 'logs:PutLogEvents'
-    - 'logs:DescribeLogStreams'
+    - Effect: Allow
+      Resource: "*"
+      Action:
+        - "cloudformation:DescribeStacks"
+        - "cloudformation:DescribeResources"
+        - "cloudformation:SignalResource"
+        - "ec2:DescribeTags"
+    - Effect: Allow
+      Resource: "arn:aws:logs:*:*:*"
+      Action:
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+        - "logs:DescribeLogStreams"

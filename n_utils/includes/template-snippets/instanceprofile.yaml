@@ -17,4 +17,4 @@ Type: AWS::IAM::InstanceProfile
 Properties:
   Path: /
   Roles:
-  - {Ref: resourceRole}
+    - { Ref: resourceRole }

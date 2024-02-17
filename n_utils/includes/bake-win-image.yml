@@ -18,16 +18,16 @@
   connection: local
   gather_facts: no
   tasks:
-  - amazon.aws.ec2_instance:
-      state: terminated
-      region: "{{ aws_region }}"
-      filters:
-        "tag:environment": "nameless"
-        "tag:Name": "{{ job_name }} prototype"
-        subnet-id: "{{ subnet_id }}"
-        instance.group-id: "{{ sg_id }}"
-        instance-type: "{{ instance_type }}"
-        image-id: "{{ root_ami }}"
+    - amazon.aws.ec2_instance:
+        state: terminated
+        region: "{{ aws_region }}"
+        filters:
+          "tag:environment": "nameless"
+          "tag:Name": "{{ job_name }} prototype"
+          subnet-id: "{{ subnet_id }}"
+          instance.group-id: "{{ sg_id }}"
+          instance-type: "{{ instance_type }}"
+          image-id: "{{ root_ami }}"
 
 - name: "create instance"
   hosts: localhost
@@ -90,58 +90,58 @@
     ansible_port: 5986
     ansible_winrm_server_cert_validation: ignore
   tasks:
-  - name: Wait for system to become reachable
-    wait_for_connection:
-      delay: 30
-      timeout: 600
-  - win_file: path="C:\\nameless" state=directory
-    when: base_ami_id == "clean"
-  - win_copy: src="{{ prepare_script }}" dest="C:\\nameless\\prepare.ps1"
-    when: base_ami_id == "clean"
-  - win_copy: src="{{ imagedir }}/pre_install.ps1" dest="C:\\nameless\\pre_install.ps1"
-  - win_copy: src="{{ imagedir }}/post_install.ps1" dest="C:\\nameless\\post_install.ps1"
-  - win_copy: src="{{ imagedir }}/bake-credentials" dest="C:\\nameless\\bake-credentials"
-  - win_copy:
-      src: "{{ imagedir }}/{{ item }}"
-      dest: "C:\\nameless\\"
-    with_items: "{{ files }}"
-  - win_chocolatey:
-      state: latest
-      name: [ "python" ]
-      version: "{{ win_python_version }}"
-  - win_chocolatey:
-      name: [ "sync" ]
-      ignore_checksums: yes
-    when: base_ami_id == "clean"
-  - win_chocolatey:
-      name: [ "awscli" ]
-    when: base_ami_id == "clean"
-  - win_shell: "C:\\nameless\\prepare.ps1"
-    args:
-      chdir: "C:\\"
-    when: base_ami_id == "clean"
-  - win_shell: "C:\\nameless\\pre_install.ps1"
-    args:
-      chdir: "C:\\"
-  - win_updates:
-      category_names:
-      - SecurityUpdates
-      - CriticalUpdates
-      - UpdateRollups
-      - Updates
-      - ServicePacks
-    register: update_result
-    when: base_ami_id == "clean"
-  - win_reboot:
-      reboot_timeout: 1800
-    when:
-      - "'skipped' not in update_result"
-      - update_result["reboot_required"]
-  - win_chocolatey:
-      name: "{{ packages }}"
-  - win_shell: "C:\\nameless\\post_install.ps1"
-    args:
-      chdir: "C:\\"
+    - name: Wait for system to become reachable
+      wait_for_connection:
+        delay: 30
+        timeout: 600
+    - win_file: path="C:\\nameless" state=directory
+      when: base_ami_id == "clean"
+    - win_copy: src="{{ prepare_script }}" dest="C:\\nameless\\prepare.ps1"
+      when: base_ami_id == "clean"
+    - win_copy: src="{{ imagedir }}/pre_install.ps1" dest="C:\\nameless\\pre_install.ps1"
+    - win_copy: src="{{ imagedir }}/post_install.ps1" dest="C:\\nameless\\post_install.ps1"
+    - win_copy: src="{{ imagedir }}/bake-credentials" dest="C:\\nameless\\bake-credentials"
+    - win_copy:
+        src: "{{ imagedir }}/{{ item }}"
+        dest: "C:\\nameless\\"
+      with_items: "{{ files }}"
+    - win_chocolatey:
+        state: latest
+        name: ["python"]
+        version: "{{ win_python_version }}"
+    - win_chocolatey:
+        name: ["sync"]
+        ignore_checksums: yes
+      when: base_ami_id == "clean"
+    - win_chocolatey:
+        name: ["awscli"]
+      when: base_ami_id == "clean"
+    - win_shell: "C:\\nameless\\prepare.ps1"
+      args:
+        chdir: "C:\\"
+      when: base_ami_id == "clean"
+    - win_shell: "C:\\nameless\\pre_install.ps1"
+      args:
+        chdir: "C:\\"
+    - win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
+          - Updates
+          - ServicePacks
+      register: update_result
+      when: base_ami_id == "clean"
+    - win_reboot:
+        reboot_timeout: 1800
+      when:
+        - "'skipped' not in update_result"
+        - update_result["reboot_required"]
+    - win_chocolatey:
+        name: "{{ packages }}"
+    - win_shell: "C:\\nameless\\post_install.ps1"
+      args:
+        chdir: "C:\\"
 
 - name: Create AMI from deployed instance
   hosts: localhost
@@ -170,17 +170,17 @@
   connection: local
   gather_facts: no
   tasks:
-  - amazon.aws.ec2_instance:
-      state: terminated
-      region: "{{ aws_region }}"
-      filters:
-        "tag:environment": "nameless"
-        "tag:Name": "{{ job_name }} prototype"
-        subnet-id: "{{ subnet_id }}"
-        instance.group-id: "{{ sg_id }}"
-        instance-type: "{{ instance_type }}"
-        image-id: "{{ root_ami }}"
-    register: ec2_prototype_instance
+    - amazon.aws.ec2_instance:
+        state: terminated
+        region: "{{ aws_region }}"
+        filters:
+          "tag:environment": "nameless"
+          "tag:Name": "{{ job_name }} prototype"
+          subnet-id: "{{ subnet_id }}"
+          instance.group-id: "{{ sg_id }}"
+          instance-type: "{{ instance_type }}"
+          image-id: "{{ root_ami }}"
+      register: ec2_prototype_instance
 
 - name: Clean up old AMIs, keep the latest 5 excluding images with running instances or launch configurations
   hosts: localhost

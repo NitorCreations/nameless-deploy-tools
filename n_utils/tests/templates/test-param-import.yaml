@@ -1,2 +1,2 @@
 Parameters:
-  'Fn::ImportYaml': include-test.yaml
+  "Fn::ImportYaml": include-test.yaml

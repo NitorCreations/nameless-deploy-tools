@@ -1,5 +1,5 @@
 ---
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 ContextClass: n_utils.cf_bootstrap.BakeryRoles
 Parameters:
   paramNetworkStack:
@@ -12,80 +12,108 @@ Parameters:
     Default: vault
   paramVPCId:
     Description: VPC Id
-    Type: 'AWS::EC2::VPC::Id'
-    Default: {StackRef: { region: {Ref: 'AWS::Region'}, stackName: {Ref: paramNetworkStack}, paramName: VPC}}
+    Type: "AWS::EC2::VPC::Id"
+    Default:
+      {
+        StackRef:
+          {
+            region: { Ref: "AWS::Region" },
+            stackName: { Ref: paramNetworkStack },
+            paramName: VPC,
+          },
+      }
 Resources:
   resourceDeployRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
-        - Effect: Allow
-          Principal:
-            AWS: [{'Fn::GetAtt': [ resourceRole, Arn]}]
-          Action: sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              AWS: [{ "Fn::GetAtt": [resourceRole, Arn] }]
+            Action: sts:AssumeRole
       Path: /
       Policies:
-      - PolicyName: allowDeploy
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - {Effect: Allow, Action: '*', Resource: '*'}
+        - PolicyName: allowDeploy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - { Effect: Allow, Action: "*", Resource: "*" }
   resourceRole:
     Type: AWS::IAM::Role
     Properties:
-      AssumeRolePolicyDocument: {'Fn::ImportYaml': (( includes ))/template-snippets/policydoc_assumerole.yaml}
+      AssumeRolePolicyDocument:
+        {
+          "Fn::ImportYaml": (( includes ))/template-snippets/policydoc_assumerole.yaml,
+        }
       Path: /
       Policies:
-      - {'Fn::ImportYaml': (( includes ))/template-snippets/policy_ec2_associate_address.yaml}
-      - {'Fn::ImportYaml': (( includes ))/template-snippets/policy_cloud_init.yaml}
-      - {'Fn::ImportYaml': (( includes ))/template-snippets/policy_baking.yaml}
-      - {'Fn::ImportYaml': (( includes ))/template-snippets/policy_ec2_allow_volume_ops.yaml}
-      - PolicyName: allowDescribeStacks-Jenkins
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - {Effect: Allow, Action: 'cloudformation:DescribeStacks', Resource: '*'}
+        - {
+            "Fn::ImportYaml": (( includes ))/template-snippets/policy_ec2_associate_address.yaml,
+          }
+        - {
+            "Fn::ImportYaml": (( includes ))/template-snippets/policy_cloud_init.yaml,
+          }
+        - {
+            "Fn::ImportYaml": (( includes ))/template-snippets/policy_baking.yaml,
+          }
+        - {
+            "Fn::ImportYaml": (( includes ))/template-snippets/policy_ec2_allow_volume_ops.yaml,
+          }
+        - PolicyName: allowDescribeStacks-Jenkins
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - {
+                  Effect: Allow,
+                  Action: "cloudformation:DescribeStacks",
+                  Resource: "*",
+                }
       ManagedPolicyArns:
-      - StackRef:
-          region: {Ref: 'AWS::Region'}
-          stackName: vault
-          paramName: encryptPolicy
+        - StackRef:
+            region: { Ref: "AWS::Region" }
+            stackName: vault
+            paramName: encryptPolicy
   resourceBakeInstanceprofile:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Path: /
       Roles:
-      - {Ref: resourceBakeRole}
+        - { Ref: resourceBakeRole }
   resourceBakeRole:
     Type: AWS::IAM::Role
     Properties:
-      AssumeRolePolicyDocument: { 'Fn::ImportYaml': ((includes))/template-snippets/policydoc_assumerole.yaml }
+      AssumeRolePolicyDocument:
+        {
+          "Fn::ImportYaml": ((includes))/template-snippets/policydoc_assumerole.yaml,
+        }
       Path: /
       ManagedPolicyArns:
-      - StackRef:
-          region: {Ref: 'AWS::Region'}
-          stackName: {Ref: paramVaultStack}
-          paramName: decryptPolicy
-  resourceBakeSg: {'Fn::ImportYaml': (( includes ))/template-snippets/sg_bake.yaml}
-  resourceBakeWinSg: {'Fn::ImportYaml': (( includes ))/template-snippets/sg_win_bake.yaml}
+        - StackRef:
+            region: { Ref: "AWS::Region" }
+            stackName: { Ref: paramVaultStack }
+            paramName: decryptPolicy
+  resourceBakeSg:
+    { "Fn::ImportYaml": (( includes ))/template-snippets/sg_bake.yaml }
+  resourceBakeWinSg:
+    { "Fn::ImportYaml": (( includes ))/template-snippets/sg_win_bake.yaml }
 Outputs:
   bakeryRole:
-    Description: 'The role for the bakery'
-    Value: {Ref: resourceRole}
+    Description: "The role for the bakery"
+    Value: { Ref: resourceRole }
   bakeInstanceRole:
-    Description: 'The role of instances being baked'
-    Value: {Ref: resourceBakeRole}
+    Description: "The role of instances being baked"
+    Value: { Ref: resourceBakeRole }
   bakeInstanceInstanceprofile:
-    Description: 'The instanceprofile of instances being baked'
-    Value: {Ref: resourceBakeInstanceprofile}
+    Description: "The instanceprofile of instances being baked"
+    Value: { Ref: resourceBakeInstanceprofile }
   deployRoleArn:
-    Description: 'The arn for the role for deployment'
-    Value: {'Fn::GetAtt': [ resourceDeployRole, Arn]}
+    Description: "The arn for the role for deployment"
+    Value: { "Fn::GetAtt": [resourceDeployRole, Arn] }
   bakeInstanceSg:
-    Description: 'The security group of instances being baked'
-    Value: {Ref: resourceBakeSg}
+    Description: "The security group of instances being baked"
+    Value: { Ref: resourceBakeSg }
   bakeWinInstanceSg:
-    Description: 'The security group of windows instances being baked'
-    Value: {Ref: resourceBakeWinSg}
+    Description: "The security group of windows instances being baked"
+    Value: { Ref: resourceBakeWinSg }

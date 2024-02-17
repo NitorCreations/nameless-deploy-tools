@@ -15,8 +15,8 @@
 Type: AWS::EC2::SecurityGroup
 Properties:
   GroupDescription: Security group for bake instances
-  VpcId: {Ref: paramVPCId}
+  VpcId: { Ref: paramVPCId }
   SecurityGroupEgress:
-  - {CidrIp: 0.0.0.0/0, FromPort: -1, IpProtocol: -1, ToPort: -1}
+    - { CidrIp: 0.0.0.0/0, FromPort: -1, IpProtocol: -1, ToPort: -1 }
   SecurityGroupIngress:
-  - {IpProtocol: tcp, FromPort: '22', ToPort: '22', CidrIp: 0.0.0.0/0}
+    - { IpProtocol: tcp, FromPort: "22", ToPort: "22", CidrIp: 0.0.0.0/0 }

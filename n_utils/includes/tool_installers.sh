@@ -46,7 +46,8 @@ if [ -z "$FLUTTER_VERSION" ]; then
   FLUTTER_CSUM=7b3d2900ce0e367d73d85591d5d43a11f94a223278dd3220776b03a83e234865
 fi
 if [ -z "$LEIN_COMMIT" ]; then
-  LEIN_COMMIT=64e02a842e7bb50edc9b8b35de1e2ef1fac090dd # 2.10.0
+  # 2.10.0
+  LEIN_COMMIT=64e02a842e7bb50edc9b8b35de1e2ef1fac090dd
 fi
 if [ -z "$GITHUB_RUNNER_VERSION" ]; then
   GITHUB_RUNNER_VERSION=2.303.0
@@ -82,7 +83,6 @@ install_phantomjs() {
   echo " CHANGE install_phantomjs TO install_phantomjs_insecure"
   echo " REMOVING PHANTOMJS IS STRONGLY RECOMMENDED HOWEVER."
   echo "############################################################################"
-
 }
 
 install_phantomjs_insecure() {
@@ -388,7 +388,7 @@ github_actions_get_create_token() {
     https://api.github.com/orgs/$ORGANIZATION/actions/runners/registration-token | jq -r .token
 }
 
-install_soci_snapshotter(){
+install_soci_snapshotter() {
   source $(n-include common_tools.sh)
 
   safe_download "$SOCI_SNAPSHOTTER_URL" "$SOCI_SNAPSHOTTER_CSUM" "soci-snapshotter.tar.gz"

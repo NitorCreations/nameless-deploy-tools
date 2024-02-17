@@ -13,22 +13,21 @@
 # limitations under the License.
 
 ---
-
 - name: Terminate any old instance(s)
   hosts: localhost
   connection: local
   gather_facts: no
   tasks:
-  - amazon.aws.ec2_instance:
-      state: terminated
-      region: "{{ aws_region }}"
-      filters:
-        "tag:environment": "nameless"
-        "tag:Name": "{{ job_name }} prototype"
-        subnet-id: "{{ subnet_id }}"
-        instance.group-id: "{{ sg_id }}"
-        instance-type: "{{ instance_type }}"
-        image-id: "{{ root_ami }}"
+    - amazon.aws.ec2_instance:
+        state: terminated
+        region: "{{ aws_region }}"
+        filters:
+          "tag:environment": "nameless"
+          "tag:Name": "{{ job_name }} prototype"
+          subnet-id: "{{ subnet_id }}"
+          instance.group-id: "{{ sg_id }}"
+          instance-type: "{{ instance_type }}"
+          image-id: "{{ root_ami }}"
 
 - name: "create instance"
   hosts: localhost
@@ -80,7 +79,6 @@
       with_items: "{{ ec2_prototype_instance.instances }}"
       when: private_subnet == "yes"
 
-
 - name: Prepare AMI instance - run pre_install, install/update packages and finally post_install
   hosts: "{{ job_name }}_ami_instance"
   become: yes
@@ -115,23 +113,85 @@
     - apt: update_cache=yes upgrade=dist
       when: ansible_os_family == "Debian"
     - apt:
-        name: ["python-pip", "git", "build-essential", "gcc", "libpython2.7-dev", "libffi-dev", "libssl-dev", "jq", "nvme-cli", "checkpolicy", "semodule-utils"]
+        name:
+          [
+            "python-pip",
+            "git",
+            "build-essential",
+            "gcc",
+            "libpython2.7-dev",
+            "libffi-dev",
+            "libssl-dev",
+            "jq",
+            "nvme-cli",
+            "checkpolicy",
+            "semodule-utils",
+          ]
       when: ansible_os_family == "Debian"
     - yum:
         name: epel-release
       when: ansible_os_family == "RedHat" or ansible_os_family == "Rocky"
     - yum:
-        name: '*'
+        name: "*"
         state: latest
       when: ansible_os_family == "RedHat" or ansible_os_family == "Rocky"
     - yum:
-        name: ["python-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python-crypto", "python-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+        name:
+          [
+            "python-pip",
+            "wget",
+            "rxvt-unicode",
+            "lsof",
+            "psmisc",
+            "cryptsetup",
+            "git",
+            "gcc",
+            "unzip",
+            "python-crypto",
+            "python-devel",
+            "libffi-devel",
+            "openssl-devel",
+            "jq",
+            "nvme-cli",
+          ]
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
     - dnf:
-        name: ["python39-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python39-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+        name:
+          [
+            "python39-pip",
+            "wget",
+            "rxvt-unicode",
+            "lsof",
+            "psmisc",
+            "cryptsetup",
+            "git",
+            "gcc",
+            "unzip",
+            "python39-devel",
+            "libffi-devel",
+            "openssl-devel",
+            "jq",
+            "nvme-cli",
+          ]
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "8"
     - dnf:
-        name: ["python3-pip", "wget", "rxvt-unicode", "lsof", "psmisc", "cryptsetup", "git", "gcc", "unzip", "python3-devel", "libffi-devel", "openssl-devel", "jq", "nvme-cli"]
+        name:
+          [
+            "python3-pip",
+            "wget",
+            "rxvt-unicode",
+            "lsof",
+            "psmisc",
+            "cryptsetup",
+            "git",
+            "gcc",
+            "unzip",
+            "python3-devel",
+            "libffi-devel",
+            "openssl-devel",
+            "jq",
+            "nvme-cli",
+          ]
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Rocky") and ansible_distribution_major_version == "9"
     - alternatives:
         name: python
@@ -194,17 +254,17 @@
   connection: local
   gather_facts: no
   tasks:
-  - amazon.aws.ec2_instance:
-      state: terminated
-      region: "{{ aws_region }}"
-      filters:
-        "tag:environment": "nameless"
-        "tag:Name": "{{ job_name }} prototype"
-        subnet-id: "{{ subnet_id }}"
-        instance.group-id: "{{ sg_id }}"
-        instance-type: "{{ instance_type }}"
-        image-id: "{{ root_ami }}"
-    register: ec2_prototype_instance
+    - amazon.aws.ec2_instance:
+        state: terminated
+        region: "{{ aws_region }}"
+        filters:
+          "tag:environment": "nameless"
+          "tag:Name": "{{ job_name }} prototype"
+          subnet-id: "{{ subnet_id }}"
+          instance.group-id: "{{ sg_id }}"
+          instance-type: "{{ instance_type }}"
+          image-id: "{{ root_ami }}"
+      register: ec2_prototype_instance
 
 - name: Clean up old AMIs, keep the latest 5 excluding images with running instances or launch configurations
   hosts: localhost

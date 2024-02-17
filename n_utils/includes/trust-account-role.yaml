@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Description: NDT Trusted account role
 Parameters:
   paramTrustedAccount:
@@ -15,30 +15,29 @@ Resources:
     Properties:
       RoleName: !Sub "trust-${paramTrustedAccount}-${paramRoleName}"
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
-              AWS:
-                !Sub "arn:aws:iam::${paramTrustedAccount}:root"
-            Action: 'sts:AssumeRole'
+              AWS: !Sub "arn:aws:iam::${paramTrustedAccount}:root"
+            Action: "sts:AssumeRole"
       Path: /
       Policies:
         - PolicyName: AllowAdmin
           PolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
-            - Effect: Allow
-              Action: '*'
-              Resource: '*'
+              - Effect: Allow
+                Action: "*"
+                Resource: "*"
 Outputs:
   TrustRole:
     Value: !Ref TrustRole
     Export:
       Name:
-        Fn::Join: [":", [{Ref: "AWS::StackName"}, TrustRole]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, TrustRole]]
   TrustedAccount:
     Value: !Ref paramTrustedAccount
     Export:
       Name:
-        Fn::Join: [":", [{Ref: "AWS::StackName"}, TrustedAccount]]
+        Fn::Join: [":", [{ Ref: "AWS::StackName" }, TrustedAccount]]
