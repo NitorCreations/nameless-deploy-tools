@@ -144,6 +144,7 @@ MARKER
 install_nexus3() {
   source $(n-include common_tools.sh)
   add_gpg_key 0374CF2E8DD1BDFD
+  add_gpg_key 6C0D8AA121AE5808F43805A6C26BAB2B209A8FF4
   gpg_safe_download https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/3/nexus-$NEXUS3_VERSION-unix.tar.gz nexus3.tar.gz asc
   mkdir -p /opt/nexus
   tar -xzf nexus3.tar.gz -C /opt/nexus
