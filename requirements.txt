@@ -69,7 +69,7 @@ pyotp==2.9.0
     # via nameless-deploy-tools (setup.py)
 pyqrcode==1.2.1
     # via nameless-deploy-tools (setup.py)
-python-dateutil==2.8.2
+python-dateutil==2.9.0
     # via
     #   botocore
     #   ec2-utils
