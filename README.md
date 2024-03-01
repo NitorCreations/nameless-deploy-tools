@@ -104,8 +104,8 @@ Python dependencies are specified in [setup.cfg](./setup.cfg).
 To update the requirements, use the following commands:
 
 ```shell
-python -m pip install --upgrade pip-tools
-python -m piptools compile setup.py
+pipx install pip-tools
+pip-compile setup.py
 ```
 
 Note: pip-compile needs to run inside a virtual environment.
