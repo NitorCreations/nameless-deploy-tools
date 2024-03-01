@@ -9,15 +9,15 @@ argcomplete==3.2.2
     #   ec2-utils
     #   nameless-deploy-tools (setup.py)
     #   nitor-vault
-boto3==1.34.32
+boto3==1.34.53
     # via
     #   nameless-deploy-tools (setup.py)
     #   threadlocal-aws
-botocore==1.34.32
+botocore==1.34.53
     # via
     #   boto3
     #   s3transfer
-certifi==2023.11.17
+certifi==2024.2.2
     # via requests
 cffi==1.16.0
     # via cryptography
@@ -25,9 +25,9 @@ charset-normalizer==3.3.2
     # via requests
 cloudformation-utils==0.0.2
     # via nameless-deploy-tools (setup.py)
-configparser==6.0.0
+configparser==6.0.1
     # via nameless-deploy-tools (setup.py)
-cryptography==42.0.4
+cryptography==42.0.5
     # via
     #   nitor-vault
     #   pyopenssl
@@ -35,7 +35,7 @@ decorator==5.1.1
     # via retry
 ec2-utils==0.38
     # via nameless-deploy-tools (setup.py)
-future==0.18.3
+future==1.0.0
     # via
     #   ec2-utils
     #   nitor-vault
@@ -69,7 +69,7 @@ pyotp==2.9.0
     # via nameless-deploy-tools (setup.py)
 pyqrcode==1.2.1
     # via nameless-deploy-tools (setup.py)
-python-dateutil==2.8.2
+python-dateutil==2.9.0
     # via
     #   botocore
     #   ec2-utils
