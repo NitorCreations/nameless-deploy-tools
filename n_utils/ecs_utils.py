@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import signal
 import time
 from subprocess import Popen
 from typing import Union
@@ -176,4 +177,10 @@ def ecs_execute_command(cluster: str, service: str, command: str, task_str: Unio
     if interactive:
         command.append("--interactive")
 
-    Popen(command).communicate()
+    p = Popen(command)
+    # while process is open, catch CTRL-C signals and pass those through to the SSM
+    while p.poll() is None:
+        try:
+            p.communicate()
+        except KeyboardInterrupt:
+            p.send_signal(signal.SIGINT)
