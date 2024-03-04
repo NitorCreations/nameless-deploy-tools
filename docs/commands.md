@@ -1055,8 +1055,8 @@ options:
 ```bash
 usage: ndt print-aws-profiles [-h] [prefix]
 
-Prints profile names from credentials file (~/.aws/credentials), and the conf
-file (~/.aws/conf) for autocomplete tools.
+Prints profile names from the credentials file (~/.aws/credentials), and the
+config file (~/.aws/config) for autocomplete tools.
 
 positional arguments:
   prefix      Prefix of profiles to print
