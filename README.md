@@ -81,9 +81,14 @@ You need to have AWS credentials for command line access set up.
 
 For full list of commands see [here](docs/commands.md)
 
+### Faster shell complete
+
 You can additionally use a faster register-complete by running `./faster_register_complete.sh`.
-This compiles a C++ program from the file [nameless-dt-register-complete.cpp](n_utils/nameless-dt-register-complete.cpp),
-and replaces the Python version of `nameless-dt-register-complete` with it.
+This compiles C++ programs from the files
+[n_utils/nameless-dt-register-complete.cpp](n_utils/nameless-dt-register-complete.cpp)
+and [n_utils/nameless-dt-print-aws-profiles.cpp](n_utils/nameless-dt-print-aws-profiles.cpp),
+and replaces the Python versions of `nameless-dt-register-complete`
+and `nameless-dt-print-aws-profiles` with these much faster compiled binaries.
 
 ## Documentation
 
