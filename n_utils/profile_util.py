@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from os import R_OK, access
 from os.path import exists, expanduser, isdir, isfile, join
 
@@ -616,8 +616,8 @@ def _print_profile_switch(profile):
 
 
 def _epoc_to_str(epoc):
-    return datetime.utcfromtimestamp(epoc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    return datetime.fromtimestamp(epoc, timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 def _epoc_secs(d):
-    return int((d - datetime.utcfromtimestamp(0).replace(tzinfo=tzutc())).total_seconds())
+    return int((d - datetime.fromtimestamp(0, timezone.utc).replace(tzinfo=tzutc())).total_seconds())

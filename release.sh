@@ -105,13 +105,12 @@ fi
 
 print_magenta "Updating command list..."
 ./update-commandlist.sh
-"${SED_COMMAND[@]}" "s/$VERSION/$NEW_VERSION/g" setup.cfg
 "${SED_COMMAND[@]}" "s/$VERSION/$NEW_VERSION/g" pyproject.toml
 "${SED_COMMAND[@]}" "s/## Released version.*/## Released version $NEW_VERSION/g" README.md
 "${SED_COMMAND[@]}" "s/^VERSION.*=.*/VERSION\ =\ \"$NEW_VERSION\"/" n_utils/__init__.py
 
 print_magenta "Version tagging release..."
-git commit -m "$MESSAGE" setup.cfg pyproject.toml README.md docs/commands.md n_utils/__init__.py
+git commit -m "$MESSAGE" pyproject.toml README.md docs/commands.md n_utils/__init__.py
 git tag "$NEW_VERSION" -m "$MESSAGE"
 run_command git push
 run_command git push origin "$NEW_VERSION"

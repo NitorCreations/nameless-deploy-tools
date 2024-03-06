@@ -20,7 +20,7 @@ def test_add_server():
     settings = tree.getroot()
     servers = settings.find("./servers")
     deployer_server = servers.find("./server[id='deploy']")
-    assert deployer_server
+    assert deployer_server is not None
     password = deployer_server.find("./password")
     username_el = deployer_server.find("./username")
     assert password.text == "password"

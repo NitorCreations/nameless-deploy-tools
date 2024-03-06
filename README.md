@@ -110,13 +110,34 @@ happy to release the next major version and try and have a painless upgrade path
 
 ## Dependencies
 
-Python dependencies are specified in [setup.cfg](./setup.cfg).
+Python dependencies are specified in [pyproject.toml](./pyproject.toml).
 [pip-compile](https://github.com/jazzband/pip-tools/) is used to generate the `requirements.txt` file.
 To update the requirements, use the following commands:
 
 ```shell
 pipx install pip-tools
-pip-compile setup.py
+pip-compile pyproject.toml
+```
+
+Dev and test requirements are specified separately:
+
+```shell
+# This will output the requirements for the "dev" and "testing" groups
+pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
+```
+
+## Running tests
+
+Install test requirements:
+
+```shell
+pip install -r dev-requirements.txt
+```
+
+Run tests with Pytest:
+
+```shell
+python -m pytest -v .
 ```
 
 ## Code formatting and linting

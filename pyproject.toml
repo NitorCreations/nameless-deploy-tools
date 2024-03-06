@@ -52,6 +52,10 @@ dependencies = [
     "wmi;platform_system=='Windows'",
 ]
 
+[project.optional-dependencies]
+testing = ["coverage", "mock", "pytest-cov", "pytest-mock", "pytest"]
+dev = ["isort", "pip-tools", "ruff"]
+
 [project.readme]
 file = "README.md"
 content-type = "text/markdown"
@@ -74,10 +78,6 @@ nameless-dt-register-complete = "n_utils.project_util:ndt_register_complete"
 ndt = "n_utils.ndt:ndt"
 signal-cf-status = "ec2_utils.cli:cf_signal_status"
 
-[project.optional-dependencies]
-testing = ["coverage", "mock", "pytest-cov", "pytest-mock", "pytest"]
-dev = ["black", "isort", "pip-tools", "ruff"]
-
 [tool.setuptools]
 packages = ["n_utils"]
 zip-safe = false
@@ -92,9 +92,6 @@ script-files = [
     "bin/setup-fetch-secrets.sh",
     "bin/ssh-hostkeys-collect.sh",
 ]
-
-[tool.aliases]
-test = "pytest"
 
 [tool.pytest.ini_options]
 addopts = "--cov-config=.coveragerc --cov=n_utils/ --capture=sys"
