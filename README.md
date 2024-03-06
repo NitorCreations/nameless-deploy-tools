@@ -126,6 +126,12 @@ Dev and test requirements are specified separately:
 pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
 ```
 
+Use the helper script to automatically run pip-compile:
+
+```shell
+./compile-requirements.sh
+```
+
 ## Running tests
 
 Install test requirements:
