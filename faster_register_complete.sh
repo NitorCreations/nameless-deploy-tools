@@ -43,7 +43,7 @@ source "$DIR/common.sh"
 
 ARGS=(-std=c++20 -O3 -Wall -Wextra)
 
-if [ "$PLATFORM" = mac ]; then
+if [ "$BASH_PLATFORM" = mac ]; then
   # 03/2023:
   # try to use brew llvm / Clang since it is newer than what Apple includes.
   # Critically, Clang 14 does not yet support `march` compiler option for Apple Silicon,

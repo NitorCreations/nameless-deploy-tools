@@ -9,21 +9,21 @@ export REPO_ROOT
 # Check platform
 case "$(uname -s)" in
   "Darwin")
-    PLATFORM="mac"
+    export BASH_PLATFORM="mac"
     ;;
   "MINGW"*)
-    PLATFORM="windows"
+    export BASH_PLATFORM="windows"
     ;;
   *)
-    PLATFORM="linux"
+    export BASH_PLATFORM="linux"
     ;;
 esac
 
 # BSD sed on MacOS works differently
-if [ "$PLATFORM" = mac ]; then
-  SED_COMMAND=(sed -i '')
+if [ "$BASH_PLATFORM" = mac ]; then
+  export SED_COMMAND=(sed -i '')
 else
-  SED_COMMAND=(sed -i)
+  export SED_COMMAND=(sed -i)
 fi
 
 # Print a message with red color
@@ -71,6 +71,7 @@ check_and_set_python() {
     print_error_and_exit "Python not found in path"
   fi
   echo "$($PYTHON --version) from $PYTHON"
+  export PYTHON
 }
 
 # if DRYRUN or DRY_RUN has been set, only print commands instead of running them
