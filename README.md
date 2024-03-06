@@ -137,8 +137,6 @@ pip install -r dev-requirements.txt
 Run tests with Pytest:
 
 ```shell
-# Call as a python module to ensure you get the virtual env pytest and not some globally installed one
-# that is probably missing some of the dependencies needed.
 python -m pytest -v .
 ```
 
