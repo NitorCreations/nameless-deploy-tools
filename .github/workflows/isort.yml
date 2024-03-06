@@ -5,13 +5,13 @@ on:
     branches:
       - master
     paths:
-      - ".github/workflows/ruff.yml"
+      - ".github/workflows/isort.yml"
       - "**.py"
       - "requirements.txt"
       - "pyproject.toml"
   pull_request:
     paths:
-      - ".github/workflows/ruff.yml"
+      - ".github/workflows/isort.yml"
       - "**.py"
       - "requirements.txt"
       - "pyproject.toml"
