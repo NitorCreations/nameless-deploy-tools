@@ -2,7 +2,6 @@
 
 [![Build Status](https://api.travis-ci.com/NitorCreations/nameless-deploy-tools.svg?branch=master)](https://app.travis-ci.com/github/NitorCreations/nameless-deploy-tools/)
 [![Coverage Status](https://coveralls.io/repos/github/NitorCreations/nameless-deploy-tools/badge.svg?branch=master)](https://coveralls.io/github/NitorCreations/nameless-deploy-tools?branch=master)
-[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 ## Released version 1.317
@@ -50,11 +49,18 @@ applications. All of the above can also be deployed using _[Terraform](https://w
 
 ## Installation
 
+Requires Python 3.8 or newer.
+
 ```shell
 pip install nameless-deploy-tools
 ```
 
-Requires Python 3.8 or newer.
+Or in an isolated environment using [pipx](https://github.com/pypa/pipx):
+
+```shell
+pipx install nameless-deploy-tools
+pipx upgrade nameless-deploy-tools
+```
 
 ## Getting started
 
@@ -108,29 +114,20 @@ pipx install pip-tools
 pip-compile setup.py
 ```
 
-Note: pip-compile needs to run inside a virtual environment.
-Create and activate one before using it.
-
 ## Code formatting and linting
 
-This project uses [Black](https://github.com/psf/black) together with [isort](https://github.com/PyCQA/isort) for Python code formatting,
-and [ruff](https://github.com/astral-sh/ruff) for linting.
+This project uses [ruff](https://github.com/astral-sh/ruff)
+together with [isort](https://github.com/PyCQA/isort) for Python code formatting and linting.
 They are configured with a custom line length limit of 120.
 
 Usage:
 
 ```shell
-pip install --upgrade black isort ruff
-black .
+pipx install isort ruff
 isort .
-ruff --fix .
+ruff check --fix .
+ruff format .
 ```
-
-These can also be integrated to IDEs / editors or run as a pre-commit hook.
-See the documentation for example for Black [here](https://black.readthedocs.io/en/stable/integrations/editors.html).
-VS Code has built-in support for [Black](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter),
-[isort](https://marketplace.visualstudio.com/items?itemName=ms-python.isort),
-and [ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) through official plugins.
 
 Using with [pre-commit](https://pre-commit.com/):
 

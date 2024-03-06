@@ -1,15 +1,20 @@
 name: Python isort
 
-# Run either when pushing directly to main/master or in a PR targeting main/master
 on:
   push:
     branches:
       - master
-      - main
     paths:
+      - ".github/workflows/ruff.yml"
       - "**.py"
-      - ".github/workflows/isort.yml"
+      - "requirements.txt"
+      - "pyproject.toml"
   pull_request:
+    paths:
+      - ".github/workflows/ruff.yml"
+      - "**.py"
+      - "requirements.txt"
+      - "pyproject.toml"
 
 # https://github.com/marketplace/actions/python-isort
 jobs:

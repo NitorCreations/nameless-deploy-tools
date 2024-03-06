@@ -21,19 +21,17 @@ repos:
         exclude: ^docs/commands\.md$
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.2.2"
+    rev: v0.3.0
     hooks:
       - id: ruff
-        name: python ruff
+        name: python ruff lint
         args: [--fix, --exit-non-zero-on-fix]
-
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.2.0
-    hooks:
-      - id: black
-        language_version: python3.11
+      - id: ruff-format
+        name: python ruff format
+        args: [--check]
 
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
       - id: isort
+        name: python isort
