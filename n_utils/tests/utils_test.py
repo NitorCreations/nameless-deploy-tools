@@ -1,7 +1,7 @@
 from n_utils.utils import get_images, read_if_readable
 
 
-def describe_images(Filters=None):
+def describe_images(Filters=None):  # noqa: N803
     assert Filters[0]["Name"] == "tag-value"
     assert Filters[0]["Values"] == ["awsdev_centos_jenkins_bake_*"]
     return {
