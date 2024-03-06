@@ -119,6 +119,28 @@ pipx install pip-tools
 pip-compile pyproject.toml
 ```
 
+Dev and test requirements are specified separately:
+
+```shell
+pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
+```
+
+## Running tests
+
+Install test requirements:
+
+```shell
+pip install -r dev-requirements.txt
+```
+
+Run tests with Pytest:
+
+```shell
+# Call as a python module to ensure you get the virtual env pytest and not some globally installed one
+# that is probably missing some of the dependencies needed.
+python -m pytest -v .
+```
+
 ## Code formatting and linting
 
 This project uses [ruff](https://github.com/astral-sh/ruff)
