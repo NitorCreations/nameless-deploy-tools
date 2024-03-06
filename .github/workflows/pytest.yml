@@ -53,4 +53,4 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
-          python -m pytest -v .
+          python -m pytest --verbose --color=yes .
