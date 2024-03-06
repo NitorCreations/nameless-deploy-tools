@@ -163,9 +163,9 @@ def print_aws_profiles():
     """
     parser = argparse.ArgumentParser(description=print_aws_profiles.__doc__)
     if "_ARGCOMPLETE" in os.environ:
-        parser.add_argument("prefix", help="Prefix of profiles to print", default="", nargs="?").completer = (
-            ChoicesCompleter(read_profiles())
-        )
+        parser.add_argument(
+            "prefix", help="Prefix of profiles to print", default="", nargs="?"
+        ).completer = ChoicesCompleter(read_profiles())
         argcomplete.autocomplete(parser)
     else:
         parser.add_argument("prefix", help="Prefix of profiles to print", default="", nargs="?")

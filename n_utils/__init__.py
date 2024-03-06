@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""" Main module for nameless-deploy-tools
-"""
+"""Main module for nameless-deploy-tools"""
+
 import base64
 
 VERSION = "1.317"
