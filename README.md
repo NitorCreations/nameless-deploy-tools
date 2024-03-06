@@ -122,6 +122,7 @@ pip-compile pyproject.toml
 Dev and test requirements are specified separately:
 
 ```shell
+# This will output the requirements for the "dev" and "testing" groups
 pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
 ```
 
