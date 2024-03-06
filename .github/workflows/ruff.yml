@@ -7,14 +7,14 @@ on:
     paths:
       - ".github/workflows/ruff.yml"
       - "**.py"
-      - "requirements.txt"
       - "pyproject.toml"
+      - "requirements.txt"
   pull_request:
     paths:
       - ".github/workflows/ruff.yml"
       - "**.py"
-      - "requirements.txt"
       - "pyproject.toml"
+      - "requirements.txt"
 
 # https://github.com/chartboost/ruff-action
 jobs:

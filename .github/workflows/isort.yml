@@ -7,14 +7,14 @@ on:
     paths:
       - ".github/workflows/isort.yml"
       - "**.py"
-      - "requirements.txt"
       - "pyproject.toml"
+      - "requirements.txt"
   pull_request:
     paths:
       - ".github/workflows/isort.yml"
       - "**.py"
-      - "requirements.txt"
       - "pyproject.toml"
+      - "requirements.txt"
 
 # https://github.com/marketplace/actions/python-isort
 jobs:

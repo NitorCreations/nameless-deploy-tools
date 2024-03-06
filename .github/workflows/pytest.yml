@@ -1,0 +1,56 @@
+name: Pytest
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/pytest.yml"
+      - "**.py"
+      - "dev-requirements.txt"
+      - "pyproject.toml"
+      - "requirements.txt"
+  pull_request:
+    paths:
+      - ".github/workflows/pytest.yml"
+      - "**.py"
+      - "dev-requirements.txt"
+      - "pyproject.toml"
+      - "requirements.txt"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python environment
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache venv
+        id: cached-dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/dev-requirements.txt', '**/requirements.txt') }}
+          restore-keys: |
+            venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
+
+      - name: Install dependencies
+        run: |
+          if [ ! -d ".venv" ]; then
+            python -m venv .venv
+          fi
+          source .venv/bin/activate
+          pip install -U pip setuptools wheel
+          pip install -r requirements.txt
+          pip install -r dev-requirements.txt
+
+      - name: Run tests
+        run: |
+          source .venv/bin/activate
+          python -m pytest -v .
