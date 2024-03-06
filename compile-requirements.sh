@@ -68,10 +68,17 @@ fi
 # Remove old files to force upgrade of all dependencies
 rm -f requirements.txt dev-requirements.txt
 
+print_magenta "Compiling requirements.txt"
 pip-compile --output-file=requirements.txt --strip-extras pyproject.toml
+
+print_magenta "Compiling dev-requirements.txt"
 pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
 
 if [ "$COMMIT_CHANGES" = true ]; then
-  run_command git add requirements.txt dev-requirements.txt
-  run_command git commit -m "re-compile requirements"
+  git add requirements.txt dev-requirements.txt
+  if git diff --name-only --cached | grep -qE '^(requirements\.txt|dev-requirements\.txt)$'; then
+    run_command git commit -m "re-compile requirements"
+  else
+    print_yellow "No changes to requirements files. Skipping commit."
+  fi
 fi
