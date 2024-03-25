@@ -54,7 +54,7 @@ if [ -z "$GITHUB_RUNNER_VERSION" ]; then
   GITHUB_RUNNER_CSUM=e4a9fb7269c1a156eb5d5369232d0cd62e06bec2fd2b321600e85ac914a9cc73
 fi
 if [ -z "$RUSTUP_INIT_CSUM" ]; then
-  RUSTUP_INIT_CSUM=0b2f6c8f85a3d02fde2efc0ced4657869d73fccfce59defb4e8d29233116e6db
+  RUSTUP_INIT_CSUM=a3d541a5484c8fa2f1c21478a6f6c505a778d473c21d60a18a4df5185d320ef8
 fi
 if [ -z "$RUSTUP_DOWNLOAD_URL" ]; then
   RUSTUP_DOWNLOAD_URL=https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
