@@ -122,7 +122,7 @@ requests==2.31.0
     #   threadlocal-aws
 retry==0.9.2
     # via ec2-utils
-ruff==0.3.0
+ruff==0.3.4
     # via nameless-deploy-tools (pyproject.toml)
 s3transfer==0.10.0
     # via boto3
