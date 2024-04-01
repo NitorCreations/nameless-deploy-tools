@@ -4,7 +4,7 @@
 #
 #    pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
 #
-argcomplete==3.2.2
+argcomplete==3.2.3
     # via
     #   ec2-utils
     #   nameless-deploy-tools (pyproject.toml)
