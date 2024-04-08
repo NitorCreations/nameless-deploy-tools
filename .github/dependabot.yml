@@ -8,9 +8,3 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-
-  # Python
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "monthly"
