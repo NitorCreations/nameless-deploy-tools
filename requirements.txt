@@ -39,7 +39,7 @@ future==1.0.0
     # via
     #   ec2-utils
     #   nitor-vault
-idna==3.6
+idna==3.7
     # via requests
 ipaddr==2.2.0
     # via nameless-deploy-tools (pyproject.toml)

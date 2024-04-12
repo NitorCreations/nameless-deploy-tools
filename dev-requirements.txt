@@ -47,7 +47,7 @@ future==1.0.0
     # via
     #   ec2-utils
     #   nitor-vault
-idna==3.6
+idna==3.7
     # via requests
 iniconfig==2.0.0
     # via pytest
