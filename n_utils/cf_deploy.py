@@ -58,6 +58,18 @@ def log(message):
     )
 
 
+def merge(a: dict, b: dict, path=[]):
+    for key in b:
+        if key in a:
+            if isinstance(a[key], dict) and isinstance(b[key], dict):
+                merge(a[key], b[key], path + [str(key)])
+            elif a[key] != b[key]:
+                raise Exception("Conflict at " + ".".join(path + [str(key)]))
+        else:
+            a[key] = b[key]
+    return a
+
+
 def update_stack(stack_name, template, params, dry_run=False, session=None, tags=None, disable_rollback=False):
     clf = cloudformation(session=session)
     chset_name = stack_name + "-" + time.strftime("%Y%m%d%H%M%S", time.gmtime())
@@ -70,7 +82,11 @@ def update_stack(stack_name, template, params, dry_run=False, session=None, tags
     status = chset_data["Status"]
     while "_COMPLETE" not in status and status != "FAILED":
         time.sleep(5)
-        chset_data = clf.describe_change_set(ChangeSetName=chset_id)
+        chset_data = clf.describe_change_set(ChangeSetName=chset_id, IncludePropertyValues=True)
+        while "NextToken" in chset_data and chset_data["NextToken"]:
+            next_token = chset_data["NextToken"]
+            del chset_data["NextToken"]
+            chset_data = merge(chset_data, clf.describe_change_set(ChangeSetName=chset_id, NextToken=next_token))
         status = chset_data["Status"]
     if status == "FAILED":
         clf.delete_change_set(ChangeSetName=chset_id)
