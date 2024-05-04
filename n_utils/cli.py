@@ -684,8 +684,11 @@ def cli_ecs_ls():
             print(f"Tasks for service {args.service} in {args.cluster}:")
             for task in ecs_describe_tasks(args.cluster, args.service):
                 # print nice info about the task
+                task_name = task["taskArn"].split("/")[-1]
+                task_definition_name = task["taskDefinitionArn"].split("/")[-1]
+                startup_time = (task["startedAt"] - task["createdAt"]).total_seconds()
                 print(
-                    f"{task['taskArn'].split('/')[-1]}: {task['lastStatus']} {task['taskDefinitionArn'].split('/')[-1]} {task['memory']} MB {task['cpu']} vCPU"  # noqa: E501
+                    f"{task_name}: {task['lastStatus']} {task_definition_name} {task['memory']} MB {task['cpu']} vCPU {task['createdAt']} created at {startup_time}s startup time"  # noqa: E501
                 )  # noqa: E501
         else:
             for service in ecs_describe_services(args.cluster):
