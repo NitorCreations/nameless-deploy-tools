@@ -63,7 +63,8 @@ def ecs_describe_tasks(cluster: str, service: str):
             return []
         else:
             raise e
-    tasks = ecs().describe_tasks(cluster=cluster, tasks=tasks)["tasks"]
+    tasks: list[dict] = ecs().describe_tasks(cluster=cluster, tasks=tasks)["tasks"]
+    tasks.sort(key=lambda x: x["createdAt"])
     return tasks
 
 
