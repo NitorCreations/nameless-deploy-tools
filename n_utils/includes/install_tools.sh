@@ -16,7 +16,7 @@
 
 set -xe
 
-if [ -z "$1" ] && [ "$1" = "latest" ] && [ "$1" = "alpha" ]; then
+if [ -z "$1" -o "$1" = "latest" -o "$1" = "alpha" ]; then
   DEPLOYTOOLS_VERSION=""
 else
   DEPLOYTOOLS_VERSION="==$1"
