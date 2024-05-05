@@ -75,7 +75,7 @@ class ConfigFileWriter:
 
     def _write_new_section(self, section_name, new_values, config_filename):
         with open(config_filename, "a") as f:
-            f.write("[%s]\n" % section_name)
+            f.write(f"{section_name}\n")
             contents = []
             self._insert_new_values(line_number=0, contents=contents, new_values=new_values)
             f.write("".join(contents))
@@ -189,7 +189,7 @@ class ConfigFileWriter:
 
     def _matches_section(self, match, section_name):
         parts = section_name.split(" ")
-        unquoted_match = match.group(0) == "[%s]" % section_name
+        unquoted_match = match.group(0) == f"[{section_name}]"
         if len(parts) > 1:
             quoted_match = match.group(0) == '[{} "{}"]'.format(
                 parts[0],
