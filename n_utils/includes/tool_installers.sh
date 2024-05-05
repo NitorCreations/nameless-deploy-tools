@@ -60,10 +60,10 @@ if [ -z "$RUSTUP_DOWNLOAD_URL" ]; then
   RUSTUP_DOWNLOAD_URL=https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
 fi
 if [ -z "$SOCI_SNAPSHOTTER_URL" ]; then
-  SOCI_SNAPSHOTTER_URL=https://github.com/awslabs/soci-snapshotter/releases/download/v0.4.1/soci-snapshotter-0.4.1-linux-amd64-static.tar.gz
+  SOCI_SNAPSHOTTER_URL=https://github.com/awslabs/soci-snapshotter/releases/download/v0.6.0/soci-snapshotter-0.6.0-linux-amd64-static.tar.gz
 fi
 if [ -z "$SOCI_SNAPSHOTTER_CSUM" ]; then
-  SOCI_SNAPSHOTTER_CSUM=00474043ffed48a70ef88e80737722cf39c029a9744cab1071edfbebf403e93e
+  SOCI_SNAPSHOTTER_CSUM=18088e73e9981e93faa6d70a71656a141647316649e7a7bcd019cf08777d773a
 fi
 # Make sure we get logging
 if ! grep cloud-init-output.log /etc/cloud/cloud.cfg.d/05_logging.cfg > /dev/null; then
@@ -392,9 +392,14 @@ github_actions_get_create_token() {
 install_soci_snapshotter() {
   source $(n-include common_tools.sh)
 
-  safe_download "$SOCI_SNAPSHOTTER_URL" "$SOCI_SNAPSHOTTER_CSUM" "soci-snapshotter.tar.gz"
-  tar xzf soci-snapshotter.tar.gz --strip-components=6 --directory=/usr/bin/
-  rm -f soci-snapshotter.tar.gz
+  mkdir -p /tmp/soci-snapshotter
+  safe_download "$SOCI_SNAPSHOTTER_URL" "$SOCI_SNAPSHOTTER_CSUM" "/tmp/soci-snapshotter/soci-snapshotter.tar.gz"
+  tar xzf /tmp/soci-snapshotter/soci-snapshotter.tar.gz --directory /tmp/soci-snapshotter
+  /tmp/soci-snapshotter/soci-snapshotter-grpc --version
+  /tmp/soci-snapshotter/soci --version
+  \cp -f /tmp/soci-snapshotter/soci-snapshotter-grpc /usr/bin
+  \cp -f /tmp/soci-snapshotter/soci /usr/bin/
+  rm -rf /tmp/soci-snapshotter
   soci-snapshotter-grpc --version
   cat > /etc/systemd/system/soci-snapshotter.service << MARKER
 # Copyright The Soci Snapshotter Authors.
