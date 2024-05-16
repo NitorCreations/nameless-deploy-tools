@@ -45,7 +45,6 @@ dependencies = [
     "PyYAML>=5.2",
     "requests",
     "scandir",
-    "six",
     "termcolor",
     "pypiwin32;platform_system=='Windows'",
     "win-unicode-console;platform_system=='Windows'",
