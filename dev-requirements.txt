@@ -114,7 +114,7 @@ pyyaml==6.0.1
     #   cloudformation-utils
     #   nameless-deploy-tools (pyproject.toml)
     #   pyaml
-requests==2.31.0
+requests==2.32.0
     # via
     #   ec2-utils
     #   nameless-deploy-tools (pyproject.toml)
