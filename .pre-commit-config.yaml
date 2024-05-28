@@ -21,7 +21,7 @@ repos:
         exclude: ^docs/commands\.md$
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.4.4
+    rev: v0.4.5
     hooks:
       - id: ruff
         name: python ruff lint
