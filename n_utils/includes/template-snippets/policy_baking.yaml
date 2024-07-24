@@ -21,6 +21,7 @@ PolicyDocument:
       Resource: "*"
       Action:
         - cloudformation:DescribeStacks
+        - cloudformation:DescribeStackResources
         - ec2:AuthorizeSecurityGroupEgress
         - ec2:AuthorizeSecurityGroupIngress
         - ec2:CopyImage
