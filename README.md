@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/NitorCreations/nameless-deploy-tools/badge.svg?branch=master)](https://coveralls.io/github/NitorCreations/nameless-deploy-tools?branch=master)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-## Released version 1.323
+## Released version 1.324
 
 Nameless deploy tools are a set of tools to implement a true Infrastructure As Code workflow
 with various cloud infrastructure management tools. Currently supported tools are

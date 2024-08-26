@@ -24,7 +24,7 @@ requires-python = ">=3.8"
 description = "Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow"
 license = { text = "Apache 2.0" }
 authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
-version = "1.323"
+version = "1.324"
 dynamic = ["entry-points"]
 dependencies = [
     "argcomplete",
@@ -61,7 +61,7 @@ content-type = "text/markdown"
 
 [project.urls]
 Homepage = "http://github.com/NitorCreations/nameless-deploy-tools"
-Download = "https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.323"
+Download = "https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.324"
 
 [project.scripts]
 associate-eip = "n_utils.cli:associate_eip"
