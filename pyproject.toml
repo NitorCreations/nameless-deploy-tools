@@ -109,9 +109,6 @@ ignore = []
 # https://docs.astral.sh/ruff/rules/
 select = ["E4", "E7", "E9", "F", "W", "N", "UP", "I"]
 
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = [
     "A",
@@ -183,6 +180,9 @@ exclude = [
     "node_modules",
     "venv*",
 ]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.per-file-ignores]
 "n_utils/yuuuu3332111i1l1i.py" = ["F821", "N802", "N806"]
