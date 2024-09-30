@@ -102,30 +102,19 @@ target-version = ['py38']
 include = '\.pyi?$'
 extend-exclude = '''venv*'''
 
-[tool.isort]
-# https://pycqa.github.io/isort/docs/configuration/options.html
-# profile = "black"
-# manually specifying black compatibility to override line length
-combine_as_imports = true
-ensure_newline_before_comments = true
-extend_skip = [".idea", ".vscode", ".venv", "venv"]
-extend_skip_glob = ["venv*"]
-force_grid_wrap = 0
-include_trailing_comma = true
-line_length = 120
-multi_line_output = 3
-py_version = 38
-sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
-use_parentheses = true
-
 [tool.ruff]
-# https://github.com/charliermarsh/ruff#configuration
+# https://docs.astral.sh/ruff/configuration/
+include = ["*.py", "*.pyi", "**/pyproject.toml"]
 target-version = "py38"
 line-length = 120
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "N", "UP"] # "I"
 ignore = []
+# https://docs.astral.sh/ruff/rules/
+select = ["E4", "E7", "E9", "F", "W", "N", "UP", "I"]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = [
@@ -136,7 +125,7 @@ fixable = [
     "E",
     "F",
     "G",
-    #"I",  disable isort rules
+    "I",
     "N",
     "Q",
     "S",
@@ -199,16 +188,13 @@ exclude = [
     "venv*",
 ]
 
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
 [tool.ruff.lint.per-file-ignores]
 "n_utils/yuuuu3332111i1l1i.py" = ["F821", "N802", "N806"]
 "n_utils/nameless-dt-enable-profile.py" = ["N999"]
 "n_utils/nameless-dt-load-project-env.py" = ["N999"]
 
 [tool.ruff.lint.isort]
-# https://beta.ruff.rs/docs/settings/#isort
+# https://docs.astral.sh/ruff/settings/#isort
 combine-as-imports = true
 lines-between-types = 1
 section-order = [
@@ -218,3 +204,19 @@ section-order = [
     "first-party",
     "local-folder",
 ]
+
+[tool.isort]
+# https://pycqa.github.io/isort/docs/configuration/options.html
+# profile = "black"
+# manually specifying black compatibility to override line length
+combine_as_imports = true
+ensure_newline_before_comments = true
+extend_skip = [".idea", ".vscode", ".venv", "venv"]
+extend_skip_glob = ["venv*"]
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 120
+multi_line_output = 3
+py_version = 38
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+use_parentheses = true
