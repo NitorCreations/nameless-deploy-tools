@@ -20,24 +20,16 @@ USAGE="Usage: $0 [OPTIONS] [MESSAGE]
 
 Create new release for ndt.
 
+Arguments:
+  [MESSAGE]    Optional commit message for git commit (default is the new version).
+
 OPTIONS: All options are optional
-  -h | --help
-    Display these instructions.
-
-  -d | --dryrun
-    Only print commands instead of executing them.
-
-  -m | --major
-    Increment major version.
-
-  --message
-    Message for git version tag.
-
-  -v | --version <NEW_VERSION>
-    Use given version as the new version number.
-
-  --verbose
-    Display commands being executed."
+  -h | --help                 Display these instructions.
+  -d | --dryrun               Only print commands instead of executing them.
+  -m | --major                Increment major version and reset minor version to 0.
+       --message              Message for git version tag.
+  -v | --version [VERSION]    Set the new version explicitly.
+  -x | --verbose              Display commands being executed."
 
 init_options() {
   DRYRUN=false
@@ -62,7 +54,7 @@ init_options() {
         NEW_VERSION="$2"
         shift
         ;;
-      --verbose)
+      -x | --verbose)
         set -x
         ;;
       *)
@@ -110,15 +102,17 @@ print_magenta "Updating command list..."
 "${SED_COMMAND[@]}" "s/^VERSION.*=.*/VERSION\ =\ \"$NEW_VERSION\"/" n_utils/__init__.py
 
 print_magenta "Version tagging release..."
-git commit -m "$MESSAGE" pyproject.toml README.md docs/commands.md n_utils/__init__.py
-git tag "$NEW_VERSION" -m "$MESSAGE"
+run_command git commit -m "$MESSAGE" pyproject.toml README.md docs/commands.md n_utils/__init__.py
+run_command git tag "$NEW_VERSION" -m "$MESSAGE"
 run_command git push
 run_command git push origin "$NEW_VERSION"
 
-check_and_set_python
-
-print_magenta "Build and upload package..."
+print_magenta "Building package..."
 rm -rf dist/*
+check_and_set_python
 # https://pypa-build.readthedocs.io/en/stable/
 $PYTHON -m build
+
+print_magenta "Uploading package..."
+twine check dist/*
 run_command twine upload dist/*

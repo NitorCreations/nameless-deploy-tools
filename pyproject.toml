@@ -12,19 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# https://setuptools.pypa.io/en/latest/userguide/dependency_management.html
-
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "nameless-deploy-tools"
-requires-python = ">=3.8"
-description = "Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow"
-license = { text = "Apache 2.0" }
-authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
 version = "1.324"
+description = "Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
+license = { text = "Apache 2.0" }
 dynamic = ["entry-points"]
 dependencies = [
     "argcomplete",
@@ -53,11 +48,12 @@ dependencies = [
 
 [project.optional-dependencies]
 testing = ["coverage", "mock", "pytest-cov", "pytest-mock", "pytest"]
-dev = ["isort", "pip-tools", "ruff"]
+dev = ["pip-tools", "ruff"]
+build = ["build", "setuptools", "twine", "wheel"]
 
-[project.readme]
-file = "README.md"
-content-type = "text/markdown"
+[build-system]
+requires = ["setuptools", "wheel", "build"]
+build-backend = "setuptools.build_meta"
 
 [project.urls]
 Homepage = "http://github.com/NitorCreations/nameless-deploy-tools"
@@ -69,8 +65,8 @@ cf-logs-to-cloudwatch = "ec2_utils.cli:log_to_cloudwatch"
 cf-update-stack = "n_utils.cli:update_stack"
 ec2-associate-eip = "n_utils.cli:associate_eip"
 logs-to-cloudwatch = "ec2_utils.cli:log_to_cloudwatch"
-n-include-all = "n_utils.cli:resolve_all_includes"
 n-include = "n_utils.cli:resolve_include"
+n-include-all = "n_utils.cli:resolve_all_includes"
 nameless-dt-enable-profile = "n_utils.profile_util:cli_enable_profile"
 nameless-dt-load-project-env = "n_utils.project_util:load_project_env"
 nameless-dt-register-complete = "n_utils.project_util:ndt_register_complete"

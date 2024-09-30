@@ -7,38 +7,44 @@
 ## Released version 1.324
 
 Nameless deploy tools are a set of tools to implement a true Infrastructure As Code workflow
-with various cloud infrastructure management tools. Currently supported tools are
-CloudFormation, AWS CDK, Serverless Framework, Terraform, Azure Resource Manager (with
-a YAML syntax) and Bicep.
+with various cloud infrastructure management tools.
+Currently supported tools are:
+
+* CloudFormation
+* AWS CDK
+* Serverless Framework
+* Terraform
+* Azure Resource Manager (with YAML syntax)
+* Bicep
 
 ## Why Nameless?
 
 A common analogy for cloud infrastructure has been to move from having pets with
-names that need lots of looking after, to cattle that has at most id's. It's time
-to move to the industrial age from the agrarian era. The infrastructure our
-applications runs now comes and goes, and we know at most some statistical information
-about the actual executions. Run times, memory usage, used bandwidth and the like.
-We no longer know even the id's of the things that actually run the code. Hence -
-nameless.
+names that need lots of looking after, to cattle that has at most id's.
+It's time to move to the industrial age from the agrarian era.
+The infrastructure our applications runs now comes and goes,
+and we know at most some statistical information about the actual executions.
+Run times, memory usage, used bandwidth and the like.
+We no longer know even the id's of the things that actually run the code.
+Hence - nameless.
 
 ## Rationale
 
-We at Nitor are software engineers with mostly a developer or architect background, but
-a lot of us have had to work closely with various Operations teams around the world.
+We at Nitor are software engineers with mostly a developer or architect background,
+but a lot of us have had to work closely with various Operations teams around the world.
 DevOps has a natural appeal to us and immediately "infrastructure as code" meant for us
-that we should apply the best development practices to infrastructure development. It starts
-with version control and continues with testing new features in isolation and a workflow
-that supports this. Our teams usually take into use a feature branch workflow if it is
-feasible, and we expect all the tools and practices to support this. For infrastructure
-this type of branching means that you should be able to spin up enough of the infrastructure
-to be able to verify the changes you want to implement in production. Also, the testing
-environment should be close enough to the target environment for the results to be valid.
-So the differences between testing and production environments should be minimized and
-reviewable.
+that we should apply the best development practices to infrastructure development.
+It starts with version control and continues with testing new features in isolation and a workflow that supports this.
+Our teams usually take into use a feature branch workflow if it is feasible,
+and we expect all the tools and practices to support this.
+For infrastructure this type of branching means that you should be able to spin up enough of the infrastructure
+to be able to verify the changes you want to implement in production.
+Also, the testing environment should be close enough to the target environment for the results to be valid.
+So the differences between testing and production environments should be minimized and reviewable.
 
-With the popular tools like Ansible, Terraform, Chef etc. you need to come up with and
-implement the ways to achieve the goals above. As far as I know, no tool besides ndt
-has at its core a thought-out way of a branching infrastructure development model.
+With the popular tools like Ansible, Terraform, Chef etc.
+you need to come up with and implement the ways to achieve the goals above.
+As far as I know, no tool besides ndt has at its core a thought-out way of a branching infrastructure development model.
 
 ## What it is
 
@@ -51,23 +57,23 @@ applications. All of the above can also be deployed using _[Terraform](https://w
 
 Requires Python 3.8 or newer.
 
-```shell
-pip install nameless-deploy-tools
-```
-
-Or in an isolated environment using [pipx](https://github.com/pypa/pipx):
+Use pipx or uv to install it globally in an isolated environment.
+[pipx](https://github.com/pypa/pipx) is the older and stable tool,
+[uv](https://github.com/astral-sh/uv) is a new, much faster version.
 
 ```shell
 pipx install nameless-deploy-tools
-pipx upgrade nameless-deploy-tools
+# or
+uv tool install nameless-deploy-tools
 ```
+
+Directly installing with pip is no longer supported by most Python distributions.
 
 ## Getting started
 
 To use nameless-deploy-tools you need to set up a _project repository_ that
-describes the images you want to build, and the stacks you want to deploy them in. See
-[ndt-project-template](https://github.com/NitorCreations/ndt-project-template)
-for an example.
+describes the images you want to build, and the stacks you want to deploy them in.
+See [ndt-project-template](https://github.com/NitorCreations/ndt-project-template) for an example.
 
 Here are few commands you can use. All of these are run in your project repository root.
 You need to have AWS credentials for command line access set up.
@@ -75,8 +81,8 @@ You need to have AWS credentials for command line access set up.
 * To bake a new version of an image: `ndt bake-image <image-name>`
 * To build a new Docker container image `ndt bake-docker <component> <docker-name>`
 * To deploy a stack:
-  * with a known AMI id: `ndt deploy-stack <image-name> <stack-name> <AMI-id>`
-  * with the newest AMI id by a given bake job: `ndt deploy-stack <image-name> <stack-name> "" <bake-job-name>`
+    * with a known AMI id: `ndt deploy-stack <image-name> <stack-name> <AMI-id>`
+    * with the newest AMI id by a given bake job: `ndt deploy-stack <image-name> <stack-name> "" <bake-job-name>`
 * To undeploy a stack: `ndt undeploy-stack <image-name> <stack-name>`
 
 For full list of commands see [here](docs/commands.md)
@@ -108,31 +114,51 @@ worth wasting time on. We will release often and if we need changes that are not
 we will fork the next major version and release alphas versions of that until we are
 happy to release the next major version and try and have a painless upgrade path.
 
+## Development
+
+uv is the recommended way to handle virtual environments for development.
+
+Create a venv and install all dependencies:
+
+```shell
+uv sync --all-extras
+```
+
+You can then run commands directly with the venv using `uv run`,
+or activate the venv manually first.
+The uv default venv location is `.venv`.
+
+```shell
+source .venv/bin/activate
+# or Windows
+.venv\Scripts\activate
+```
+
 ## Dependencies
 
 Python dependencies are specified in [pyproject.toml](./pyproject.toml).
-[pip-compile](https://github.com/jazzband/pip-tools/) is used to generate the `requirements.txt` file.
-To update the requirements, use the following commands:
+The `requirements.txt` file is generated by pip compile and should not be modified manually.
 
-```shell
-pipx install pip-tools
-pip-compile pyproject.toml
-```
-
-Dev and test requirements are specified separately:
-
-```shell
-# This will output the requirements for the "dev" and "testing" groups
-pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
-```
-
-Use the helper script to automatically run pip-compile:
+Use the provided shell script to update the requirements file.
+First install [uv](https://github.com/astral-sh/uv) (recommended),
+or alternatively `pip-tools` using [pipx](https://github.com/pypa/pipx).
+Then run:
 
 ```shell
 ./compile-requirements.sh
+# See help
+./compile-requirements.sh -h
 ```
 
 ## Running tests
+
+### Using uv
+
+```shell
+uv run python -m pytest -v .
+```
+
+## Inside active virtual env
 
 Install test requirements:
 
@@ -148,17 +174,16 @@ python -m pytest -v .
 
 ## Code formatting and linting
 
-This project uses [ruff](https://github.com/astral-sh/ruff)
-together with [isort](https://github.com/PyCQA/isort) for Python code formatting and linting.
-They are configured with a custom line length limit of 120.
+Code formatting and linting with [ruff](https://github.com/charliermarsh/ruff).
+
+These are configured with a custom line length limit of 120.
+The configs can be found in [pyproject.toml](./pyproject.toml).
 
 Usage:
 
 ```shell
-pipx install isort ruff
-isort .
-ruff check --fix .
-ruff format .
+ruff format
+ruff check --fix
 ```
 
 Using with [pre-commit](https://pre-commit.com/):
@@ -169,4 +194,15 @@ pre-commit install
 
 # run manually
 pre-commit run --all-files
+```
+
+## Release
+
+Use the provided shell script.
+Note that you need to have a venv with the extra dependencies installed active when running the script.
+
+```shell
+./release.sh
+# See help
+./release.sh -h
 ```

@@ -21,22 +21,15 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=./common.sh
 source "$DIR/common.sh"
 
-USAGE="Usage: $0 [OPTIONS] [MESSAGE]
+USAGE="Usage: $0 [OPTIONS]
 
-Re-compile requirements files using pip-compile.
+Re-compile requirements files using pip compile.
 
 OPTIONS: All options are optional
-  -h | --help
-    Display these instructions.
-
-  -c | --commit
-    Create git commit for changes to requirements.
-
-  -d | --dryrun
-    Only print commands instead of executing them.
-
-  --verbose
-    Display commands being executed."
+  -h | --help      Display these instructions.
+  -c | --commit    Create git commit for changes to requirements.
+  -d | --dryrun    Only print commands instead of executing them.
+  -x | --verbose   Display commands being executed."
 
 DRYRUN=false
 COMMIT_CHANGES=false
@@ -52,7 +45,7 @@ while [ $# -gt 0 ]; do
     -d | --dryrun)
       DRYRUN=true
       ;;
-    --verbose)
+    -x | --verbose)
       set -x
       ;;
   esac
