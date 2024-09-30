@@ -17,6 +17,7 @@
 
 import signal
 import time
+
 from subprocess import Popen
 from typing import Union
 

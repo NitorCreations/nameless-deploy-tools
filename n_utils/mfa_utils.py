@@ -4,6 +4,7 @@ import base64
 import json
 import os
 
+
 # Copyright 2017 Nitor Creations Oy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +23,7 @@ from os import walk
 import pyotp
 import pyqrcode
 import yaml
+
 from Cryptodome.Cipher import AES
 from Cryptodome.Hash import SHA256
 from Cryptodome.Util import Counter

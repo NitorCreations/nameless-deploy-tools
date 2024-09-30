@@ -2,6 +2,7 @@ import glob
 import locale
 import os
 import sys
+
 from subprocess import PIPE, Popen
 
 from argcomplete import split_line
@@ -136,6 +137,7 @@ def ndt():
                 import cProfile
                 import io
                 import pstats
+
                 from pstats import SortKey
 
                 pr = cProfile.Profile()

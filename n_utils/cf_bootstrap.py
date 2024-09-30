@@ -24,6 +24,7 @@ import shutil
 import stat
 import subprocess
 import sys
+
 from ast import literal_eval
 from collections import OrderedDict
 from copy import deepcopy
@@ -31,6 +32,7 @@ from subprocess import PIPE, Popen
 
 import argcomplete
 import ipaddr
+
 from argcomplete.completers import ChoicesCompleter
 from threadlocal_aws.clients import ec2, route53
 

@@ -51,6 +51,7 @@
 
 
 import sys
+
 from collections import deque
 
 from botocore.exceptions import ClientError
