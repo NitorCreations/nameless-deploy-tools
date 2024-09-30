@@ -1,4 +1,4 @@
-name: Python Ruff
+name: Ruff
 
 on:
   push:
