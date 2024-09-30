@@ -61,18 +61,29 @@ done
 
 cd "$REPO_ROOT"
 
-if [ -z "$(command -v pip-compile)" ]; then
-  print_error_and_exit "pip-tools is not installed. Run 'pip install pip-tools'"
+if [ -n "$(command -v uv)" ]; then
+  COMPILE_CMD="uv pip compile"
+elif [ -n "$(command -v pip-compile)" ]; then
+  print_yellow "uv is the recommended tool for running pip compile: https://github.com/astral-sh/uv"
+  if [ -n "$(command -v pipx)" ]; then
+    echo "Installing pip-tools with pipx"
+    pipx install pip-tools
+    COMPILE_CMD="pip-compile"
+  fi
+fi
+
+if [ -z "$COMPILE_CMD" ]; then
+  print_error_and_exit "pip tools are not installed. Use uv, or install 'pip-tools' with pipx."
 fi
 
 # Remove old files to force upgrade of all dependencies
 rm -f requirements.txt dev-requirements.txt
 
 print_magenta "Compiling requirements.txt"
-pip-compile --output-file=requirements.txt --strip-extras pyproject.toml
+$COMPILE_CMD --output-file=requirements.txt --strip-extras pyproject.toml
 
 print_magenta "Compiling dev-requirements.txt"
-pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
+$COMPILE_CMD --output-file=dev-requirements.txt --all-extras pyproject.toml
 
 if [ "$COMMIT_CHANGES" = true ]; then
   git add requirements.txt dev-requirements.txt
