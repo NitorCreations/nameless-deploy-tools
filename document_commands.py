@@ -1,7 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import locale
 import sys
+
 from subprocess import PIPE, Popen
 
 from n_utils import COMMAND_MAPPINGS, NDT_AND_CONSOLE, PATH_COMMANDS

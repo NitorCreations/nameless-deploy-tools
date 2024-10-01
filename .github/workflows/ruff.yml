@@ -1,4 +1,4 @@
-name: Python Ruff
+name: Ruff
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - name: Set up Python environment
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Ruff lint
         uses: chartboost/ruff-action@v1

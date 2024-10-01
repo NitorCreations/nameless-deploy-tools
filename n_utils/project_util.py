@@ -1,4 +1,5 @@
 import sys
+
 from locale import getpreferredencoding
 from os import devnull, environ, linesep
 from subprocess import PIPE, Popen

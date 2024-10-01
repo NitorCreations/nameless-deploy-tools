@@ -22,10 +22,12 @@ import os
 import re
 import sys
 import time
+
 from subprocess import PIPE, Popen
 
 import argcomplete
 import yaml
+
 from argcomplete.completers import ChoicesCompleter, FilesCompleter
 from ec2_utils import ebs, interface
 from ec2_utils.instance_info import dthandler, stack_params_and_outputs_and_stack

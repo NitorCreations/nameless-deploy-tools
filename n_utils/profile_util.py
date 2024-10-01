@@ -2,11 +2,13 @@ import argparse
 import json
 import os
 import re
+
 from datetime import datetime, timezone
 from os import R_OK, access
 from os.path import exists, expanduser, isdir, isfile, join
 
 import argcomplete
+
 from argcomplete.completers import ChoicesCompleter
 from dateutil.parser import parse
 from dateutil.parser._parser import ParserError

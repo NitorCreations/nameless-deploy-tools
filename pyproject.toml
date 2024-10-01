@@ -12,19 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# https://setuptools.pypa.io/en/latest/userguide/dependency_management.html
-
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "nameless-deploy-tools"
-requires-python = ">=3.8"
-description = "Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow"
-license = { text = "Apache 2.0" }
-authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
 version = "1.324"
+description = "Tools for deploying to AWS via CloudFormation and Serverless framework that support a pull request based workflow"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
+license = { text = "Apache 2.0" }
 dynamic = ["entry-points"]
 dependencies = [
     "argcomplete",
@@ -53,11 +48,12 @@ dependencies = [
 
 [project.optional-dependencies]
 testing = ["coverage", "mock", "pytest-cov", "pytest-mock", "pytest"]
-dev = ["isort", "pip-tools", "ruff"]
+dev = ["pip-tools", "ruff"]
+build = ["build", "setuptools", "twine", "wheel"]
 
-[project.readme]
-file = "README.md"
-content-type = "text/markdown"
+[build-system]
+requires = ["setuptools", "wheel", "build"]
+build-backend = "setuptools.build_meta"
 
 [project.urls]
 Homepage = "http://github.com/NitorCreations/nameless-deploy-tools"
@@ -69,8 +65,8 @@ cf-logs-to-cloudwatch = "ec2_utils.cli:log_to_cloudwatch"
 cf-update-stack = "n_utils.cli:update_stack"
 ec2-associate-eip = "n_utils.cli:associate_eip"
 logs-to-cloudwatch = "ec2_utils.cli:log_to_cloudwatch"
-n-include-all = "n_utils.cli:resolve_all_includes"
 n-include = "n_utils.cli:resolve_include"
+n-include-all = "n_utils.cli:resolve_all_includes"
 nameless-dt-enable-profile = "n_utils.profile_util:cli_enable_profile"
 nameless-dt-load-project-env = "n_utils.project_util:load_project_env"
 nameless-dt-register-complete = "n_utils.project_util:ndt_register_complete"
@@ -102,29 +98,15 @@ target-version = ['py38']
 include = '\.pyi?$'
 extend-exclude = '''venv*'''
 
-[tool.isort]
-# https://pycqa.github.io/isort/docs/configuration/options.html
-# profile = "black"
-# manually specifying black compatibility to override line length
-combine_as_imports = true
-ensure_newline_before_comments = true
-extend_skip = [".idea", ".vscode", ".venv", "venv"]
-extend_skip_glob = ["venv*"]
-force_grid_wrap = 0
-include_trailing_comma = true
-line_length = 120
-multi_line_output = 3
-py_version = 38
-sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
-use_parentheses = true
-
 [tool.ruff]
-# https://github.com/charliermarsh/ruff#configuration
+# https://docs.astral.sh/ruff/configuration/
+include = ["*.py", "*.pyi", "**/pyproject.toml"]
 target-version = "py38"
 line-length = 120
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "N", "UP"] # "I"
+# https://docs.astral.sh/ruff/rules/
+select = ["E4", "E7", "E9", "F", "W", "N", "UP", "I"]
 ignore = []
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
@@ -136,7 +118,7 @@ fixable = [
     "E",
     "F",
     "G",
-    #"I",  disable isort rules
+    "I",
     "N",
     "Q",
     "S",
@@ -208,7 +190,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "n_utils/nameless-dt-load-project-env.py" = ["N999"]
 
 [tool.ruff.lint.isort]
-# https://beta.ruff.rs/docs/settings/#isort
+# https://docs.astral.sh/ruff/settings/#isort
 combine-as-imports = true
 lines-between-types = 1
 section-order = [
@@ -218,3 +200,19 @@ section-order = [
     "first-party",
     "local-folder",
 ]
+
+[tool.isort]
+# https://pycqa.github.io/isort/docs/configuration/options.html
+# profile = "black"
+# manually specifying black compatibility to override line length
+combine_as_imports = true
+ensure_newline_before_comments = true
+extend_skip = [".idea", ".vscode", ".venv", "venv"]
+extend_skip_glob = ["venv*"]
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 120
+multi_line_output = 3
+py_version = 38
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+use_parentheses = true

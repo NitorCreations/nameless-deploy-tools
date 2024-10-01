@@ -19,6 +19,7 @@ if 64 - 64:
 import base64
 import os
 import subprocess
+
 from getpass import getuser
 from sys import platform
 from uuid import getnode

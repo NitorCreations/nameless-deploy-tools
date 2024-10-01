@@ -21,22 +21,15 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=./common.sh
 source "$DIR/common.sh"
 
-USAGE="Usage: $0 [OPTIONS] [MESSAGE]
+USAGE="Usage: $0 [OPTIONS]
 
-Re-compile requirements files using pip-compile.
+Re-compile requirements files using pip compile.
 
 OPTIONS: All options are optional
-  -h | --help
-    Display these instructions.
-
-  -c | --commit
-    Create git commit for changes to requirements.
-
-  -d | --dryrun
-    Only print commands instead of executing them.
-
-  --verbose
-    Display commands being executed."
+  -h | --help      Display these instructions.
+  -c | --commit    Create git commit for changes to requirements.
+  -d | --dryrun    Only print commands instead of executing them.
+  -x | --verbose   Display commands being executed."
 
 DRYRUN=false
 COMMIT_CHANGES=false
@@ -52,7 +45,7 @@ while [ $# -gt 0 ]; do
     -d | --dryrun)
       DRYRUN=true
       ;;
-    --verbose)
+    -x | --verbose)
       set -x
       ;;
   esac
@@ -61,18 +54,29 @@ done
 
 cd "$REPO_ROOT"
 
-if [ -z "$(command -v pip-compile)" ]; then
-  print_error_and_exit "pip-tools is not installed. Run 'pip install pip-tools'"
+if [ -n "$(command -v uv)" ]; then
+  COMPILE_CMD="uv pip compile"
+elif [ -n "$(command -v pip-compile)" ]; then
+  print_yellow "uv is the recommended tool for running pip compile: https://github.com/astral-sh/uv"
+  if [ -n "$(command -v pipx)" ]; then
+    echo "Installing pip-tools with pipx"
+    pipx install pip-tools
+    COMPILE_CMD="pip-compile"
+  fi
+fi
+
+if [ -z "$COMPILE_CMD" ]; then
+  print_error_and_exit "pip tools are not installed. Use uv, or install 'pip-tools' with pipx."
 fi
 
 # Remove old files to force upgrade of all dependencies
 rm -f requirements.txt dev-requirements.txt
 
 print_magenta "Compiling requirements.txt"
-pip-compile --output-file=requirements.txt --strip-extras pyproject.toml
+$COMPILE_CMD --output-file=requirements.txt --strip-extras pyproject.toml
 
 print_magenta "Compiling dev-requirements.txt"
-pip-compile --all-extras --output-file=dev-requirements.txt --strip-extras pyproject.toml
+$COMPILE_CMD --output-file=dev-requirements.txt --all-extras pyproject.toml
 
 if [ "$COMMIT_CHANGES" = true ]; then
   git add requirements.txt dev-requirements.txt

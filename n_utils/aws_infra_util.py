@@ -20,6 +20,7 @@ import os
 import re
 import subprocess
 import sys
+
 from base64 import b64encode
 from collections import OrderedDict
 from copy import copy
@@ -28,6 +29,7 @@ from numbers import Number
 from operator import itemgetter
 
 import yaml
+
 from botocore.exceptions import ClientError
 from cloudformation_utils.tools import cloudformation_yaml_loads as yaml_load, process_script_decorated as import_script
 from ec2_utils.instance_info import dthandler, resolve_account, stack_params_and_outputs_and_stack
