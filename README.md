@@ -4,18 +4,18 @@
 [![Coverage Status](https://coveralls.io/repos/github/NitorCreations/nameless-deploy-tools/badge.svg?branch=master)](https://coveralls.io/github/NitorCreations/nameless-deploy-tools?branch=master)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-## Released version 1.325
+## Released version 1.326
 
 Nameless deploy tools are a set of tools to implement a true Infrastructure As Code workflow
 with various cloud infrastructure management tools.
 Currently supported tools are:
 
-* CloudFormation
-* AWS CDK
-* Serverless Framework
-* Terraform
-* Azure Resource Manager (with YAML syntax)
-* Bicep
+- CloudFormation
+- AWS CDK
+- Serverless Framework
+- Terraform
+- Azure Resource Manager (with YAML syntax)
+- Bicep
 
 ## Why Nameless?
 
@@ -48,14 +48,16 @@ As far as I know, no tool besides ndt has at its core a thought-out way of a bra
 
 ## What it is
 
-nameless-deploy-tools works by defining _Amazon Machine Images_, _[Docker containers](https://www.docker.com)_,
-_[Serverless services](https://serverless.com)_ and deploying _[CloudFormation](https://aws.amazon.com/cloudformation/)
+nameless-deploy-tools works by defining _Amazon Machine Images_,
+_[Docker containers](https://www.docker.com)_,
+_[Serverless services](https://serverless.com)_,
+and deploying _[CloudFormation](https://aws.amazon.com/cloudformation/)
 stacks_ of resources. CloudFormation stacks can also be defined with _[AWS CDK](https://awslabs.github.io/aws-cdk/)_
 applications. All of the above can also be deployed using _[Terraform](https://www.terraform.io)_.
 
 ## Installation
 
-Requires Python 3.8 or newer.
+Requires Python 3.9 or newer.
 
 Use pipx or uv to install it globally in an isolated environment.
 [pipx](https://github.com/pypa/pipx) is the older and stable tool,
@@ -78,12 +80,12 @@ See [ndt-project-template](https://github.com/NitorCreations/ndt-project-templat
 Here are few commands you can use. All of these are run in your project repository root.
 You need to have AWS credentials for command line access set up.
 
-* To bake a new version of an image: `ndt bake-image <image-name>`
-* To build a new Docker container image `ndt bake-docker <component> <docker-name>`
-* To deploy a stack:
-    * with a known AMI id: `ndt deploy-stack <image-name> <stack-name> <AMI-id>`
-    * with the newest AMI id by a given bake job: `ndt deploy-stack <image-name> <stack-name> "" <bake-job-name>`
-* To undeploy a stack: `ndt undeploy-stack <image-name> <stack-name>`
+- To bake a new version of an image: `ndt bake-image <image-name>`
+- To build a new Docker container image `ndt bake-docker <component> <docker-name>`
+- To deploy a stack:
+  - with a known AMI id: `ndt deploy-stack <image-name> <stack-name> <AMI-id>`
+  - with the newest AMI id by a given bake job: `ndt deploy-stack <image-name> <stack-name> "" <bake-job-name>`
+- To undeploy a stack: `ndt undeploy-stack <image-name> <stack-name>`
 
 For full list of commands see [here](docs/commands.md)
 
@@ -98,11 +100,11 @@ and `nameless-dt-print-aws-profiles` with these much faster compiled binaries.
 
 ## Documentation
 
-* [Command Reference](docs/commands.md)
-* [ndt workspace tooling](docs/workspace.md)
-* [Template Pre-Processing](docs/template-processing.md)
-* [Multifactor Authentication](docs/mfa.md)
-* [Common parameters](docs/parameters.md)
+- [Command Reference](docs/commands.md)
+- [ndt workspace tooling](docs/workspace.md)
+- [Template Pre-Processing](docs/template-processing.md)
+- [Multifactor Authentication](docs/mfa.md)
+- [Common parameters](docs/parameters.md)
 
 ## Versioning
 
