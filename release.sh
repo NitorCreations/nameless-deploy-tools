@@ -114,5 +114,5 @@ check_and_set_python
 $PYTHON -m build
 
 print_magenta "Uploading package..."
-twine check dist/*
-run_command twine upload dist/*
+$PYTHON -m twine check dist/*
+run_command $PYTHON -m twine upload dist/*
