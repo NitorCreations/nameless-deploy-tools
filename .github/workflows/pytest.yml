@@ -5,15 +5,15 @@ on:
     branches:
       - master
     paths:
-      - ".github/workflows/pytest.yml"
       - "**.py"
+      - ".github/workflows/pytest.yml"
       - "dev-requirements.txt"
       - "pyproject.toml"
       - "requirements.txt"
   pull_request:
     paths:
-      - ".github/workflows/pytest.yml"
       - "**.py"
+      - ".github/workflows/pytest.yml"
       - "dev-requirements.txt"
       - "pyproject.toml"
       - "requirements.txt"
@@ -43,14 +43,14 @@ jobs:
       - name: Install dependencies
         run: |
           if [ ! -d ".venv" ]; then
-            python -m venv .venv
+            python3 -m venv .venv
           fi
           source .venv/bin/activate
-          pip install -U pip setuptools wheel
-          pip install -r requirements.txt
-          pip install -r dev-requirements.txt
+          python3 -m pip install -U pip setuptools wheel
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install -r dev-requirements.txt
 
       - name: Run tests
         run: |
           source .venv/bin/activate
-          python -m pytest --verbose --color=yes .
+          python3 -m pytest --verbose --color=yes .

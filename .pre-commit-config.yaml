@@ -12,7 +12,7 @@ repos:
       - id: check-merge-conflict
       - id: check-toml
       - id: check-yaml
-        args: [--unsafe]
+        args: [ --unsafe ]
       - id: debug-statements
       - id: end-of-file-fixer
         exclude: ^docs/commands\.md$
@@ -25,13 +25,7 @@ repos:
     hooks:
       - id: ruff
         name: python ruff lint
-        args: [--fix, --exit-non-zero-on-fix]
+        args: [ --fix, --exit-non-zero-on-fix ]
       - id: ruff-format
         name: python ruff format
-        args: [--check]
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        name: python isort
+        args: [ --check ]
