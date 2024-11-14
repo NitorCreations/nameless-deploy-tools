@@ -20,8 +20,8 @@ repos:
       - id: trailing-whitespace
         exclude: ^docs/commands\.md$
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.7.1
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.3
     hooks:
       - id: ruff
         name: python ruff lint
