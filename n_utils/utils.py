@@ -191,21 +191,25 @@ def interpolate_file(
         params = deepcopy(os.environ)
     else:
         params = {}
+
     if not stack_name and is_ec2() and not skip_stack:
         params.update(info().stack_data_dict())
     elif stack_name and not skip_stack:
         stack_params, _ = stack_params_and_outputs_and_stack(stack_name=stack_name)
         params.update(stack_params)
+
     vault = None
     vault_keys = []
     if use_vault:
         vault = Vault()
         vault_keys = vault.list_all()
+
     with open(file_name, encoding=encoding) as _infile:
         with dstfile as _outfile:
             for line in _infile:
                 line = _process_line(line, params, vault, vault_keys)
                 _outfile.write(_to_bytes(line, encoding=encoding))
+
     shutil.copy(dstfile.name, destination)
     os.unlink(dstfile.name)
 
@@ -282,7 +286,7 @@ def expand_only_double_paranthesis_params(line, params, vault, vault_keys):
     return line
 
 
-def _process_line(line, params, vault, vault_keys):
+def _process_line(line, params, vault: Vault, vault_keys: list[str]):
     ret = line
     ret = _process_line_re(ret, params, vault, vault_keys, SIMPLE_PARAM_RE)
     ret = _process_line_re(ret, params, vault, vault_keys, DOUBLE_PARANTHESIS_RE)
@@ -290,7 +294,7 @@ def _process_line(line, params, vault, vault_keys):
     return ret
 
 
-def _process_line_re(line, params, vault, vault_keys, matcher):
+def _process_line_re(line, params, vault: Vault, vault_keys: list[str], matcher):
     ret = line
     next_start = 0
     match = matcher.search(line)
@@ -325,6 +329,7 @@ def _process_line_re(line, params, vault, vault_keys, matcher):
             else:
                 ret = ret[: match.start()] + _to_str(param_value) + ret[match.end() :]
         match = matcher.search(ret, next_start)
+
     return ret
 
 
