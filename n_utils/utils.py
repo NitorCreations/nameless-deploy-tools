@@ -46,6 +46,10 @@ USER_DATA_URL = "http://169.254.169.254/latest/user-data"
 INSTANCE_DATA_LINUX = "/opt/nameless/instance-data.json"
 INSTANCE_DATA_WIN = "C:/nameless/instance-data.json"
 
+PARAM_RE = re.compile(r"\$\{([^\$\{\}]*)\}", re.M)
+SIMPLE_PARAM_RE = re.compile(r"\$([a-zA-Z0-9_]*)", re.M)
+DOUBLE_PARANTHESIS_RE = re.compile(r"\(\(([^)]+)\)\)", re.M)
+
 
 def dthandler(obj):
     return obj.isoformat() if hasattr(obj, "isoformat") else json.JSONEncoder().default(obj)
@@ -212,11 +216,6 @@ def interpolate_file(
 
     shutil.copy(dstfile.name, destination)
     os.unlink(dstfile.name)
-
-
-PARAM_RE = re.compile(r"\$\{([^\$\{\}]*)\}", re.M)
-SIMPLE_PARAM_RE = re.compile(r"\$([a-zA-Z0-9_]*)", re.M)
-DOUBLE_PARANTHESIS_RE = re.compile(r"\(\(([^)]+)\)\)", re.M)
 
 
 def _apply_simple_regex(re, line, params, vault, vault_keys):
