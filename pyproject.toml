@@ -19,7 +19,7 @@ description = "Tools for deploying to AWS via CloudFormation and Serverless fram
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
-license = { text = "Apache 2.0" }
+license = { text = "Apache-2.0" }
 dynamic = ["entry-points"]
 dependencies = [
     "argcomplete",
