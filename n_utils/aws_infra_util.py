@@ -173,12 +173,11 @@ def _resolve_ssm_parameter(ssm_key, region=None):
 
 
 def _resolve_vault_parameter(vault_key):
-    value = None
     if vault_key in vault_params:
-        value = vault_params[vault_key]
-    else:
-        value = Vault().lookup(vault_key)
-        vault_params[vault_key] = value
+        return vault_params[vault_key]
+
+    value = Vault().lookup(vault_key)
+    vault_params[vault_key] = value
     return value
 
 
@@ -322,7 +321,6 @@ def _process_value(value, used_params):
 def joined_file_lines(filename):
     with open(filename) as f:
         prevline = ""
-        to_yeild = None
         for line in f.readlines():
             if prevline.strip().endswith("\\"):
                 to_yeild = None
@@ -1004,6 +1002,7 @@ def _preprocess_template(data, root, basefile, path, template_params):
     elif isinstance(data, list):
         for i in range(0, len(data)):
             data[i] = _preprocess_template(data[i], root, basefile, path + str(i) + "_", template_params)
+
     return data
 
 
@@ -1135,13 +1134,15 @@ def extract_script(prefix, path, join_args):
 
     filename = encode_script_filename(prefix, path)
     sys.stderr.write(prefix + ": Exported path '" + path + "' contents to file '" + filename + "'\n")
-    with open(filename, "w") as script_file:  # opens file with name of "test.txt"
+    # opens file with name of "test.txt"
+    with open(filename, "w") as script_file:
         script_file.write(code[0])
         script_file.write("\n")
         for var_name, var_decl in list(var_decls.items()):
             script_file.write(var_decl)
         script_file.write("\n")
         script_file.write(code[1])
+
     return filename
 
 

@@ -308,12 +308,14 @@ def _process_line_re(line, params, vault: Vault, vault_keys: list[str], matcher)
                 param_name = param_match
                 name_arg.append(transform)
                 break
+
         if param_name in vault_keys:
             param_value = vault.lookup(param_name)
         elif param_name in params:
             param_value = params[param_name]
         else:
             next_start = match.end()
+
         if name_arg:
             if param_value and (PARAM_RE.search(param_value) or SIMPLE_PARAM_RE.search(param_value)):
                 param_value = None
@@ -327,6 +329,7 @@ def _process_line_re(line, params, vault: Vault, vault_keys: list[str], matcher)
                 return param_value
             else:
                 ret = ret[: match.start()] + _to_str(param_value) + ret[match.end() :]
+
         match = matcher.search(ret, next_start)
 
     return ret
