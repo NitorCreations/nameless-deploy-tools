@@ -865,6 +865,7 @@ usage: ndt load-parameters [-h] [--branch BRANCH] [--resolve-images]
                            [component]
 
 Load parameters from infra*.properties files in the order:
+
 branch.properties
 [branch].properties
 infra.properties,
@@ -1548,7 +1549,7 @@ options:
 usage: ndt yaml-to-json [-h] [--colorize] [--merge [MERGE ...]] [--small] file
 
 Convert nameless CloudFormation yaml to CloudFormation json with some
-preprosessing
+preprocessing
 
 positional arguments:
   file                  File to parse
