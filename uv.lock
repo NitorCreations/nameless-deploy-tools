@@ -630,7 +630,7 @@ requires-dist = [
     { name = "ipaddr" },
     { name = "jmespath" },
     { name = "mock", marker = "extra == 'testing'" },
-    { name = "nitor-vault", specifier = "~=2.2" },
+    { name = "nitor-vault", specifier = "~=2.4" },
     { name = "pip-tools", marker = "extra == 'dev'" },
     { name = "pyaml" },
     { name = "pycryptodomex" },
@@ -692,20 +692,20 @@ wheels = [
 
 [[package]]
 name = "nitor-vault"
-version = "2.2.0"
+version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5b/52/ee7186e2169718d286f6ffc29ef076d6a997b787ad773a46d56356c22ebd/nitor_vault-2.2.0.tar.gz", hash = "sha256:ea6aa547bbbff313508085206eaf54b5cbe5efe94b79769c55b14d0c527db003", size = 77568 }
+sdist = { url = "https://files.pythonhosted.org/packages/f2/c8/f424b990d95346de9dcf4afd5e711a80c6af7fe35ed1f7bf10e7865d72e6/nitor_vault-2.4.0.tar.gz", hash = "sha256:4c92a42f2ef6a68b9e00c52b4a2f924c575a4e10f44c18ea0391fca124668a23", size = 57301 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/81/a0/bcce5a2aecb994900eddf152eb11c76f53618de0423d2f1447a8dfe5feb9/nitor_vault-2.2.0-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:f6d39ed52357d759f10a1d3ba855a382f7da8d8011346fa71250928bb62a2315", size = 5845643 },
-    { url = "https://files.pythonhosted.org/packages/0b/a6/1d7978c30924059204864fc72a1e60ec78457dc47cb7d3ef4cfc0385c0b6/nitor_vault-2.2.0-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:ce511c9b7e517035398ed757dec5253ada81d47fa4a0387e4dcba5b8ec4d695a", size = 5634462 },
-    { url = "https://files.pythonhosted.org/packages/b9/35/8698bcf47fdccbf41867124556e9db0c5b529b64ab1075363163233ba118/nitor_vault-2.2.0-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:19924476e44b13b78a19c240db2a7e128b0f51a96a5d260538767f4f4cef6ceb", size = 5123056 },
-    { url = "https://files.pythonhosted.org/packages/5a/c8/6f4cdcec231494a014629806ffc2db92eda7060b4b4bb6e78a630eb08273/nitor_vault-2.2.0-cp39-abi3-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f19d768d681649c92163e737e80c9198af5e311ae2eff518787a24236d2df7c6", size = 5410915 },
-    { url = "https://files.pythonhosted.org/packages/09/48/5f4c6510f6b67d7c6daef6c0f5d9ae5b5a9930fc45665bab61dd35f2be38/nitor_vault-2.2.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a7af914266c6be409e91ae7a4556d957634c1bc039e087c3338d78caca971e80", size = 5368383 },
-    { url = "https://files.pythonhosted.org/packages/08/e3/2c3a7abadf1fa2955821aa768e0b683a437c38d1bcb2c070728e4c5e3373/nitor_vault-2.2.0-cp39-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:fee87af3ba53080f50b95f6c65285b742b0a3622d41c5a94933e90abed683273", size = 6707187 },
-    { url = "https://files.pythonhosted.org/packages/94/c8/d5c16cbccf9dcd6494faeef39bcf41ed3451f9719d88461eb71e7eb1335e/nitor_vault-2.2.0-cp39-abi3-musllinux_1_2_i686.whl", hash = "sha256:b6a286a8ec45770424175570eabf21bfbb4409f14a599cf4c2cf79d87144dd74", size = 6332939 },
-    { url = "https://files.pythonhosted.org/packages/d3/45/e98647181b5e6810f6221eda66481836fd4e3723538647a2e05749281da8/nitor_vault-2.2.0-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:0260fd3b2e177dce68f997ac85012bd79512c88771414f7f983192ffb3272b80", size = 6605648 },
-    { url = "https://files.pythonhosted.org/packages/1a/af/8c52091c124ff818e9e3bf829c9a4fb24dfd119f833804a61136ee946077/nitor_vault-2.2.0-cp39-abi3-win32.whl", hash = "sha256:bbcb75567bea4adfa2667be4c43ec25543391b437030b8c75e279b6c849450be", size = 4371654 },
-    { url = "https://files.pythonhosted.org/packages/af/e6/a5301c8052ba28313d012c8f4bfabe34f415f96ab7448651d6d2d8f18b53/nitor_vault-2.2.0-cp39-abi3-win_amd64.whl", hash = "sha256:7dd46ba91e6552e20cd6ebd9a2b2a21e8f0ebd645f348500da926651f811408d", size = 5091018 },
+    { url = "https://files.pythonhosted.org/packages/29/a3/9f4572b1a0f991bfddce2a90e71be70a272a36e27cb1c59c744f6830b437/nitor_vault-2.4.0-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:808ecbed2500f37dd1f4b9c23029f1c408d27e108fcedf5d201275df025cfd9c", size = 5881208 },
+    { url = "https://files.pythonhosted.org/packages/74/5f/222299971b1b14d7466724951e2f5f7a1a0e621bfc516c73ca3244a7e3b4/nitor_vault-2.4.0-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:e8d46a5065bc50c21fa6abc8c7fc49788739092fc4df930762c00f8606075e5c", size = 5684284 },
+    { url = "https://files.pythonhosted.org/packages/e1/e8/2444121b87b9f96d883db36ae4805ca6c6fd31336b420737e4ea03445a99/nitor_vault-2.4.0-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:475d04b5d910abac1c38bdb98ca4b1b81b0b28ad50160c86db2187bcb413508f", size = 5145641 },
+    { url = "https://files.pythonhosted.org/packages/04/49/888d7cae9379f30b8e5ec767d6ae8bdc341fd8a3ad4f1e66892c30399bee/nitor_vault-2.4.0-cp39-abi3-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:eb767bd972823fdd48dabf75a475fb96ae3f73096d061ce9eebd405ab002c03c", size = 5461541 },
+    { url = "https://files.pythonhosted.org/packages/a3/29/e40f76fbf326e49ecc97d1f2a5db90d9fd9af0b1945137f516b5725d856b/nitor_vault-2.4.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e8a115d4ad7cc11ecc03ee530cb7663821ba02a25b5332a77627ababd5b3e316", size = 5402390 },
+    { url = "https://files.pythonhosted.org/packages/c4/4e/3f5f78fbbd4e8e0ecfcd7e20bf4c1a3f52e321c6d10185c4cb1aca3b54a2/nitor_vault-2.4.0-cp39-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:5f65b4f4c5ba10fef187eacec8267fed89f7e8ad8d2e51e06aa8683e75cbe8ab", size = 6762986 },
+    { url = "https://files.pythonhosted.org/packages/b8/36/c1e818bbc8932d532f9b0548fa653966259062682cd03803c3aa119bab86/nitor_vault-2.4.0-cp39-abi3-musllinux_1_2_i686.whl", hash = "sha256:d3259d9e58894c0bbc630467290dd87ef461e6b7c7da4c79f354b2d5f3f009cd", size = 6366780 },
+    { url = "https://files.pythonhosted.org/packages/25/96/a8198d9bd65a809ff7476804d873f579e1b7e47f5e2fb92caf670e6eeac1/nitor_vault-2.4.0-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:65f1feba5eb3ba231b72812c8af2adc0938bbefd0b7f4c48329218658627775c", size = 6657036 },
+    { url = "https://files.pythonhosted.org/packages/bf/f8/e381202f224c20078b2635bc85747604401b923e4075e48eb47033101ba9/nitor_vault-2.4.0-cp39-abi3-win32.whl", hash = "sha256:af0e6d31335f0dc577755cf5f27679f7ebd2aff7e49e7900be0b0ce9928c2349", size = 4403313 },
+    { url = "https://files.pythonhosted.org/packages/58/14/8b088c7f7f24afd008ffbf5a81b5fbe81fb2bdd90270507735c767921134/nitor_vault-2.4.0-cp39-abi3-win_amd64.whl", hash = "sha256:25e23cb84544ebb527e648ef00b4690e4393a7c9606504dddd52acffd36e48b9", size = 5131512 },
 ]
 
 [[package]]

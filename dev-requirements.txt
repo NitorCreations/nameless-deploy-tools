@@ -4,11 +4,11 @@ argcomplete==3.5.1
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   ec2-utils
-boto3==1.35.60
+boto3==1.35.62
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   threadlocal-aws
-botocore==1.35.60
+botocore==1.35.62
     # via
     #   boto3
     #   s3transfer
@@ -28,7 +28,7 @@ cloudformation-utils==0.0.2
     # via nameless-deploy-tools (pyproject.toml)
 configparser==7.1.0
     # via nameless-deploy-tools (pyproject.toml)
-coverage==7.6.4
+coverage==7.6.7
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   pytest-cov
@@ -78,7 +78,7 @@ netifaces==0.11.0
     # via ec2-utils
 nh3==0.2.18
     # via readme-renderer
-nitor-vault==2.2.0
+nitor-vault==2.4.0
     # via nameless-deploy-tools (pyproject.toml)
 packaging==24.2
     # via
@@ -151,7 +151,7 @@ rfc3986==2.0.0
     # via twine
 rich==13.9.4
     # via twine
-ruff==0.7.3
+ruff==0.7.4
     # via nameless-deploy-tools (pyproject.toml)
 s3transfer==0.10.3
     # via boto3

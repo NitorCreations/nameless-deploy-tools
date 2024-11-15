@@ -29,7 +29,7 @@ dependencies = [
     "ec2-utils>=0.38",
     "ipaddr",
     "jmespath",
-    "nitor-vault~=2.2",
+    "nitor-vault~=2.4",
     "pyaml",
     "pycryptodomex",
     "Pygments",
