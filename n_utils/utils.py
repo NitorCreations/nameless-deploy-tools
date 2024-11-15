@@ -46,6 +46,10 @@ USER_DATA_URL = "http://169.254.169.254/latest/user-data"
 INSTANCE_DATA_LINUX = "/opt/nameless/instance-data.json"
 INSTANCE_DATA_WIN = "C:/nameless/instance-data.json"
 
+PARAM_RE = re.compile(r"\$\{([^\$\{\}]*)\}", re.M)
+SIMPLE_PARAM_RE = re.compile(r"\$([a-zA-Z0-9_]*)", re.M)
+DOUBLE_PARANTHESIS_RE = re.compile(r"\(\(([^)]+)\)\)", re.M)
+
 
 def dthandler(obj):
     return obj.isoformat() if hasattr(obj, "isoformat") else json.JSONEncoder().default(obj)
@@ -191,28 +195,27 @@ def interpolate_file(
         params = deepcopy(os.environ)
     else:
         params = {}
+
     if not stack_name and is_ec2() and not skip_stack:
         params.update(info().stack_data_dict())
     elif stack_name and not skip_stack:
         stack_params, _ = stack_params_and_outputs_and_stack(stack_name=stack_name)
         params.update(stack_params)
+
     vault = None
     vault_keys = []
     if use_vault:
         vault = Vault()
         vault_keys = vault.list_all()
+
     with open(file_name, encoding=encoding) as _infile:
         with dstfile as _outfile:
             for line in _infile:
                 line = _process_line(line, params, vault, vault_keys)
                 _outfile.write(_to_bytes(line, encoding=encoding))
+
     shutil.copy(dstfile.name, destination)
     os.unlink(dstfile.name)
-
-
-PARAM_RE = re.compile(r"\$\{([^\$\{\}]*)\}", re.M)
-SIMPLE_PARAM_RE = re.compile(r"\$([a-zA-Z0-9_]*)", re.M)
-DOUBLE_PARANTHESIS_RE = re.compile(r"\(\(([^)]+)\)\)", re.M)
 
 
 def _apply_simple_regex(re, line, params, vault, vault_keys):
@@ -282,7 +285,7 @@ def expand_only_double_paranthesis_params(line, params, vault, vault_keys):
     return line
 
 
-def _process_line(line, params, vault, vault_keys):
+def _process_line(line, params, vault: Vault, vault_keys: list[str]):
     ret = line
     ret = _process_line_re(ret, params, vault, vault_keys, SIMPLE_PARAM_RE)
     ret = _process_line_re(ret, params, vault, vault_keys, DOUBLE_PARANTHESIS_RE)
@@ -290,7 +293,7 @@ def _process_line(line, params, vault, vault_keys):
     return ret
 
 
-def _process_line_re(line, params, vault, vault_keys, matcher):
+def _process_line_re(line, params, vault: Vault, vault_keys: list[str], matcher):
     ret = line
     next_start = 0
     match = matcher.search(line)
@@ -305,12 +308,14 @@ def _process_line_re(line, params, vault, vault_keys, matcher):
                 param_name = param_match
                 name_arg.append(transform)
                 break
+
         if param_name in vault_keys:
             param_value = vault.lookup(param_name)
         elif param_name in params:
             param_value = params[param_name]
         else:
             next_start = match.end()
+
         if name_arg:
             if param_value and (PARAM_RE.search(param_value) or SIMPLE_PARAM_RE.search(param_value)):
                 param_value = None
@@ -324,7 +329,9 @@ def _process_line_re(line, params, vault, vault_keys, matcher):
                 return param_value
             else:
                 ret = ret[: match.start()] + _to_str(param_value) + ret[match.end() :]
+
         match = matcher.search(ret, next_start)
+
     return ret
 
 

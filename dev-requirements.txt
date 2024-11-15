@@ -4,12 +4,11 @@ argcomplete==3.5.1
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   ec2-utils
-    #   nitor-vault
-boto3==1.35.58
+boto3==1.35.62
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   threadlocal-aws
-botocore==1.35.58
+botocore==1.35.62
     # via
     #   boto3
     #   s3transfer
@@ -29,14 +28,12 @@ cloudformation-utils==0.0.2
     # via nameless-deploy-tools (pyproject.toml)
 configparser==7.1.0
     # via nameless-deploy-tools (pyproject.toml)
-coverage==7.6.4
+coverage==7.6.7
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   pytest-cov
 cryptography==43.0.3
-    # via
-    #   nitor-vault
-    #   pyopenssl
+    # via pyopenssl
 decorator==5.1.1
     # via retry
 docutils==0.21.2
@@ -44,9 +41,7 @@ docutils==0.21.2
 ec2-utils==0.38
     # via nameless-deploy-tools (pyproject.toml)
 future==1.0.0
-    # via
-    #   ec2-utils
-    #   nitor-vault
+    # via ec2-utils
 idna==3.10
     # via requests
 importlib-metadata==8.5.0
@@ -83,7 +78,7 @@ netifaces==0.11.0
     # via ec2-utils
 nh3==0.2.18
     # via readme-renderer
-nitor-vault==0.56
+nitor-vault==2.4.0
     # via nameless-deploy-tools (pyproject.toml)
 packaging==24.2
     # via
@@ -145,7 +140,6 @@ requests==2.32.3
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   ec2-utils
-    #   nitor-vault
     #   requests-toolbelt
     #   threadlocal-aws
     #   twine
@@ -157,13 +151,13 @@ rfc3986==2.0.0
     # via twine
 rich==13.9.4
     # via twine
-ruff==0.7.3
+ruff==0.7.4
     # via nameless-deploy-tools (pyproject.toml)
 s3transfer==0.10.3
     # via boto3
 scandir==1.10.0
     # via nameless-deploy-tools (pyproject.toml)
-setuptools==75.4.0
+setuptools==75.5.0
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   pip-tools
@@ -174,9 +168,7 @@ termcolor==2.5.0
     #   nameless-deploy-tools (pyproject.toml)
     #   ec2-utils
 threadlocal-aws==0.11
-    # via
-    #   ec2-utils
-    #   nitor-vault
+    # via ec2-utils
 twine==5.1.1
     # via nameless-deploy-tools (pyproject.toml)
 urllib3==2.2.3

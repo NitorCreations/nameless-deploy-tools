@@ -19,7 +19,7 @@ description = "Tools for deploying to AWS via CloudFormation and Serverless fram
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Pasi Niemi", email = "pasi@nitor.com" }]
-license = { text = "Apache 2.0" }
+license = { text = "Apache-2.0" }
 dynamic = ["entry-points"]
 dependencies = [
     "argcomplete",
@@ -29,7 +29,7 @@ dependencies = [
     "ec2-utils>=0.38",
     "ipaddr",
     "jmespath",
-    "nitor-vault~=0.56",
+    "nitor-vault~=2.4",
     "pyaml",
     "pycryptodomex",
     "Pygments",
@@ -57,7 +57,7 @@ requires = ["setuptools", "wheel", "build"]
 build-backend = "setuptools.build_meta"
 
 [project.urls]
-Homepage = "http://github.com/NitorCreations/nameless-deploy-tools"
+Homepage = "https://github.com/NitorCreations/nameless-deploy-tools"
 Download = "https://github.com/NitorCreations/nameless-deploy-tools/tarball/1.326"
 
 [project.scripts]

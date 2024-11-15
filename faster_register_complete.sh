@@ -41,25 +41,8 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=./common.sh
 source "$DIR/common.sh"
 
-ARGS=(-std=c++20 -O3 -Wall -Wextra)
-
-if [ "$BASH_PLATFORM" = mac ]; then
-  # 03/2023:
-  # try to use brew llvm / Clang since it is newer than what Apple includes.
-  # Critically, Clang 14 does not yet support `march` compiler option for Apple Silicon,
-  # but brew llvm comes with Clang 15 that does support it so we can get the full benefit from the C++ code.
-  # This can be removed once macOS comes with Clang 15 by default...
-  if [ -e "$(brew --prefix)/opt/llvm/bin/clang++" ]; then
-    COMPILER="$(brew --prefix)/opt/llvm/bin/clang++"
-    ARGS+=(-march=native -mtune=native)
-  else
-    echo "You might want to install the latest Clang from brew ('brew install llvm') to get the best results..."
-    COMPILER="g++"
-  fi
-else
-  COMPILER="g++"
-  ARGS+=(-march=native -mtune=native)
-fi
+ARGS=(-std=c++20 -O3 -Wall -Wextra -march=native -mtune=native)
+COMPILER="g++"
 
 if [ -n "$(command -v nameless-dt-register-complete)" ]; then
   print_yellow "Overwriting existing script: nameless-dt-register-complete"

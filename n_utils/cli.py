@@ -78,6 +78,31 @@ SYS_ENCODING = locale.getpreferredencoding()
 NoneType = type(None)
 
 
+class SubCCompleter:
+    def __init__(self, sc_type):
+        self.sc_type = sc_type
+
+    def __call__(self, prefix="", action=None, parser=None, parsed_args=None):
+        p_args = {}
+        if hasattr(parsed_args, "branch") and parsed_args.branch:
+            p_args["branch"] = parsed_args.branch
+        if hasattr(parsed_args, "component") and parsed_args.component:
+            return [
+                sc.name
+                for sc in Project(**p_args).get_component(parsed_args.component).get_subcomponents()
+                if sc.type == self.sc_type and sc.name.startswith(prefix)
+            ]
+        else:
+            return [sc.name for sc in Project(**p_args).get_all_subcomponents() if sc.type == self.sc_type]
+
+
+class FlowNameCompleter:
+    def __call__(self, prefix="", action=None, parser=None, parsed_args=None):
+        instance_id = _resolve_connect_instance(parsed_args)
+        if instance_id:
+            return [flow for flow in connect.get_flows(instance_id).keys() if flow.startswith(prefix)]
+
+
 def get_parser(formatter=None):
     func_name = inspect.stack()[1][3]
     caller = sys._getframe().f_back
@@ -138,8 +163,8 @@ def colorprint(data, output_format="yaml"):
 
 
 def yaml_to_json():
-    """Convert nameless CloudFormation yaml to CloudFormation json with some
-    preprosessing
+    """
+    Convert nameless CloudFormation yaml to CloudFormation json with some preprocessing
     """
     parser = get_parser()
     parser.add_argument("--colorize", "-c", help="Colorize output", action="store_true")
@@ -184,7 +209,8 @@ def yaml_to_yaml():
 
 
 def json_to_yaml():
-    """Convert CloudFormation json to an approximation of a nameless CloudFormation
+    """
+    Convert CloudFormation json to an approximation of a nameless CloudFormation
     yaml with for example scripts externalized
     """
     parser = get_parser()
@@ -335,7 +361,8 @@ def resolve_all_includes():
 
 
 def assume_role():
-    """Assume a defined role. Prints out environment variables
+    """
+    Assume a defined role. Prints out environment variables
     to be eval'd to current context for use:
     eval $(ndt assume-role 'arn:aws:iam::43243246645:role/DeployRole')
     """
@@ -433,7 +460,8 @@ def session_to_env():
 
 
 def clean_snapshots():
-    """Clean snapshots that are older than a number of days (30 by default) and
+    """
+    Clean snapshots that are older than a number of days (30 by default) and
     have one of specified tag values
     """
     parser = get_parser()
@@ -468,9 +496,9 @@ def clean_snapshots():
 
 
 def setup_cli():
-    """Setup the command line environment to define an aws cli profile with
-    the given name and credentials. If an identically named profile exists,
-    it will not be overwritten.
+    """
+    Setup the command line environment to define an aws cli profile with the given name and credentials.
+    If an identically named profile exists, it will not be overwritten.
     """
     parser = get_parser()
     parser.add_argument("-n", "--name", help="Name for the profile to create")
@@ -511,7 +539,7 @@ def show_terraform_params():
     parser = get_parser()
     parser.add_argument(
         "component", help="The component containg the terraform subcomponet"
-    ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("terraform"))
+    ).completer = ChoicesCompleter(_component_having_a_subcomponent_of_type("terraform"))
     parser.add_argument("terraform", help="The name of the terraform subcomponent").completer = SubCCompleter(
         "terraform"
     )
@@ -540,7 +568,7 @@ def show_azure_params():
     """Show available parameters for a azure subcomponent"""
     parser = get_parser()
     parser.add_argument("component", help="The component containg the azure subcomponet").completer = ChoicesCompleter(
-        component_having_a_subcomponent_of_type("azure")
+        _component_having_a_subcomponent_of_type("azure")
     )
     parser.add_argument("azure", help="The name of the azure subcomponent").completer = SubCCompleter("azure")
     param = parser.add_mutually_exclusive_group(required=False)
@@ -595,7 +623,8 @@ def cli_share_to_another_region():
 
 
 def cli_interpolate_file():
-    """Replace placeholders in file with parameter values from stack and
+    """
+    Replace placeholders in file with parameter values from stack and
     optionally from vault
     """
     parser = get_parser()
@@ -644,8 +673,9 @@ def cli_interpolate_file():
 
 
 def cli_ecr_ensure_repo():
-    """Ensure that an ECR repository exists and get the uri and login token for
-    it"""
+    """
+    Ensure that an ECR repository exists and get the uri and login token for it
+    """
     parser = get_parser()
     parser.add_argument("name", help="The name of the ecr repository to verify")
     argcomplete.autocomplete(parser)
@@ -758,9 +788,11 @@ def cli_upsert_cloudfront_records():
 
 
 def cli_mfa_add_token():
-    """Adds an MFA token to be used with role assumption.
+    """
+    Adds an MFA token to be used with role assumption.
     Tokens will be saved in a .ndt subdirectory in the user's home directory.
-    If a token with the same name already exists, it will not be overwritten."""
+    If a token with the same name already exists, it will not be overwritten.
+    """
     parser = get_parser()
     parser.add_argument(
         "token_name",
@@ -804,7 +836,7 @@ def cli_mfa_add_token():
     try:
         mfa_add_token(args)
     except ValueError as error:
-        parser.error(error)
+        parser.error(str(error))
 
 
 def cli_mfa_delete_token():
@@ -838,7 +870,8 @@ def cli_mfa_to_qrcode():
 
 
 def cli_mfa_backup_tokens():
-    """Encrypt or decrypt a backup JSON structure of tokens.
+    """
+    Encrypt or decrypt a backup JSON structure of tokens.
 
     To output an encrypted backup, provide an encryption secret.
 
@@ -906,7 +939,9 @@ def cli_create_account():
 
 
 def cli_load_parameters():
-    """Load parameters from infra*.properties files in the order:
+    """
+    Load parameters from infra*.properties files in the order:
+
     branch.properties
     [branch].properties
     infra.properties,
@@ -1037,13 +1072,14 @@ def cli_load_parameters():
             "image, stack, doker, serverless, azure, connect, cdk or terraform do not make sense without component"
         )
     filter_arr = []
+    filter_types = {}
     if args.filter:
         filter_arr = args.filter.split(",")
-        filter_types = {}
         for filter_entry in filter_arr.copy():
             if len(filter_entry.split(":")) > 1:
                 filter_arr = list(map(lambda x: x.replace(filter_entry, filter_entry.split(":")[0]), filter_arr))
                 filter_types[filter_entry.split(":")[0]] = filter_entry.split(":")[1]
+
     del args.filter
     parameters = load_parameters(**vars(args))
     if filter_arr:
@@ -1052,40 +1088,16 @@ def cli_load_parameters():
                 del parameters[param_key]
             elif param_key in filter_types:
                 _cast_param(param_key, parameters, filter_types[param_key])
+
     print(transform(parameters))
 
 
-def _cast_param(key, params, param_type):
-    if param_type == "int":
-        params[key] = int(params[key])
-    elif param_type == "bool":
-        params[key] = params[key] and params[key].lower() == "true"
-    return
-
-
-class SubCCompleter:
-    def __init__(self, sc_type):
-        self.sc_type = sc_type
-
-    def __call__(self, prefix="", action=None, parser=None, parsed_args=None):
-        p_args = {}
-        if hasattr(parsed_args, "branch") and parsed_args.branch:
-            p_args["branch"] = parsed_args.branch
-        if hasattr(parsed_args, "component") and parsed_args.component:
-            return [
-                sc.name
-                for sc in Project(**p_args).get_component(parsed_args.component).get_subcomponents()
-                if sc.type == self.sc_type and sc.name.startswith(prefix)
-            ]
-        else:
-            return [sc.name for sc in Project(**p_args).get_all_subcomponents() if sc.type == self.sc_type]
-        return None
-
-
 def map_to_exports(map):
-    """Prints the map as eval-able set of environment variables. Keys
+    """
+    Prints the map as eval-able set of environment variables. Keys
     will be cleaned of all non-word letters and values will be escaped so
-    that they will be exported as literal values."""
+    that they will be exported as literal values.
+    """
     ret = ""
     keys = []
     for key, val in list(map.items()):
@@ -1104,13 +1116,16 @@ def map_to_exports(map):
         key = re.sub("[^a-zA-Z0-9_]", "", key)
         ret += key + "=" + value + os.linesep
         keys.append(key)
+
     ret += "export " + " ".join(keys) + os.linesep
     return ret
 
 
 def map_to_properties(map):
-    """Prints the map as loadable set of java properties. Keys
-    will be cleaned of all non-word letters."""
+    """
+    Prints the map as loadable set of java properties. Keys
+    will be cleaned of all non-word letters.
+    """
     ret = ""
     for key, val in list(map.items()):
         key = re.sub("[^a-zA-Z0-9_]", "", key)
@@ -1118,6 +1133,7 @@ def map_to_properties(map):
             ret += key + "=" + val + os.linesep
         else:
             ret += key + "=" + json_save_small(val) + os.linesep
+
     return ret
 
 
@@ -1127,6 +1143,7 @@ def map_to_tfvars(map):
     for key, val in list(map.items()):
         if "${" not in val:
             ret += key + "=" + json.dumps(val) + "\n"
+
     return ret
 
 
@@ -1139,6 +1156,7 @@ def map_to_azure_params(map):
     }
     for key, val in list(map.items()):
         ret_map["parameters"][key] = {"value": val}
+
     return json.dumps(ret_map)
 
 
@@ -1151,8 +1169,10 @@ def cli_assumed_role_name():
 
 
 def cli_list_jobs():
-    """Prints a line for every runnable job in this git repository, in all branches and
-    optionally exports the properties for each under '$root/job-properties/"""
+    """
+    Prints a line for every runnable job in this git repository, in all branches and
+    optionally exports the properties for each under '$root/job-properties/
+    """
     parser = get_parser()
     parser.add_argument(
         "-e",
@@ -1188,8 +1208,8 @@ def cli_list_jobs():
 def branch_components(prefix, parsed_args, **kwargs):
     if parsed_args.branch:
         return [c.name for c in Project(branch=parsed_args.branch).get_components()]
-    else:
-        return [c.name for c in Project().get_components()]
+
+    return [c.name for c in Project().get_components()]
 
 
 def cli_list_components():
@@ -1375,7 +1395,7 @@ def deploy_connect_contact_flows():
     parser.add_argument(
         "component",
         help="the component directory where the connect contact flow directory is",
-    ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("connect"))
+    ).completer = ChoicesCompleter(_component_having_a_subcomponent_of_type("connect"))
     parser.add_argument(
         "contactflowname",
         help="the name of the connect subcomponent directory that has the contact flow template",
@@ -1398,7 +1418,7 @@ def export_connect_contact_flow():
         "-c",
         "--component",
         help="the component directory where the connect contact flow directory is",
-    ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("connect"))
+    ).completer = ChoicesCompleter(_component_having_a_subcomponent_of_type("connect"))
     parser.add_argument(
         "-f",
         "--contactflowname",
@@ -1432,7 +1452,7 @@ def list_connect_contact_flows():
         "-c",
         "--component",
         help="the component directory where the connect contact flow directory is",
-    ).completer = ChoicesCompleter(component_having_a_subcomponent_of_type("connect"))
+    ).completer = ChoicesCompleter(_component_having_a_subcomponent_of_type("connect"))
     parser.add_argument(
         "-f",
         "--contactflowname",
@@ -1458,12 +1478,13 @@ def list_connect_contact_flows():
                 print(flow)
 
 
-def component_having_a_subcomponent_of_type(subcomponent_type):
+def _component_having_a_subcomponent_of_type(subcomponent_type):
     ret = []
     for dir in [x for x in next(os.walk("."))[1] if not x.startswith(".")]:
         for subd in next(os.walk(dir))[1]:
             if subd.startswith(subcomponent_type + "-") and dir not in ret:
                 ret.append(dir)
+
     return ret
 
 
@@ -1481,11 +1502,14 @@ def _resolve_connect_instance(args):
         flow_template = yaml_to_dict(template_dir + os.sep + "template.yaml")
         if "connectInstanceId" in flow_template:
             return flow_template["connectInstanceId"]
+
     return None
 
 
-class FlowNameCompleter:
-    def __call__(self, prefix="", action=None, parser=None, parsed_args=None):
-        instance_id = _resolve_connect_instance(parsed_args)
-        if instance_id:
-            return [flow for flow in connect.get_flows(instance_id).keys() if flow.startswith(prefix)]
+def _cast_param(key, params, param_type):
+    if param_type == "int":
+        params[key] = int(params[key])
+    elif param_type == "bool":
+        params[key] = params[key] and params[key].lower() == "true"
+
+    return
