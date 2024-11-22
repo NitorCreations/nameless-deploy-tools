@@ -104,9 +104,9 @@ if ! [ "$SECURITY_GROUP" ]; then
   SECURITY_GROUP="$(ndt show-stack-params-and-outputs -r $REGION $BAKERY_ROLES_STACK -p $SG_PARAM)"
 fi
 if [ "$IMAGETYPE" != "windows" ]; then
-  [ "$IMAGE_WAIT" ] || IMAGE_WAIT=1200
-else
   [ "$IMAGE_WAIT" ] || IMAGE_WAIT=1800
+else
+  [ "$IMAGE_WAIT" ] || IMAGE_WAIT=3600
 fi
 if ! [ "$AMIBAKE_INSTANCEPROFILE" ]; then
   [ "$INSTANCE_PROFILE_PARAM" ] || INSTANCE_PROFILE_PARAM="bakeInstanceInstanceprofile"
