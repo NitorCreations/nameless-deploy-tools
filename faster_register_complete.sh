@@ -41,16 +41,10 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=./common.sh
 source "$DIR/common.sh"
 
+print_magenta "Compiling faster shell completitions..."
+
 ARGS=(-std=c++20 -O3 -Wall -Wextra -march=native -mtune=native)
 COMPILER="g++"
-
-if [ -n "$(command -v nameless-dt-register-complete)" ]; then
-  print_yellow "Overwriting existing script: nameless-dt-register-complete"
-  DESTINATION="$(which nameless-dt-register-complete)"
-else
-  check_and_set_python
-  DESTINATION="$(dirname "$PYTHON")/nameless-dt-register-complete"
-fi
 
 if [ -z "$(command -v "$COMPILER")" ]; then
   print_error_and_exit "Compiler not found: $COMPILER"
@@ -58,9 +52,14 @@ fi
 
 $COMPILER --version
 
-print_magenta "Compiling nameless-dt-register-complete.cpp"
-run_command $COMPILER "${ARGS[@]}" "$REPO_ROOT/n_utils/nameless-dt-register-complete.cpp" -o "$DESTINATION"
-
-print_magenta "Compiling nameless-dt-print-aws-profiles.cpp"
-DESTINATION="$(dirname "$DESTINATION")/nameless-dt-print-aws-profiles"
-run_command $COMPILER "${ARGS[@]}" "$REPO_ROOT/n_utils/nameless-dt-print-aws-profiles.cpp" -o "$DESTINATION"
+for file in nameless-dt-register-complete nameless-dt-print-aws-profiles; do
+  if [ -n "$(command -v $file)" ]; then
+    print_yellow "Overwriting existing script: $file"
+    DESTINATION="$(which $file)"
+  else
+    check_and_set_python
+    DESTINATION="$(dirname "$PYTHON")/$file"
+  fi
+  print_magenta "Compiling ${file}.cpp"
+  run_command $COMPILER "${ARGS[@]}" "$REPO_ROOT/n_utils/${file}.cpp" -o "$DESTINATION"
+done
