@@ -158,14 +158,16 @@ def promote_image(ami_id, job_name):
     image_name_prefix = re.sub(r"\W", "_", job_name)
     build_number = time.strftime("%Y%m%d%H%M%S", time.gmtime())
     if "BUILD_NUMBER" in os.environ:
-        build_number = "%04d" % int(os.environ["BUILD_NUMBER"])
+        build_number = f"{int(os.environ['BUILD_NUMBER']):04d}"
+
     images_resp = ec2().describe_images(ImageIds=[ami_id])
     ami_name = images_resp["Images"][0]["Name"]
     with open("ami.properties", "w") as ami_props:
-        ami_props.write("AMI_ID=" + ami_id + "\nNAME=" + ami_name + "\n")
+        ami_props.write(f"AMI_ID={ami_id}\nNAME={ami_name}\n")
+
     ec2().create_tags(
         Resources=[ami_id],
-        Tags=[{"Key": image_name_prefix, "Value": image_name_prefix + "_" + build_number}],
+        Tags=[{"Key": image_name_prefix, "Value": f"{image_name_prefix}_{build_number}"}],
     )
 
 
