@@ -434,7 +434,11 @@ def cli_store_bw_profile():
 
 
 def cli_enable_profile():
-    """Enable a configured profile. Simple IAM user, AzureAD, ADFS and ndt assume-role profiles are supported."""
+    """
+    Enable a configured profile.
+
+    Simple IAM user, AzureAD, ADFS and ndt assume-role profiles are supported.
+    """
     parser = argparse.ArgumentParser(description=cli_enable_profile.__doc__)
     type_select = parser.add_mutually_exclusive_group(required=False)
     type_select.add_argument("-i", "--iam", action="store_true", help="IAM user type profile")
@@ -454,6 +458,7 @@ def cli_enable_profile():
         argcomplete.autocomplete(parser)
     else:
         parser.add_argument("profile", help="The profile to enable")
+
     args = parser.parse_args()
     if args.iam:
         profile_type = "iam"
@@ -471,6 +476,7 @@ def cli_enable_profile():
         profile_type = "sso"
     else:
         profile_type = resolve_profile_type(args.profile)
+
     enable_profile(profile_type, args.profile)
 
 
@@ -560,6 +566,7 @@ def enable_profile(profile_type, profile):
             profile_data = get_profile(profile)
             if "ndt_origin_profile" not in profile_data:
                 return
+
             origin_profile = profile_data["ndt_origin_profile"]
             origin_profile_data = get_profile(origin_profile)
             if "azure_tenant_id" in origin_profile_data:
@@ -570,6 +577,7 @@ def enable_profile(profile_type, profile):
                 origin_type = "lastpass"
             else:
                 origin_type = "iam"
+
             enable_profile(origin_type, origin_profile)
 
             command = ["ndt", "assume-role"]
@@ -580,6 +588,7 @@ def enable_profile(profile_type, profile):
                 command.append("-d")
                 duration = str(int(profile_data["ndt_default_duration_hours"]) * 60)
                 command.append(duration)
+
             command.append("-p")
             command.append(profile)
             command.append(profile_data["ndt_role_arn"])
