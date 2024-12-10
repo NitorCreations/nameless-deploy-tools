@@ -260,12 +260,12 @@ def print_profile_expiry(profile, expiry_epoc=None):
     safe_profile = re.sub("[^A-Z0-9]", "_", profile.upper())
     if expiry_epoc:
         epoc = expiry_epoc
-        expiry = _epoc_to_str(epoc)
+        expiry = _epoc_to_datetime(epoc)
     else:
         expiry = read_profile_expiry(profile)
         epoc = _epoc_secs(expiry.replace(tzinfo=tzutc()))
     print("AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + "=" + str(epoc))
-    print("AWS_SESSION_EXPIRATION_" + safe_profile + "=" + expiry)
+    print("AWS_SESSION_EXPIRATION_" + safe_profile + "=" + expiry.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
     print("export AWS_SESSION_EXPIRATION_" + safe_profile + " AWS_SESSION_EXPIRATION_EPOC_" + safe_profile + ";")
 
 
@@ -594,6 +594,7 @@ def enable_profile(profile_type, profile):
             command.append(profile_data["ndt_role_arn"])
             print(" ".join(command))
         elif "AWS_SESSION_EXPIRATION_EPOC_" + safe_profile not in os.environ:
+            expiry = read_profile_expiry_epoc(profile, profile_type=profile_type)
             print_profile_expiry(profile, expiry_epoc=expiry)
         _print_profile_switch(profile)
     elif profile_type == "azure-subscription":
@@ -627,8 +628,10 @@ def _print_profile_switch(profile):
 
 
 def _epoc_to_str(epoc):
-    return datetime.fromtimestamp(epoc, timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    return _epoc_to_datetime(epoc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
+def _epoc_to_datetime(epoc):
+    return datetime.fromtimestamp(epoc, timezone.utc)
 
 def _epoc_secs(d):
     return int((d - datetime.fromtimestamp(0, timezone.utc).replace(tzinfo=tzutc())).total_seconds())
