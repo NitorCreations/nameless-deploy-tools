@@ -47,11 +47,11 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -t, --mfa-token TOKEN_NAME
+  -t TOKEN_NAME, --mfa-token TOKEN_NAME
                         Name of MFA token to use
-  -d, --duration DURATION
+  -d DURATION, --duration DURATION
                         Duration for the session in minutes
-  -p, --profile PROFILE
+  -p PROFILE, --profile PROFILE
                         Profile to edit in ~/.aws/credentials to make role
                         persist in that file for the duration of the session.
 ```
@@ -91,7 +91,7 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -l, --location LOCATION
+  -l LOCATION, --location LOCATION
                         The location for the resource group. If not defined
                         looked from the environment variable AZURE_LOCATION
                         and after that seen if location is defined for the
@@ -215,11 +215,12 @@ usage: ndt cf-follow-logs [-h] [-s START] stack_name
 Tail logs from the log group of a cloudformation stack
 
 positional arguments:
-  stack_name         Name of the stack to watch logs for
+  stack_name            Name of the stack to watch logs for
 
 options:
-  -h, --help         show this help message and exit
-  -s, --start START  Start time in seconds since epoc
+  -h, --help            show this help message and exit
+  -s START, --start START
+                        Start time in seconds since epoc
 ```
 
 ## `ndt cf-get-parameter`
@@ -271,7 +272,7 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -r, --resource RESOURCE
+  -r RESOURCE, --resource RESOURCE
                         Logical resource name to signal. Looked up from
                         cloudformation tags by default
 ```
@@ -315,13 +316,13 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -d, --deny-billing-access
-  -o, --organization-role-name ORGANIZATION_ROLE_NAME
+  -o ORGANIZATION_ROLE_NAME, --organization-role-name ORGANIZATION_ROLE_NAME
                         Role name for admin access from parent account
-  -r, --trust-role-name TRUST_ROLE_NAME
+  -r TRUST_ROLE_NAME, --trust-role-name TRUST_ROLE_NAME
                         Role name for admin access from parent account
-  -a, --trusted-accounts [TRUSTED_ACCOUNTS ...]
+  -a [TRUSTED_ACCOUNTS ...], --trusted-accounts [TRUSTED_ACCOUNTS ...]
                         Account to trust with user management
-  -t, --mfa-token TOKEN_NAME
+  -t TOKEN_NAME, --mfa-token TOKEN_NAME
                         Name of MFA token to use
 ```
 
@@ -491,11 +492,12 @@ Create a snapshot of a volume identified by it\'s mount path
 
 options:
   -h, --help            show this help message and exit
-  -m, --mount-path MOUNT_PATH
+  -m MOUNT_PATH, --mount-path MOUNT_PATH
                         Mount point of the volume to be detached
-  -i, --volume-id VOLUME_ID
+  -i VOLUME_ID, --volume-id VOLUME_ID
                         Volume id to detach
-  -d, --device DEVICE   Device to detach
+  -d DEVICE, --device DEVICE
+                        Device to detach
   -x, --delete          Delete volume after detaching
 ```
 
@@ -509,16 +511,17 @@ Clean snapshots that are older than a number of days (30 by default) and have
 one of specified tag values
 
 positional arguments:
-  tags                 The tag values to select deleted snapshots
+  tags                  The tag values to select deleted snapshots
 
 options:
-  -h, --help           show this help message and exit
-  -r, --region REGION  The region to delete snapshots from. Can also be set
-                       with env variable AWS_DEFAULT_REGION or is gotten from
-                       instance metadata as a last resort
-  -d, --days DAYS      The number of days that is theminimum age for snapshots
-                       to be deleted
-  --dry-run            Do not delete, but print what would be deleted
+  -h, --help            show this help message and exit
+  -r REGION, --region REGION
+                        The region to delete snapshots from. Can also be set
+                        with env variable AWS_DEFAULT_REGION or is gotten from
+                        instance metadata as a last resort
+  -d DAYS, --days DAYS  The number of days that is theminimum age for
+                        snapshots to be deleted
+  --dry-run             Do not delete, but print what would be deleted
 ```
 
 ## `ndt ec2-get-tag`
@@ -582,7 +585,7 @@ expires or a socket can be established to the metadata service
 
 options:
   -h, --help            show this help message and exit
-  --timeout, -t TIMEOUT
+  --timeout TIMEOUT, -t TIMEOUT
                         Maximum time to wait in seconds for the metadata
                         service to be available
 ```
@@ -623,16 +626,16 @@ usage: ndt ecs-exec [-h] [-t TASK] [--non-interactive] cluster service command
 Execute a command in a running ECS task using ECS Exec
 
 positional arguments:
-  cluster            The cluster to execute the command in
-  service            The service to execute the command in
-  command            The command to execute
+  cluster               The cluster to execute the command in
+  service               The service to execute the command in
+  command               The command to execute
 
 options:
-  -h, --help         show this help message and exit
-  -t, --task TASK    The task to execute the command in. If not specified, a
-                     task will be selected at random
-  --non-interactive  Run the command non-interactively. Default is to run
-                     interactively
+  -h, --help            show this help message and exit
+  -t TASK, --task TASK  The task to execute the command in. If not specified,
+                        a task will be selected at random
+  --non-interactive     Run the command non-interactively. Default is to run
+                        interactively
 ```
 
 ## `ndt ecs-ls`
@@ -680,8 +683,9 @@ options:
 
 ```bash
 usage: ndt export-connect-contact-flow [-h] [-c COMPONENT]
-                                       [-f CONTACTFLOWNAME] [-i INSTANCEID |
-                                       -a INSTANCEALIAS] [--colorize]
+                                       [-f CONTACTFLOWNAME]
+                                       [-i INSTANCEID | -a INSTANCEALIAS]
+                                       [--colorize]
                                        name
 
 Export AWS Connect contact flow from an existing instance
@@ -691,15 +695,15 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -c, --component COMPONENT
+  -c COMPONENT, --component COMPONENT
                         the component directory where the connect contact flow
                         directory is
-  -f, --contactflowname CONTACTFLOWNAME
+  -f CONTACTFLOWNAME, --contactflowname CONTACTFLOWNAME
                         the name of the connect subcomponent directory that
                         has the contact flow template
-  -i, --instanceid INSTANCEID
+  -i INSTANCEID, --instanceid INSTANCEID
                         id of the connect instance to export from
-  -a, --instancealias INSTANCEALIAS
+  -a INSTANCEALIAS, --instancealias INSTANCEALIAS
                         alias of the connect instance to export from
   --colorize, -o        Colorize output
 ```
@@ -733,14 +737,16 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -s, --stack STACK     Stack name for values. Automatically resolved on ec2
+  -s STACK, --stack STACK
+                        Stack name for values. Automatically resolved on ec2
                         instances
   -k, --skip-stack      Skip stack parameters in all cases
   -n, --use-environ     Use environment variables for interpolation
   -v, --vault           Use vault values as well.Vault resovled from env
                         variables or default is used
-  -o, --output OUTPUT   Output file
-  -e, --encoding ENCODING
+  -o OUTPUT, --output OUTPUT
+                        Output file
+  -e ENCODING, --encoding ENCODING
                         Encoding to use for the file. Defaults to utf-8
 ```
 
@@ -782,10 +788,11 @@ usage: ndt list-components [-h] [-j] [-b BRANCH]
 Prints the components in a branch, by default the current branch
 
 options:
-  -h, --help           show this help message and exit
-  -j, --json           Print in json format.
-  -b, --branch BRANCH  The branch to get components from. Default is to
-                       process current branch
+  -h, --help            show this help message and exit
+  -j, --json            Print in json format.
+  -b BRANCH, --branch BRANCH
+                        The branch to get components from. Default is to
+                        process current branch
 ```
 
 ## `ndt list-connect-contact-flows`
@@ -799,18 +806,19 @@ List existing AWS Connect contact flows in an instance
 
 options:
   -h, --help            show this help message and exit
-  -c, --component COMPONENT
+  -c COMPONENT, --component COMPONENT
                         the component directory where the connect contact flow
                         directory is
-  -f, --contactflowname CONTACTFLOWNAME
+  -f CONTACTFLOWNAME, --contactflowname CONTACTFLOWNAME
                         the name of the connect subcomponent directory that
                         has the contact flow template
-  -i, --instanceid INSTANCEID
+  -i INSTANCEID, --instanceid INSTANCEID
                         id of the connect instance to export from
-  -a, --instancealias INSTANCEALIAS
+  -a INSTANCEALIAS, --instancealias INSTANCEALIAS
                         alias of the connect instance to export from
   -t, --trash           Include trashed flows
-  -m, --match MATCH     Pattern to match printed flows
+  -m MATCH, --match MATCH
+                        Pattern to match printed flows
 ```
 
 ## `ndt list-file-to-json`
@@ -844,9 +852,10 @@ options:
                         under job-properties/
   -j, --json            Print in json format. Optionally exported parameters
                         will be in the json document
-  -b, --branch BRANCH   The branch to process. Default is to process all
+  -b BRANCH, --branch BRANCH
+                        The branch to process. Default is to process all
                         branches
-  -c, --component COMPONENT
+  -c COMPONENT, --component COMPONENT
                         Component to process. Default is to process all
                         components
 ```
@@ -855,64 +864,68 @@ options:
 
 ```bash
 usage: ndt load-parameters [-h] [--branch BRANCH] [--resolve-images]
-                           [--stack STACK | --serverless SERVERLESS |
-                           --docker DOCKER | --image [IMAGE] | --cdk CDK |
-                           --terraform TERRAFORM | --azure AZURE |
-                           --connect CONNECT] [--json | --yaml |
-                           --properties | --terraform-variables |
-                           --export-statements | --azure-parameters]
+                           [--stack STACK | --serverless SERVERLESS | --docker DOCKER | --image [IMAGE]
+                           | --cdk CDK | --terraform TERRAFORM | --azure AZURE
+                           | --connect CONNECT]
+                           [--json | --yaml | --properties | --terraform-variables | --export-statements | --azure-parameters]
                            [-f FILTER]
                            [component]
 
-Load parameters from infra*.properties files in the order:
+    Load parameters from infra*.properties files in the order:
 
-branch.properties
-[branch].properties
-infra.properties,
-infra-[branch].properties,
-[component]/infra.properties,
-[component]/infra-[branch].properties,
-[component]/[subcomponent-type]-[subcomponent]/infra.properties,
-[component]/[subcomponent-type]-[subcomponent]/infra-[branch].properties
+    branch.properties
+    [branch].properties
+    infra.properties,
+    infra-[branch].properties,
+    [component]/infra.properties,
+    [component]/infra-[branch].properties,
+    [component]/[subcomponent-type]-[subcomponent]/infra.properties,
+    [component]/[subcomponent-type]-[subcomponent]/infra-[branch].properties
 
-Last parameter defined overwrites ones defined before in the files. Supports parameter expansion
-and bash -like transformations. Namely:
+    Last parameter defined overwrites ones defined before in the files. Supports parameter expansion
+    and bash -like transformations. Namely:
 
-${PARAM##prefix} # strip prefix greedy
-${PARAM%%suffix} # strip suffix greedy
-${PARAM#prefix} # strip prefix not greedy
-${PARAM%suffix} # strip suffix not greedy
-${PARAM:-default} # default if empty
-${PARAM:4:2} # start:len
-${PARAM/substr/replace}
-${PARAM^} # upper initial
-${PARAM,} # lower initial
-${PARAM^^} # upper
-${PARAM,,} # lower
+    ${PARAM##prefix} # strip prefix greedy
+    ${PARAM%%suffix} # strip suffix greedy
+    ${PARAM#prefix} # strip prefix not greedy
+    ${PARAM%suffix} # strip suffix not greedy
+    ${PARAM:-default} # default if empty
+    ${PARAM:4:2} # start:len
+    ${PARAM/substr/replace}
+    ${PARAM^} # upper initial
+    ${PARAM,} # lower initial
+    ${PARAM^^} # upper
+    ${PARAM,,} # lower
 
-Comment lines start with \'#\'
-Lines can be continued by adding \'\' at the end
+    Comment lines start with \'#\'
+    Lines can be continued by adding \'\' at the end
 
-See https://www.tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_03.html
-(arrays not supported)
+    See https://www.tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_03.html
+    (arrays not supported)
+    
 
 positional arguments:
   component             Compenent to descend into
 
 options:
   -h, --help            show this help message and exit
-  --branch, -b BRANCH   Branch to get active parameters for
+  --branch BRANCH, -b BRANCH
+                        Branch to get active parameters for
   --resolve-images, -r  Also resolve subcomponent AMI IDs and docker repo urls
-  --stack, -s STACK     CloudFormation subcomponent to descent into
-  --serverless, -l SERVERLESS
+  --stack STACK, -s STACK
+                        CloudFormation subcomponent to descent into
+  --serverless SERVERLESS, -l SERVERLESS
                         Serverless subcomponent to descent into
-  --docker, -d DOCKER   Docker image subcomponent to descent into
-  --image, -i [IMAGE]   AMI image subcomponent to descent into
-  --cdk, -c CDK         CDK subcomponent to descent into
-  --terraform, -t TERRAFORM
+  --docker DOCKER, -d DOCKER
+                        Docker image subcomponent to descent into
+  --image [IMAGE], -i [IMAGE]
+                        AMI image subcomponent to descent into
+  --cdk CDK, -c CDK     CDK subcomponent to descent into
+  --terraform TERRAFORM, -t TERRAFORM
                         Terraform subcomponent to descent into
-  --azure, -a AZURE     Azure subcomponent to descent into
-  --connect, -n CONNECT
+  --azure AZURE, -a AZURE
+                        Azure subcomponent to descent into
+  --connect CONNECT, -n CONNECT
                         Connect subcomponent to descent into
   --json, -j            JSON format output (default)
   --yaml, -y            YAML format output
@@ -923,7 +936,8 @@ options:
                         Output as eval-able export statements
   --azure-parameters, -z
                         Azure parameter file syntax variables
-  -f, --filter FILTER   Comma separated list of parameter names to output
+  -f FILTER, --filter FILTER
+                        Comma separated list of parameter names to output
 ```
 
 ## `ndt logs`
@@ -938,11 +952,12 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -f, --filter FILTER   CloudWatch filter pattern
-  -s, --start START [START ...]
+  -f FILTER, --filter FILTER
+                        CloudWatch filter pattern
+  -s START [START ...], --start START [START ...]
                         Start time (x m|h|d|w ago | now | <seconds since
                         epoc>)
-  -e, --end END [END ...]
+  -e END [END ...], --end END [END ...]
                         End time (x m|h|d|w ago | now | <seconds since epoc>)
   -o, --order           Best effort ordering of log entries
   -t, --shortformat     Print timestamps and log groups in shorter format
@@ -966,11 +981,11 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -i, --interactive     Ask for token details interactively.
-  -b, --bitwarden-entry BITWARDEN_ENTRY
+  -b BITWARDEN_ENTRY, --bitwarden-entry BITWARDEN_ENTRY
                         Use a bitwarden entry as the source of the totp secret
-  -a, --token_arn TOKEN_ARN
+  -a TOKEN_ARN, --token_arn TOKEN_ARN
                         ARN identifier for the token.
-  -s, --token_secret TOKEN_SECRET
+  -s TOKEN_SECRET, --token_secret TOKEN_SECRET
                         Token secret.
   -f, --force           Force an overwrite if the token already exists.
 ```
@@ -985,11 +1000,12 @@ backup, provide an encryption secret. To decrypt an existing backup, use
 --decrypt <file>.
 
 positional arguments:
-  backup_secret       Secret to use for encrypting or decrypts the backup.
+  backup_secret         Secret to use for encrypting or decrypts the backup.
 
 options:
-  -h, --help          show this help message and exit
-  -d, --decrypt FILE  Outputs a decrypted token backup read from given file.
+  -h, --help            show this help message and exit
+  -d FILE, --decrypt FILE
+                        Outputs a decrypted token backup read from given file.
 ```
 
 ## `ndt mfa-code`
@@ -1096,7 +1112,7 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -t, --target-role     Output also azure_default_role_arn
-  -r, --role-arn ROLE_ARN
+  -r ROLE_ARN, --role-arn ROLE_ARN
                         Output also the role given here as the target role for
                         the profile
 ```
@@ -1172,8 +1188,8 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -t, --ttl TTL         Time to live for the record. 60 by default
-  -p, --private-ip PRIVATE_IP
+  -t TTL, --ttl TTL     Time to live for the record. 60 by default
+  -p PRIVATE_IP, --private-ip PRIVATE_IP
                         Private IP address to register
 ```
 
@@ -1186,9 +1202,9 @@ Export current session as environment variables
 
 options:
   -h, --help            show this help message and exit
-  -t, --token-name TOKEN_NAME
+  -t TOKEN_NAME, --token-name TOKEN_NAME
                         Name of the mfs token to use.
-  -d, --duration-minutes DURATION_MINUTES
+  -d DURATION_MINUTES, --duration-minutes DURATION_MINUTES
                         Duration in minutes for the session token. Default to
                         60
 ```
@@ -1203,19 +1219,22 @@ name and credentials. If an identically named profile exists, it will not be
 overwritten.
 
 options:
-  -h, --help           show this help message and exit
-  -n, --name NAME      Name for the profile to create
-  -k, --key-id KEY_ID  Key id for the profile
-  -s, --secret SECRET  Secret to set for the profile
-  -r, --region REGION  Default region for the profile
+  -h, --help            show this help message and exit
+  -n NAME, --name NAME  Name for the profile to create
+  -k KEY_ID, --key-id KEY_ID
+                        Key id for the profile
+  -s SECRET, --secret SECRET
+                        Secret to set for the profile
+  -r REGION, --region REGION
+                        Default region for the profile
 ```
 
 ## `ndt share-to-another-region`
 
 ```bash
 usage: ndt share-to-another-region [-h]
-                                   ami_id to_region ami_name
-                                   account_id [account_id ...]
+                                   ami_id to_region ami_name account_id
+                                   [account_id ...]
 
 Shares an image to another region for potentially another account
 
@@ -1242,7 +1261,7 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -p, --parameter PARAMETER
+  -p PARAMETER, --parameter PARAMETER
                         Name of paremeter if only one parameter required
 ```
 
@@ -1259,8 +1278,9 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -r, --region REGION   Region for the stack to show
-  -p, --parameter PARAMETER
+  -r REGION, --region REGION
+                        Region for the stack to show
+  -p PARAMETER, --parameter PARAMETER
                         Name of paremeter if only one parameter required
 ```
 
@@ -1278,9 +1298,9 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -j, --jmespath JMESPATH
+  -j JMESPATH, --jmespath JMESPATH
                         Show just a matching jmespath value
-  -p, --parameter PARAMETER
+  -p PARAMETER, --parameter PARAMETER
                         Name of paremeter if only one parameter required
 ```
 
@@ -1301,10 +1321,10 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -w, --wait            Wait for the snapshot to finish before returning
-  -c, --copytags [COPYTAGS ...]
+  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
                         Tag to copy to the snapshot from instance. Multiple
                         values allowed.
-  -t, --tags [TAGS ...]
+  -t [TAGS ...], --tags [TAGS ...]
                         Tag to add to the snapshot in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1435,16 +1455,17 @@ options:
 ## `ndt upsert-cloudfront-records`
 
 ```bash
-usage: ndt upsert-cloudfront-records [-h] (-i DISTRIBUTION_ID |
-                                     -c DISTRIBUTION_COMMENT) [-w]
+usage: ndt upsert-cloudfront-records [-h]
+                                     (-i DISTRIBUTION_ID | -c DISTRIBUTION_COMMENT)
+                                     [-w]
 
 Upsert Route53 records for all aliases of a CloudFront distribution
 
 options:
   -h, --help            show this help message and exit
-  -i, --distribution_id DISTRIBUTION_ID
+  -i DISTRIBUTION_ID, --distribution_id DISTRIBUTION_ID
                         Id for the distribution to upsert
-  -c, --distribution_comment DISTRIBUTION_COMMENT
+  -c DISTRIBUTION_COMMENT, --distribution_comment DISTRIBUTION_COMMENT
                         Comment for the distribution to upsert
   -w, --wait            Wait for request to sync
 ```
@@ -1454,34 +1475,35 @@ options:
 ```bash
 usage: ndt upsert-codebuild-projects [-h] [-d]
 
-Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
+    Creates or updates codebuild projects to deploy or bake ndt subcomponents in the current branch.
 
-Parameters are read from properties files as described in \'ndt load-parameters -h\'.
-To check all job paramters you can run \'ndt list-jobs -e -j -b [current-branch]\'
-The only mandatory parameter is CODEBUILD_SERVICE_ROLE,
-which defines the role that the codebuild project assumes for building.
-Other parameters that affect jobs are:
-* BUILD_JOB_NAME - name for the codebuild project
-* NDT_VERSION - version to use to run bakes and deployments.
-    - Defaults to current version.
-    - You may also want to uses \'latest\' to always run the latest released ndt version (only recommended for dev/testing workloads).
-* BUILD_SPEC - file or yaml snippet to use as the build definition.
-    - See https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
-    - subcomponent variables and special variables ${command}, ${component} and ${subcomponent} are available and will be substituted accordingly
-* CODEBUILD_SOURCE_TYPE - one of BITBUCKET, CODECOMMIT, CODEPIPELINE, GITHUB, GITHUB_ENTERPRISE, NO_SOURCE, S3
-* CODEBUILD_SOURCE_LOCATION - the location of the source code
-    - if either of the above is missing, then the source part of the build will be omitted
-* CODEBUILD_EVENT_FILTER - the type of event to trigger the build.
-    - By default PULL_REQUEST_MERGED
-    - Other possible values: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED and PULL_REQUEST_REOPENED
-* CODEBUILD_TIMEOUT - timeout in minutes for the codebuild execution. 60 by default
-* BUILD_ENVIRONMENT_COMPUTE - the compute environment for the build.
-    - BUILD_GENERAL1_SMALL by default
-    - Other possible values BUILD_GENERAL1_MEDIUM, BUILD_GENERAL1_LARGE, BUILD_GENERAL1_2XLARGE
-* NEEDS_DOCKER - if \'y\' (by default on for docker bakes and missing otheriwise), docker server is started inside the container
-    - Needed for bakes and for example serverless python dockerized dependencies
-* SKIP_BUILD_JOB - skip creating build jobs where this parameter is \'y\'
-* SKIP_IMAGE_JOB, SKIP_DOCKER_JOB, SKIP_SERVERLESS_JOB, SKIP_CDK_JOB, SKIP_TERRAFORM_JOB - skip creating jobs where these parameters are \'y\' and match the subcomponent type
+    Parameters are read from properties files as described in \'ndt load-parameters -h\'.
+    To check all job paramters you can run \'ndt list-jobs -e -j -b [current-branch]\'
+    The only mandatory parameter is CODEBUILD_SERVICE_ROLE,
+    which defines the role that the codebuild project assumes for building.
+    Other parameters that affect jobs are:
+    * BUILD_JOB_NAME - name for the codebuild project
+    * NDT_VERSION - version to use to run bakes and deployments.
+        - Defaults to current version.
+        - You may also want to uses \'latest\' to always run the latest released ndt version (only recommended for dev/testing workloads).
+    * BUILD_SPEC - file or yaml snippet to use as the build definition.
+        - See https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
+        - subcomponent variables and special variables ${command}, ${component} and ${subcomponent} are available and will be substituted accordingly
+    * CODEBUILD_SOURCE_TYPE - one of BITBUCKET, CODECOMMIT, CODEPIPELINE, GITHUB, GITHUB_ENTERPRISE, NO_SOURCE, S3
+    * CODEBUILD_SOURCE_LOCATION - the location of the source code
+        - if either of the above is missing, then the source part of the build will be omitted
+    * CODEBUILD_EVENT_FILTER - the type of event to trigger the build.
+        - By default PULL_REQUEST_MERGED
+        - Other possible values: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED and PULL_REQUEST_REOPENED
+    * CODEBUILD_TIMEOUT - timeout in minutes for the codebuild execution. 60 by default
+    * BUILD_ENVIRONMENT_COMPUTE - the compute environment for the build.
+        - BUILD_GENERAL1_SMALL by default
+        - Other possible values BUILD_GENERAL1_MEDIUM, BUILD_GENERAL1_LARGE, BUILD_GENERAL1_2XLARGE
+    * NEEDS_DOCKER - if \'y\' (by default on for docker bakes and missing otheriwise), docker server is started inside the container
+        - Needed for bakes and for example serverless python dockerized dependencies
+    * SKIP_BUILD_JOB - skip creating build jobs where this parameter is \'y\'
+    * SKIP_IMAGE_JOB, SKIP_DOCKER_JOB, SKIP_SERVERLESS_JOB, SKIP_CDK_JOB, SKIP_TERRAFORM_JOB - skip creating jobs where these parameters are \'y\' and match the subcomponent type
+    
 
 options:
   -h, --help     show this help message and exit
@@ -1497,14 +1519,14 @@ usage: ndt upsert-dns-record [-h] [-t TYPE] [-l TTL] [-n] name value
 Update a dns record in Route53.
 
 positional arguments:
-  name             The name of the record to create
-  value            The value to put into the record
+  name                  The name of the record to create
+  value                 The value to put into the record
 
 options:
-  -h, --help       show this help message and exit
-  -t, --type TYPE  The type of record to create. Defaults to \'A\'
-  -l, --ttl TTL    Time To Live for the record. Defaults to 300
-  -n, --no-wait    Do not wait for the record to be synced within Route53
+  -h, --help            show this help message and exit
+  -t TYPE, --type TYPE  The type of record to create. Defaults to \'A\'
+  -l TTL, --ttl TTL     Time To Live for the record. Defaults to 300
+  -n, --no-wait         Do not wait for the record to be synced within Route53
 ```
 
 ## `ndt volume-from-snapshot`
@@ -1530,10 +1552,10 @@ options:
   -n, --no_delete_on_termination
                         Whether to skip deleting the volume on termination,
                         defaults to false
-  -c, --copytags [COPYTAGS ...]
+  -c [COPYTAGS ...], --copytags [COPYTAGS ...]
                         Tag to copy to the volume from instance. Multiple
                         values allowed.
-  -t, --tags [TAGS ...]
+  -t [TAGS ...], --tags [TAGS ...]
                         Tag to add to the volume in the format name=value.
                         Multiple values allowed.
   -i, --ignore-missing-copytags
@@ -1557,7 +1579,7 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   --colorize, -c        Colorize output
-  --merge, -m [MERGE ...]
+  --merge [MERGE ...], -m [MERGE ...]
                         Merge other yaml files to the main file
   --small, -s           Compact representration of json
 ```
@@ -1587,16 +1609,16 @@ Associate an Elastic IP for the instance that this script runs on
 
 options:
   -h, --help            show this help message and exit
-  -i, --ip IP           Elastic IP to allocate - default is to get paramEip
+  -i IP, --ip IP        Elastic IP to allocate - default is to get paramEip
                         from the stack that created this instance
-  -a, --allocationid ALLOCATIONID
+  -a ALLOCATIONID, --allocationid ALLOCATIONID
                         Elastic IP allocation id to allocate - default is to
                         get paramEipAllocationId from the stack that created
                         this instance
-  -e, --eipparam EIPPARAM
+  -e EIPPARAM, --eipparam EIPPARAM
                         Parameter to look up for Elastic IP in the stack -
                         default is paramEip
-  -p, --allocationidparam ALLOCATIONIDPARAM
+  -p ALLOCATIONIDPARAM, --allocationidparam ALLOCATIONIDPARAM
                         Parameter to look up for Elastic IP Allocation ID in
                         the stack - default is paramEipAllocationId
 ```
@@ -1612,15 +1634,17 @@ as an argument. The logstream will be the instance id and filename if not
 given as an argument. Group and stream aare created if they do not exist.
 
 positional arguments:
-  file                 File to follow
+  file                  File to follow
 
 options:
-  -h, --help           show this help message and exit
-  -g, --group GROUP    Log group to log to. Defaults to the stack name that
-                       created the instance if not given and instance is
-                       created with a CloudFormation stack
-  -s, --stream STREAM  The log stream name to log to. The instance id and
-                       filename if not given
+  -h, --help            show this help message and exit
+  -g GROUP, --group GROUP
+                        Log group to log to. Defaults to the stack name that
+                        created the instance if not given and instance is
+                        created with a CloudFormation stack
+  -s STREAM, --stream STREAM
+                        The log stream name to log to. The instance id and
+                        filename if not given
 ```
 
 ## `[ndt ]ec2-associate-eip`
@@ -1633,16 +1657,16 @@ Associate an Elastic IP for the instance that this script runs on
 
 options:
   -h, --help            show this help message and exit
-  -i, --ip IP           Elastic IP to allocate - default is to get paramEip
+  -i IP, --ip IP        Elastic IP to allocate - default is to get paramEip
                         from the stack that created this instance
-  -a, --allocationid ALLOCATIONID
+  -a ALLOCATIONID, --allocationid ALLOCATIONID
                         Elastic IP allocation id to allocate - default is to
                         get paramEipAllocationId from the stack that created
                         this instance
-  -e, --eipparam EIPPARAM
+  -e EIPPARAM, --eipparam EIPPARAM
                         Parameter to look up for Elastic IP in the stack -
                         default is paramEip
-  -p, --allocationidparam ALLOCATIONIDPARAM
+  -p ALLOCATIONIDPARAM, --allocationidparam ALLOCATIONIDPARAM
                         Parameter to look up for Elastic IP Allocation ID in
                         the stack - default is paramEipAllocationId
 ```
@@ -1658,15 +1682,17 @@ as an argument. The logstream will be the instance id and filename if not
 given as an argument. Group and stream aare created if they do not exist.
 
 positional arguments:
-  file                 File to follow
+  file                  File to follow
 
 options:
-  -h, --help           show this help message and exit
-  -g, --group GROUP    Log group to log to. Defaults to the stack name that
-                       created the instance if not given and instance is
-                       created with a CloudFormation stack
-  -s, --stream STREAM  The log stream name to log to. The instance id and
-                       filename if not given
+  -h, --help            show this help message and exit
+  -g GROUP, --group GROUP
+                        Log group to log to. Defaults to the stack name that
+                        created the instance if not given and instance is
+                        created with a CloudFormation stack
+  -s STREAM, --stream STREAM
+                        The log stream name to log to. The instance id and
+                        filename if not given
 ```
 
 ## `[ndt ]n-include`
@@ -1710,7 +1736,7 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -r, --resource RESOURCE
+  -r RESOURCE, --resource RESOURCE
                         Logical resource name to signal. Looked up from
                         cloudformation tags by default
 ```
