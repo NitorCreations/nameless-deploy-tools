@@ -630,8 +630,10 @@ def _print_profile_switch(profile):
 def _epoc_to_str(epoc):
     return _epoc_to_datetime(epoc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
+
 def _epoc_to_datetime(epoc):
     return datetime.fromtimestamp(epoc, timezone.utc)
+
 
 def _epoc_secs(d):
     return int((d - datetime.fromtimestamp(0, timezone.utc).replace(tzinfo=tzutc())).total_seconds())
