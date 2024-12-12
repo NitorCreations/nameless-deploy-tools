@@ -572,7 +572,7 @@ wheels = [
 
 [[package]]
 name = "nameless-deploy-tools"
-version = "1.326"
+version = "1.328"
 source = { editable = "." }
 dependencies = [
     { name = "argcomplete" },
