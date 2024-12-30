@@ -32,11 +32,11 @@ jobs:
           python-version: 3.x
 
       - name: Ruff lint
-        uses: astral-sh/ruff-action@v1
+        uses: astral-sh/ruff-action@v3
         with:
           args: check --verbose
 
       - name: Ruff format
-        uses: astral-sh/ruff-action@v1
+        uses: astral-sh/ruff-action@v3
         with:
           args: format --check --verbose
