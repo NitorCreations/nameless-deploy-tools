@@ -30,7 +30,7 @@ In short you need to append the following to `~/.zshrc`
 ```shell
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
-eval "$(nitor-care-register-complete)"
+eval "$(nameless-dt-register-complete)"
 ```
 
 ## Project session switcher
