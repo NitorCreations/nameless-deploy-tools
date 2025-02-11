@@ -22,7 +22,7 @@ cloudformation-utils==0.0.2
     # via nameless-deploy-tools (pyproject.toml)
 configparser==7.1.0
     # via nameless-deploy-tools (pyproject.toml)
-cryptography==44.0.0
+cryptography==44.0.1
     # via pyopenssl
 decorator==5.1.1
     # via retry
