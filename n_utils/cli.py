@@ -737,7 +737,7 @@ def cli_ecs_ls():
         for cluster in ecs_describe_clusters():
             if cluster["status"] == "ACTIVE":
                 print(
-                    f"{cluster['clusterName']}: {cluster['activeServicesCount']} services ({cluster['runningTasksCount']} task{'s' if cluster['runningTasksCount']!=1 else ''} running, {cluster['pendingTasksCount']} pending)"  # noqa: E501
+                    f"{cluster['clusterName']}: {cluster['activeServicesCount']} services ({cluster['runningTasksCount']} task{'s' if cluster['runningTasksCount'] != 1 else ''} running, {cluster['pendingTasksCount']} pending)"  # noqa: E501
                 )
 
 
@@ -1184,7 +1184,7 @@ def cli_list_jobs():
         "-j",
         "--json",
         action="store_true",
-        help="Print in json format. Optionally " "exported parameters will be in the json document",
+        help="Print in json format. Optionally exported parameters will be in the json document",
     )
     parser.add_argument(
         "-b",

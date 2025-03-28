@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.9"
 resolution-markers = [
     "python_full_version < '3.10'",
@@ -219,7 +220,7 @@ name = "click"
 version = "8.1.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de", size = 336121 }
 wheels = [
@@ -572,7 +573,7 @@ wheels = [
 
 [[package]]
 name = "nameless-deploy-tools"
-version = "1.328"
+version = "1.329"
 source = { editable = "." }
 dependencies = [
     { name = "argcomplete" },
@@ -588,15 +589,15 @@ dependencies = [
     { name = "pygments" },
     { name = "pyopenssl" },
     { name = "pyotp" },
-    { name = "pypiwin32", marker = "platform_system == 'Windows'" },
+    { name = "pypiwin32", marker = "sys_platform == 'win32'" },
     { name = "pyqrcode" },
     { name = "python-dateutil" },
     { name = "pyyaml" },
     { name = "requests" },
     { name = "scandir" },
     { name = "termcolor" },
-    { name = "win-unicode-console", marker = "platform_system == 'Windows'" },
-    { name = "wmi", marker = "platform_system == 'Windows'" },
+    { name = "win-unicode-console", marker = "sys_platform == 'win32'" },
+    { name = "wmi", marker = "sys_platform == 'win32'" },
 ]
 
 [package.optional-dependencies]
@@ -637,7 +638,7 @@ requires-dist = [
     { name = "pygments" },
     { name = "pyopenssl", specifier = ">=19.1.0" },
     { name = "pyotp" },
-    { name = "pypiwin32", marker = "platform_system == 'Windows'" },
+    { name = "pypiwin32", marker = "sys_platform == 'win32'" },
     { name = "pyqrcode" },
     { name = "pytest", marker = "extra == 'testing'" },
     { name = "pytest-cov", marker = "extra == 'testing'" },
@@ -651,9 +652,10 @@ requires-dist = [
     { name = "termcolor" },
     { name = "twine", marker = "extra == 'build'" },
     { name = "wheel", marker = "extra == 'build'" },
-    { name = "win-unicode-console", marker = "platform_system == 'Windows'" },
-    { name = "wmi", marker = "platform_system == 'Windows'" },
+    { name = "win-unicode-console", marker = "sys_platform == 'win32'" },
+    { name = "wmi", marker = "sys_platform == 'win32'" },
 ]
+provides-extras = ["testing", "dev", "build"]
 
 [[package]]
 name = "netifaces"
@@ -808,8 +810,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/48/7d/0f2b09490b98cc6a902ac15dda8760c568b9c18cfe70e0ef7a16de64d53a/pycryptodomex-3.20.0-cp35-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:7a7a8f33a1f1fb762ede6cc9cbab8f2a9ba13b196bfaf7bc6f0b39d2ba315a43", size = 2158708 },
     { url = "https://files.pythonhosted.org/packages/b0/1c/375adb14b71ee1c8d8232904e928b3e7af5bbbca7c04e4bec94fe8e90c3d/pycryptodomex-3.20.0-cp35-abi3-win32.whl", hash = "sha256:c39778fd0548d78917b61f03c1fa8bfda6cfcf98c767decf360945fe6f97461e", size = 1726798 },
     { url = "https://files.pythonhosted.org/packages/b2/e8/1b92184ab7e5595bf38000587e6f8cf9556ebd1bf0a583619bee2057afbd/pycryptodomex-3.20.0-cp35-abi3-win_amd64.whl", hash = "sha256:2a47bcc478741b71273b917232f521fd5704ab4b25d301669879e7273d3586cc", size = 1762906 },
-    { url = "https://files.pythonhosted.org/packages/e7/c5/9140bb867141d948c8e242013ec8a8011172233c898dfdba0a2417c3169a/pycryptodomex-3.20.0-pp27-pypy_73-manylinux2010_x86_64.whl", hash = "sha256:1be97461c439a6af4fe1cf8bf6ca5936d3db252737d2f379cc6b2e394e12a458", size = 1642622 },
-    { url = "https://files.pythonhosted.org/packages/5e/6a/04acb4978ce08ab16890c70611ebc6efd251681341617bbb9e53356dee70/pycryptodomex-3.20.0-pp27-pypy_73-win32.whl", hash = "sha256:19764605feea0df966445d46533729b645033f134baeb3ea26ad518c9fdf212c", size = 1711668 },
     { url = "https://files.pythonhosted.org/packages/eb/df/3f1ea084e43b91e6d2b6b3493cc948864c17ea5d93ff1261a03812fbfd1a/pycryptodomex-3.20.0-pp310-pypy310_pp73-macosx_10_9_x86_64.whl", hash = "sha256:f2e497413560e03421484189a6b65e33fe800d3bd75590e6d78d4dfdb7accf3b", size = 1569076 },
     { url = "https://files.pythonhosted.org/packages/c9/f3/83ffbdfa0c8f9154bcd8866895f6cae5a3ec749da8b0840603cf936c4412/pycryptodomex-3.20.0-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e48217c7901edd95f9f097feaa0388da215ed14ce2ece803d3f300b4e694abea", size = 1609872 },
     { url = "https://files.pythonhosted.org/packages/c9/9d/c113e640aaf02af5631ae2686b742aac5cd0e1402b9d6512b1c7ec5ef05d/pycryptodomex-3.20.0-pp310-pypy310_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:d00fe8596e1cc46b44bf3907354e9377aa030ec4cd04afbbf6e899fc1e2a7781", size = 1640752 },
