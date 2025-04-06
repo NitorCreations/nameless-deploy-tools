@@ -30,7 +30,10 @@ if [ -z "$NEXUS_VERSION" ]; then
   NEXUS_VERSION=2.15.1-02
 fi
 if [ -z "$NEXUS3_VERSION" ]; then
-  NEXUS3_VERSION=3.68.1-02
+  NEXUS3_VERSION=3.79.0-09
+fi
+if [ -z "$NEXUS3_CSUM" ]; then
+  NEXUS3_CSUM=fa290f799bdbec81815cabf5ee220faa8b4564720244fabead6ae1d5d26fa479
 fi
 if [ -z "$CARGO_PLUGIN_VERSION" ]; then
   CARGO_PLUGIN_VERSION=0.0.6
@@ -145,7 +148,7 @@ install_nexus3() {
   source $(n-include common_tools.sh)
   add_gpg_key 0374CF2E8DD1BDFD
   add_gpg_key 6C0D8AA121AE5808F43805A6C26BAB2B209A8FF4
-  gpg_safe_download https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/3/nexus-$NEXUS3_VERSION-java11-unix.tar.gz nexus3.tar.gz asc
+  safe_download https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/3/nexus-unix-x86-64-$NEXUS3_VERSION.tar.gz $NEXUS3_CSUM nexus3.tar.gz
   mkdir -p /opt/nexus
   tar -xzf nexus3.tar.gz -C /opt/nexus
   chown -R nexus:nexus /opt/nexus
