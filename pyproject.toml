@@ -26,7 +26,7 @@ dependencies = [
     "boto3",
     "cloudformation-utils==0.0.2",
     "configparser",
-    "ec2-utils>=0.38",
+    "ec2-utils>=0.39",
     "ipaddr",
     "jmespath",
     "nitor-vault~=2.4",
