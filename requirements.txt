@@ -4,29 +4,29 @@ argcomplete==3.6.2
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   ec2-utils
-boto3==1.38.2
+boto3==1.38.46
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   threadlocal-aws
-botocore==1.38.2
+botocore==1.38.46
     # via
     #   boto3
     #   s3transfer
-certifi==2025.1.31
+certifi==2025.6.15
     # via requests
 cffi==1.17.1
     # via cryptography
-charset-normalizer==3.4.1
+charset-normalizer==3.4.2
     # via requests
 cloudformation-utils==0.0.2
     # via nameless-deploy-tools (pyproject.toml)
 configparser==7.2.0
     # via nameless-deploy-tools (pyproject.toml)
-cryptography==44.0.2
+cryptography==45.0.4
     # via pyopenssl
 decorator==5.2.1
     # via retry
-ec2-utils==0.38
+ec2-utils==0.39
     # via nameless-deploy-tools (pyproject.toml)
 future==1.0.0
     # via ec2-utils
@@ -40,21 +40,21 @@ jmespath==1.0.1
     #   boto3
     #   botocore
     #   ec2-utils
-netifaces==0.11.0
+netifaces2==0.0.22
     # via ec2-utils
 nitor-vault==2.7.0
     # via nameless-deploy-tools (pyproject.toml)
 py==1.11.0
     # via retry
-pyaml==25.1.0
+pyaml==25.5.0
     # via nameless-deploy-tools (pyproject.toml)
 pycparser==2.22
     # via cffi
-pycryptodomex==3.22.0
+pycryptodomex==3.23.0
     # via nameless-deploy-tools (pyproject.toml)
-pygments==2.19.1
+pygments==2.19.2
     # via nameless-deploy-tools (pyproject.toml)
-pyopenssl==25.0.0
+pyopenssl==25.1.0
     # via nameless-deploy-tools (pyproject.toml)
 pyotp==2.9.0
     # via nameless-deploy-tools (pyproject.toml)
@@ -77,19 +77,19 @@ requests==2.32.4
     #   threadlocal-aws
 retry==0.9.2
     # via ec2-utils
-s3transfer==0.12.0
+s3transfer==0.13.0
     # via boto3
 scandir==1.10.0
     # via nameless-deploy-tools (pyproject.toml)
 six==1.17.0
     # via python-dateutil
-termcolor==3.0.1
+termcolor==3.1.0
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   ec2-utils
 threadlocal-aws==0.11
     # via ec2-utils
-typing-extensions==4.13.2
+typing-extensions==4.14.0
     # via pyopenssl
 urllib3==2.5.0
     # via
