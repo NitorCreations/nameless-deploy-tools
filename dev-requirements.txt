@@ -94,7 +94,7 @@ packaging==25.0
     #   build
     #   pytest
     #   twine
-pip==25.0.1
+pip==25.2
     # via pip-tools
 pip-tools==7.4.1
     # via nameless-deploy-tools (pyproject.toml)
