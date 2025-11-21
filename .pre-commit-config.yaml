@@ -21,7 +21,7 @@ repos:
         exclude: ^docs/commands\.md$
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.2
+    rev: v0.14.5
     hooks:
       - id: ruff
         name: python ruff lint
