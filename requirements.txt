@@ -93,7 +93,7 @@ typing-extensions==4.15.0
     # via
     #   cryptography
     #   pyopenssl
-urllib3==1.26.20
+urllib3==2.6.0
     # via
     #   botocore
     #   requests
