@@ -97,7 +97,7 @@ install_awscliv2
 if [ "$OS_TYPE" = "centos" ] && [ "$OS_VERSION" = "8" ]; then
   pip install --disable-pip-version-check -U boto3
 else
-  pip install --disable-pip-version-check -U boto3 setuptools
+  pip install --disable-pip-version-check -U boto3 setuptools --ignore-installed
 fi
 # If alpha, get first all non-alpha dependencies
 pip install --disable-pip-version-check -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" --ignore-installed
