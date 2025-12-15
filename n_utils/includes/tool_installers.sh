@@ -36,7 +36,7 @@ if [ -z "$NEXUS3_CSUM" ]; then
   NEXUS3_CSUM=fa290f799bdbec81815cabf5ee220faa8b4564720244fabead6ae1d5d26fa479
 fi
 if [ -z "$NEXUS3_URL" ]; then
-  NEXUS3_URL=https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/3/nexus-$NEXUS3_VERSION-linux-x86_64.tar.gz
+  NEXUS3_URL=https://cdn.download.sonatype.com/repository/downloads-prod-group/3/nexus-$NEXUS3_VERSION-linux-x86_64.tar.gz
 fi
 if [ -z "$CARGO_PLUGIN_VERSION" ]; then
   CARGO_PLUGIN_VERSION=0.0.6
