@@ -33,7 +33,7 @@ jobs:
 
       - name: Cache venv
         id: cached-dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/dev-requirements.txt', '**/requirements.txt') }}
