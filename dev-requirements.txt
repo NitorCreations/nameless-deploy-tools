@@ -200,7 +200,7 @@ urllib3==2.6.3
     #   requests
     #   threadlocal-aws
     #   twine
-wheel==0.45.1
+wheel==0.46.2
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   pip-tools
