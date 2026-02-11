@@ -34,7 +34,7 @@ coverage==7.10.7
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   pytest-cov
-cryptography==46.0.1
+cryptography==46.0.5
     # via pyopenssl
 decorator==5.2.1
     # via retry
