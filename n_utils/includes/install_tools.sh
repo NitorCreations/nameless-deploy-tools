@@ -100,7 +100,7 @@ else
   pip install --disable-pip-version-check -U boto3 setuptools --ignore-installed
 fi
 # If alpha, get first all non-alpha dependencies
-pip install --disable-pip-version-check -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" --ignore-installed
+pip install --disable-pip-version-check -U "nameless-deploy-tools$DEPLOYTOOLS_VERSION" nitor-vault==2.7.0 --ignore-installed
 if [ "$1" = "alpha" ]; then
   # Upgrade just ndt to alpha
   pip install --disable-pip-version-check -U --pre --no-deps "nameless-deploy-tools" --ignore-installed
