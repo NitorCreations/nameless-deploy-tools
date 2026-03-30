@@ -111,7 +111,7 @@ pycparser==2.23
     # via cffi
 pycryptodomex==3.23.0
     # via nameless-deploy-tools (pyproject.toml)
-pygments==2.19.2
+pygments==2.20.0
     # via
     #   nameless-deploy-tools (pyproject.toml)
     #   pytest
