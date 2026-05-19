@@ -30,7 +30,7 @@ ec2-utils==0.39
     # via nameless-deploy-tools (pyproject.toml)
 future==1.0.0
     # via ec2-utils
-idna==3.11
+idna==3.15
     # via requests
 ipaddr==2.2.0
     # via nameless-deploy-tools (pyproject.toml)

@@ -48,7 +48,7 @@ future==1.0.0
     # via ec2-utils
 id==1.5.0
     # via twine
-idna==3.11
+idna==3.15
     # via requests
 importlib-metadata==8.7.1
     # via
