@@ -95,7 +95,7 @@ packaging==26.0
     #   pytest
     #   twine
     #   wheel
-pip==26.0.1
+pip==26.1.2
     # via pip-tools
 pip-tools==7.5.3
     # via nameless-deploy-tools (pyproject.toml)
