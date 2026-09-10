@@ -73,11 +73,11 @@ usage() {
   echo "  ami-id      If you want to specify a value for the paramAmi variable in the stack," >&2
   echo "              you can do so. Otherwise give an empty string with two quotation marks" >&2
   echo "  bake-job    If an ami-id is not given, the ami id is resolved by getting the latest" >&2
-  echo "              ami that is tagged with the bake-job name"
+  echo "              ami that is tagged with the bake-job name" >&2
   echo "" >&2
   echo "optional arguments:" >&2
   echo "  -d, --dryrun  dry-run - show only the change set without actually deploying it" >&2
-  echo "  -r, --disable-rollback - disable stack rollback on failure"
+  echo "  -r, --disable-rollback - disable stack rollback on failure" >&2
   echo "  -h, --help  show this help message and exit" >&2
   exit 1
 }

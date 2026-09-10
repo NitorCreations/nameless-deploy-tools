@@ -434,8 +434,6 @@ optional arguments:
 ## `ndt deploy-stack`
 
 ```bash
-ami that is tagged with the bake-job name
-  -r, --disable-rollback - disable stack rollback on failure
 usage: ndt deploy-stack [-d] [-r] [-h] component stack-name ami-id bake-job
 
 Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it.
@@ -452,9 +450,11 @@ positional arguments:
   ami-id      If you want to specify a value for the paramAmi variable in the stack,
               you can do so. Otherwise give an empty string with two quotation marks
   bake-job    If an ami-id is not given, the ami id is resolved by getting the latest
+              ami that is tagged with the bake-job name
 
 optional arguments:
   -d, --dryrun  dry-run - show only the change set without actually deploying it
+  -r, --disable-rollback - disable stack rollback on failure
   -h, --help  show this help message and exit
 ```
 
