@@ -71,13 +71,24 @@ def merge(a: dict, b: dict, path=[]):
     return a
 
 
-def update_stack(stack_name, template, params, dry_run=False, session=None, tags=None, disable_rollback=False):
+def update_stack(
+    stack_name,
+    template,
+    params,
+    dry_run=False,
+    session=None,
+    tags=None,
+    disable_rollback=False,
+    execution_role_arn=None,
+):
     clf = cloudformation(session=session)
     chset_name = stack_name + "-" + time.strftime("%Y%m%d%H%M%S", time.gmtime())
     params = get_template_arguments(stack_name, template, params)
     params["ChangeSetName"] = chset_name
     if tags:
         params["Tags"] = tags
+    if execution_role_arn:
+        params["RoleARN"] = execution_role_arn
     chset_id = clf.create_change_set(**params)["Id"]
     chset_data = clf.describe_change_set(ChangeSetName=chset_id)
     status = chset_data["Status"]
@@ -119,11 +130,15 @@ def update_stack(stack_name, template, params, dry_run=False, session=None, tags
     return
 
 
-def create_stack(stack_name, template, params, session=None, tags=None, disable_rollback=False):
+def create_stack(
+    stack_name, template, params, session=None, tags=None, disable_rollback=False, execution_role_arn=None
+):
     params = get_template_arguments(stack_name, template, params)
     if tags:
         params["Tags"] = tags
     params["DisableRollback"] = disable_rollback
+    if execution_role_arn:
+        params["RoleARN"] = execution_role_arn
     cloudformation(session=session).create_stack(**params)
     return
 
@@ -169,9 +184,25 @@ def get_end_status(stack_name, session=None):
     return status
 
 
-def create_or_update_stack(stack_name, json_small, params_doc, session=None, tags=None, disable_rollback=False):
+def create_or_update_stack(
+    stack_name,
+    json_small,
+    params_doc,
+    session=None,
+    tags=None,
+    disable_rollback=False,
+    execution_role_arn=None,
+):
     stack_func = get_stack_operation(stack_name, session=session)
-    stack_func(stack_name, json_small, params_doc, session=session, tags=tags, disable_rollback=disable_rollback)
+    stack_func(
+        stack_name,
+        json_small,
+        params_doc,
+        session=session,
+        tags=tags,
+        disable_rollback=disable_rollback,
+        execution_role_arn=execution_role_arn,
+    )
     return get_end_status(stack_name, session=session)
 
 
@@ -194,13 +225,16 @@ def get_template_arguments(stack_name, template, params, session=None):
     return params
 
 
-def delete(stack_name, regn, session=None):
+def delete(stack_name, regn, session=None, execution_role_arn=None):
     os.environ["AWS_DEFAULT_REGION"] = regn
     log("**** Deleting stack '" + stack_name + "'")
     clf = cloudformation(session=session)
     cf_events = CloudFormationEvents(log_group_name=stack_name)
     cf_events.start()
-    clf.delete_stack(StackName=stack_name)
+    delete_args = {"StackName": stack_name}
+    if execution_role_arn:
+        delete_args["RoleARN"] = execution_role_arn
+    clf.delete_stack(**delete_args)
     while True:
         try:
             stack_info = clf.describe_stacks(StackName=stack_name)
@@ -251,7 +285,15 @@ def resolve_ami(template_doc, session=None):
     return ami_id, ami_name, ami_created
 
 
-def deploy(stack_name, yaml_template, regn, dry_run=False, session=None, disable_rollback=False):
+def deploy(
+    stack_name,
+    yaml_template,
+    regn,
+    dry_run=False,
+    session=None,
+    disable_rollback=False,
+    execution_role_arn=None,
+):
     os.environ["AWS_DEFAULT_REGION"] = regn
     os.environ["REGION"] = regn
     global REDIRECTED
@@ -322,12 +364,26 @@ def deploy(stack_name, yaml_template, regn, dry_run=False, session=None, disable
 
     if not dry_run:
         status = create_or_update_stack(
-            stack_name, json_small, params_doc, session=session, tags=tags, disable_rollback=disable_rollback
+            stack_name,
+            json_small,
+            params_doc,
+            session=session,
+            tags=tags,
+            disable_rollback=disable_rollback,
+            execution_role_arn=execution_role_arn,
         )
         if not (status == "CREATE_COMPLETE" or status == "UPDATE_COMPLETE"):
             sys.exit("Stack operation failed: end state " + status)
     elif get_stack_operation(stack_name).__name__ == "update_stack":
-        update_stack(stack_name, json_small, params_doc, dry_run=True, session=session, tags=tags)
+        update_stack(
+            stack_name,
+            json_small,
+            params_doc,
+            dry_run=True,
+            session=session,
+            tags=tags,
+            execution_role_arn=execution_role_arn,
+        )
     log("Done!")
 
 

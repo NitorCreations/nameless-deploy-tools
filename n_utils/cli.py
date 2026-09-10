@@ -291,6 +291,11 @@ def update_stack():
         action="store_true",
         help="Disable stack rollback on failure",
     )
+    parser.add_argument(
+        "-e",
+        "--execution-role",
+        help="ARN of the IAM role that CloudFormation assumes when operating on the stack",
+    )
     args = parser.parse_args()
     if not os.path.isfile(args.yaml_template):
         parser.error(args.yaml_template + " not found")
@@ -300,6 +305,7 @@ def update_stack():
         args.region,
         args.dry_run,
         disable_rollback=args.disable_rollback,
+        execution_role_arn=args.execution_role,
     )
     return
 
@@ -309,8 +315,13 @@ def delete_stack():
     parser = get_parser()
     parser.add_argument("stack_name", help="Name of the stack to delete")
     parser.add_argument("region", help="The region to delete the stack from")
+    parser.add_argument(
+        "-e",
+        "--execution-role",
+        help="ARN of the IAM role that CloudFormation assumes when operating on the stack",
+    )
     args = parser.parse_args()
-    cf_deploy.delete(args.stack_name, args.region)
+    cf_deploy.delete(args.stack_name, args.region, execution_role_arn=args.execution_role)
     return
 
 

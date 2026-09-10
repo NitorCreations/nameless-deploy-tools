@@ -57,7 +57,7 @@ if [ "$_ARGCOMPLETE" ]; then
 fi
 
 usage() {
-  echo "usage: ndt deploy-stack [-d] [-r] [-h] component stack-name ami-id bake-job" >&2
+  echo "usage: ndt deploy-stack [-d] [-r] [-e execution-role-arn] [-h] component stack-name ami-id bake-job" >&2
   echo "" >&2
   echo "Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it." >&2
   echo "If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory," >&2
@@ -73,11 +73,13 @@ usage() {
   echo "  ami-id      If you want to specify a value for the paramAmi variable in the stack," >&2
   echo "              you can do so. Otherwise give an empty string with two quotation marks" >&2
   echo "  bake-job    If an ami-id is not given, the ami id is resolved by getting the latest" >&2
-  echo "              ami that is tagged with the bake-job name"
+  echo "              ami that is tagged with the bake-job name" >&2
   echo "" >&2
   echo "optional arguments:" >&2
   echo "  -d, --dryrun  dry-run - show only the change set without actually deploying it" >&2
-  echo "  -r, --disable-rollback - disable stack rollback on failure"
+  echo "  -r, --disable-rollback - disable stack rollback on failure" >&2
+  echo "  -e, --execution-role <arn>  the ARN of the IAM role that CloudFormation assumes" >&2
+  echo "                              when operating on the stack" >&2
   echo "  -h, --help  show this help message and exit" >&2
   exit 1
 }
@@ -98,6 +100,14 @@ while [[ $# -gt 0 ]]; do
     -r | --disable-rollback)
       DISABLE_ROLLBACK="--disable-rollback"
       shift
+      ;;
+    -e | --execution-role)
+      if [ -z "$2" ]; then
+        echo "Option $1 requires an execution role ARN"
+        usage
+      fi
+      EXECUTION_ROLE="--execution-role $2"
+      shift 2
       ;;
     -h | --help)
       usage
@@ -151,7 +161,7 @@ fi
 cd ../..
 
 set -e
-cf-update-stack "${STACK_NAME}" "${component}/stack-${ORIG_STACK_NAME}/template.yaml" "$REGION" $DRY_RUN $DISABLE_ROLLBACK
+cf-update-stack "${STACK_NAME}" "${component}/stack-${ORIG_STACK_NAME}/template.yaml" "$REGION" $DRY_RUN $DISABLE_ROLLBACK $EXECUTION_ROLE
 
 cd ${component}/stack-${ORIG_STACK_NAME}
 if [ -z "$DRY_RUN" ] && [ -x "./post_deploy.sh" ]; then
