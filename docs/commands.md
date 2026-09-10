@@ -195,16 +195,19 @@ options:
 ## `ndt cf-delete-stack`
 
 ```bash
-usage: ndt cf-delete-stack [-h] stack_name region
+usage: ndt cf-delete-stack [-h] [-e EXECUTION_ROLE] stack_name region
 
 Delete an existing CloudFormation stack
 
 positional arguments:
-  stack_name  Name of the stack to delete
-  region      The region to delete the stack from
+  stack_name            Name of the stack to delete
+  region                The region to delete the stack from
 
 options:
-  -h, --help  show this help message and exit
+  -h, --help            show this help message and exit
+  -e EXECUTION_ROLE, --execution-role EXECUTION_ROLE
+                        ARN of the IAM role that CloudFormation assumes when
+                        operating on the stack
 ```
 
 ## `ndt cf-follow-logs`
@@ -434,7 +437,7 @@ optional arguments:
 ## `ndt deploy-stack`
 
 ```bash
-usage: ndt deploy-stack [-d] [-r] [-h] component stack-name ami-id bake-job
+usage: ndt deploy-stack [-d] [-r] [-e execution-role-arn] [-h] component stack-name ami-id bake-job
 
 Resolves potential ECR urls and AMI Ids and then deploys the given stack either updating or creating it.
 If pre_deploy.sh and post_deploy.sh exist and are executable in the subcompoent directory,
@@ -455,6 +458,8 @@ positional arguments:
 optional arguments:
   -d, --dryrun  dry-run - show only the change set without actually deploying it
   -r, --disable-rollback - disable stack rollback on failure
+  -e, --execution-role <arn>  the ARN of the IAM role that CloudFormation assumes
+                              when operating on the stack
   -h, --help  show this help message and exit
 ```
 
@@ -1407,7 +1412,7 @@ optional arguments:
 ## `ndt undeploy-stack`
 
 ```bash
-usage: ndt undeploy-stack [-h] [-f] <component> <stack-name>
+usage: ndt undeploy-stack [-h] [-f] [-e execution-role-arn] <component> <stack-name>
 
 Undeploys (deletes) the given stack.
 Found s3 buckets are emptied and deleted only in case the -f argument is given.
@@ -1419,6 +1424,9 @@ positional arguments:
               you would give cluster
 
 optional arguments:
+  -f, --force                 empty and delete found S3 buckets
+  -e, --execution-role <arn>  the ARN of the IAM role that CloudFormation assumes
+                              when operating on the stack
   -h, --help  show this help message and exit
 ```
 

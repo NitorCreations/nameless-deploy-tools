@@ -19,7 +19,7 @@ if [ "$_ARGCOMPLETE" ]; then
   source $(n-include autocomplete-helpers.sh)
   case $COMP_CWORD in
     2)
-      compgen -W "-f -h $(get_stack_dirs)" -- $COMP_CUR
+      compgen -W "-f -e -h $(get_stack_dirs)" -- $COMP_CUR
       ;;
     3)
       compgen -W "$(get_stacks $COMP_PREV)" -- $COMP_CUR
@@ -32,7 +32,7 @@ if [ "$_ARGCOMPLETE" ]; then
 fi
 
 usage() {
-  echo "usage: ndt undeploy-stack [-h] [-f] <component> <stack-name>" >&2
+  echo "usage: ndt undeploy-stack [-h] [-f] [-e execution-role-arn] <component> <stack-name>" >&2
   echo "" >&2
   echo "Undeploys (deletes) the given stack." >&2
   echo "Found s3 buckets are emptied and deleted only in case the -f argument is given." >&2
@@ -44,6 +44,9 @@ usage() {
   echo "              you would give cluster" >&2
   echo "" >&2
   echo "optional arguments:" >&2
+  echo "  -f, --force                 empty and delete found S3 buckets" >&2
+  echo "  -e, --execution-role <arn>  the ARN of the IAM role that CloudFormation assumes" >&2
+  echo "                              when operating on the stack" >&2
   echo "  -h, --help  show this help message and exit" >&2
   exit 1
 }
@@ -54,10 +57,36 @@ fi
 
 set -xe
 
-if [ "$1" == "-f" ]; then
-  FORCE="yes"
-  shift
-fi
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -f | --force)
+      FORCE="yes"
+      shift
+      ;;
+    -e | --execution-role)
+      if [ -z "$2" ]; then
+        echo "Option $1 requires an execution role ARN"
+        usage
+      fi
+      EXECUTION_ROLE="--execution-role $2"
+      shift 2
+      ;;
+    -h | --help)
+      usage
+      ;;
+    -* | --*)
+      echo "Unknown option $1"
+      usage
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 image="$1"
 shift
@@ -83,4 +112,4 @@ for BUCKET in $(aws --region "$REGION" cloudformation list-stack-resources --sta
   fi
 done
 
-ndt cf-delete-stack "${STACK_NAME}" "$REGION"
+ndt cf-delete-stack "${STACK_NAME}" "$REGION" $EXECUTION_ROLE
