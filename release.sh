@@ -110,6 +110,11 @@ run_command git push origin "$NEW_VERSION"
 print_magenta "Building package..."
 rm -rf dist/*
 check_and_set_python
+# Prefer the project venv: system twine may be too old for Metadata-Version 2.4 wheels
+if [ -x "$DIR/.venv/bin/python" ]; then
+  PYTHON="$DIR/.venv/bin/python"
+  echo "Using venv python: $PYTHON"
+fi
 # https://pypa-build.readthedocs.io/en/stable/
 $PYTHON -m build
 
