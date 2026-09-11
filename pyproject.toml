@@ -52,6 +52,10 @@ testing = ["coverage", "mock", "pytest-cov", "pytest-mock", "pytest"]
 dev = ["pip-tools", "ruff"]
 build = ["build", "setuptools", "twine", "wheel"]
 
+# Installed by default with `uv sync` so that `pytest` (whose addopts need pytest-cov) works locally
+[dependency-groups]
+dev = ["nameless-deploy-tools[testing,dev]"]
+
 [build-system]
 requires = ["setuptools", "wheel", "build"]
 build-backend = "setuptools.build_meta"

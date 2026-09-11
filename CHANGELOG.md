@@ -6,8 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 
 ## [Unreleased]
+
+## [1.337] - 2026-09-11
 ### Added
-* Update rustup-init checksum
+* Add CloudFormation execution role parameter
+
+### Fixed
+* Fix missing redirection
+
+### Security
+* Bump cryptography from 46.0.5 to 50.0.1 (CVE-2026-69247)
+* Bump pyopenssl from 25.3.0 to 26.4.0
+* Bump urllib3 from 2.6.3 to 2.7.0
+* Bump idna from 3.10 to 3.19
+* Bump pygments from 2.19.2 to 2.21.0
+* Bump requests from 2.32.4 to 2.34.2
+* Bump pip from 26.0 to 26.2.1 and setuptools from 80.9.0 to 84.0.0
+
+### Changed
+* Re-compile all requirements (boto3 1.43.92, nitor-vault 2.8.1, pytest 9.1.1, ruff 0.16.7)
+* Install test and dev dependencies by default with `uv sync` so `pytest` works locally
 
 ## [1.299] - 2023-04-24
 ### Fixed

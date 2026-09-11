@@ -106,3 +106,4 @@ azuredeploy.json
 variables.json
 /cmake-build*
 .venv
+.serena

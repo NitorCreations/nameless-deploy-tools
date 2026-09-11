@@ -667,6 +667,11 @@ testing = [
     { name = "pytest-mock" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "nameless-deploy-tools", extra = ["dev", "testing"] },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "argcomplete" },
@@ -704,6 +709,9 @@ requires-dist = [
     { name = "wmi", marker = "sys_platform == 'win32'" },
 ]
 provides-extras = ["testing", "dev", "build"]
+
+[package.metadata.requires-dev]
+dev = [{ name = "nameless-deploy-tools", extras = ["testing", "dev"] }]
 
 [[package]]
 name = "netifaces2"
