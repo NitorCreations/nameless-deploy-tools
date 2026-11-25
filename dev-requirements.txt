@@ -184,7 +184,7 @@ twine==7.0.0
     # via nameless-deploy-tools (pyproject.toml)
 typing-extensions==4.16.0
     # via pyopenssl
-urllib3==2.7.0
+urllib3==2.8.0
     # via
     #   botocore
     #   id
